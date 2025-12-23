@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: merezha-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: merezha
+      POSTGRES_USER: merezha
+      POSTGRES_PASSWORD: merezha_dev_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U merezha -d merezha"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
