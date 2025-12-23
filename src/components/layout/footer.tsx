@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Logo() {
   return (
@@ -203,48 +204,48 @@ export function Footer() {
           {/* Partners */}
           <div>
             <p className="label" style={{ marginBottom: '15px' }}>НАШІ ПАРТНЕРИ</p>
-            <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
               <a
                 href="https://www.youtube.com/@ZBROIOVYILOBIST"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: 'var(--timber-dark)',
-                  textDecoration: 'none',
-                  opacity: 0.7,
-                }}
+                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
               >
-                ЗБРОЙОВИЙ ЛОБІСТ
+                <Image
+                  src="/images/partners/zb-lobist.png"
+                  alt="Збройовий Лобіст"
+                  width={76}
+                  height={40}
+                  style={{ height: '32px', width: 'auto' }}
+                />
               </a>
               <a
                 href="https://uavz.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: 'var(--timber-dark)',
-                  textDecoration: 'none',
-                  opacity: 0.7,
-                }}
+                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
               >
-                УАВЗ
+                <Image
+                  src="/images/partners/uavz.png"
+                  alt="УАВЗ"
+                  width={87}
+                  height={32}
+                  style={{ height: '32px', width: 'auto' }}
+                />
               </a>
               <a
                 href="https://ppdo.org.ua"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: 'var(--timber-dark)',
-                  textDecoration: 'none',
-                  opacity: 0.7,
-                }}
+                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
               >
-                ППДО
+                <Image
+                  src="/images/partners/ppdo.png"
+                  alt="ППДО"
+                  width={203}
+                  height={50}
+                  style={{ height: '32px', width: 'auto' }}
+                />
               </a>
             </div>
           </div>
