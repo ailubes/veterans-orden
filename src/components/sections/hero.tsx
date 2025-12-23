@@ -143,6 +143,8 @@ export function Hero() {
           color: '#e8e2d6',
           padding: '40px',
           position: 'relative',
+          width: '640px',
+          maxWidth: '100%',
         }}
       >
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
