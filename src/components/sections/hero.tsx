@@ -37,15 +37,13 @@ const AnimatedCounter = ({
     requestAnimationFrame(animate);
   }, [isVisible, end, duration]);
 
-  return <span ref={ref}>{count.toLocaleString('uk-UA').replace(/,/g, ' ')}</span>;
+  return <span ref={ref}>{count.toLocaleString('uk-UA')}</span>;
 };
 
 export function Hero() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const currentMembers = 4569;
   const weeklyGrowth = 35;
-  const memberGoal = 1000000;
-  const percentage = (currentMembers / memberGoal) * 100;
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -65,12 +63,12 @@ export function Hero() {
         gridColumn: '2 / 5',
         padding: '80px 0 100px',
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr', // Kept 1fr 1fr for balance
+        gridTemplateColumns: '1.5fr 1fr',
         gap: '60px',
         position: 'relative',
-        alignItems: 'start',
       }}
     >
+      {/* Floating Timber Element */}
       <div
         className="floating-timber hide-mobile"
         style={{
@@ -86,7 +84,7 @@ export function Hero() {
         }}
       />
 
-      {/* Left Column */}
+      {/* Left Column - Title */}
       <div>
         <p className="label" style={{ marginBottom: '20px' }}>
           Громадянська мережа політичного впливу
@@ -105,10 +103,7 @@ export function Hero() {
           <span className="outline-text" style={{ display: 'block' }}>
             ГУРТУЄМО
           </span>
-          <span
-            className="solid-text"
-            style={{ display: 'block', color: '#d45d3a' }}
-          >
+          <span className="solid-text" style={{ display: 'block', color: '#d45d3a' }}>
             1,000,000
           </span>
           <span className="outline-text" style={{ display: 'block' }}>
@@ -127,8 +122,8 @@ export function Hero() {
             lineHeight: 1.6,
           }}
         >
-          Щоб змусити політиків ухвалити закон про зброю самозахисту та виконувати наші вимоги. Велика війна навчила нас:
-          замало бути правим — потрібно бути сильним. Вступай, формуй порядок денний і стеж за його виконанням.
+          Щоб змусити політиків ухвалити закон про зброю самозахисту та виконувати наші вимоги. Велика війна навчила
+          нас: замало бути правим — потрібно бути сильним.
         </p>
 
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
@@ -141,141 +136,131 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Right Column */}
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      {/* Right Column - Counter Card */}
+      <div
+        style={{
+          background: '#2c2824',
+          color: '#e8e2d6',
+          padding: '40px',
+          position: 'relative',
+        }}
+      >
+        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
+        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+        <p className="label" style={{ color: '#d45d3a', marginBottom: '10px' }}>
+          ЧЛЕНІВ У МЕРЕЖІ
+        </p>
+
         <div
+          className="syne"
           style={{
-            background: '#2c2824',
-            color: '#e8e2d6',
-            padding: '50px 40px',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            minHeight: '640px',
-            height: '100%',
-            width: '100%',
-            maxWidth: '560px',
-            overflow: 'hidden',
+            fontSize: 'clamp(56px, 8vw, 80px)',
+            fontWeight: 800,
+            lineHeight: 1,
+            marginBottom: '10px',
           }}
         >
-          {/* Joints */}
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <AnimatedCounter end={currentMembers} />
+        </div>
 
-          <div style={{ position: 'relative', zIndex: 2 }}>
-            <p
-              className="label"
-              style={{
-                color: '#d45d3a',
-                marginBottom: '20px',
-                fontSize: '12px',
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-              }}
-            >
-              ЧЛЕНІВ У МЕРЕЖІ
-            </p>
+        <p
+          style={{
+            fontSize: '12px',
+            color: '#d45d3a',
+            marginBottom: '30px',
+          }}
+        >
+          +{weeklyGrowth} ЗА ТИЖДЕНЬ ↑
+        </p>
 
-            {/* FIX: Reduced clamp to 9vw / 130px to stop clipping */}
-            <div
-              className="syne"
-              style={{
-                fontSize: 'clamp(64px, 9vw, 130px)',
-                fontWeight: 800,
-                lineHeight: 0.85,
-                marginBottom: '24px',
-                width: '100%',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <AnimatedCounter end={currentMembers} />
-            </div>
-
-            <p style={{ fontSize: '12px', color: '#d45d3a', marginBottom: '32px' }}>
-              +{weeklyGrowth} ЗА ТИЖДЕНЬ ↑
-            </p>
-
-            {/* Progress Bar */}
-            <div style={{ marginBottom: '20px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontSize: '10px',
-                  marginBottom: '8px',
-                  opacity: 0.6,
-                }}
-              >
-                <span>0</span>
-                <span>100K</span>
-                <span>500K</span>
-                <span>1M</span>
-              </div>
-              <div
-                style={{
-                  height: '8px',
-                  background: 'rgba(255,255,255,0.1)',
-                  position: 'relative',
-                }}
-              >
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    width: `${percentage}%`,
-                    background: '#d45d3a',
-                    minWidth: '4px',
-                  }}
-                />
-                <div style={{ position: 'absolute', left: '10%', top: 0, bottom: 0, width: '1px', background: 'rgba(255,255,255,0.2)' }} />
-                <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: 'rgba(255,255,255,0.2)' }} />
-              </div>
-            </div>
-
-            <p style={{ fontSize: '11px', opacity: 0.7 }}>
-              {percentage.toFixed(2)}% ДО МЕТИ
-            </p>
-          </div>
-
+        {/* Progress Bar */}
+        <div style={{ marginBottom: '20px' }}>
           <div
             style={{
-              marginTop: 'auto',
-              paddingTop: '40px',
-              borderTop: '1px solid rgba(255,255,255,0.1)',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '20px',
-              position: 'relative',
-              zIndex: 2,
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '10px',
+              marginBottom: '8px',
+              opacity: 0.6,
             }}
           >
-            <div>
-              <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>
-                МЕТА 1
-              </p>
-              <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
-                100K
-              </p>
-              <p style={{ fontSize: '10px', opacity: 0.7 }}>
-                Порядок денний
-              </p>
-            </div>
-            <div>
-              <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>
-                МЕТА 2
-              </p>
-              <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
-                1M
-              </p>
-              <p style={{ fontSize: '10px', opacity: 0.7 }}>
-                Ухвалити закон
-              </p>
-            </div>
+            <span>0</span>
+            <span>100K</span>
+            <span>500K</span>
+            <span>1M</span>
+          </div>
+          <div
+            style={{
+              height: '8px',
+              background: 'rgba(255,255,255,0.1)',
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: `${(currentMembers / 1000000) * 100}%`,
+                background: '#d45d3a',
+                minWidth: '4px',
+              }}
+            />
+            {/* Milestone markers */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '10%',
+                top: 0,
+                bottom: 0,
+                width: '1px',
+                background: 'rgba(255,255,255,0.2)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                bottom: 0,
+                width: '1px',
+                background: 'rgba(255,255,255,0.2)',
+              }}
+            />
+          </div>
+        </div>
+
+        <p style={{ fontSize: '11px', opacity: 0.7 }}>
+          {((currentMembers / 1000000) * 100).toFixed(2)}% ДО МЕТИ
+        </p>
+
+        <div
+          style={{
+            marginTop: '30px',
+            paddingTop: '20px',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '20px',
+          }}
+        >
+          <div>
+            <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>МЕТА 1</p>
+            <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
+              100K
+            </p>
+            <p style={{ fontSize: '10px', opacity: 0.7 }}>Порядок денний</p>
+          </div>
+          <div>
+            <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>МЕТА 2</p>
+            <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
+              1M
+            </p>
+            <p style={{ fontSize: '10px', opacity: 0.7 }}>Ухвалити закон</p>
           </div>
         </div>
       </div>
