@@ -4,7 +4,6 @@ import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { Logo } from '@/components/ui/logo';
 
 function SignInForm() {
   const router = useRouter();
@@ -106,10 +105,6 @@ export default function SignInPage() {
       <div className="joint" style={{ top: '-6px', right: '-6px' }} />
       <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
       <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
-
-      <Link href="/" className="flex justify-center mb-6">
-        <Logo size={48} className="text-timber-dark" />
-      </Link>
 
       <h1 className="font-syne font-bold text-2xl mb-2 text-center">
         ВХІД
