@@ -46,7 +46,7 @@ export function Sidebar() {
           .single();
 
         const adminRoles = ['admin', 'super_admin', 'regional_leader'];
-        setIsAdmin(profile && adminRoles.includes(profile.role));
+        setIsAdmin(Boolean(profile && adminRoles.includes(profile.role)));
       }
     };
 

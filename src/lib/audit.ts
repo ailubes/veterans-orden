@@ -143,7 +143,7 @@ export function createDataDiff(
 ): { field: string; old: any; new: any }[] {
   const diff: { field: string; old: any; new: any }[] = [];
 
-  const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
+  const allKeys = Array.from(new Set([...Object.keys(oldData), ...Object.keys(newData)]));
 
   for (const key of allKeys) {
     if (oldData[key] !== newData[key]) {
