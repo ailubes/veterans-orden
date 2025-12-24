@@ -145,6 +145,7 @@ export function Hero() {
           position: 'relative',
           width: '640px',
           maxWidth: '100%',
+          overflow: 'hidden',
         }}
       >
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
@@ -159,7 +160,7 @@ export function Hero() {
         <div
           className="syne"
           style={{
-            fontSize: 'clamp(56px, 8vw, 80px)',
+            fontSize: 'clamp(56px, 10vw, 130px)',
             fontWeight: 800,
             lineHeight: 1,
             marginBottom: '10px',
