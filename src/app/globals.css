@@ -556,3 +556,69 @@ img {
     display: none !important;
   }
 }
+
+@layer base {
+  :root {
+    /* Timber design mapped to shadcn variables */
+    --background: 43 25% 95%; /* canvas */
+    --foreground: 20 13% 16%; /* timber-dark */
+    --card: 43 25% 95%; /* canvas */
+    --card-foreground: 20 13% 16%; /* timber-dark */
+    --popover: 43 25% 95%; /* canvas */
+    --popover-foreground: 20 13% 16%; /* timber-dark */
+    --primary: 12 70% 54%; /* accent */
+    --primary-foreground: 43 25% 95%; /* canvas */
+    --secondary: 25 15% 45%; /* timber-beam */
+    --secondary-foreground: 43 25% 95%; /* canvas */
+    --muted: 25 15% 45%; /* timber-beam */
+    --muted-foreground: 43 25% 95%; /* canvas */
+    --accent: 12 70% 54%; /* accent */
+    --accent-foreground: 43 25% 95%; /* canvas */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 43 25% 95%; /* canvas */
+    --border: 20 13% 16%; /* timber-dark */
+    --input: 20 13% 16%; /* timber-dark */
+    --ring: 12 70% 54%; /* accent */
+    --chart-1: 12 70% 54%; /* accent */
+    --chart-2: 20 13% 16%; /* timber-dark */
+    --chart-3: 25 15% 45%; /* timber-beam */
+    --chart-4: 43 25% 95%; /* canvas */
+    --chart-5: 12 70% 54%; /* accent */
+    --radius: 0rem; /* No rounded corners for Timber design */
+  }
+  .dark {
+    --background: 20 13% 16%; /* timber-dark */
+    --foreground: 43 25% 95%; /* canvas */
+    --card: 20 13% 16%; /* timber-dark */
+    --card-foreground: 43 25% 95%; /* canvas */
+    --popover: 20 13% 16%; /* timber-dark */
+    --popover-foreground: 43 25% 95%; /* canvas */
+    --primary: 12 70% 54%; /* accent */
+    --primary-foreground: 43 25% 95%; /* canvas */
+    --secondary: 25 15% 45%; /* timber-beam */
+    --secondary-foreground: 43 25% 95%; /* canvas */
+    --muted: 25 15% 45%; /* timber-beam */
+    --muted-foreground: 43 25% 95%; /* canvas */
+    --accent: 12 70% 54%; /* accent */
+    --accent-foreground: 43 25% 95%; /* canvas */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 43 25% 95%; /* canvas */
+    --border: 43 25% 95%; /* canvas */
+    --input: 43 25% 95%; /* canvas */
+    --ring: 12 70% 54%; /* accent */
+    --chart-1: 12 70% 54%; /* accent */
+    --chart-2: 43 25% 95%; /* canvas */
+    --chart-3: 25 15% 45%; /* timber-beam */
+    --chart-4: 20 13% 16%; /* timber-dark */
+    --chart-5: 12 70% 54%; /* accent */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

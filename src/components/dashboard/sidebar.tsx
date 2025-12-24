@@ -11,10 +11,12 @@ import {
   Settings,
   LogOut,
   Trophy,
+  Shield,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/logo';
+import { useEffect, useState } from 'react';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -29,6 +31,27 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('role')
+          .eq('clerk_id', user.id)
+          .single();
+
+        const adminRoles = ['admin', 'super_admin', 'regional_leader'];
+        setIsAdmin(profile && adminRoles.includes(profile.role));
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
 
   const handleSignOut = async () => {
     const supabase = createClient();
@@ -70,6 +93,25 @@ export function Sidebar() {
               </li>
             );
           })}
+
+          {/* Admin Link - only visible to admins */}
+          {isAdmin && (
+            <>
+              <li className="pt-4 mt-4 border-t border-canvas/10">
+                <Link
+                  href="/admin"
+                  className={`flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors ${
+                    pathname.startsWith('/admin')
+                      ? 'bg-accent text-canvas'
+                      : 'hover:bg-canvas/10'
+                  }`}
+                >
+                  <Shield size={18} />
+                  АДМІН-ПАНЕЛЬ
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
 
