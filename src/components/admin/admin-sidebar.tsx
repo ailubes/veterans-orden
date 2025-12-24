@@ -5,6 +5,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Users,
+  Calendar,
+  Vote,
+  CheckSquare,
   FileText,
   BarChart3,
   Settings,
@@ -12,11 +15,15 @@ import {
   LogOut,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { Logo } from '@/components/ui/logo';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'ОГЛЯД' },
   { href: '/admin/members', icon: Users, label: 'ЧЛЕНИ' },
-  { href: '/admin/content', icon: FileText, label: 'КОНТЕНТ' },
+  { href: '/admin/events', icon: Calendar, label: 'ПОДІЇ' },
+  { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
+  { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
+  { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
   { href: '/admin/analytics', icon: BarChart3, label: 'АНАЛІТИКА' },
   { href: '/admin/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];
@@ -37,9 +44,7 @@ export function AdminSidebar() {
       {/* Logo */}
       <div className="p-6 border-b border-canvas/10">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-accent flex items-center justify-center">
-            <span className="text-canvas font-syne font-bold text-xl">А</span>
-          </div>
+          <Logo size={40} className="text-accent" />
           <div>
             <span className="font-syne font-bold text-lg tracking-tight block">
               АДМІН

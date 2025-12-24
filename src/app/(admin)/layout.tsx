@@ -17,17 +17,17 @@ export default async function AdminLayout({
     redirect('/sign-in');
   }
 
-  // For now, allow any authenticated user to access admin
-  // In production, you would check the user's role from the database
-  // const { data: userData } = await supabase
-  //   .from('users')
-  //   .select('role')
-  //   .eq('id', user.id)
-  //   .single();
-  //
-  // if (!userData || !['admin', 'moderator'].includes(userData.role)) {
-  //   redirect('/dashboard');
-  // }
+  // Check user's role from the database
+  const { data: profile } = await supabase
+    .from('users')
+    .select('role')
+    .eq('clerk_id', user.id)
+    .single();
+
+  const adminRoles = ['admin', 'super_admin', 'regional_leader'];
+  if (!profile || !adminRoles.includes(profile.role)) {
+    redirect('/dashboard');
+  }
 
   return (
     <div className="min-h-screen bg-canvas">

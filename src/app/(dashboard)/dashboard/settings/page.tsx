@@ -2,36 +2,54 @@
 
 import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
 
 export default function SettingsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [user, setUser] = useState<{
     email: string;
     firstName: string;
     lastName: string;
+    membershipTier: string;
   } | null>(null);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
+    // Check for payment success
+    if (searchParams.get('payment') === 'success') {
+      setMessage('Оплата успішна! Ваше членство активовано.');
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
     const getUser = async () => {
       const supabase = createClient();
       const {
-        data: { user },
+        data: { user: authUser },
       } = await supabase.auth.getUser();
 
-      if (user) {
+      if (authUser) {
+        // Fetch profile to get membership tier
+        const { data: profile } = await supabase
+          .from('users')
+          .select('membership_tier')
+          .eq('clerk_id', authUser.id)
+          .single();
+
         setUser({
-          email: user.email || '',
-          firstName: user.user_metadata?.first_name || '',
-          lastName: user.user_metadata?.last_name || '',
+          email: authUser.email || '',
+          firstName: authUser.user_metadata?.first_name || '',
+          lastName: authUser.user_metadata?.last_name || '',
+          membershipTier: profile?.membership_tier || 'free',
         });
-        setFirstName(user.user_metadata?.first_name || '');
-        setLastName(user.user_metadata?.last_name || '');
+        setFirstName(authUser.user_metadata?.first_name || '');
+        setLastName(authUser.user_metadata?.last_name || '');
       }
     };
 
@@ -165,39 +183,51 @@ export default function SettingsPage() {
 
         <p className="label text-accent mb-4">ЧЛЕНСТВО</p>
 
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h3 className="font-syne text-xl font-bold">Безкоштовний план</h3>
-            <p className="text-sm text-timber-beam">Базові можливості Мережі</p>
-          </div>
-          <div className="text-right">
-            <p className="font-syne text-2xl font-bold">0 ₴</p>
-            <p className="text-xs text-timber-beam">/ місяць</p>
-          </div>
-        </div>
+        {user.membershipTier === 'free' ? (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="font-syne text-xl font-bold">Безкоштовний план</h3>
+                <p className="text-sm text-timber-beam">Базові можливості Мережі</p>
+              </div>
+              <div className="text-right">
+                <p className="font-syne text-2xl font-bold">0 ₴</p>
+                <p className="text-xs text-timber-beam">/ місяць</p>
+              </div>
+            </div>
 
-        <div className="border-t border-timber-dark/20 pt-6">
-          <p className="text-sm text-timber-beam mb-4">
-            Оновіть до платного плану для отримання:
-          </p>
-          <ul className="text-sm space-y-2 mb-6">
-            <li className="flex items-center gap-2">
-              <span className="text-accent">✓</span>
-              Право голосу у прийнятті рішень
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-accent">✓</span>
-              Доступ до ексклюзивних подій
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-accent">✓</span>
-              Більше впливу в Мережі
-            </li>
-          </ul>
-          <button className="btn btn-outline" disabled>
-            НЕЗАБАРОМ
-          </button>
-        </div>
+            <div className="border-t border-timber-dark/20 pt-6">
+              <p className="font-bold mb-4">Оберіть план членства:</p>
+              <MembershipUpgrade currentTier={user.membershipTier} />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="font-syne text-xl font-bold">
+                  {user.membershipTier === 'basic_49' && 'Базовий'}
+                  {user.membershipTier === 'supporter_100' && 'Підтримка'}
+                  {user.membershipTier === 'supporter_200' && 'Підтримка+'}
+                  {user.membershipTier === 'patron_500' && 'Меценат'}
+                </h3>
+                <p className="text-sm text-timber-beam">Активне членство</p>
+              </div>
+              <div className="px-3 py-1 bg-green-100 text-green-700 text-sm font-bold">
+                АКТИВНИЙ
+              </div>
+            </div>
+
+            <p className="text-sm text-timber-beam mb-4">
+              Дякуємо за підтримку Мережі Вільних Людей!
+            </p>
+
+            <div className="border-t border-timber-dark/20 pt-6">
+              <p className="font-bold mb-4">Оновити план:</p>
+              <MembershipUpgrade currentTier={user.membershipTier} />
+            </div>
+          </>
+        )}
       </div>
 
       {/* Danger Zone */}
