@@ -1,4 +1,5 @@
 import { GrainOverlay } from '@/components/layout/grain-overlay';
+import { Logo } from '@/components/ui/logo';
 
 export default function AuthLayout({
   children,
@@ -12,9 +13,7 @@ export default function AuthLayout({
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-timber-dark flex items-center justify-center">
-              <span className="text-canvas font-syne font-bold text-2xl">М</span>
-            </div>
+            <Logo size={48} className="text-timber-dark" />
             <span className="font-syne font-bold text-2xl tracking-tight">
               МЕРЕЖА
             </span>

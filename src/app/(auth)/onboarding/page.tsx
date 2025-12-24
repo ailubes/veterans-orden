@@ -4,39 +4,82 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { UKRAINIAN_OBLASTS } from '@/lib/constants';
-import { Check, ChevronRight } from 'lucide-react';
+import { Check, ChevronRight, ChevronLeft, User, MapPin } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 
-type Step = 'welcome' | 'region' | 'complete';
+type Step = 'welcome' | 'personal' | 'region' | 'complete';
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('welcome');
+
+  // Personal info
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [patronymic, setPatronymic] = useState('');
+  const [phone, setPhone] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+
+  // Location
   const [selectedOblast, setSelectedOblast] = useState('');
   const [city, setCity] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [user, setUser] = useState<{ firstName: string; email: string } | null>(
-    null
-  );
+  const [user, setUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
       const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
+        const fName = user.user_metadata?.first_name || '';
+        const lName = user.user_metadata?.last_name || '';
         setUser({
-          firstName: user.user_metadata?.first_name || 'Друже',
+          firstName: fName,
+          lastName: lName,
           email: user.email || '',
         });
+        setFirstName(fName);
+        setLastName(lName);
       }
     };
 
     getUser();
   }, []);
+
+  const validatePersonalInfo = () => {
+    if (!firstName.trim()) {
+      setError('Введіть ім\'я');
+      return false;
+    }
+    if (!lastName.trim()) {
+      setError('Введіть прізвище');
+      return false;
+    }
+    if (!dateOfBirth) {
+      setError('Введіть дату народження');
+      return false;
+    }
+
+    // Validate age (must be at least 14 years old)
+    const birthDate = new Date(dateOfBirth);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    if (age < 14) {
+      setError('Вам має бути не менше 14 років');
+      return false;
+    }
+    if (age > 120) {
+      setError('Перевірте дату народження');
+      return false;
+    }
+
+    setError('');
+    return true;
+  };
 
   const handleCompleteOnboarding = async () => {
     setLoading(true);
@@ -44,9 +87,7 @@ export default function OnboardingPage() {
 
     try {
       const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
         setError('Сесія закінчилась. Увійдіть знову.');
@@ -61,18 +102,21 @@ export default function OnboardingPage() {
       }
 
       // Find oblast UUID
-      const { data: oblastData } = await supabase
-        .from('oblasts')
-        .select('id')
-        .eq('code', selectedOblast)
-        .single();
+      let oblastId = null;
+      if (selectedOblast) {
+        const { data: oblastData } = await supabase
+          .from('oblasts')
+          .select('id')
+          .eq('code', selectedOblast)
+          .single();
+        oblastId = oblastData?.id || null;
+      }
 
       // Check if user was referred by someone
       const referrerCode = user.user_metadata?.referral_code;
       let referrerId: string | null = null;
 
       if (referrerCode) {
-        // Find the referrer by their referral code
         const { data: referrer } = await supabase
           .from('users')
           .select('id')
@@ -86,12 +130,15 @@ export default function OnboardingPage() {
 
       // Create user profile in database
       const { error: insertError } = await supabase.from('users').insert({
-        clerk_id: user.id, // Using Supabase auth id
+        clerk_id: user.id,
         email: user.email,
-        first_name: user.user_metadata?.first_name || '',
-        last_name: user.user_metadata?.last_name || '',
-        oblast_id: oblastData?.id || null,
-        city: city || null,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        patronymic: patronymic.trim() || null,
+        phone: phone.trim() || null,
+        date_of_birth: dateOfBirth ? new Date(dateOfBirth).toISOString() : null,
+        oblast_id: oblastId,
+        city: city.trim() || null,
         referral_code: referralCode,
         referred_by_id: referrerId,
         role: 'prospect',
@@ -101,7 +148,6 @@ export default function OnboardingPage() {
 
       if (insertError) {
         if (insertError.code === '23505') {
-          // Duplicate key - user already exists, redirect to dashboard
           router.push('/dashboard');
           return;
         }
@@ -110,7 +156,6 @@ export default function OnboardingPage() {
 
       // If user was referred, increment the referrer's count and add points
       if (referrerId) {
-        // Get current referral count
         const { data: referrer } = await supabase
           .from('users')
           .select('referral_count, points')
@@ -122,7 +167,7 @@ export default function OnboardingPage() {
             .from('users')
             .update({
               referral_count: (referrer.referral_count || 0) + 1,
-              points: (referrer.points || 0) + 10, // 10 points per referral
+              points: (referrer.points || 0) + 10,
               updated_at: new Date().toISOString(),
             })
             .eq('id', referrerId);
@@ -138,6 +183,15 @@ export default function OnboardingPage() {
     }
   };
 
+  const getStepNumber = () => {
+    switch (step) {
+      case 'welcome': return 1;
+      case 'personal': return 2;
+      case 'region': return 3;
+      case 'complete': return 4;
+    }
+  };
+
   return (
     <div className="bg-canvas border-2 border-timber-dark p-8 relative max-w-lg mx-auto">
       {/* Corner joints */}
@@ -148,34 +202,27 @@ export default function OnboardingPage() {
 
       {/* Progress */}
       <div className="flex items-center justify-center gap-2 mb-8">
-        <div
-          className={`w-3 h-3 rounded-full ${
-            step === 'welcome' ? 'bg-accent' : 'bg-timber-dark'
-          }`}
-        />
-        <div className="w-8 h-0.5 bg-timber-dark/30" />
-        <div
-          className={`w-3 h-3 rounded-full ${
-            step === 'region' ? 'bg-accent' : step === 'complete' ? 'bg-timber-dark' : 'bg-timber-dark/30'
-          }`}
-        />
-        <div className="w-8 h-0.5 bg-timber-dark/30" />
-        <div
-          className={`w-3 h-3 rounded-full ${
-            step === 'complete' ? 'bg-accent' : 'bg-timber-dark/30'
-          }`}
-        />
+        {[1, 2, 3, 4].map((num, idx) => (
+          <div key={num} className="flex items-center">
+            <div
+              className={`w-3 h-3 rounded-full transition-colors ${
+                getStepNumber() >= num ? 'bg-accent' : 'bg-timber-dark/30'
+              }`}
+            />
+            {idx < 3 && <div className="w-8 h-0.5 bg-timber-dark/30 ml-2" />}
+          </div>
+        ))}
       </div>
 
       {/* Step: Welcome */}
       {step === 'welcome' && (
         <div className="text-center">
-          <div className="w-16 h-16 bg-accent text-canvas flex items-center justify-center mx-auto mb-6">
-            <span className="font-syne text-3xl font-bold">М</span>
+          <div className="flex items-center justify-center mx-auto mb-6">
+            <Logo size={64} className="text-accent" />
           </div>
 
           <h1 className="font-syne text-2xl font-bold mb-4">
-            Вітаємо, {user?.firstName || 'Друже'}!
+            Вітаємо{user?.firstName ? `, ${user.firstName}` : ''}!
           </h1>
 
           <p className="text-timber-beam mb-8">
@@ -184,7 +231,7 @@ export default function OnboardingPage() {
           </p>
 
           <button
-            onClick={() => setStep('region')}
+            onClick={() => setStep('personal')}
             className="btn w-full justify-center"
           >
             ПОЧАТИ <ChevronRight size={18} />
@@ -192,12 +239,114 @@ export default function OnboardingPage() {
         </div>
       )}
 
+      {/* Step: Personal Info */}
+      {step === 'personal' && (
+        <div>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <User size={24} className="text-accent" />
+            <h1 className="font-syne text-2xl font-bold">
+              Особисті дані
+            </h1>
+          </div>
+          <p className="text-center text-sm text-timber-beam mb-6">
+            Заповніть інформацію про себе
+          </p>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="label block mb-2">ІМ&apos;Я *</label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  required
+                />
+              </div>
+              <div>
+                <label className="label block mb-2">ПРІЗВИЩЕ *</label>
+                <input
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="label block mb-2">ПО БАТЬКОВІ</label>
+              <input
+                type="text"
+                value={patronymic}
+                onChange={(e) => setPatronymic(e.target.value)}
+                placeholder="Наприклад: Іванович"
+                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="label block mb-2">ДАТА НАРОДЖЕННЯ *</label>
+              <input
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                max={new Date().toISOString().split('T')[0]}
+                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="label block mb-2">НОМЕР ТЕЛЕФОНУ</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+380 XX XXX XX XX"
+                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              />
+            </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep('welcome')}
+                className="btn btn-outline flex-1 justify-center"
+              >
+                <ChevronLeft size={18} /> НАЗАД
+              </button>
+              <button
+                onClick={() => {
+                  if (validatePersonalInfo()) {
+                    setStep('region');
+                  }
+                }}
+                className="btn flex-1 justify-center"
+              >
+                ДАЛІ <ChevronRight size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Step: Region Selection */}
       {step === 'region' && (
         <div>
-          <h1 className="font-syne text-2xl font-bold mb-2 text-center">
-            Ваш регіон
-          </h1>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <MapPin size={24} className="text-accent" />
+            <h1 className="font-syne text-2xl font-bold">
+              Ваш регіон
+            </h1>
+          </div>
           <p className="text-center text-sm text-timber-beam mb-6">
             Оберіть область для участі в регіональних подіях та голосуваннях
           </p>
@@ -220,7 +369,7 @@ export default function OnboardingPage() {
             </div>
 
             <div>
-              <label className="label block mb-2">МІСТО (НЕОБОВ&apos;ЯЗКОВО)</label>
+              <label className="label block mb-2">МІСТО</label>
               <input
                 type="text"
                 value={city}
@@ -236,21 +385,21 @@ export default function OnboardingPage() {
               </div>
             )}
 
-            <button
-              onClick={handleCompleteOnboarding}
-              disabled={loading || !selectedOblast}
-              className="btn w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'ЗБЕРЕЖЕННЯ...' : 'ЗАВЕРШИТИ →'}
-            </button>
-
-            <button
-              onClick={handleCompleteOnboarding}
-              disabled={loading}
-              className="text-center w-full text-sm text-timber-beam hover:text-accent"
-            >
-              Пропустити цей крок
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setStep('personal')}
+                className="btn btn-outline flex-1 justify-center"
+              >
+                <ChevronLeft size={18} /> НАЗАД
+              </button>
+              <button
+                onClick={handleCompleteOnboarding}
+                disabled={loading}
+                className="btn flex-1 justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'ЗБЕРЕЖЕННЯ...' : 'ЗАВЕРШИТИ →'}
+              </button>
+            </div>
           </div>
         </div>
       )}

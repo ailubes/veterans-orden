@@ -232,6 +232,7 @@ export const users = pgTable('users', {
   firstName: varchar('first_name', { length: 100 }).notNull(),
   lastName: varchar('last_name', { length: 100 }).notNull(),
   patronymic: varchar('patronymic', { length: 100 }),
+  dateOfBirth: timestamp('date_of_birth'),
   avatarUrl: text('avatar_url'),
 
   // Role & Status
