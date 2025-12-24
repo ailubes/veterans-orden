@@ -60,8 +60,9 @@ export default async function DashboardPage() {
 
     if (recentVotes) {
       recentVotes.forEach((v) => {
-        const vote = v.vote as { title: string } | null;
-        if (vote) {
+        const voteData = v.vote as { title: string } | { title: string }[] | null;
+        const vote = Array.isArray(voteData) ? voteData[0] : voteData;
+        if (vote?.title) {
           activities.push({
             type: 'vote',
             title: 'Голосування',
@@ -87,8 +88,9 @@ export default async function DashboardPage() {
         not_going: 'Не буду',
       };
       recentRsvps.forEach((r) => {
-        const event = r.event as { title: string } | null;
-        if (event) {
+        const eventData = r.event as { title: string } | { title: string }[] | null;
+        const event = Array.isArray(eventData) ? eventData[0] : eventData;
+        if (event?.title) {
           activities.push({
             type: 'event',
             title: statusLabels[r.status] || 'Реєстрація на подію',
