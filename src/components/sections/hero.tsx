@@ -58,7 +58,7 @@ export function Hero() {
 
   return (
     <header
-      className="mobile-full"
+      className="mobile-full hero-grid"
       style={{
         gridColumn: '2 / 5',
         padding: '80px 0 100px',

@@ -4,52 +4,7 @@ import { Footer } from '@/components/layout/footer';
 import { SkeletonGrid } from '@/components/layout/skeleton-grid';
 import { GrainOverlay } from '@/components/layout/grain-overlay';
 import { PageHeader } from '@/components/layout/page-header';
-
-const newsArticles = [
-  {
-    date: '18.12.2024',
-    category: 'ГОЛОСУВАННЯ',
-    title: 'Мережа проголосувала за Положення про праймеріз',
-    excerpt: 'Члени Мережі одноголосно підтримали новий механізм внутрішнього відбору кандидатів. Це історичний крок до формування справжньої інфраструктури демократії.',
-    slug: 'praymeriz-2024',
-    featured: true,
-  },
-  {
-    date: '15.12.2024',
-    category: 'ПІДСУМКИ',
-    title: "Підбиваємо підсумки перших дев'яти місяців",
-    excerpt: 'Від ідеї до 4,500+ членів: як ми будуємо інфраструктуру демократії в Україні.',
-    slug: 'pidsumky-2024',
-  },
-  {
-    date: '10.12.2024',
-    category: 'ПЛАНИ',
-    title: 'Що зміниться в Мережі до кінця 2025 року?',
-    excerpt: 'Плани розвитку: нові функції, регіональні осередки та шлях до 100,000 членів.',
-    slug: 'plany-2025',
-  },
-  {
-    date: '05.12.2024',
-    category: 'ПОДІЇ',
-    title: 'Перша офлайн-зустріч членів Мережі у Києві',
-    excerpt: 'Понад 200 учасників зібрались для обговорення стратегії розвитку та знайомства.',
-    slug: 'zustrych-kyiv',
-  },
-  {
-    date: '28.11.2024',
-    category: 'АНАЛІТИКА',
-    title: 'Чому українцям потрібне право на зброю',
-    excerpt: 'Детальний аналіз світового досвіду та специфіки українського контексту.',
-    slug: 'pravo-na-zbroyu',
-  },
-  {
-    date: '20.11.2024',
-    category: 'ПАРТНЕРСТВО',
-    title: 'Мережа підписала меморандум з громадськими організаціями',
-    excerpt: 'Спільна робота над законодавчими ініціативами та просвітницькою діяльністю.',
-    slug: 'memorandum',
-  },
-];
+import { newsArticles } from '@/data/news';
 
 export default function NewsPage() {
   const featuredArticle = newsArticles.find((a) => a.featured);
@@ -82,6 +37,7 @@ export default function NewsPage() {
             }}
           >
             <div
+              className="two-col"
               style={{
                 background: 'var(--timber-dark)',
                 color: 'var(--grain)',
@@ -149,6 +105,7 @@ export default function NewsPage() {
 
         {/* Articles Grid */}
         <div
+          className="three-col"
           style={{
             gridColumn: '2 / 5',
             display: 'grid',

@@ -21,7 +21,7 @@ const frameworks = [
 export function Frameworks() {
   return (
     <div
-      className="mobile-full"
+      className="mobile-full three-col frameworks-grid"
       style={{
         gridColumn: '2 / 5',
         display: 'grid',

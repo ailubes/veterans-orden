@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 
 const navLinks = [
@@ -7,6 +8,7 @@ const navLinks = [
   { href: '/about', label: 'ПРО НАС' },
   { href: '/news', label: 'НОВИНИ' },
   { href: '/contacts', label: 'КОНТАКТИ' },
+  { href: '/faq', label: 'FAQ' },
 ];
 
 function Logo() {
@@ -23,62 +25,181 @@ function Logo() {
   );
 }
 
-export function Navigation() {
+function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
   return (
-    <nav
+    <div
       style={{
-        gridColumn: '2 / 5',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '40px 0',
-        borderBottom: '2px solid var(--timber-dark)',
-        zIndex: 10,
+        width: '24px',
+        height: '20px',
+        position: 'relative',
+        cursor: 'pointer',
       }}
     >
-      <Link
-        href="/"
-        className="syne"
+      <span
         style={{
-          fontSize: '20px',
-          fontWeight: 800,
-          textDecoration: 'none',
-          color: 'var(--timber-dark)',
+          position: 'absolute',
+          height: '2px',
+          width: '100%',
+          background: 'var(--timber-dark)',
+          left: 0,
+          top: isOpen ? '9px' : 0,
+          transform: isOpen ? 'rotate(45deg)' : 'none',
+          transition: 'all 0.3s ease',
+        }}
+      />
+      <span
+        style={{
+          position: 'absolute',
+          height: '2px',
+          width: '100%',
+          background: 'var(--timber-dark)',
+          left: 0,
+          top: '9px',
+          opacity: isOpen ? 0 : 1,
+          transition: 'all 0.3s ease',
+        }}
+      />
+      <span
+        style={{
+          position: 'absolute',
+          height: '2px',
+          width: '100%',
+          background: 'var(--timber-dark)',
+          left: 0,
+          bottom: isOpen ? '9px' : 0,
+          transform: isOpen ? 'rotate(-45deg)' : 'none',
+          transition: 'all 0.3s ease',
+        }}
+      />
+    </div>
+  );
+}
+
+export function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <>
+      <nav
+        style={{
+          gridColumn: '2 / 5',
           display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '12px',
+          padding: '40px 0',
+          borderBottom: '2px solid var(--timber-dark)',
+          zIndex: 100,
         }}
       >
-        <Logo />
-        <span className="hide-mobile">МЕРЕЖА ВІЛЬНИХ ЛЮДЕЙ</span>
-      </Link>
+        <Link
+          href="/"
+          className="syne"
+          style={{
+            fontSize: '20px',
+            fontWeight: 800,
+            textDecoration: 'none',
+            color: 'var(--timber-dark)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+          }}
+        >
+          <Logo />
+          <span className="hide-mobile">МЕРЕЖА ВІЛЬНИХ ЛЮДЕЙ</span>
+        </Link>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-        <div className="hide-mobile" style={{ display: 'flex', gap: '40px' }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{
-                textDecoration: 'none',
-                color: 'var(--timber-dark)',
-                fontSize: '12px',
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* Desktop Navigation */}
+        <div className="hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+          <div style={{ display: 'flex', gap: '40px' }}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{
+                  textDecoration: 'none',
+                  color: 'var(--timber-dark)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <Link
+            href="/sign-up"
+            className="btn"
+            style={{ padding: '15px 25px', fontSize: '11px' }}
+          >
+            ДОЛУЧИТИСЬ
+          </Link>
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          className="show-mobile"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: '10px',
+            cursor: 'pointer',
+            display: 'none',
+          }}
+          aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
+        >
+          <HamburgerIcon isOpen={isMenuOpen} />
+        </button>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className="mobile-menu-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'var(--canvas)',
+          zIndex: 99,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '30px',
+          opacity: isMenuOpen ? 1 : 0,
+          visibility: isMenuOpen ? 'visible' : 'hidden',
+          transition: 'all 0.3s ease',
+        }}
+      >
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={() => setIsMenuOpen(false)}
+            className="syne"
+            style={{
+              textDecoration: 'none',
+              color: 'var(--timber-dark)',
+              fontSize: '28px',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+            }}
+          >
+            {link.label}
+          </Link>
+        ))}
         <Link
           href="/sign-up"
-          className="btn hide-mobile"
-          style={{ padding: '15px 25px', fontSize: '11px' }}
+          onClick={() => setIsMenuOpen(false)}
+          className="btn"
+          style={{ padding: '20px 40px', fontSize: '14px', marginTop: '20px' }}
         >
           ДОЛУЧИТИСЬ
         </Link>
       </div>
-    </nav>
+    </>
   );
 }

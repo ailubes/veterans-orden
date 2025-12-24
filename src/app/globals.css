@@ -116,12 +116,79 @@ body {
     grid-template-columns: 20px 1fr 20px;
   }
 
+  .skeleton-container > * {
+    grid-column: 2 / 3 !important;
+  }
+
   .hide-mobile {
     display: none !important;
   }
 
+  .show-mobile {
+    display: block !important;
+  }
+
   .mobile-full {
     grid-template-columns: 1fr !important;
+  }
+
+  /* Mobile menu overlay - hide on desktop */
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .show-mobile {
+    display: none !important;
+  }
+
+  .mobile-menu-overlay {
+    display: none !important;
+  }
+}
+
+/* Mobile responsive sections */
+@media (max-width: 900px) {
+  /* Hero section */
+  header[style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+    padding: 40px 0 60px !important;
+  }
+
+  /* Counter card mobile */
+  div[style*="width: '640px'"],
+  div[style*="width:'640px'"] {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* News grid */
+  div[style*="gridTemplateColumns: 'repeat(3, 1fr)'"],
+  div[style*="grid-template-columns: repeat(3, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Featured article grid */
+  div[style*="gridTemplateColumns: '1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Frameworks grid */
+  div[style*="gridTemplateColumns: 'repeat(3, 1fr)'"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Page headers */
+  h1[style*="clamp"] {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+
+  /* Footer grid */
+  footer > div[style*="display: 'grid'"] {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
   }
 }
 
@@ -249,4 +316,243 @@ body {
 /* Card title hover */
 .card:hover .card-title {
   color: var(--canvas);
+}
+
+/* ===================== */
+/* MOBILE RESPONSIVE     */
+/* ===================== */
+
+/* Mobile menu styles */
+@media (max-width: 900px) {
+  .mobile-menu-overlay {
+    display: flex !important;
+  }
+}
+
+/* Responsive grids and layouts */
+@media (max-width: 900px) {
+  /* Hero section responsive */
+  .hero-grid {
+    display: block !important;
+  }
+
+  /* Article content */
+  .article-content {
+    padding: 0 !important;
+  }
+
+  .article-content h2 {
+    font-size: 24px !important;
+  }
+
+  .article-content h3 {
+    font-size: 20px !important;
+  }
+
+  /* Frameworks section */
+  .frameworks-grid {
+    display: block !important;
+  }
+
+  .frameworks-grid > div {
+    margin-bottom: 20px;
+  }
+
+  /* Quote section */
+  .quote-section {
+    padding: 40px 20px !important;
+  }
+
+  .quote-section h2 {
+    font-size: 24px !important;
+  }
+
+  /* Contact form */
+  .contact-form {
+    padding: 30px !important;
+  }
+
+  /* Footer responsive */
+  .footer-grid {
+    display: block !important;
+  }
+
+  .footer-section {
+    margin-bottom: 30px;
+  }
+
+  .footer-partners {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .footer-socials {
+    justify-content: center !important;
+  }
+
+  .footer-bottom {
+    flex-direction: column !important;
+    gap: 20px !important;
+    text-align: center;
+  }
+
+  /* General padding adjustments */
+  article[style*="gridColumn"] {
+    padding: 0 !important;
+  }
+
+  /* Buttons on mobile */
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Cards on mobile */
+  .card {
+    padding: 30px !important;
+  }
+
+  /* Stats strip adjustments */
+  .stat-item {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* FAQ items */
+  .faq-item h3 {
+    font-size: 18px !important;
+  }
+
+  /* Page header adjustments */
+  .page-header {
+    padding: 40px 0 !important;
+  }
+
+  .page-header h1 {
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* CTA sections */
+  .cta-section {
+    padding: 40px 20px !important;
+  }
+
+  .cta-section h2 {
+    font-size: 24px !important;
+  }
+
+  /* Image placeholders */
+  .image-placeholder {
+    height: 200px !important;
+  }
+
+  /* News cards */
+  .news-card {
+    padding: 20px !important;
+  }
+
+  .news-card h3 {
+    font-size: 18px !important;
+  }
+
+  /* Two column layouts become single */
+  .two-col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Three column layouts become single */
+  .three-col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Typography scaling */
+  h1 {
+    font-size: 32px !important;
+  }
+
+  h2 {
+    font-size: 24px !important;
+  }
+
+  h3 {
+    font-size: 20px !important;
+  }
+
+  /* Reduce padding on sections */
+  section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Joint decorations - smaller on mobile */
+  .joint {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Tablet adjustments (between 600px and 900px) */
+@media (min-width: 600px) and (max-width: 900px) {
+  .skeleton-container {
+    grid-template-columns: 40px 1fr 40px;
+  }
+
+  .three-col {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Small mobile adjustments (under 400px) */
+@media (max-width: 400px) {
+  .skeleton-container {
+    grid-template-columns: 15px 1fr 15px;
+  }
+
+  .btn {
+    padding: 15px 20px !important;
+    font-size: 12px !important;
+  }
+
+  h1 {
+    font-size: 28px !important;
+  }
+
+  h2 {
+    font-size: 22px !important;
+  }
+
+  .joint {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Ensure images don't overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile-friendly touch targets */
+@media (max-width: 900px) {
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .hide-mobile,
+  .show-mobile,
+  .mobile-menu-overlay,
+  nav button {
+    display: none !important;
+  }
 }

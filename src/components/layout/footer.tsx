@@ -202,9 +202,9 @@ export function Footer() {
           className="footer-bottom"
         >
           {/* Partners */}
-          <div>
+          <div className="footer-section">
             <p className="label" style={{ marginBottom: '15px' }}>НАШІ ПАРТНЕРИ</p>
-            <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            <div className="footer-partners" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
               <a
                 href="https://www.youtube.com/@ZBROIOVYILOBIST"
                 target="_blank"
@@ -251,7 +251,7 @@ export function Footer() {
           </div>
 
           {/* Social Icons */}
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <div className="footer-socials" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             {socialLinks.map((social) => (
               <a
                 key={social.label}

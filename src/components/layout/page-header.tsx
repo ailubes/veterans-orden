@@ -9,6 +9,7 @@ interface PageHeaderProps {
 export function PageHeader({ label, title, description }: PageHeaderProps) {
   return (
     <div
+      className="page-header"
       style={{
         gridColumn: '2 / 5',
         padding: '80px 0 60px',
