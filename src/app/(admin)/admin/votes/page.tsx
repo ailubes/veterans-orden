@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, Vote, Edit2, Trash2, Eye, BarChart3 } from 'lucide-react';
+import { Plus, Vote, Edit2, Trash2, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function AdminVotesPage() {
