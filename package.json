@@ -10,17 +10,14 @@
     "db:generate": "drizzle-kit generate:pg",
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx scripts/seed.ts",
-    "convex:dev": "convex dev",
-    "convex:deploy": "convex deploy"
+    "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
-    "@clerk/localizations": "^3.32.1",
-    "@clerk/nextjs": "^4.31.0",
     "@hookform/resolvers": "^3.3.0",
     "@sentry/nextjs": "^7.92.0",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.89.0",
     "clsx": "^2.0.0",
-    "convex": "^1.8.0",
     "date-fns": "^3.0.0",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.29.0",

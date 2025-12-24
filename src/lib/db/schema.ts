@@ -226,7 +226,7 @@ export const groups = pgTable('groups', {
 // ----- USERS (Members) -----
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
-  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(),
+  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(), // Now stores Supabase Auth user id
   email: varchar('email', { length: 255 }).notNull(),
   phone: varchar('phone', { length: 20 }),
   firstName: varchar('first_name', { length: 100 }).notNull(),

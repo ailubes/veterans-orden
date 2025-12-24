@@ -1,0 +1,73 @@
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
+
+export async function updateSession(request: NextRequest) {
+  let supabaseResponse = NextResponse.next({
+    request,
+  });
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          supabaseResponse = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
+
+  // IMPORTANT: Avoid writing any logic between createServerClient and
+  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
+  // issues with users being randomly logged out.
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const url = request.nextUrl;
+  const pathname = url.pathname;
+
+  // Protected routes that require authentication
+  const protectedRoutes = ['/dashboard', '/admin', '/onboarding'];
+  const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
+
+  // Admin routes that require admin role
+  const adminRoutes = ['/admin'];
+  const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
+
+  // Auth routes (sign-in, sign-up)
+  const authRoutes = ['/sign-in', '/sign-up', '/reset-password'];
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+
+  // Redirect unauthenticated users from protected routes to sign-in
+  if (isProtectedRoute && !user) {
+    const redirectUrl = new URL('/sign-in', request.url);
+    redirectUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  // Redirect authenticated users from auth routes to dashboard
+  if (isAuthRoute && user) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // For admin routes, check if user has admin role
+  // Note: This is a basic check. For production, you'd want to check the user's role in the database
+  if (isAdminRoute && user) {
+    // The actual role check will happen in the admin layout
+    // This is just to ensure the user is logged in
+  }
+
+  return supabaseResponse;
+}

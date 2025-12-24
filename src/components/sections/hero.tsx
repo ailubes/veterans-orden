@@ -42,8 +42,29 @@ const AnimatedCounter = ({
 
 export function Hero() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const currentMembers = 4569;
-  const weeklyGrowth = 35;
+  const [stats, setStats] = useState({ totalMembers: 0, weeklyGrowth: 0 });
+
+  // Fetch real stats from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/stats');
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    };
+
+    fetchStats();
+
+    // Refresh stats every 30 seconds for real-time updates
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentMembers = stats.totalMembers;
+  const weeklyGrowth = stats.weeklyGrowth;
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
