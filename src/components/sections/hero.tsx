@@ -83,10 +83,8 @@ export function Hero() {
       style={{
         gridColumn: '2 / 5',
         padding: '80px 0 100px',
-        display: 'grid',
-        gridTemplateColumns: '1.5fr 1fr',
-        gap: '60px',
         position: 'relative',
+        minHeight: '600px',
       }}
     >
       {/* Floating Timber Element */}
@@ -106,7 +104,7 @@ export function Hero() {
       />
 
       {/* Left Column - Title */}
-      <div>
+      <div style={{ maxWidth: 'calc(50% - 40px)' }}>
         <p className="label" style={{ marginBottom: '20px' }}>
           Громадянська мережа політичного впливу
         </p>
@@ -159,20 +157,25 @@ export function Hero() {
 
       {/* Right Column - Counter Card */}
       <div
+        className="counter-card"
         style={{
           background: '#2c2824',
           color: '#e8e2d6',
           padding: '40px',
-          position: 'relative',
-          width: '640px',
-          maxWidth: '100%',
+          position: 'absolute',
+          /* Right edge aligns with right beam (at right edge of hero) */
+          right: '0',
+          top: '80px',
+          /* Left edge is 20px right of center (50% of hero) */
+          left: 'calc(50% + 20px)',
           overflow: 'hidden',
         }}
       >
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        {/* Corner joints - 12x12px black squares */}
+        <div className="joint" style={{ top: '0', left: '0' }} />
+        <div className="joint" style={{ top: '0', right: '0' }} />
+        <div className="joint" style={{ bottom: '0', left: '0' }} />
+        <div className="joint" style={{ bottom: '0', right: '0' }} />
 
         <p className="label" style={{ color: '#d45d3a', marginBottom: '10px' }}>
           ЧЛЕНІВ У МЕРЕЖІ
