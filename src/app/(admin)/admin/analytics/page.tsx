@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Users, TrendingUp, Calendar, Vote, CheckSquare, DollarSign } from 'lucide-react';
+import { GrowthChart } from '@/components/admin/analytics/growth-chart';
+import { EngagementChart } from '@/components/admin/analytics/engagement-chart';
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient();
@@ -186,6 +188,12 @@ export default async function AdminAnalyticsPage() {
             <DollarSign className="text-accent" size={32} />
           </div>
         </div>
+      </div>
+
+      {/* Interactive Charts */}
+      <div className="grid grid-cols-1 gap-6 mb-8">
+        <GrowthChart />
+        <EngagementChart />
       </div>
 
       {/* Charts Section */}

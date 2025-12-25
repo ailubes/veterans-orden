@@ -24,6 +24,7 @@ export const userRoleEnum = pgEnum('user_role', [
   'full_member',
   'group_leader',
   'regional_leader',
+  'news_editor',
   'admin',
   'super_admin',
 ]);
@@ -538,7 +539,7 @@ export const newsArticles = pgTable('news_articles', {
   content: text('content').notNull(),
 
   // Media
-  featuredImage: text('featured_image'),
+  featuredImageUrl: text('featured_image_url'),
   images: jsonb('images').default([]),
   videoUrl: text('video_url'),
 
@@ -572,6 +573,20 @@ export const newsArticles = pgTable('news_articles', {
   publishedAtIdx: index('news_articles_published_at_idx').on(table.publishedAt),
   categoryIdx: index('news_articles_category_idx').on(table.category),
 }));
+
+// ----- NEWS CATEGORY METADATA -----
+export const newsCategoryMeta = pgTable('news_category_meta', {
+  id: varchar('id', { length: 50 }).primaryKey(), // matches enum value
+  nameUk: varchar('name_uk', { length: 100 }).notNull(),
+  nameEn: varchar('name_en', { length: 100 }).notNull(),
+  description: text('description'),
+  icon: varchar('icon', { length: 50 }), // Lucide icon name
+  color: varchar('color', { length: 20 }), // hex color
+  order: integer('order').default(0),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
 
 // ----- NOTIFICATIONS -----
 export const notifications = pgTable('notifications', {

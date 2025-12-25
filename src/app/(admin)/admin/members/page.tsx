@@ -7,7 +7,7 @@ import {
 } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Plus, Download } from 'lucide-react';
+import { Plus, Download, Upload } from 'lucide-react';
 import { MembersTable } from '@/components/admin/members-table';
 
 interface MembersPageProps {
@@ -115,6 +115,15 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             <Download size={18} />
             ЕКСПОРТ
           </Link>
+          {['super_admin', 'admin'].includes(adminProfile.role) && (
+            <Link
+              href="/admin/members/import"
+              className="btn btn-outline flex items-center gap-2"
+            >
+              <Upload size={18} />
+              ІМПОРТ
+            </Link>
+          )}
           <Link href="/admin/members/new" className="btn flex items-center gap-2">
             <Plus size={18} />
             ДОДАТИ

@@ -17,6 +17,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
+import { MemberActivityTimeline } from '@/components/admin/member-activity-timeline';
 
 interface MemberDetailPageProps {
   params: Promise<{
@@ -58,14 +59,6 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
     .from('users')
     .select('*', { count: 'exact', head: true })
     .eq('referred_by_id', member.id);
-
-  // Get recent activity from activity_log
-  const { data: recentActivity } = await supabase
-    .from('activity_log')
-    .select('*')
-    .eq('user_id', member.id)
-    .order('created_at', { ascending: false })
-    .limit(10);
 
   // Get referral tree (first level only for visualization)
   const { data: directReferrals } = await supabase
@@ -397,44 +390,8 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
         </div>
       )}
 
-      {/* Activity Feed */}
-      {recentActivity && recentActivity.length > 0 && (
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
-
-          <p className="label text-accent mb-4">ОСТАННЯ АКТИВНІСТЬ</p>
-
-          <div className="space-y-3">
-            {recentActivity.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-start gap-3 pb-3 border-b border-timber-dark/10 last:border-0"
-              >
-                <div className="w-2 h-2 bg-accent rounded-full mt-2" />
-                <div className="flex-1">
-                  <p className="text-sm font-bold">{activity.action_type}</p>
-                  {activity.description && (
-                    <p className="text-xs text-timber-beam mt-1">
-                      {activity.description}
-                    </p>
-                  )}
-                  <p className="text-xs text-timber-beam mt-1">
-                    {formatDate(activity.created_at)}
-                  </p>
-                </div>
-                {activity.points_earned && (
-                  <span className="text-xs font-bold text-accent">
-                    +{activity.points_earned}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Activity Timeline */}
+      <MemberActivityTimeline memberId={member.id} />
     </div>
   );
 }

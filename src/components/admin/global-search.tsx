@@ -93,6 +93,14 @@ export function GlobalSearch() {
     return () => clearTimeout(timer);
   }, [query]);
 
+  // Handle selection
+  const handleSelect = useCallback((result: SearchResult) => {
+    router.push(result.url);
+    setIsOpen(false);
+    setQuery('');
+    setResults([]);
+  }, [router]);
+
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -107,15 +115,8 @@ export function GlobalSearch() {
         handleSelect(results[selectedIndex]);
       }
     },
-    [results, selectedIndex]
+    [results, selectedIndex, handleSelect]
   );
-
-  const handleSelect = (result: SearchResult) => {
-    router.push(result.url);
-    setIsOpen(false);
-    setQuery('');
-    setResults([]);
-  };
 
   if (!isOpen) return null;
 

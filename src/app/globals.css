@@ -113,7 +113,7 @@ body {
 /* Mobile grid */
 @media (max-width: 900px) {
   .skeleton-container {
-    grid-template-columns: 20px 1fr 20px;
+    grid-template-columns: 10px 1fr 10px;
   }
 
   .skeleton-container > * {
@@ -495,7 +495,7 @@ body {
 /* Tablet adjustments (between 600px and 900px) */
 @media (min-width: 600px) and (max-width: 900px) {
   .skeleton-container {
-    grid-template-columns: 40px 1fr 40px;
+    grid-template-columns: 20px 1fr 20px;
   }
 
   .three-col {
@@ -506,7 +506,7 @@ body {
 /* Small mobile adjustments (under 400px) */
 @media (max-width: 400px) {
   .skeleton-container {
-    grid-template-columns: 15px 1fr 15px;
+    grid-template-columns: 10px 1fr 10px;
   }
 
   .btn {

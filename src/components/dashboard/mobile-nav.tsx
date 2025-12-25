@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
   Trophy,
+  Shield,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -30,8 +31,29 @@ const navItems = [
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('role')
+          .eq('clerk_id', user.id)
+          .single();
+
+        const adminRoles = ['admin', 'super_admin', 'regional_leader'];
+        setIsAdmin(Boolean(profile && adminRoles.includes(profile.role)));
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
 
   const handleSignOut = async () => {
     const supabase = createClient();
@@ -83,6 +105,24 @@ export function MobileNav() {
                 </li>
               );
             })}
+
+            {/* Admin Link - only visible to admins */}
+            {isAdmin && (
+              <li className="pt-4 mt-4 border-t border-canvas/10">
+                <Link
+                  href="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider transition-colors ${
+                    pathname.startsWith('/admin')
+                      ? 'bg-accent text-canvas'
+                      : 'hover:bg-canvas/10'
+                  }`}
+                >
+                  <Shield size={20} />
+                  АДМІН-ПАНЕЛЬ
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="mt-4 pt-4 border-t border-canvas/10">

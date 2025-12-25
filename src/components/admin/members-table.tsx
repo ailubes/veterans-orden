@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { BulkActionsToolbar, commonBulkActions } from './bulk-actions-toolbar';
 import { toast } from '@/hooks/use-toast';
+import { exportMembersData } from '@/lib/export-utils';
+import { FileSpreadsheet, FileText } from 'lucide-react';
 
 interface Member {
   id: string;
@@ -23,9 +25,10 @@ interface MembersTableProps {
   members: Member[];
   canSuspend: boolean;
   canDelete: boolean;
+  showExportButtons?: boolean;
 }
 
-export function MembersTable({ members, canSuspend, canDelete }: MembersTableProps) {
+export function MembersTable({ members, canSuspend, canDelete, showExportButtons = true }: MembersTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const toggleSelect = (id: string) => {
@@ -189,6 +192,32 @@ export function MembersTable({ members, canSuspend, canDelete }: MembersTablePro
     bulkActions.push(commonBulkActions.delete(handleBulkDelete));
   }
 
+  const handleExportExcel = () => {
+    const dataToExport = selectedIds.size > 0
+      ? members.filter(m => selectedIds.has(m.id))
+      : members;
+
+    exportMembersData(dataToExport, 'excel');
+
+    toast({
+      title: 'Експортовано',
+      description: `${dataToExport.length} членів експортовано в Excel`,
+    });
+  };
+
+  const handleExportPDF = () => {
+    const dataToExport = selectedIds.size > 0
+      ? members.filter(m => selectedIds.has(m.id))
+      : members;
+
+    exportMembersData(dataToExport, 'pdf');
+
+    toast({
+      title: 'Експортовано',
+      description: `${dataToExport.length} членів експортовано в PDF`,
+    });
+  };
+
   if (members.length === 0) {
     return (
       <div className="bg-canvas border-2 border-timber-dark relative">
@@ -208,6 +237,26 @@ export function MembersTable({ members, canSuspend, canDelete }: MembersTablePro
 
   return (
     <>
+      {/* Export Buttons */}
+      {showExportButtons && (
+        <div className="flex justify-end gap-2 mb-4">
+          <button
+            onClick={handleExportExcel}
+            className="btn btn-outline btn-sm flex items-center gap-2"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            Експорт Excel
+          </button>
+          <button
+            onClick={handleExportPDF}
+            className="btn btn-outline btn-sm flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            Експорт PDF
+          </button>
+        </div>
+      )}
+
       <div className="bg-canvas border-2 border-timber-dark relative overflow-hidden">
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
         <div className="joint" style={{ top: '-6px', right: '-6px' }} />

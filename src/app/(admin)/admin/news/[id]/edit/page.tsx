@@ -3,8 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Save, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, AlertCircle, AlertTriangle } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
+import { ImageUploadZone } from '@/components/admin/image-upload-zone';
+import { validateSlugFormat } from '@/lib/utils/slug';
 
 interface NewsEditPageProps {
   params: Promise<{
@@ -18,6 +21,8 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [slugError, setSlugError] = useState('');
+  const [isCheckingSlug, setIsCheckingSlug] = useState(false);
   const [canEdit, setCanEdit] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -46,12 +51,54 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newsId]);
 
+  // Validate slug uniqueness (exclude current article)
+  useEffect(() => {
+    if (!formData.slug || !newsId) {
+      setSlugError('');
+      return;
+    }
+
+    // Validate format first
+    const formatValidation = validateSlugFormat(formData.slug);
+    if (!formatValidation.valid) {
+      setSlugError(formatValidation.error || '');
+      return;
+    }
+
+    // Check uniqueness via API (excluding current article)
+    const timer = setTimeout(async () => {
+      setIsCheckingSlug(true);
+      try {
+        const response = await fetch(
+          `/api/admin/news/check-slug?slug=${encodeURIComponent(
+            formData.slug
+          )}&excludeId=${newsId}`
+        );
+        const data = await response.json();
+
+        if (data.unique === false) {
+          setSlugError('Цей slug вже використовується. Виберіть інший.');
+        } else {
+          setSlugError('');
+        }
+      } catch (err) {
+        console.error('Error checking slug:', err);
+      } finally {
+        setIsCheckingSlug(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.slug, newsId]);
+
   const loadData = async () => {
     try {
       const supabase = createClient();
 
       // Get current admin profile
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         router.push('/sign-in');
         return;
@@ -63,7 +110,12 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
         .eq('clerk_id', user.id)
         .single();
 
-      if (!adminProfile || !['admin', 'super_admin', 'regional_leader'].includes(adminProfile.role)) {
+      if (
+        !adminProfile ||
+        !['admin', 'super_admin', 'regional_leader', 'news_editor'].includes(
+          adminProfile.role
+        )
+      ) {
         router.push('/dashboard');
         return;
       }
@@ -85,7 +137,9 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       const hasEditPermission =
         adminProfile.role === 'super_admin' ||
         adminProfile.role === 'admin' ||
-        (adminProfile.role === 'regional_leader' && article.author_id === adminProfile.id);
+        adminProfile.role === 'news_editor' ||
+        (adminProfile.role === 'regional_leader' &&
+          article.author_id === adminProfile.id);
 
       if (!hasEditPermission) {
         router.push('/admin/news');
@@ -113,26 +167,21 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
     }
   };
 
-  // Auto-generate slug from title
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-  };
-
-  const handleTitleChange = (title: string) => {
-    setFormData({
-      ...formData,
-      title,
-      slug: generateSlug(title),
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate slug
+    if (slugError) {
+      setError('Виправте помилки slug перед збереженням');
+      return;
+    }
+
+    // Validate required fields
+    if (!formData.title || !formData.content || !formData.slug) {
+      setError('Заповніть всі обов\'язкові поля');
+      return;
+    }
+
     setSaving(true);
     setError(null);
 
@@ -194,52 +243,43 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      {/* Back button */}
-      <div className="mb-6">
-        <Link
-          href={`/admin/news/${newsId}`}
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
-        >
-          <ArrowLeft size={16} />
-          НАЗАД
-        </Link>
-      </div>
-
+    <div className="max-w-4xl mx-auto pb-12">
       {/* Header */}
       <div className="mb-8">
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ СТАТТІ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">
-          Редагувати статтю
-        </h1>
+        <Link
+          href={`/admin/news/${newsId}`}
+          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+        >
+          <ArrowLeft size={16} />
+          Назад до статті
+        </Link>
+        <h1 className="font-syne text-3xl font-bold">Редагувати статтю</h1>
+        <p className="text-timber-beam mt-2">
+          Оновіть вміст статті з підтримкою Rich Text Editor
+        </p>
       </div>
 
-      {/* Error Alert */}
-      {error && (
-        <div className="bg-red-50 border-2 border-red-500 p-4 mb-6">
-          <div className="flex items-center gap-2 text-red-700">
-            <AlertTriangle size={20} />
-            <p className="font-bold">{error}</p>
-          </div>
-        </div>
-      )}
-
       {/* Form */}
-      <form onSubmit={handleSubmit}>
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Basic Info Card */}
+        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
 
-          <div className="space-y-6">
+          <h2 className="text-xl font-bold mb-4">Основна інформація</h2>
+
+          <div className="space-y-4">
             {/* Title */}
             <div>
-              <label className="label mb-2 block">ЗАГОЛОВОК *</label>
+              <label className="block text-sm font-medium text-timber-dark mb-2">
+                ЗАГОЛОВОК *
+              </label>
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => handleTitleChange(e.target.value)}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
                 required
               />
@@ -247,104 +287,157 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
 
             {/* Slug */}
             <div>
-              <label className="label mb-2 block">URL (SLUG) *</label>
+              <label className="block text-sm font-medium text-timber-dark mb-2">
+                URL (SLUG) *
+              </label>
               <div className="flex items-center">
-                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-timber-dark text-sm text-timber-beam">
+                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-timber-dark text-sm text-timber-beam whitespace-nowrap">
                   /news/
                 </span>
                 <input
                   type="text"
                   value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  onChange={(e) =>
+                    setFormData({ ...formData, slug: e.target.value })
+                  }
+                  className={`flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none ${
+                    slugError ? 'border-red-500' : ''
+                  }`}
                   required
                 />
+                {isCheckingSlug && (
+                  <span className="ml-2 text-xs text-gray-500">Перевірка...</span>
+                )}
               </div>
+              {slugError && (
+                <div className="flex items-start gap-2 mt-2 text-sm text-red-600">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                  <span>{slugError}</span>
+                </div>
+              )}
             </div>
 
             {/* Excerpt */}
             <div>
-              <label className="label mb-2 block">КОРОТКИЙ ОПИС</label>
+              <label className="block text-sm font-medium text-timber-dark mb-2">
+                КОРОТКИЙ ОПИС
+              </label>
               <textarea
                 value={formData.excerpt}
-                onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, excerpt: e.target.value })
+                }
                 className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[80px]"
-                placeholder="Короткий опис для анонсів та превʼю..."
+                placeholder="Короткий опис для превью та соціальних мереж (необов'язково)"
+                maxLength={300}
               />
+              <p className="text-xs text-gray-500 mt-1">
+                {formData.excerpt.length} / 300 символів
+              </p>
             </div>
 
-            {/* Content */}
-            <div>
-              <label className="label mb-2 block">ЗМІСТ СТАТТІ *</label>
-              <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[300px]"
-                required
-              />
-            </div>
-
-            {/* Row: Category + Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Categories and Status */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label mb-2 block">КАТЕГОРІЯ *</label>
+                <label className="block text-sm font-medium text-timber-dark mb-2">
+                  КАТЕГОРІЯ *
+                </label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, category: e.target.value })
+                  }
                   className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
                   required
                 >
-                  <option value="announcement">Оголошення</option>
-                  <option value="update">Оновлення</option>
-                  <option value="event_recap">Звіт з події</option>
-                  <option value="press">Преса</option>
-                  <option value="blog">Блог</option>
+                  <option value="announcement">📢 Оголошення</option>
+                  <option value="update">🔔 Оновлення</option>
+                  <option value="success_story">🏆 Історія успіху</option>
+                  <option value="media">📰 Медіа</option>
+                  <option value="education">📚 Освіта</option>
                 </select>
               </div>
 
               <div>
-                <label className="label mb-2 block">СТАТУС *</label>
+                <label className="block text-sm font-medium text-timber-dark mb-2">
+                  СТАТУС *
+                </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, status: e.target.value })
+                  }
                   className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
                   required
                 >
-                  <option value="draft">Чернетка</option>
-                  <option value="published">Опубліковано</option>
-                  <option value="archived">Архів</option>
+                  <option value="draft">📝 Чернетка</option>
+                  <option value="published">✅ Опубліковано</option>
+                  <option value="archived">📦 Архів</option>
                 </select>
               </div>
-            </div>
-
-            {/* Featured Image URL */}
-            <div>
-              <label className="label mb-2 block">URL ГОЛОВНОГО ЗОБРАЖЕННЯ</label>
-              <input
-                type="url"
-                value={formData.featured_image_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, featured_image_url: e.target.value })
-                }
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                placeholder="https://example.com/image.jpg"
-              />
             </div>
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex flex-wrap gap-4">
+        {/* Featured Image Card */}
+        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+          <h2 className="text-xl font-bold mb-4">Головне зображення</h2>
+
+          <ImageUploadZone
+            value={formData.featured_image_url}
+            onChange={(url) =>
+              setFormData({ ...formData, featured_image_url: url })
+            }
+            label="Головне зображення статті"
+            context="news_featured"
+            compress={true}
+          />
+        </div>
+
+        {/* Content Editor Card */}
+        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+          <h2 className="text-xl font-bold mb-4">Контент статті *</h2>
+
+          <RichTextEditor
+            content={formData.content}
+            onChange={(html) => setFormData({ ...formData, content: html })}
+            placeholder="Редагуйте вміст статті..."
+            minHeight="500px"
+            maxLength={50000}
+          />
+        </div>
+
+        {/* Error Alert */}
+        {error && (
+          <div className="bg-red-50 border-2 border-red-200 p-4 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-red-800 font-medium">Помилка</p>
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-4 pt-4">
           <button
             type="submit"
-            disabled={saving}
-            className="btn flex items-center gap-2 disabled:opacity-50"
+            disabled={saving || !!slugError || isCheckingSlug}
+            className="px-6 py-3 bg-timber-dark text-white font-bold hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Save size={18} />
-            {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ЗМІНИ'}
+            {saving ? 'ЗБЕРЕЖЕННЯ...' : '💾 ЗБЕРЕГТИ ЗМІНИ →'}
           </button>
-          <Link href={`/admin/news/${newsId}`} className="btn btn-outline">
-            СКАСУВАТИ
+          <Link
+            href={`/admin/news/${newsId}`}
+            className="text-sm text-timber-beam hover:text-accent"
+          >
+            Скасувати
           </Link>
         </div>
       </form>
