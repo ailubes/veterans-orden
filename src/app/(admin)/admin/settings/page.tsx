@@ -85,12 +85,12 @@ export default async function AdminSettingsPage() {
         </TabsContent>
 
         <TabsContent value="audit" className="mt-0">
-          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas relative">
+          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
             {/* Joints */}
-            <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <h2 className="font-syne text-xl sm:text-2xl font-bold mb-4">Журнал аудиту</h2>
             <p className="text-timber-beam">

@@ -95,23 +95,23 @@ export default function OrganizationProfileTab({
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-8 bg-canvas relative flex items-center justify-center min-h-[400px]">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
         <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
 
   return (
-    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas relative">
+    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
       {/* Joints */}
-      <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <div className="mb-6">
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Профіль організації</h2>

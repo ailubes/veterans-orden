@@ -146,11 +146,11 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
 
       {/* Filters */}
       {!isRegionalLeader(adminProfile.role) && (
-        <div className="border-2 border-timber-dark p-4 sm:p-6 bg-canvas relative mb-6">
-          <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="border-2 border-timber-dark p-4 sm:p-6 bg-canvas card-with-joints mb-6">
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-accent" />
@@ -219,11 +219,11 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
       )}
 
       {/* Audit Log Table */}
-      <div className="border-2 border-timber-dark bg-canvas relative">
-        <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="border-2 border-timber-dark bg-canvas card-with-joints">
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <div className="p-4 sm:p-6 border-b-2 border-timber-dark flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <h2 className="font-syne text-lg sm:text-xl font-bold">
