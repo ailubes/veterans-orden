@@ -276,7 +276,8 @@ body {
   }
 
   .btn-outline {
-    @apply inline-block px-10 py-5 bg-accent text-timber-dark font-mono font-bold text-[13px] uppercase tracking-wider relative cursor-pointer border-none;
+    @apply inline-block px-10 py-5 text-timber-dark font-mono font-bold text-[13px] uppercase tracking-wider relative cursor-pointer border-none;
+    background-color: var(--accent);
     transition: transform 0.2s ease;
   }
 
