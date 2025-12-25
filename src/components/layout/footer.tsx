@@ -233,7 +233,7 @@ export function Footer() {
                 className="partner-link"
               >
                 <Image
-                  src="/images/partners/zb-lobist-light.png"
+                  src="/images/partners/zb-lobist.png"
                   alt="Збройовий Лобіст"
                   width={76}
                   height={40}
