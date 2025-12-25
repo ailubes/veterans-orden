@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Bell } from 'lucide-react';
 
 export default function NewTaskPage() {
   const router = useRouter();
@@ -19,6 +19,7 @@ export default function NewTaskPage() {
     points: 10,
     due_date: '',
     requires_proof: false,
+    notifyMembers: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,19 +51,43 @@ export default function NewTaskPage() {
         return;
       }
 
-      const { error: insertError } = await supabase.from('tasks').insert({
-        title: formData.title,
-        description: formData.description,
-        type: formData.type,
-        priority: formData.priority,
-        points: formData.points,
-        due_date: formData.due_date || null,
-        requires_proof: formData.requires_proof,
-        status: 'open',
-        created_by: profile.id,
-      });
+      const { data: newTask, error: insertError } = await supabase
+        .from('tasks')
+        .insert({
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+          priority: formData.priority,
+          points: formData.points,
+          due_date: formData.due_date || null,
+          requires_proof: formData.requires_proof,
+          status: 'open',
+          created_by: profile.id,
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+
+      // Send notification if enabled
+      if (formData.notifyMembers && newTask) {
+        try {
+          await fetch('/api/admin/notifications/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: `Нове завдання: ${formData.title}`,
+              message: formData.description
+                ? formData.description.slice(0, 200) + (formData.description.length > 200 ? '...' : '')
+                : `Нове завдання на ${formData.points} балів`,
+              type: 'info',
+              scope: 'all',
+            }),
+          });
+        } catch (notifyError) {
+          console.error('Failed to send notification:', notifyError);
+        }
+      }
 
       router.push('/admin/tasks');
       router.refresh();
@@ -201,6 +226,23 @@ export default function NewTaskPage() {
               <label htmlFor="requires_proof" className="text-sm">
                 Потребує підтвердження виконання (посилання/скріншот)
               </label>
+            </div>
+
+            {/* Notification Option */}
+            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.notifyMembers}
+                  onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
+                  className="w-5 h-5"
+                />
+                <Bell className="w-5 h-5 text-accent" />
+                <span className="font-bold">Сповістити всіх членів про завдання</span>
+              </label>
+              <p className="text-xs text-timber-beam mt-2 ml-8">
+                Всі активні члени отримають сповіщення про нове завдання
+              </p>
             </div>
           </div>
         </div>

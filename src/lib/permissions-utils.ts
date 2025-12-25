@@ -90,16 +90,27 @@ export function canAccessSystemSettings(adminRole: UserRole): boolean {
   return isSuperAdmin(adminRole);
 }
 
+export type NotificationScope =
+  | 'all'
+  | 'user'
+  | 'role'
+  | 'oblast'
+  | 'tier'
+  | 'group'
+  | 'referral_tree'
+  | 'payment_expired'
+  | 'never_paid';
+
 /**
  * Can the admin send notifications to a specific scope?
  *
  * Rules:
  * - Super Admin & Admin: Can send to anyone
- * - Regional Leader: Can only send to their referral tree
+ * - Regional Leader: Can only send to their referral tree or specific users
  */
 export function canSendNotificationTo(
   adminRole: UserRole,
-  scope: 'user' | 'role' | 'oblast' | 'group' | 'referral_tree'
+  scope: NotificationScope
 ): boolean {
   if (isSuperAdmin(adminRole) || adminRole === 'admin') {
     return true;

@@ -1,15 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+
+interface Oblast {
+  id: string;
+  name: string;
+}
 
 export default function NewEventPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [oblasts, setOblasts] = useState<Oblast[]>([]);
+
+  useEffect(() => {
+    const fetchOblasts = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('oblasts')
+        .select('id, name')
+        .order('name');
+      if (data) setOblasts(data);
+    };
+    fetchOblasts();
+  }, []);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -25,6 +43,9 @@ export default function NewEventPage() {
     endTime: '',
     maxAttendees: '',
     status: 'draft',
+    notifyMembers: false,
+    notifyScope: 'all' as 'all' | 'oblast',
+    oblastId: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,22 +79,48 @@ export default function NewEventPage() {
       const startDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
       const endDateTime = new Date(`${formData.endDate}T${formData.endTime}`);
 
-      const { error: insertError } = await supabase.from('events').insert({
-        title: formData.title,
-        description: formData.description,
-        type: formData.type,
-        scope: formData.scope,
-        is_online: formData.isOnline,
-        online_url: formData.isOnline ? formData.onlineUrl : null,
-        location: formData.isOnline ? null : { address: formData.location },
-        start_date: startDateTime.toISOString(),
-        end_date: endDateTime.toISOString(),
-        max_attendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
-        status: formData.status,
-        organizer_id: profile.id,
-      });
+      const { data: newEvent, error: insertError } = await supabase
+        .from('events')
+        .insert({
+          title: formData.title,
+          description: formData.description,
+          type: formData.type,
+          scope: formData.scope,
+          is_online: formData.isOnline,
+          online_url: formData.isOnline ? formData.onlineUrl : null,
+          location: formData.isOnline ? null : { address: formData.location },
+          start_date: startDateTime.toISOString(),
+          end_date: endDateTime.toISOString(),
+          max_attendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
+          status: formData.status,
+          organizer_id: profile.id,
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+
+      // Send notification if enabled and event is published
+      if (formData.notifyMembers && formData.status === 'published' && newEvent) {
+        try {
+          await fetch('/api/admin/notifications/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: `Нова подія: ${formData.title}`,
+              message: formData.description
+                ? formData.description.slice(0, 200) + (formData.description.length > 200 ? '...' : '')
+                : 'Нова подія в Мережі',
+              type: 'info',
+              scope: formData.notifyScope === 'oblast' ? 'oblast' : 'all',
+              scopeValue: formData.notifyScope === 'oblast' ? formData.oblastId : null,
+            }),
+          });
+        } catch (notifyError) {
+          console.error('Failed to send notification:', notifyError);
+          // Don't fail the whole operation if notification fails
+        }
+      }
 
       router.push('/admin/events');
     } catch (err) {
@@ -261,7 +308,7 @@ export default function NewEventPage() {
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
               <label className="label block mb-2">МАКСИМУМ УЧАСНИКІВ</label>
               <input
@@ -284,6 +331,59 @@ export default function NewEventPage() {
                 <option value="published">Опублікувати</option>
               </select>
             </div>
+          </div>
+
+          {/* Notification Settings */}
+          <div className="border-t border-timber-dark/20 pt-6">
+            <label className="flex items-center gap-3 cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                checked={formData.notifyMembers}
+                onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
+                className="w-5 h-5"
+              />
+              <Bell className="w-5 h-5 text-accent" />
+              <span className="font-bold">Сповістити членів про подію</span>
+            </label>
+
+            {formData.notifyMembers && (
+              <div className="ml-8 space-y-4">
+                <div>
+                  <label className="label block mb-2">КОГО СПОВІСТИТИ</label>
+                  <select
+                    value={formData.notifyScope}
+                    onChange={(e) => setFormData({ ...formData, notifyScope: e.target.value as 'all' | 'oblast' })}
+                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  >
+                    <option value="all">Всіх активних членів</option>
+                    <option value="oblast">Тільки певну область</option>
+                  </select>
+                </div>
+
+                {formData.notifyScope === 'oblast' && (
+                  <div>
+                    <label className="label block mb-2">ОБЕРІТЬ ОБЛАСТЬ</label>
+                    <select
+                      value={formData.oblastId}
+                      onChange={(e) => setFormData({ ...formData, oblastId: e.target.value })}
+                      className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                      required={formData.notifyScope === 'oblast'}
+                    >
+                      <option value="">Оберіть область...</option>
+                      {oblasts.map((oblast) => (
+                        <option key={oblast.id} value={oblast.id}>
+                          {oblast.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <p className="text-xs text-timber-beam">
+                  Сповіщення буде надіслано тільки якщо статус події &quot;Опублікувати&quot;
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
 import { ProfilePhotoUpload } from '@/components/dashboard/profile-photo-upload';
+import { MessageToLeader } from '@/components/dashboard/message-to-leader';
 import {
   Copy,
   Check,
@@ -30,6 +31,7 @@ interface UserProfile {
   avatarUrl: string | null;
   referralCode: string;
   referralCount: number;
+  referredById: string | null;
   referredByName: string | null;
   oblastName: string | null;
   city: string | null;
@@ -41,6 +43,8 @@ interface UserProfile {
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   isIdentityVerified: boolean;
+  regionalLeaderId: string | null;
+  regionalLeaderName: string | null;
 }
 
 export default function SettingsPage() {
@@ -115,6 +119,29 @@ export default function SettingsPage() {
             }
           }
 
+          // Get regional leader if user has an oblast
+          let regionalLeaderId = null;
+          let regionalLeaderName = null;
+          if (profile.oblast_id) {
+            const { data: oblast } = await supabase
+              .from('oblasts')
+              .select('leader_id')
+              .eq('id', profile.oblast_id)
+              .single();
+
+            if (oblast?.leader_id) {
+              const { data: leader } = await supabase
+                .from('users')
+                .select('id, first_name, last_name')
+                .eq('id', oblast.leader_id)
+                .single();
+              if (leader) {
+                regionalLeaderId = leader.id;
+                regionalLeaderName = `${leader.first_name} ${leader.last_name}`;
+              }
+            }
+          }
+
           setUser({
             id: profile.id,
             email: profile.email || authUser.email || '',
@@ -127,6 +154,7 @@ export default function SettingsPage() {
             avatarUrl: profile.avatar_url,
             referralCode: profile.referral_code,
             referralCount: profile.referral_count || 0,
+            referredById: profile.referred_by_id || null,
             referredByName,
             oblastName: Array.isArray(profile.oblast)
               ? profile.oblast[0]?.name || null
@@ -140,6 +168,8 @@ export default function SettingsPage() {
             isEmailVerified: profile.is_email_verified || false,
             isPhoneVerified: profile.is_phone_verified || false,
             isIdentityVerified: profile.is_identity_verified || false,
+            regionalLeaderId,
+            regionalLeaderName,
           });
           setFirstName(profile.first_name || '');
           setLastName(profile.last_name || '');
@@ -385,6 +415,26 @@ export default function SettingsPage() {
           </p>
         </div>
       </div>
+
+      {/* Message to Leader Section */}
+      {(user.referredById || user.regionalLeaderId) && (
+        <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+          <p className="label text-accent mb-6">НАПИСАТИ ЛІДЕРУ</p>
+
+          <MessageToLeader
+            referrerId={user.referredById}
+            referrerName={user.referredByName}
+            regionalLeaderId={user.regionalLeaderId}
+            regionalLeaderName={user.regionalLeaderName}
+            oblastName={user.oblastName}
+          />
+        </div>
+      )}
 
       {/* Profile Photo */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">

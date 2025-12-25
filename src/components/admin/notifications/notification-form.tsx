@@ -36,6 +36,8 @@ export function NotificationForm({
         { value: 'role', label: 'За роллю' },
         { value: 'oblast', label: 'За областю' },
         { value: 'tier', label: 'За планом членства' },
+        { value: 'payment_expired', label: 'Прострочені платежі' },
+        { value: 'never_paid', label: 'Ніколи не платили' },
         { value: 'user', label: 'Конкретний користувач' },
       ];
     }
@@ -62,7 +64,8 @@ export function NotificationForm({
       return;
     }
 
-    if (scope !== 'all' && scope !== 'referral_tree' && !scopeValue) {
+    const scopesWithoutValue = ['all', 'referral_tree', 'payment_expired', 'never_paid'];
+    if (!scopesWithoutValue.includes(scope) && !scopeValue) {
       toast({
         variant: 'destructive',
         title: 'Помилка',

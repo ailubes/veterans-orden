@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, AlertCircle, RefreshCw, Bell } from 'lucide-react';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { ImageUploadZone } from '@/components/admin/image-upload-zone';
 import { generateSlug, validateSlugFormat } from '@/lib/utils/slug';
@@ -25,6 +25,7 @@ export default function NewNewsPage() {
     category: 'update',
     status: 'draft',
     featured_image_url: '',
+    notifyMembers: false,
   });
 
   // Generate slug when title field loses focus (only if not manually edited)
@@ -132,17 +133,21 @@ export default function NewNewsPage() {
       }
 
       // Insert article
-      const { error: insertError } = await supabase.from('news_articles').insert({
-        title: formData.title,
-        slug: formData.slug,
-        excerpt: formData.excerpt || null,
-        content: formData.content,
-        category: formData.category,
-        status: formData.status,
-        featured_image_url: formData.featured_image_url || null,
-        author_id: profile.id,
-        published_at: formData.status === 'published' ? new Date().toISOString() : null,
-      });
+      const { data: newArticle, error: insertError } = await supabase
+        .from('news_articles')
+        .insert({
+          title: formData.title,
+          slug: formData.slug,
+          excerpt: formData.excerpt || null,
+          content: formData.content,
+          category: formData.category,
+          status: formData.status,
+          featured_image_url: formData.featured_image_url || null,
+          author_id: profile.id,
+          published_at: formData.status === 'published' ? new Date().toISOString() : null,
+        })
+        .select()
+        .single();
 
       if (insertError) {
         if (insertError.code === '23505') {
@@ -151,6 +156,26 @@ export default function NewNewsPage() {
           return;
         }
         throw insertError;
+      }
+
+      // Send notification if enabled and article is published
+      if (formData.notifyMembers && formData.status === 'published' && newArticle) {
+        try {
+          await fetch('/api/admin/notifications/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              title: `Новина: ${formData.title}`,
+              message: formData.excerpt
+                ? formData.excerpt.slice(0, 200) + (formData.excerpt.length > 200 ? '...' : '')
+                : 'Нова новина в Мережі',
+              type: 'info',
+              scope: 'all',
+            }),
+          });
+        } catch (notifyError) {
+          console.error('Failed to send notification:', notifyError);
+        }
       }
 
       router.push('/admin/news');
@@ -316,6 +341,23 @@ export default function NewNewsPage() {
                   <option value="published">✅ Опублікувати зараз</option>
                 </select>
               </div>
+            </div>
+
+            {/* Notification Option */}
+            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.notifyMembers}
+                  onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
+                  className="w-5 h-5"
+                />
+                <Bell className="w-5 h-5 text-accent" />
+                <span className="font-bold">Сповістити всіх членів про новину</span>
+              </label>
+              <p className="text-xs text-timber-beam mt-2 ml-8">
+                Сповіщення буде надіслано тільки якщо статус &quot;Опублікувати зараз&quot;
+              </p>
             </div>
           </div>
         </div>

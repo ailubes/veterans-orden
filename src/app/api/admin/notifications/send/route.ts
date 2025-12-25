@@ -87,6 +87,21 @@ export async function POST(request: NextRequest) {
           .eq('status', 'active');
         break;
 
+      case 'payment_expired':
+        // Users who had a paid tier but membership expired
+        recipientQuery = recipientQuery
+          .lt('membership_paid_until', new Date().toISOString())
+          .not('membership_paid_until', 'is', null)
+          .eq('status', 'active');
+        break;
+
+      case 'never_paid':
+        // Users who never paid (still on free tier)
+        recipientQuery = recipientQuery
+          .eq('membership_tier', 'free')
+          .eq('status', 'active');
+        break;
+
       case 'user':
         if (!scopeValue) {
           return NextResponse.json(
