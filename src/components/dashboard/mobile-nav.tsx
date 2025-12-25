@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
+import { NotificationBell } from './notification-bell';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -71,13 +72,16 @@ export function MobileNav() {
           <span className="font-syne font-bold tracking-tight">МЕРЕЖА</span>
         </Link>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-2">
+          <NotificationBell variant="dark" />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </header>
 
       {/* Mobile Menu */}

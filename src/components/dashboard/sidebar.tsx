@@ -12,11 +12,13 @@ import {
   LogOut,
   Trophy,
   Shield,
+  Bell,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/logo';
 import { useEffect, useState } from 'react';
+import { NotificationBell } from './notification-bell';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -62,12 +64,13 @@ export function Sidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-timber-dark text-canvas min-h-screen">
-      {/* Logo */}
-      <div className="p-6 border-b border-canvas/10">
+      {/* Logo & Notifications */}
+      <div className="p-6 border-b border-canvas/10 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <Logo size={40} className="text-canvas" />
           <span className="font-syne font-bold text-lg tracking-tight">МЕРЕЖА</span>
         </Link>
+        <NotificationBell variant="dark" />
       </div>
 
       {/* Navigation */}

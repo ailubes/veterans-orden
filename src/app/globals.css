@@ -516,30 +516,31 @@ body {
     gap: 0 !important;
   }
 
+  .footer-grid div[style*="flex-direction: column"] {
+    gap: 6px 0 !important;
+    row-gap: 6px !important;
+  }
+
   .footer-grid div[style*="flex-direction: column"] a {
-    padding-right: 6px;
-    margin-right: 6px;
-    line-height: 1.6;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
     display: inline-flex;
     align-items: center;
+    height: auto;
   }
 
   .footer-grid div[style*="flex-direction: column"] a::after {
     content: '';
     display: inline-block;
     width: 1px;
-    height: 0.8em;
+    height: 1em;
     background: rgba(255,255,255,0.3);
-    margin-left: 6px;
+    margin: 0 6px;
   }
 
   .footer-grid div[style*="flex-direction: column"] a:last-child::after {
     display: none;
-  }
-
-  .footer-grid div[style*="flex-direction: column"] a:last-child {
-    padding-right: 0;
-    margin-right: 0;
   }
 
   .footer-grid .label {
