@@ -1,0 +1,30 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  # Disable secrets scanning for NEXT_PUBLIC_ variables
+  # These are intentionally exposed to the client-side bundle
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
+
+# Cache Next.js build for faster rebuilds
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Image optimization
+[[redirects]]
+  from = "/_next/image"
+  to = "/.netlify/images?url=:url&w=:width&q=:quality"
+  status = 200
+  query = {url = ":url", w = ":width", q = ":quality"}
+
+# Static assets cache
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
