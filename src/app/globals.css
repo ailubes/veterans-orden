@@ -277,12 +277,14 @@ body {
 
   .btn-outline {
     @apply inline-block px-10 py-5 bg-accent text-timber-dark font-mono font-bold text-[13px] uppercase tracking-wider relative cursor-pointer border-none;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
   }
 
   .btn-outline:hover {
+    background-color: var(--timber-dark);
+    color: var(--canvas);
     transform: translate(4px, -4px);
-    box-shadow: -4px 4px 0 var(--timber-dark);
+    box-shadow: -4px 4px 0 var(--accent);
   }
 
   .btn-sm {
