@@ -1,8 +1,14 @@
 import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, getRegionalLeaderFilter } from '@/lib/permissions';
+import {
+  getAdminProfile,
+  getRegionalLeaderFilter,
+  canSuspendMembers,
+  isSuperAdmin,
+} from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, Download } from 'lucide-react';
+import { MembersTable } from '@/components/admin/members-table';
 
 interface MembersPageProps {
   searchParams: Promise<{
@@ -207,119 +213,11 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
       </div>
 
       {/* Members Table */}
-      <div className="bg-canvas border-2 border-timber-dark relative overflow-hidden">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
-
-        {members && members.length > 0 ? (
-          <>
-            {/* Table Header */}
-            <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-timber-dark bg-timber-dark/5">
-              <div className="col-span-3 label">ЧЛЕН</div>
-              <div className="col-span-2 label">РОЛЬ</div>
-              <div className="col-span-2 label">СТАТУС</div>
-              <div className="col-span-2 label">ПЛАН</div>
-              <div className="col-span-1 label">БАЛИ</div>
-              <div className="col-span-2 label text-right">ДІЇ</div>
-            </div>
-
-            {/* Table Rows */}
-            {members.map((member) => (
-              <div
-                key={member.id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b border-timber-dark/20 hover:bg-timber-dark/5"
-              >
-                {/* Member info */}
-                <div className="col-span-1 md:col-span-3">
-                  <div className="font-bold">
-                    {member.first_name} {member.last_name}
-                  </div>
-                  <div className="text-xs text-timber-beam">{member.email}</div>
-                  {member.oblast && (
-                    <div className="text-xs text-timber-beam mt-1">
-                      {member.oblast.name}
-                    </div>
-                  )}
-                </div>
-
-                {/* Role */}
-                <div className="col-span-1 md:col-span-2">
-                  <span className="px-2 py-1 bg-timber-dark/10 text-xs font-bold">
-                    {member.role === 'super_admin' && 'Супер-адмін'}
-                    {member.role === 'admin' && 'Адмін'}
-                    {member.role === 'regional_leader' && 'Рег. лідер'}
-                    {member.role === 'group_leader' && 'Лідер групи'}
-                    {member.role === 'full_member' && 'Повноцінний'}
-                    {member.role === 'silent_member' && 'Мовчазний'}
-                    {member.role === 'prospect' && 'Потенційний'}
-                    {member.role === 'free_viewer' && 'Спостерігач'}
-                  </span>
-                </div>
-
-                {/* Status */}
-                <div className="col-span-1 md:col-span-2">
-                  <span
-                    className={`px-2 py-1 text-xs font-bold ${
-                      member.status === 'active'
-                        ? 'bg-green-100 text-green-700'
-                        : member.status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : member.status === 'suspended'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {member.status === 'active' && 'Активний'}
-                    {member.status === 'pending' && 'На перевірці'}
-                    {member.status === 'suspended' && 'Призупинено'}
-                    {member.status === 'churned' && 'Відійшов'}
-                  </span>
-                </div>
-
-                {/* Tier */}
-                <div className="col-span-1 md:col-span-2">
-                  <span className="text-sm">
-                    {member.membership_tier === 'patron_500' && 'Патрон'}
-                    {member.membership_tier === 'supporter_200' &&
-                      'Прихильник 200'}
-                    {member.membership_tier === 'supporter_100' &&
-                      'Прихильник 100'}
-                    {member.membership_tier === 'basic_49' && 'Базовий'}
-                    {member.membership_tier === 'free' && 'Безкоштовний'}
-                  </span>
-                </div>
-
-                {/* Points */}
-                <div className="col-span-1 md:col-span-1">
-                  <span className="font-bold text-accent">
-                    {member.points || 0}
-                  </span>
-                </div>
-
-                {/* Actions */}
-                <div className="col-span-1 md:col-span-2 text-right">
-                  <Link
-                    href={`/admin/members/${member.id}`}
-                    className="text-xs text-accent hover:underline font-bold"
-                  >
-                    ПЕРЕГЛЯНУТИ →
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <div className="text-center py-16 text-timber-beam">
-            <p className="text-sm">
-              {search || roleFilter || statusFilter || tierFilter
-                ? 'Не знайдено членів за вказаними фільтрами'
-                : 'Поки що немає членів'}
-            </p>
-          </div>
-        )}
-      </div>
+      <MembersTable
+        members={members || []}
+        canSuspend={canSuspendMembers(adminProfile.role)}
+        canDelete={isSuperAdmin(adminProfile.role)}
+      />
 
       {/* Pagination */}
       {totalPages > 1 && (
