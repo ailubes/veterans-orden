@@ -280,7 +280,7 @@ body {
   }
 
   .btn-outline:hover {
-    @apply bg-accent text-canvas;
+    @apply bg-timber-dark text-canvas border-timber-dark;
   }
 
   .btn-sm {
