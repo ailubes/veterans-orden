@@ -276,11 +276,13 @@ body {
   }
 
   .btn-outline {
-    @apply bg-accent text-timber-dark border-2 border-accent;
+    @apply inline-block px-10 py-5 bg-accent text-timber-dark font-mono font-bold text-[13px] uppercase tracking-wider relative cursor-pointer border-none;
+    transition: transform 0.2s ease;
   }
 
   .btn-outline:hover {
-    @apply bg-timber-dark text-canvas border-timber-dark;
+    transform: translate(4px, -4px);
+    box-shadow: -4px 4px 0 var(--timber-dark);
   }
 
   .btn-sm {
