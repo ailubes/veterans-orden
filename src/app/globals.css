@@ -276,7 +276,7 @@ body {
   }
 
   .btn-outline {
-    @apply bg-transparent text-accent border-2 border-accent;
+    @apply bg-accent text-timber-dark border-2 border-accent;
   }
 
   .btn-outline:hover {
