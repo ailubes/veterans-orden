@@ -513,6 +513,1126 @@ async function linkTelegramAccount(
 }
 ```
 
+### 5.5 Direct Registration in Telegram
+
+Users can register directly in Telegram without visiting the website. This is especially useful for invitations sent via Telegram contacts.
+
+#### 5.5.1 Registration Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  User clicks invitation link or /start                          │
+│  t.me/MerezhaVilnykhBot?start=REF123456                         │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  🇺🇦 Мережа Вільних Людей                                        │
+│                                                                  │
+│  Вітаємо! Вас запросив [Referrer Name].                         │
+│                                                                  │
+│  [🔗 Прив'язати існуючий акаунт]                                │
+│  [📝 Зареєструватися в Telegram]                                │
+│  [🌐 Зареєструватися на сайті]                                  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Click "Зареєструватися в Telegram"
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 1: Phone Number                                            │
+│                                                                  │
+│  📱 Для реєстрації нам потрібен ваш номер телефону.            │
+│  Це дозволить підтвердити вашу особу.                           │
+│                                                                  │
+│  [📱 Поділитися номером телефону]                               │
+│  [❌ Скасувати]                                                  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Share contact
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 2: Email Address                                           │
+│                                                                  │
+│  📧 Введіть вашу email адресу:                                  │
+│                                                                  │
+│  (Буде використана для входу на сайт та сповіщень)              │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Enter email
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 3: Verify Email                                            │
+│                                                                  │
+│  📬 Код підтвердження надіслано на user@example.com             │
+│                                                                  │
+│  Введіть 6-значний код:                                         │
+│                                                                  │
+│  [🔄 Надіслати повторно]                                        │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Enter verification code
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 4: Personal Information                                    │
+│                                                                  │
+│  👤 Як вас звати?                                               │
+│                                                                  │
+│  Ім'я та прізвище (українською):                                │
+│  Приклад: Іван Петренко                                         │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Enter name
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 5: Select Oblast                                           │
+│                                                                  │
+│  🗺️ Оберіть вашу область:                                       │
+│                                                                  │
+│  [Київська] [Львівська] [Одеська]                               │
+│  [Харківська] [Дніпропетровська] [...]                          │
+│  [🔍 Пошук...]                                                  │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Select oblast
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STEP 6: Create Password (Optional)                              │
+│                                                                  │
+│  🔐 Створіть пароль для входу на сайт:                          │
+│  (мінімум 8 символів)                                           │
+│                                                                  │
+│  [⏭️ Пропустити — створити пароль пізніше]                      │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           │ Enter password or skip
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  ✅ REGISTRATION COMPLETE                                        │
+│                                                                  │
+│  🎉 Вітаємо, Іване!                                             │
+│                                                                  │
+│  Ви успішно приєдналися до Мережі Вільних Людей!               │
+│                                                                  │
+│  📊 Ваш реферальний код: XYZ78901                               │
+│  👤 Вас запросив: [Referrer Name]                               │
+│  📍 Область: Київська                                           │
+│                                                                  │
+│  Що далі?                                                        │
+│  • Запросіть друзів та отримайте +25 балів за кожного           │
+│  • Перегляньте відкриті голосування                             │
+│  • Відвідайте найближчі події                                   │
+│                                                                  │
+│  [📨 Запросити друзів]                                          │
+│  [🗳️ Голосування]                                               │
+│  [📅 Події]                                                      │
+│  [🌐 Відкрити сайт]                                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 5.5.2 Registration Session State
+
+```typescript
+// src/lib/telegram/types.ts
+
+interface RegistrationSession {
+  step: 'phone' | 'email' | 'verify_email' | 'name' | 'oblast' | 'password';
+  referralCode?: string;         // Referrer's code from deep link
+  referrerId?: string;           // Referrer's user ID
+  referrerName?: string;         // For display
+
+  // Collected data
+  telegramId: number;
+  telegramUsername?: string;
+  phone?: string;
+  email?: string;
+  emailVerificationCode?: string;
+  emailVerificationExpires?: number;
+  firstName?: string;
+  lastName?: string;
+  oblastId?: string;
+
+  // Timestamps
+  startedAt: number;
+  lastActivityAt: number;
+  expiresAt: number;             // 30 minutes timeout
+}
+
+// Store sessions in Redis or memory with TTL
+const registrationSessions = new Map<number, RegistrationSession>();
+```
+
+#### 5.5.3 Registration Command Handler
+
+```typescript
+// src/lib/telegram/handlers/registration.ts
+
+import { Context, InlineKeyboard, Keyboard } from 'grammy';
+import { supabase } from '@/lib/supabase';
+import { generateReferralCode, generateVerificationCode } from '@/lib/utils';
+import { sendVerificationEmail } from '@/lib/email';
+import { oblasts } from '@/lib/constants';
+
+// Start registration flow
+bot.callbackQuery('register_telegram', async (ctx) => {
+  await ctx.answerCallbackQuery();
+
+  const telegramId = ctx.from.id;
+
+  // Check if already registered
+  const existingUser = await supabase
+    .from('users')
+    .select('id')
+    .eq('telegram_id', telegramId)
+    .single();
+
+  if (existingUser.data) {
+    return ctx.reply(
+      '⚠️ Ви вже зареєстровані!\n\n' +
+      'Використовуйте /mystats для перегляду профілю.'
+    );
+  }
+
+  // Get stored referral code if any
+  const storedRefCode = await getStoredReferralCode(telegramId);
+  let referrerInfo = null;
+
+  if (storedRefCode) {
+    const { data: referrer } = await supabase
+      .from('users')
+      .select('id, first_name, last_name')
+      .eq('referral_code', storedRefCode)
+      .single();
+
+    if (referrer) {
+      referrerInfo = {
+        id: referrer.id,
+        name: `${referrer.first_name} ${referrer.last_name}`,
+        code: storedRefCode,
+      };
+    }
+  }
+
+  // Initialize registration session
+  const session: RegistrationSession = {
+    step: 'phone',
+    telegramId,
+    telegramUsername: ctx.from.username,
+    referralCode: referrerInfo?.code,
+    referrerId: referrerInfo?.id,
+    referrerName: referrerInfo?.name,
+    startedAt: Date.now(),
+    lastActivityAt: Date.now(),
+    expiresAt: Date.now() + 30 * 60 * 1000, // 30 min
+  };
+
+  registrationSessions.set(telegramId, session);
+
+  // Request phone number
+  const keyboard = new Keyboard()
+    .requestContact('📱 Поділитися номером телефону')
+    .row()
+    .text('❌ Скасувати')
+    .resized();
+
+  let message = '📝 *Реєстрація в Мережі Вільних Людей*\n\n';
+
+  if (referrerInfo) {
+    message += `👤 Вас запросив: ${referrerInfo.name}\n\n`;
+  }
+
+  message +=
+    '*Крок 1 з 5: Номер телефону*\n\n' +
+    'Для реєстрації потрібен ваш номер телефону.\n' +
+    'Це допоможе підтвердити вашу особу та захистити акаунт.\n\n' +
+    '🔒 Ваш номер буде захищено та не буде публічним.';
+
+  return ctx.reply(message, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+  });
+});
+
+// Handle phone number submission
+bot.on('message:contact', async (ctx) => {
+  const contact = ctx.message.contact;
+  const telegramId = ctx.from.id;
+
+  // Must be own contact
+  if (contact.user_id !== telegramId) {
+    return ctx.reply(
+      '❌ Будь ласка, поділіться *своїм* номером телефону.',
+      { parse_mode: 'Markdown' }
+    );
+  }
+
+  const session = registrationSessions.get(telegramId);
+  if (!session || session.step !== 'phone') {
+    return; // Not in registration flow
+  }
+
+  // Check if phone already registered
+  const phone = normalizePhoneNumber(contact.phone_number);
+  const existingUser = await supabase
+    .from('users')
+    .select('id, telegram_id')
+    .eq('phone', phone)
+    .single();
+
+  if (existingUser.data) {
+    // Phone exists - offer to link instead
+    if (!existingUser.data.telegram_id) {
+      return ctx.reply(
+        '📱 Цей номер вже зареєстровано!\n\n' +
+        'Бажаєте прив\'язати існуючий акаунт до Telegram?',
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '✅ Так, прив\'язати', callback_data: `link_phone:${phone}` }],
+              [{ text: '❌ Ні, скасувати', callback_data: 'cancel_registration' }],
+            ]
+          }
+        }
+      );
+    }
+    return ctx.reply(
+      '❌ Цей номер телефону вже зареєстровано.\n\n' +
+      'Якщо це ваш акаунт, використайте /link для прив\'язки.'
+    );
+  }
+
+  // Save phone and move to email step
+  session.phone = phone;
+  session.step = 'email';
+  session.lastActivityAt = Date.now();
+
+  await ctx.reply(
+    '✅ Номер телефону підтверджено!\n\n' +
+    '*Крок 2 з 5: Email адреса*\n\n' +
+    'Введіть вашу email адресу:\n\n' +
+    '💡 Email буде використано для:\n' +
+    '• Входу на сайт freepeople.org.ua\n' +
+    '• Важливих сповіщень\n' +
+    '• Відновлення паролю',
+    {
+      parse_mode: 'Markdown',
+      reply_markup: { remove_keyboard: true },
+    }
+  );
+});
+
+// Handle email input
+bot.on('message:text', async (ctx) => {
+  const telegramId = ctx.from.id;
+  const text = ctx.message.text.trim();
+
+  const session = registrationSessions.get(telegramId);
+  if (!session) return;
+
+  // Check session expiry
+  if (Date.now() > session.expiresAt) {
+    registrationSessions.delete(telegramId);
+    return ctx.reply(
+      '⏰ Час реєстрації вичерпано.\n' +
+      'Почніть спочатку: /start'
+    );
+  }
+
+  session.lastActivityAt = Date.now();
+
+  switch (session.step) {
+    case 'email':
+      await handleEmailInput(ctx, session, text);
+      break;
+    case 'verify_email':
+      await handleEmailVerification(ctx, session, text);
+      break;
+    case 'name':
+      await handleNameInput(ctx, session, text);
+      break;
+    case 'password':
+      await handlePasswordInput(ctx, session, text);
+      break;
+  }
+});
+
+// Email input handler
+async function handleEmailInput(ctx: Context, session: RegistrationSession, email: string) {
+  // Validate email format
+  if (!isValidEmail(email)) {
+    return ctx.reply(
+      '❌ Невірний формат email.\n\n' +
+      'Введіть коректну email адресу:'
+    );
+  }
+
+  email = email.toLowerCase();
+
+  // Check if email already exists
+  const existingUser = await supabase
+    .from('users')
+    .select('id, telegram_id')
+    .eq('email', email)
+    .single();
+
+  if (existingUser.data) {
+    if (!existingUser.data.telegram_id) {
+      return ctx.reply(
+        '📧 Цей email вже зареєстровано!\n\n' +
+        'Бажаєте прив\'язати існуючий акаунт?',
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '✅ Так, прив\'язати', callback_data: 'link_start' }],
+              [{ text: '🔄 Ввести інший email', callback_data: 'retry_email' }],
+            ]
+          }
+        }
+      );
+    }
+    return ctx.reply(
+      '❌ Цей email вже зареєстровано.\n\n' +
+      'Введіть інший email:'
+    );
+  }
+
+  // Generate and send verification code
+  const code = generateVerificationCode(); // 6 digits
+  session.email = email;
+  session.emailVerificationCode = code;
+  session.emailVerificationExpires = Date.now() + 10 * 60 * 1000; // 10 min
+  session.step = 'verify_email';
+
+  // Send email
+  await sendVerificationEmail(email, code);
+
+  return ctx.reply(
+    `📬 *Крок 3 з 5: Підтвердження email*\n\n` +
+    `Код підтвердження надіслано на:\n` +
+    `📧 \`${email}\`\n\n` +
+    `Введіть 6-значний код з листа:`,
+    {
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '🔄 Надіслати код повторно', callback_data: 'resend_email_code' }],
+          [{ text: '✏️ Змінити email', callback_data: 'change_email' }],
+        ]
+      }
+    }
+  );
+}
+
+// Email verification handler
+async function handleEmailVerification(ctx: Context, session: RegistrationSession, code: string) {
+  // Clean input
+  code = code.replace(/\D/g, '');
+
+  if (code.length !== 6) {
+    return ctx.reply('❌ Код має містити 6 цифр. Спробуйте ще:');
+  }
+
+  if (Date.now() > session.emailVerificationExpires!) {
+    return ctx.reply(
+      '⏰ Код прострочений.\n\n' +
+      'Натисніть кнопку, щоб отримати новий код:',
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '🔄 Надіслати новий код', callback_data: 'resend_email_code' }],
+          ]
+        }
+      }
+    );
+  }
+
+  if (code !== session.emailVerificationCode) {
+    return ctx.reply('❌ Невірний код. Спробуйте ще раз:');
+  }
+
+  // Email verified - move to name step
+  session.step = 'name';
+
+  // Pre-fill name from Telegram if available
+  const telegramName = ctx.from.first_name +
+    (ctx.from.last_name ? ` ${ctx.from.last_name}` : '');
+
+  return ctx.reply(
+    `✅ Email підтверджено!\n\n` +
+    `*Крок 4 з 5: Ваше ім'я*\n\n` +
+    `Введіть ваше ім'я та прізвище українською:\n\n` +
+    `💡 Приклад: Іван Петренко\n\n` +
+    (telegramName ? `_Ваше ім'я в Telegram: ${telegramName}_` : ''),
+    { parse_mode: 'Markdown' }
+  );
+}
+
+// Name input handler
+async function handleNameInput(ctx: Context, session: RegistrationSession, name: string) {
+  // Parse name (expect "FirstName LastName")
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length < 2) {
+    return ctx.reply(
+      '❌ Будь ласка, введіть ім\'я ТА прізвище.\n\n' +
+      'Приклад: Іван Петренко'
+    );
+  }
+
+  // Validate Ukrainian characters
+  const ukrainianRegex = /^[А-ЯІЇЄҐа-яіїєґ'\-\s]+$/;
+  if (!ukrainianRegex.test(name)) {
+    return ctx.reply(
+      '❌ Будь ласка, введіть ім\'я українською мовою.\n\n' +
+      'Приклад: Іван Петренко'
+    );
+  }
+
+  session.firstName = parts[0];
+  session.lastName = parts.slice(1).join(' ');
+  session.step = 'oblast'; // Changed from 'password' to 'oblast'
+
+  // Show oblast selection
+  return showOblastSelection(ctx, session);
+}
+
+// Oblast selection
+async function showOblastSelection(ctx: Context, session: RegistrationSession) {
+  // Fetch oblasts from DB
+  const { data: oblastList } = await supabase
+    .from('oblasts')
+    .select('id, name, code')
+    .order('name');
+
+  if (!oblastList || oblastList.length === 0) {
+    // Fallback - skip oblast
+    session.step = 'password';
+    return showPasswordStep(ctx, session);
+  }
+
+  // Create inline keyboard with oblasts (4 per row)
+  const keyboard: { text: string; callback_data: string }[][] = [];
+  let row: { text: string; callback_data: string }[] = [];
+
+  for (const oblast of oblastList) {
+    row.push({
+      text: oblast.name.replace(' область', ''),
+      callback_data: `reg_oblast:${oblast.id}`,
+    });
+
+    if (row.length === 2) {
+      keyboard.push(row);
+      row = [];
+    }
+  }
+
+  if (row.length > 0) {
+    keyboard.push(row);
+  }
+
+  // Add skip option
+  keyboard.push([{ text: '⏭️ Пропустити', callback_data: 'reg_oblast:skip' }]);
+
+  return ctx.reply(
+    `👤 ${session.firstName}, дякуємо!\n\n` +
+    `*Крок 5 з 5: Ваша область*\n\n` +
+    `Оберіть область проживання:\n\n` +
+    `_Це допоможе знайти місцеві події та голосування_`,
+    {
+      parse_mode: 'Markdown',
+      reply_markup: { inline_keyboard: keyboard },
+    }
+  );
+}
+
+// Handle oblast selection
+bot.callbackQuery(/^reg_oblast:(.+)$/, async (ctx) => {
+  await ctx.answerCallbackQuery();
+
+  const telegramId = ctx.from.id;
+  const session = registrationSessions.get(telegramId);
+
+  if (!session || session.step !== 'oblast') {
+    return ctx.reply('❌ Сесія реєстрації не знайдена. Почніть спочатку: /start');
+  }
+
+  const oblastId = ctx.match[1];
+
+  if (oblastId !== 'skip') {
+    session.oblastId = oblastId;
+  }
+
+  session.step = 'password';
+
+  // Delete oblast selection message
+  await ctx.deleteMessage().catch(() => {});
+
+  return showPasswordStep(ctx, session);
+});
+
+// Password step
+async function showPasswordStep(ctx: Context, session: RegistrationSession) {
+  return ctx.reply(
+    `🔐 *Останній крок: Пароль*\n\n` +
+    `Створіть пароль для входу на сайт freepeople.org.ua\n\n` +
+    `Вимоги:\n` +
+    `• Мінімум 8 символів\n` +
+    `• Рекомендовано: літери, цифри, спецсимволи\n\n` +
+    `Введіть пароль:`,
+    {
+      parse_mode: 'Markdown',
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: '⏭️ Пропустити — створити пізніше', callback_data: 'reg_skip_password' }],
+        ]
+      }
+    }
+  );
+}
+
+// Password input handler
+async function handlePasswordInput(ctx: Context, session: RegistrationSession, password: string) {
+  // Validate password
+  if (password.length < 8) {
+    return ctx.reply(
+      '❌ Пароль занадто короткий.\n\n' +
+      'Мінімум 8 символів. Спробуйте ще:'
+    );
+  }
+
+  // Complete registration
+  await completeRegistration(ctx, session, password);
+}
+
+// Skip password
+bot.callbackQuery('reg_skip_password', async (ctx) => {
+  await ctx.answerCallbackQuery();
+
+  const telegramId = ctx.from.id;
+  const session = registrationSessions.get(telegramId);
+
+  if (!session || session.step !== 'password') {
+    return ctx.reply('❌ Сесія не знайдена. Почніть спочатку: /start');
+  }
+
+  await ctx.deleteMessage().catch(() => {});
+
+  // Complete without password (will need to set via "forgot password" on web)
+  await completeRegistration(ctx, session, null);
+});
+
+// Complete registration
+async function completeRegistration(
+  ctx: Context,
+  session: RegistrationSession,
+  password: string | null
+) {
+  try {
+    // Generate referral code for new user
+    const referralCode = generateReferralCode();
+
+    // Create Supabase Auth user
+    let authUserId: string;
+
+    if (password) {
+      // Create with password
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: session.email!,
+        password,
+        email_confirm: true, // Already verified via code
+        user_metadata: {
+          first_name: session.firstName,
+          last_name: session.lastName,
+        },
+      });
+
+      if (authError) throw authError;
+      authUserId = authData.user.id;
+    } else {
+      // Create without password (passwordless)
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: session.email!,
+        email_confirm: true,
+        user_metadata: {
+          first_name: session.firstName,
+          last_name: session.lastName,
+        },
+      });
+
+      if (authError) throw authError;
+      authUserId = authData.user.id;
+    }
+
+    // Create user record in database
+    const { data: newUser, error: dbError } = await supabase
+      .from('users')
+      .insert({
+        clerk_id: authUserId, // Supabase Auth ID stored in clerk_id field
+        email: session.email,
+        phone: session.phone,
+        first_name: session.firstName,
+        last_name: session.lastName,
+        role: 'prospect',
+        status: 'active',
+        is_email_verified: true,
+        is_phone_verified: true,
+        verification_method: 'phone',
+        oblast_id: session.oblastId || null,
+        referred_by_id: session.referrerId || null,
+        referral_code: referralCode,
+        telegram_id: session.telegramId,
+        telegram_username: session.telegramUsername || null,
+        telegram_linked_at: new Date().toISOString(),
+        telegram_notifications_enabled: true,
+        member_since: new Date().toISOString(),
+        points: 0,
+        level: 1,
+      })
+      .select()
+      .single();
+
+    if (dbError) throw dbError;
+
+    // Award referral points to referrer
+    if (session.referrerId) {
+      await supabase.rpc('award_referral_points', {
+        referrer_id: session.referrerId,
+        points_amount: 25,
+      });
+
+      // Update referral count
+      await supabase
+        .from('users')
+        .update({
+          referral_count: supabase.raw('referral_count + 1'),
+        })
+        .eq('id', session.referrerId);
+
+      // Notify referrer
+      const { data: referrer } = await supabase
+        .from('users')
+        .select('telegram_id')
+        .eq('id', session.referrerId)
+        .single();
+
+      if (referrer?.telegram_id) {
+        await ctx.api.sendMessage(
+          referrer.telegram_id,
+          `🎉 *Чудові новини!*\n\n` +
+          `${session.firstName} ${session.lastName} приєднався до Мережі за вашим запрошенням!\n\n` +
+          `✨ Вам нараховано *+25 балів*`,
+          { parse_mode: 'Markdown' }
+        ).catch(() => {});
+      }
+
+      // Update telegram_invitations if exists
+      await supabase
+        .from('telegram_invitations')
+        .update({
+          status: 'registered',
+          registered_at: new Date().toISOString(),
+        })
+        .eq('referral_code', session.referralCode)
+        .eq('recipient_telegram_id', session.telegramId);
+    }
+
+    // Get oblast name for confirmation
+    let oblastName = '';
+    if (session.oblastId) {
+      const { data: oblast } = await supabase
+        .from('oblasts')
+        .select('name')
+        .eq('id', session.oblastId)
+        .single();
+      oblastName = oblast?.name || '';
+    }
+
+    // Clean up session
+    registrationSessions.delete(session.telegramId);
+
+    // Send success message
+    let successMessage =
+      `🎉 *Вітаємо, ${session.firstName}!*\n\n` +
+      `Ви успішно приєдналися до Мережі Вільних Людей!\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━\n` +
+      `📧 Email: ${session.email}\n` +
+      `📱 Телефон: ${session.phone}\n`;
+
+    if (oblastName) {
+      successMessage += `📍 Область: ${oblastName}\n`;
+    }
+
+    successMessage +=
+      `🔗 Ваш код: \`${referralCode}\`\n` +
+      `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+
+    if (session.referrerName) {
+      successMessage += `👤 Вас запросив: ${session.referrerName}\n\n`;
+    }
+
+    successMessage +=
+      `*Що далі?*\n` +
+      `• Запросіть друзів — отримайте +25 балів за кожного\n` +
+      `• Перегляньте відкриті голосування\n` +
+      `• Знайдіть події у вашому регіоні\n\n`;
+
+    if (!password) {
+      successMessage +=
+        `⚠️ _Для входу на сайт використайте "Забув пароль" щоб створити пароль_\n\n`;
+    }
+
+    successMessage += `_Гуртуємось, щоб впливати!_`;
+
+    const keyboard = new InlineKeyboard()
+      .text('📨 Запросити друзів', 'invite_menu').row()
+      .text('🗳️ Голосування', 'votes_list')
+      .text('📅 Події', 'events_list').row()
+      .url('🌐 Відкрити сайт', 'https://freepeople.org.ua/dashboard');
+
+    await ctx.reply(successMessage, {
+      parse_mode: 'Markdown',
+      reply_markup: keyboard,
+    });
+
+    // Track analytics
+    await trackEvent('telegram_registration_completed', {
+      userId: newUser.id,
+      telegramId: session.telegramId,
+      hasReferrer: !!session.referrerId,
+      hasPassword: !!password,
+    });
+
+  } catch (error) {
+    console.error('[Telegram Registration] Error:', error);
+
+    await ctx.reply(
+      '❌ Виникла помилка при реєстрації.\n\n' +
+      'Будь ласка, спробуйте пізніше або зареєструйтесь на сайті:\n' +
+      'freepeople.org.ua/sign-up'
+    );
+  }
+}
+
+// Resend email verification code
+bot.callbackQuery('resend_email_code', async (ctx) => {
+  await ctx.answerCallbackQuery();
+
+  const session = registrationSessions.get(ctx.from.id);
+  if (!session || !session.email) {
+    return ctx.reply('❌ Сесія не знайдена. Почніть спочатку: /start');
+  }
+
+  // Generate new code
+  const code = generateVerificationCode();
+  session.emailVerificationCode = code;
+  session.emailVerificationExpires = Date.now() + 10 * 60 * 1000;
+
+  await sendVerificationEmail(session.email, code);
+
+  return ctx.reply(
+    `✅ Новий код надіслано на ${session.email}\n\n` +
+    'Введіть 6-значний код:'
+  );
+});
+
+// Cancel registration
+bot.callbackQuery('cancel_registration', async (ctx) => {
+  await ctx.answerCallbackQuery();
+
+  registrationSessions.delete(ctx.from.id);
+
+  return ctx.reply(
+    'Реєстрацію скасовано.\n\n' +
+    'Щоб почати знову, надішліть /start',
+    { reply_markup: { remove_keyboard: true } }
+  );
+});
+```
+
+#### 5.5.4 Update /start Command for Registration
+
+```typescript
+// Updated /start command to include registration option
+bot.command('start', async (ctx) => {
+  const telegramId = ctx.from.id;
+
+  // Check if already registered/linked
+  const user = await getUserByTelegramId(telegramId);
+
+  if (user) {
+    // Already linked - show main menu
+    return ctx.reply(
+      `👋 Вітаємо, ${user.first_name}!\n\n` +
+      `📊 Ваші бали: ${user.points}\n` +
+      `👥 Запрошено: ${user.referral_count}\n` +
+      `🎯 Рівень: ${user.level}\n\n` +
+      'Оберіть дію:',
+      { reply_markup: mainMenuKeyboard }
+    );
+  }
+
+  // Check for referral code in deep link: /start REF123456
+  const refCode = ctx.message.text.split(' ')[1];
+  let referrerInfo = null;
+
+  if (refCode) {
+    await storeReferralCode(telegramId, refCode);
+
+    // Get referrer name
+    const { data: referrer } = await supabase
+      .from('users')
+      .select('first_name, last_name')
+      .eq('referral_code', refCode)
+      .single();
+
+    if (referrer) {
+      referrerInfo = {
+        name: `${referrer.first_name} ${referrer.last_name}`,
+        code: refCode,
+      };
+    }
+  }
+
+  // Not registered - show welcome with registration option
+  let welcomeMessage = '🇺🇦 *Мережа Вільних Людей*\n\n';
+
+  if (referrerInfo) {
+    welcomeMessage += `👤 Вас запрошує: *${referrerInfo.name}*\n\n`;
+  }
+
+  welcomeMessage +=
+    'Ласкаво просимо до громадянської організації,\n' +
+    'що об\'єднує вільних людей України.\n\n' +
+    '*Гуртуємось, щоб впливати!*\n\n' +
+    'Оберіть дію:';
+
+  const keyboard = new InlineKeyboard()
+    .text('📝 Зареєструватися', 'register_telegram').row()
+    .text('🔗 Прив\'язати існуючий акаунт', 'link_start').row()
+    .url('🌐 Дізнатися більше', 'https://freepeople.org.ua');
+
+  return ctx.reply(welcomeMessage, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+  });
+});
+```
+
+#### 5.5.5 Helper Functions
+
+```typescript
+// src/lib/telegram/utils.ts
+
+// Generate 6-digit verification code
+export function generateVerificationCode(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Generate 8-character referral code
+export function generateReferralCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No O, I, 0, 1
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+// Validate email format
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email) && email.length <= 255;
+}
+
+// Normalize Ukrainian phone number
+export function normalizePhoneNumber(phone: string): string {
+  const digits = phone.replace(/\D/g, '');
+
+  if (digits.startsWith('380')) {
+    return '+' + digits;
+  }
+  if (digits.startsWith('80')) {
+    return '+3' + digits;
+  }
+  if (digits.startsWith('0')) {
+    return '+38' + digits;
+  }
+
+  return '+' + digits;
+}
+
+// Store referral code for later use
+const referralCodeStore = new Map<number, { code: string; expiresAt: number }>();
+
+export async function storeReferralCode(telegramId: number, code: string) {
+  referralCodeStore.set(telegramId, {
+    code,
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+  });
+}
+
+export async function getStoredReferralCode(telegramId: number): Promise<string | null> {
+  const stored = referralCodeStore.get(telegramId);
+  if (!stored || Date.now() > stored.expiresAt) {
+    referralCodeStore.delete(telegramId);
+    return null;
+  }
+  return stored.code;
+}
+```
+
+#### 5.5.6 API Endpoint for Telegram Registration
+
+```typescript
+// src/app/api/telegram/register/route.ts
+
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function POST(request: NextRequest) {
+  try {
+    // Verify request is from our bot (via secret header)
+    const botSecret = request.headers.get('x-bot-secret');
+    if (botSecret !== process.env.TELEGRAM_BOT_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      telegram_id,
+      telegram_username,
+      email,
+      phone,
+      first_name,
+      last_name,
+      oblast_id,
+      referral_code,
+      password,
+    } = body;
+
+    // Validate required fields
+    if (!telegram_id || !email || !phone || !first_name || !last_name) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // Check for existing user
+    const { data: existingUser } = await supabaseAdmin
+      .from('users')
+      .select('id')
+      .or(`telegram_id.eq.${telegram_id},email.eq.${email},phone.eq.${phone}`)
+      .single();
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: 'User already exists' },
+        { status: 409 }
+      );
+    }
+
+    // Get referrer if code provided
+    let referrerId = null;
+    if (referral_code) {
+      const { data: referrer } = await supabaseAdmin
+        .from('users')
+        .select('id')
+        .eq('referral_code', referral_code)
+        .single();
+      referrerId = referrer?.id || null;
+    }
+
+    // Create Supabase Auth user
+    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
+      email,
+      password: password || undefined,
+      email_confirm: true,
+      phone,
+      phone_confirm: true,
+      user_metadata: { first_name, last_name },
+    });
+
+    if (authError) {
+      console.error('[Telegram Register] Auth error:', authError);
+      return NextResponse.json({ error: authError.message }, { status: 400 });
+    }
+
+    // Generate unique referral code
+    const newReferralCode = generateUniqueReferralCode();
+
+    // Create user record
+    const { data: newUser, error: dbError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        clerk_id: authData.user.id,
+        email,
+        phone,
+        first_name,
+        last_name,
+        role: 'prospect',
+        status: 'active',
+        is_email_verified: true,
+        is_phone_verified: true,
+        verification_method: 'phone',
+        oblast_id: oblast_id || null,
+        referred_by_id: referrerId,
+        referral_code: newReferralCode,
+        telegram_id,
+        telegram_username: telegram_username || null,
+        telegram_linked_at: new Date().toISOString(),
+        telegram_notifications_enabled: true,
+        member_since: new Date().toISOString(),
+        points: 0,
+        level: 1,
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('[Telegram Register] DB error:', dbError);
+      // Rollback auth user
+      await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+      return NextResponse.json({ error: 'Database error' }, { status: 500 });
+    }
+
+    // Award referral bonus
+    if (referrerId) {
+      await supabaseAdmin.rpc('award_referral_points', {
+        referrer_id: referrerId,
+        points_amount: 25,
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: {
+        id: newUser.id,
+        referral_code: newReferralCode,
+        points: 0,
+        level: 1,
+      },
+    });
+  } catch (error) {
+    console.error('[Telegram Register] Error:', error);
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
+  }
+}
+
+function generateUniqueReferralCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+```
+
 ---
 
 ## 6. Command Reference

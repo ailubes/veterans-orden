@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 
 // Debug: Check server-side env vars
@@ -82,8 +83,6 @@ export async function createAdminClient() {
 }
 
 // Simple service role client for API routes (no cookies needed)
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-
 export function createServiceClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

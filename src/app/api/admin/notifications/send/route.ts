@@ -10,23 +10,46 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    let adminProfile;
+    console.log('[Send Notification] Starting...');
 
+    let adminProfile;
     try {
       const result = await getAdminProfileFromRequest(request);
       adminProfile = result.profile;
+      console.log('[Send Notification] Admin authenticated:', adminProfile.id, adminProfile.role);
     } catch (authError) {
       console.error('[Send Notification] Auth error:', authError);
       return NextResponse.json(
-        { error: 'Authentication failed' },
+        { error: 'Authentication failed', stage: 'auth' },
         { status: 401 }
       );
     }
 
     // Use service role client for database operations (bypasses RLS)
-    const supabase = createServiceClient();
+    let supabase;
+    try {
+      supabase = createServiceClient();
+      console.log('[Send Notification] Service client created');
+    } catch (clientError) {
+      console.error('[Send Notification] Service client error:', clientError);
+      return NextResponse.json(
+        { error: 'Database client creation failed', stage: 'client' },
+        { status: 500 }
+      );
+    }
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+      console.log('[Send Notification] Request body:', JSON.stringify(body));
+    } catch (parseError) {
+      console.error('[Send Notification] Body parse error:', parseError);
+      return NextResponse.json(
+        { error: 'Invalid request body', stage: 'parse' },
+        { status: 400 }
+      );
+    }
+
     const { title, message, type, scope, scopeValue } = body;
 
     // Validate input
@@ -198,13 +221,15 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (notificationError || !notification) {
-      console.error('[Send Notification] Insert error:', notificationError);
+      console.error('[Send Notification] Insert error:', JSON.stringify(notificationError));
       return NextResponse.json(
         {
           error: 'Failed to create notification',
-          details: notificationError?.message,
-          code: notificationError?.code,
-          hint: notificationError?.hint,
+          stage: 'insert',
+          details: notificationError?.message || 'Unknown error',
+          code: notificationError?.code || 'UNKNOWN',
+          hint: notificationError?.hint || null,
+          data: notificationData,
         },
         { status: 500 }
       );
@@ -248,7 +273,11 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[Send Notification Error]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        stage: 'unknown',
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     );
   }
