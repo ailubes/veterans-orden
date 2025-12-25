@@ -6,22 +6,11 @@ interface SkeletonGridProps {
 
 export function SkeletonGrid({ children }: SkeletonGridProps) {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '80px 1fr 1fr 1fr 80px',
-        minHeight: '100vh',
-        borderLeft: '1px solid var(--grid-line)',
-        borderRight: '1px solid var(--grid-line)',
-        margin: '0 auto',
-        maxWidth: '1600px',
-        position: 'relative',
-      }}
-    >
-      {/* Structural Beams */}
-      <div className="beam-v" style={{ left: '80px' }} />
-      <div className="beam-v" style={{ right: '80px' }} />
-      <div className="beam-v" style={{ left: '50%', opacity: 0.5 }} />
+    <div className="skeleton-container">
+      {/* Structural Beams - hidden on mobile via CSS */}
+      <div className="beam-v beam-left" />
+      <div className="beam-v beam-right" />
+      <div className="beam-v beam-center" />
 
       {children}
     </div>

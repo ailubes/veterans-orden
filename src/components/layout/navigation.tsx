@@ -80,17 +80,7 @@ export function Navigation() {
 
   return (
     <>
-      <nav
-        style={{
-          gridColumn: '2 / 5',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '40px 0',
-          borderBottom: '2px solid var(--timber-dark)',
-          zIndex: 100,
-        }}
-      >
+      <nav className="main-nav">
         <Link
           href="/"
           className="syne"

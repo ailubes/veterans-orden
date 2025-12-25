@@ -51,17 +51,48 @@ export function generateUniqueFilename(originalFilename: string): string {
 }
 
 /**
- * Get file path based on context (news/featured, news/inline, etc.)
+ * Storage folder structure:
+ *
+ * freepeople-data/
+ * ├── avatars/           - User profile photos
+ * ├── news/
+ * │   ├── featured/      - Article cover/featured images
+ * │   ├── inline/        - Images embedded in article content
+ * │   └── documents/     - PDF and document attachments
+ * ├── events/
+ * │   └── images/        - Event cover images
+ * └── uploads/
+ *     └── other/         - Miscellaneous uploads
+ */
+export type UploadContext =
+  | 'user_avatar'
+  | 'news_featured'
+  | 'news_inline'
+  | 'news_document'
+  | 'event_image'
+  | 'other';
+
+/**
+ * Get file path based on context
  */
 export function getFilePath(context: string, filename: string): string {
   const paths: Record<string, string> = {
+    // User content
+    user_avatar: 'avatars',
+
+    // News/Articles
     news_featured: 'news/featured',
     news_inline: 'news/inline',
     news_document: 'news/documents',
-    user_avatar: 'avatars',
+
+    // Events
+    event_image: 'events/images',
+
+    // Other
+    other: 'uploads/other',
   };
 
-  const folder = paths[context] || 'news/other';
+  const folder = paths[context] || 'uploads/other';
   return `${folder}/${filename}`;
 }
 
@@ -194,36 +225,60 @@ export async function deleteFromS3(s3Key: string): Promise<void> {
 }
 
 /**
- * Validate file type
+ * Validate file type based on upload context
  */
 export function isValidFileType(fileType: string, context: string): boolean {
+  const imageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const documentTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
+
   const allowedTypes: Record<string, string[]> = {
-    news_featured: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-    news_inline: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-    news_document: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    user_avatar: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+    // User content
+    user_avatar: imageTypes,
+
+    // News/Articles
+    news_featured: imageTypes,
+    news_inline: imageTypes,
+    news_document: documentTypes,
+
+    // Events
+    event_image: imageTypes,
+
+    // Other - allow both images and documents
+    other: [...imageTypes, ...documentTypes],
   };
 
-  const allowed = allowedTypes[context] || allowedTypes.news_featured;
+  const allowed = allowedTypes[context] || imageTypes;
   return allowed.includes(fileType);
 }
 
 /**
- * Validate file size
+ * Validate file size based on upload context
  */
 export function isValidFileSize(fileSize: number, context: string): boolean {
+  const maxImageSize = parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'); // 10MB
+  const maxDocumentSize = parseInt(process.env.NEXT_PUBLIC_MAX_DOCUMENT_SIZE || '52428800'); // 50MB
+
   const maxSizes: Record<string, number> = {
-    news_featured: parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'), // 10MB
-    news_inline: parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'), // 10MB
-    news_document: parseInt(process.env.NEXT_PUBLIC_MAX_DOCUMENT_SIZE || '52428800'), // 50MB
+    // User content
     user_avatar: 5 * 1024 * 1024, // 5MB
+
+    // News/Articles
+    news_featured: maxImageSize,
+    news_inline: maxImageSize,
+    news_document: maxDocumentSize,
+
+    // Events
+    event_image: maxImageSize,
+
+    // Other
+    other: maxDocumentSize,
   };
 
-  const maxSize = maxSizes[context] || maxSizes.news_featured;
+  const maxSize = maxSizes[context] || maxImageSize;
   return fileSize <= maxSize;
 }
 
