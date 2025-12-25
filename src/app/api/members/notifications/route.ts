@@ -46,10 +46,7 @@ export async function GET(request: Request) {
           message,
           type,
           metadata,
-          sender:users!sender_id (
-            first_name,
-            last_name
-          )
+          sender_id
         )
       `, { count: 'exact' })
       .eq('user_id', profile.id)
@@ -83,7 +80,6 @@ export async function GET(request: Request) {
     // Transform data to match our interface
     const notifications = (notificationRecords || []).map((nr: Record<string, unknown>) => {
       const notification = nr.notifications as Record<string, unknown>;
-      const sender = notification?.sender as Record<string, string> | null;
 
       return {
         id: nr.id as string,
@@ -94,10 +90,7 @@ export async function GET(request: Request) {
         isRead: nr.is_read as boolean,
         readAt: nr.read_at as string | null,
         deliveredAt: nr.delivered_at as string,
-        sender: sender ? {
-          firstName: sender.first_name || '',
-          lastName: sender.last_name || '',
-        } : undefined,
+        sender: undefined, // Sender lookup removed for now to fix query
       };
     });
 
