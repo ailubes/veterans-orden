@@ -375,7 +375,7 @@ export default function NewNewsPage() {
           <button
             type="submit"
             disabled={loading || !!slugError || isCheckingSlug}
-            className="px-6 py-3 bg-timber-dark text-white font-bold hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-timber-dark text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
           >
             {loading
               ? 'ЗБЕРЕЖЕННЯ...'

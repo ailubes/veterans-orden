@@ -180,8 +180,8 @@ export function ProfilePhotoUpload({
 
           <label
             htmlFor="avatar-upload"
-            className={`inline-flex items-center gap-2 px-6 py-3 bg-timber-dark text-canvas font-bold text-sm cursor-pointer hover:bg-accent transition-colors ${
-              uploading ? 'opacity-50 cursor-not-allowed' : ''
+            className={`inline-flex items-center gap-2 px-6 py-3 bg-timber-dark text-canvas font-bold text-sm font-mono uppercase tracking-wider cursor-pointer transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] ${
+              uploading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
             }`}
           >
             <Upload size={16} />

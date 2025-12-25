@@ -25,6 +25,9 @@ function getS3Client() {
       secretAccessKey,
     },
     forcePathStyle: true, // Required for MinIO
+    // Disable automatic checksum calculation for S3-compatible storage
+    requestChecksumCalculation: 'WHEN_REQUIRED',
+    responseChecksumValidation: 'WHEN_REQUIRED',
   });
 }
 
@@ -106,8 +109,10 @@ export async function generatePresignedUploadUrl(params: {
     });
 
     // Generate presigned URL (valid for 5 minutes)
+    // Exclude checksum headers for S3-compatible storage compatibility
     const uploadUrl = await getSignedUrl(s3Client, command, {
       expiresIn: 300, // 5 minutes
+      unhoistableHeaders: new Set(['x-amz-checksum-crc32']),
     });
 
     // Public URL for accessing the file
