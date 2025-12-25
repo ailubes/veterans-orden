@@ -221,7 +221,6 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       entityType: AUDIT_ENTITY_TYPES.VOTE,
       entityId: id,
       oldData: vote,
-      newData: null,
       ipAddress: request.headers.get('x-forwarded-for'),
       userAgent: request.headers.get('user-agent'),
     });
