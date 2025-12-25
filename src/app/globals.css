@@ -520,7 +520,8 @@ body {
 
   /* Buttons on mobile */
   .btn {
-    width: 100%;
+    width: auto;
+    max-width: 70%;
     text-align: center;
   }
 
