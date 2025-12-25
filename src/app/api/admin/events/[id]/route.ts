@@ -85,7 +85,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const body = await request.json();
 
     // Prepare update data
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
 
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;

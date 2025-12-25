@@ -21,6 +21,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
     if (showQR && referralCode) {
       generateQRCode();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showQR, referralCode]);
 
   const generateQRCode = async () => {
@@ -163,6 +164,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
           <div className="bg-canvas/10 p-6 flex flex-col items-center gap-4">
             {qrCodeUrl && (
               <div className="bg-canvas p-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64" />
               </div>
             )}

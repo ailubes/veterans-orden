@@ -8,11 +8,9 @@ import {
   Calendar,
   MapPin,
   Clock,
-  Users,
   XCircle,
   CheckCircle,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
 
 interface EventDetailPageProps {
   params: Promise<{
@@ -324,7 +322,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
             <p className="label text-accent mb-4">ЗАРЕЄСТРОВАНІ УЧАСНИКИ</p>
 
             <div className="space-y-2">
-              {rsvps.map((rsvp: any) => (
+              {rsvps.map((rsvp) => (
                 <div
                   key={rsvp.id}
                   className="flex items-center justify-between p-3 border border-timber-dark/20 hover:bg-timber-dark/5"

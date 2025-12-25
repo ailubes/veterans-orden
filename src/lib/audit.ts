@@ -24,11 +24,11 @@ export interface AuditLogEntry {
   action: string;
   entityType: string;
   entityId: string;
-  oldData?: Record<string, any>;
-  newData?: Record<string, any>;
+  oldData?: Record<string, unknown>;
+  newData?: Record<string, unknown>;
   ipAddress?: string | null;
   userAgent?: string | null;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -138,10 +138,10 @@ export const AUDIT_ENTITY_TYPES = {
  * Useful for showing what changed in the audit log viewer
  */
 export function createDataDiff(
-  oldData: Record<string, any>,
-  newData: Record<string, any>
-): { field: string; old: any; new: any }[] {
-  const diff: { field: string; old: any; new: any }[] = [];
+  oldData: Record<string, unknown>,
+  newData: Record<string, unknown>
+): { field: string; old: unknown; new: unknown }[] {
+  const diff: { field: string; old: unknown; new: unknown }[] = [];
 
   const allKeys = Array.from(new Set([...Object.keys(oldData), ...Object.keys(newData)]));
 

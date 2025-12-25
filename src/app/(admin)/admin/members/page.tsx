@@ -226,7 +226,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             </div>
 
             {/* Table Rows */}
-            {members.map((member: any) => (
+            {members.map((member) => (
               <div
                 key={member.id}
                 className="grid grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b border-timber-dark/20 hover:bg-timber-dark/5"

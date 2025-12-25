@@ -18,9 +18,8 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [adminRole, setAdminRole] = useState<string>('');
   const [canEdit, setCanEdit] = useState(false);
-  const [members, setMembers] = useState<any[]>([]);
+  const [members, setMembers] = useState<Array<{ id: string; first_name: string; last_name: string; email: string }>>([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -47,6 +46,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
     if (taskId) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
   const loadData = async () => {
@@ -70,8 +70,6 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
         router.push('/dashboard');
         return;
       }
-
-      setAdminRole(adminProfile.role);
 
       // Get task data
       const { data: task, error: taskError } = await supabase
@@ -126,9 +124,9 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
       });
 
       setLoading(false);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Load error:', err);
-      setError(err.message || 'Помилка завантаження');
+      setError(err instanceof Error ? err.message : 'Помилка завантаження');
       setLoading(false);
     }
   };
@@ -163,9 +161,9 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
       }
 
       router.push(`/admin/tasks/${taskId}`);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Save error:', err);
-      setError(err.message || 'Помилка збереження');
+      setError(err instanceof Error ? err.message : 'Помилка збереження');
       setSaving(false);
     }
   };

@@ -18,7 +18,6 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [adminRole, setAdminRole] = useState<string>('');
   const [canEdit, setCanEdit] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -44,6 +43,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
     if (newsId) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newsId]);
 
   const loadData = async () => {
@@ -67,8 +67,6 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
         router.push('/dashboard');
         return;
       }
-
-      setAdminRole(adminProfile.role);
 
       // Get news article data
       const { data: article, error: articleError } = await supabase
@@ -108,9 +106,9 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       });
 
       setLoading(false);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Load error:', err);
-      setError(err.message || 'Помилка завантаження');
+      setError(err instanceof Error ? err.message : 'Помилка завантаження');
       setLoading(false);
     }
   };
@@ -165,9 +163,9 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       }
 
       router.push(`/admin/news/${newsId}`);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Save error:', err);
-      setError(err.message || 'Помилка збереження');
+      setError(err instanceof Error ? err.message : 'Помилка збереження');
       setSaving(false);
     }
   };

@@ -48,6 +48,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
     if (voteId) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voteId]);
 
   const loadData = async () => {
@@ -143,7 +144,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
       const startDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
       const endDateTime = new Date(`${formData.endDate}T${formData.endTime}`);
 
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         question: formData.question,
         description: formData.description,
         vote_type: formData.vote_type,

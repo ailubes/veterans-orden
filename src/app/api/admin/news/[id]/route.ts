@@ -68,7 +68,7 @@ export async function PATCH(
     }
 
     // Build update object
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       title,
       slug,
       excerpt,

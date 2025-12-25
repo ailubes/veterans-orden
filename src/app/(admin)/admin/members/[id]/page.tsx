@@ -121,9 +121,6 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
 
   // Permission checks for actions
   const canEdit = true; // All admins can edit
-  const canChangeRole =
-    adminProfile.role === 'super_admin' ||
-    (adminProfile.role === 'admin' && member.role !== 'super_admin');
   const canSuspend =
     adminProfile.role === 'super_admin' || adminProfile.role === 'admin';
   const canImpersonate = adminProfile.role === 'super_admin';
@@ -366,7 +363,7 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
           <p className="label text-accent mb-4">ПРЯМІ ЗАПРОШЕННЯ</p>
 
           <div className="space-y-2">
-            {directReferrals.map((referral: any) => (
+            {directReferrals.map((referral) => (
               <Link
                 key={referral.id}
                 href={`/admin/members/${referral.id}`}
@@ -411,7 +408,7 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
           <p className="label text-accent mb-4">ОСТАННЯ АКТИВНІСТЬ</p>
 
           <div className="space-y-3">
-            {recentActivity.map((activity: any) => (
+            {recentActivity.map((activity) => (
               <div
                 key={activity.id}
                 className="flex items-start gap-3 pb-3 border-b border-timber-dark/10 last:border-0"

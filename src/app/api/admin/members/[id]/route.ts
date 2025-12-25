@@ -111,7 +111,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     }
 
     // Prepare update data
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
 
     // Personal info
     if (body.first_name !== undefined) updateData.first_name = body.first_name;

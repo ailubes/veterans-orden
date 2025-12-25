@@ -63,6 +63,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
     if (memberId) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId]);
 
   const loadData = async () => {
@@ -95,7 +96,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
           root_user_id: adminProfile.id,
         });
 
-        const hasAccess = treeData?.some((m: any) => m.id === memberId);
+        const hasAccess = treeData?.some((m: { id: string }) => m.id === memberId);
         if (!hasAccess) {
           router.push('/admin/members');
           return;
@@ -146,7 +147,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
       const supabase = createClient();
 
       // Prepare update data
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         first_name: member.first_name,
         last_name: member.last_name,
         patronymic: member.patronymic,
@@ -280,7 +281,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-bold mb-2">
-                Ім'я <span className="text-red-600">*</span>
+                Ім&apos;я <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -581,7 +582,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
             {pointsAdjustment !== 0 && !pointsReason.trim() && (
               <p className="text-xs text-red-600 mt-2">
-                Причина коригування обов'язкова при зміні балів
+                Причина коригування обов&apos;язкова при зміні балів
               </p>
             )}
           </div>

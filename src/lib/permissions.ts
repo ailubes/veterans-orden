@@ -72,7 +72,7 @@ export async function checkReferralTreeAccess(
   }
 
   // Check if target user is in the tree
-  return data?.some((member: any) => member.id === targetUserId) || false;
+  return data?.some((member: { id: string }) => member.id === targetUserId) || false;
 }
 
 /**
@@ -270,7 +270,7 @@ export async function getRegionalLeaderFilter(
       root_user_id: adminProfile.id,
     });
 
-    const userIds = data?.map((member: any) => member.id) || [];
+    const userIds = data?.map((member: { id: string }) => member.id) || [];
     return { filterType: 'referral_tree', userIds };
   }
 

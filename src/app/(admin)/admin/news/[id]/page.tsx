@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getAdminProfile } from '@/lib/permissions';
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Edit, ArrowLeft, ExternalLink, Calendar, User } from 'lucide-react';
 
 interface NewsDetailPageProps {
@@ -163,9 +164,11 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
               <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
 
-              <img
+              <Image
                 src={article.featured_image_url}
                 alt={article.title}
+                width={800}
+                height={600}
                 className="w-full h-auto"
               />
             </div>

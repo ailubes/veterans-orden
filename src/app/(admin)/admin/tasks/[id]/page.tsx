@@ -8,10 +8,8 @@ import {
   Calendar,
   User,
   CheckCircle,
-  Clock,
   TrendingUp,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
 
 interface TaskDetailPageProps {
   params: Promise<{

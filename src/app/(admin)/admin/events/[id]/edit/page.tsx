@@ -18,7 +18,6 @@ export default function EventEditPage({ params }: EventEditPageProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [adminRole, setAdminRole] = useState<string>('');
   const [canEdit, setCanEdit] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -51,6 +50,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
     if (eventId) {
       loadData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId]);
 
   const loadData = async () => {
@@ -74,8 +74,6 @@ export default function EventEditPage({ params }: EventEditPageProps) {
         router.push('/dashboard');
         return;
       }
-
-      setAdminRole(adminProfile.role);
 
       // Get event data
       const { data: event, error: eventError } = await supabase
@@ -148,7 +146,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
       const now = new Date();
       const originalStartDate = new Date(formData.startDate);
 
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         title: formData.title,
         description: formData.description,
         event_type: formData.event_type,

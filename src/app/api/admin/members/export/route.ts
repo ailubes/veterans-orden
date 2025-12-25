@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
       'Дата реєстрації',
     ];
 
-    const csvRows = members.map((member: any) => [
+    const csvRows = members.map((member) => [
       member.id,
       member.first_name || '',
       member.last_name || '',

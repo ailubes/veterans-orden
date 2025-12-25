@@ -11,7 +11,6 @@ import {
   XCircle,
   Download,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
 
 interface VoteDetailPageProps {
   params: Promise<{
@@ -56,7 +55,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
     voteCounts[option.id] = 0;
   });
 
-  ballots?.forEach((ballot: any) => {
+  ballots?.forEach((ballot) => {
     if (ballot.selected_option) {
       voteCounts[ballot.selected_option] = (voteCounts[ballot.selected_option] || 0) + 1;
     }
@@ -352,7 +351,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
             <p className="label text-accent mb-4">СПИСОК ГОЛОСІВ</p>
 
             <div className="space-y-2">
-              {ballots.map((ballot: any) => {
+              {ballots.map((ballot) => {
                 const selectedOption = options.find((opt) => opt.id === ballot.selected_option);
 
                 return (
