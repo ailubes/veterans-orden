@@ -80,3 +80,23 @@ export async function createAdminClient() {
     },
   );
 }
+
+// Simple service role client for API routes (no cookies needed)
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+
+export function createServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !serviceKey) {
+    console.error('⚠️ Supabase service client: Missing URL or SERVICE_ROLE_KEY');
+    throw new Error('Missing Supabase configuration');
+  }
+
+  return createSupabaseClient(url, serviceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}

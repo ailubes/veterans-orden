@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, canSendNotificationTo } from '@/lib/permissions';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use admin client for database operations (bypasses RLS)
-    const supabase = await createAdminClient();
+    // Use service role client for database operations (bypasses RLS)
+    const supabase = createServiceClient();
 
     const body = await request.json();
     const { title, message, type, scope, scopeValue } = body;
