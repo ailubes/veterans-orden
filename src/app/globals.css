@@ -519,12 +519,25 @@ body {
   .footer-grid div[style*="flex-direction: column"] a {
     padding-right: 6px;
     margin-right: 6px;
-    border-right: 1px solid rgba(255,255,255,0.3);
     line-height: 1.6;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer-grid div[style*="flex-direction: column"] a::after {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 0.8em;
+    background: rgba(255,255,255,0.3);
+    margin-left: 6px;
+  }
+
+  .footer-grid div[style*="flex-direction: column"] a:last-child::after {
+    display: none;
   }
 
   .footer-grid div[style*="flex-direction: column"] a:last-child {
-    border-right: none;
     padding-right: 0;
     margin-right: 0;
   }
