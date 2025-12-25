@@ -10,16 +10,29 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import {
+  type UserRole,
+  isAdmin,
+  isSuperAdmin,
+  isRegionalLeader,
+} from '@/lib/permissions-utils';
 
-export type UserRole =
-  | 'free_viewer'
-  | 'prospect'
-  | 'silent_member'
-  | 'full_member'
-  | 'group_leader'
-  | 'regional_leader'
-  | 'admin'
-  | 'super_admin';
+// Re-export types and utility functions from permissions-utils
+// This allows server components to import from this file
+// while client components can import from permissions-utils
+export type { UserRole } from '@/lib/permissions-utils';
+
+export {
+  isAdmin,
+  isSuperAdmin,
+  isRegionalLeader,
+  canChangeRole,
+  canSuspendMembers,
+  canImpersonate,
+  canAccessSystemSettings,
+  canSendNotificationTo,
+  getAssignableRoles,
+} from '@/lib/permissions-utils';
 
 export interface AdminProfile {
   id: string;
@@ -30,26 +43,6 @@ export interface AdminProfile {
   last_name: string;
 }
 
-/**
- * Check if user has admin access (admin, super_admin, or regional_leader)
- */
-export function isAdmin(role: UserRole): boolean {
-  return ['admin', 'super_admin', 'regional_leader'].includes(role);
-}
-
-/**
- * Check if user is super admin
- */
-export function isSuperAdmin(role: UserRole): boolean {
-  return role === 'super_admin';
-}
-
-/**
- * Check if user is regional leader
- */
-export function isRegionalLeader(role: UserRole): boolean {
-  return role === 'regional_leader';
-}
 
 /**
  * Check if a user (regional leader) has access to a specific member
@@ -140,118 +133,6 @@ export async function canManageEntity(
   return false;
 }
 
-/**
- * Can the admin change role of a user?
- *
- * Rules:
- * - Super Admin: Can change any role
- * - Admin: Can change any role except super_admin
- * - Regional Leader: Cannot change roles
- */
-export function canChangeRole(
-  adminRole: UserRole,
-  currentRole: UserRole,
-  newRole: UserRole
-): boolean {
-  if (isSuperAdmin(adminRole)) {
-    return true;
-  }
-
-  if (adminRole === 'admin') {
-    // Admin cannot promote to super_admin or demote super_admins
-    if (newRole === 'super_admin' || currentRole === 'super_admin') {
-      return false;
-    }
-    return true;
-  }
-
-  // Regional leaders cannot change roles
-  return false;
-}
-
-/**
- * Can the admin suspend/unsuspend users?
- *
- * Only super_admin and admin can suspend
- */
-export function canSuspendMembers(adminRole: UserRole): boolean {
-  return isSuperAdmin(adminRole) || adminRole === 'admin';
-}
-
-/**
- * Can the admin impersonate users?
- *
- * Only super_admin can impersonate
- */
-export function canImpersonate(adminRole: UserRole): boolean {
-  return isSuperAdmin(adminRole);
-}
-
-/**
- * Can the admin access system settings?
- *
- * Only super_admin can access system settings
- */
-export function canAccessSystemSettings(adminRole: UserRole): boolean {
-  return isSuperAdmin(adminRole);
-}
-
-/**
- * Can the admin send notifications to a specific scope?
- *
- * Rules:
- * - Super Admin & Admin: Can send to anyone
- * - Regional Leader: Can only send to their referral tree
- */
-export function canSendNotificationTo(
-  adminRole: UserRole,
-  scope: 'user' | 'role' | 'oblast' | 'group' | 'referral_tree'
-): boolean {
-  if (isSuperAdmin(adminRole) || adminRole === 'admin') {
-    return true;
-  }
-
-  if (isRegionalLeader(adminRole)) {
-    // Regional leaders can only send to their referral tree or specific users in it
-    return scope === 'referral_tree' || scope === 'user';
-  }
-
-  return false;
-}
-
-/**
- * Get list of roles that admin can assign
- */
-export function getAssignableRoles(adminRole: UserRole): UserRole[] {
-  if (isSuperAdmin(adminRole)) {
-    return [
-      'free_viewer',
-      'prospect',
-      'silent_member',
-      'full_member',
-      'group_leader',
-      'regional_leader',
-      'admin',
-      'super_admin',
-    ];
-  }
-
-  if (adminRole === 'admin') {
-    return [
-      'free_viewer',
-      'prospect',
-      'silent_member',
-      'full_member',
-      'group_leader',
-      'regional_leader',
-      'admin',
-      // Cannot assign super_admin
-    ];
-  }
-
-  // Regional leaders cannot assign roles
-  return [];
-}
 
 /**
  * Filter query for regional leaders
