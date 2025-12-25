@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3030",
-    "build": "next build --webpack",
+    "dev": "next dev -p 3030 --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg",
@@ -63,7 +63,6 @@
     "svix": "^1.15.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "transliteration": "^2.6.0",
     "xlsx": "^0.18.5",
     "zod": "^3.25.76",
     "zustand": "^4.5.0"
