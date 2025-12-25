@@ -10,7 +10,7 @@ export interface AuthResult {
     user_metadata?: Record<string, unknown>;
   } | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  supabase: SupabaseClient<any, 'public', any>;
+  supabase: SupabaseClient<any, any, any>;
   isMobile: boolean;
   error: string | null;
 }
