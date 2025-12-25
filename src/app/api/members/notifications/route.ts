@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import type { NotificationsResponse } from '@/types/notifications';
+import type { NotificationsResponse, NotificationType } from '@/types/notifications';
 
 export const dynamic = 'force-dynamic';
 
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
         notificationId: nr.notification_id as string,
         title: notification?.title as string || '',
         message: notification?.message as string || '',
-        type: notification?.type as string || 'info',
+        type: (notification?.type || 'info') as NotificationType,
         isRead: nr.is_read as boolean,
         readAt: nr.read_at as string | null,
         deliveredAt: nr.delivered_at as string,

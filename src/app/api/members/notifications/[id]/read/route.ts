@@ -71,16 +71,14 @@ export async function PATCH(
       return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
-    // Increment read_count on parent notification
-    await supabase.rpc('increment_notification_read_count', {
-      notification_id: recipient.notification_id,
-    }).catch(() => {
-      // If RPC doesn't exist, try raw update
-      supabase
-        .from('notifications')
-        .update({ read_count: supabase.rpc('read_count') })
-        .eq('id', recipient.notification_id);
-    });
+    // Try to increment read_count on parent notification (optional, may not exist)
+    try {
+      await supabase.rpc('increment_notification_read_count', {
+        notification_id: recipient.notification_id,
+      });
+    } catch {
+      // RPC function may not exist, silently ignore
+    }
 
     // Get updated unread count
     const { count: unreadCount } = await supabase
