@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getAdminProfile, getRegionalLeaderFilter } from '@/lib/permissions';
 
+export const dynamic = 'force-dynamic'; // Mark as dynamic because we use cookies
+
 /**
  * GET /api/admin/members/export
  * Export members to CSV

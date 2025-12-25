@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { createLiqPayData, createLiqPaySignature, generateOrderId } from '@/lib/liqpay';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
 
+export const dynamic = 'force-dynamic'; // Mark as dynamic because we use cookies
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { verifyLiqPayCallback, decodeLiqPayData, parseOrderId } from '@/lib/liqpay';
 
+export const dynamic = 'force-dynamic'; // Mark as dynamic because we use cookies
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -68,7 +70,22 @@ export async function POST(request: Request) {
           user_id: payment.user_id,
           points_to_add: 50, // Bonus for becoming paid member
         });
+
+        // Log payment success for analytics
+        console.log('[Analytics] Payment completed:', {
+          user_id: payment.user_id,
+          tier: tierId,
+          amount,
+          order_id,
+        });
       }
+    } else {
+      // Log payment failure
+      console.log('[Analytics] Payment failed:', {
+        user_id: payment.user_id,
+        status,
+        order_id,
+      });
     }
 
     return NextResponse.json({ status: 'ok' });
