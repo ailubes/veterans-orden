@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, getRegionalLeaderFilter } from '@/lib/permissions';
+import { getAdminProfileFromRequest, getRegionalLeaderFilter } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,11 +9,8 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q');
@@ -23,7 +19,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ results: [] });
     }
 
-    const supabase = await createClient();
     const leaderFilter = await getRegionalLeaderFilter(adminProfile);
 
     // Search members

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,9 +8,10 @@ export const dynamic = 'force-dynamic';
  *
  * Get all news categories with metadata
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const { auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const { data: categories, error } = await supabase
       .from('news_category_meta')
@@ -37,25 +38,10 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
-    }
-
-    // Check role
-    const { data: userProfile } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', user.id)
-      .single();
-
-    if (!userProfile || userProfile.role !== 'super_admin') {
+    if (adminProfile.role !== 'super_admin') {
       return NextResponse.json(
         { error: 'Тільки super_admin може створювати категорії' },
         { status: 403 }

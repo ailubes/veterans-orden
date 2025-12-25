@@ -1,16 +1,12 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
-import { NextResponse } from 'next/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
 // GET - Check if there's an active impersonation session
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ session: null });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const cookieStore = await cookies();
     const sessionId = cookieStore.get('impersonation_session_id')?.value;
@@ -18,8 +14,6 @@ export async function GET() {
     if (!sessionId) {
       return NextResponse.json({ session: null });
     }
-
-    const supabase = await createClient();
 
     // Get session details
     const { data: session, error } = await supabase

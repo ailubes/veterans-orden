@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, checkReferralTreeAccess } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { checkReferralTreeAccess } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 interface RouteContext {
@@ -16,13 +16,8 @@ interface RouteContext {
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
-
-    // Check admin access
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Check regional leader access
     if (adminProfile.role === 'regional_leader') {
@@ -60,13 +55,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
 export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
-
-    // Check admin access
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Check regional leader access
     if (adminProfile.role === 'regional_leader') {
@@ -202,13 +192,8 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
-
-    // Check admin access (only super_admin and admin can delete)
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     if (
       adminProfile.role !== 'super_admin' &&

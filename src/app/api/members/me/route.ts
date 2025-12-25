@@ -1,22 +1,18 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/auth/get-user';
 
-export const dynamic = 'force-dynamic'; // Mark as dynamic because we use cookies
+export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Get user profile from database
-    const { data: member, error } = await supabase
+    const { data: member, error: dbError } = await supabase
       .from('users')
       .select(
         `
@@ -27,9 +23,9 @@ export async function GET() {
       .eq('clerk_id', user.id)
       .single();
 
-    if (error && error.code !== 'PGRST116') {
+    if (dbError && dbError.code !== 'PGRST116') {
       // PGRST116 = no rows returned
-      console.error('Error fetching member:', error);
+      console.error('Error fetching member:', dbError);
       return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
@@ -56,21 +52,17 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
     const { firstName, lastName, city, oblastId } = body;
 
     // Update user profile
-    const { data, error } = await supabase
+    const { data, error: dbError } = await supabase
       .from('users')
       .update({
         first_name: firstName,
@@ -83,8 +75,8 @@ export async function PATCH(request: Request) {
       .select()
       .single();
 
-    if (error) {
-      console.error('Error updating member:', error);
+    if (dbError) {
+      console.error('Error updating member:', dbError);
       return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 

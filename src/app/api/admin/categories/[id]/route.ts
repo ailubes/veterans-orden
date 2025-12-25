@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,8 +13,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
     const { id } = await params;
-    const supabase = await createClient();
 
     const { data: category, error } = await supabase
       .from('news_category_meta')
@@ -45,26 +46,11 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
     const { id } = await params;
-    const supabase = await createClient();
 
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
-    }
-
-    // Check role
-    const { data: userProfile } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', user.id)
-      .single();
-
-    if (!userProfile || userProfile.role !== 'super_admin') {
+    if (adminProfile.role !== 'super_admin') {
       return NextResponse.json(
         { error: 'Тільки super_admin може редагувати категорії' },
         { status: 403 }
@@ -119,26 +105,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
     const { id } = await params;
-    const supabase = await createClient();
 
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
-    }
-
-    // Check role
-    const { data: userProfile } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', user.id)
-      .single();
-
-    if (!userProfile || userProfile.role !== 'super_admin') {
+    if (adminProfile.role !== 'super_admin') {
       return NextResponse.json(
         { error: 'Тільки super_admin може видаляти категорії' },
         { status: 403 }

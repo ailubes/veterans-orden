@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import {
   generatePresignedUploadUrl,
   isValidFileType,
@@ -31,37 +31,19 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    // 1. Check authentication
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
-    }
-
-    // 2. Check user role (must be admin or higher)
-    const { data: userProfile } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', user.id)
-      .single();
-
-    if (!userProfile) {
-      return NextResponse.json({ error: 'Користувача не знайдено' }, { status: 404 });
-    }
+    // 1. Check authentication and authorization
+    const { profile: adminProfile } = await getAdminProfileFromRequest(request);
 
     const allowedRoles = ['super_admin', 'admin', 'regional_leader', 'news_editor'];
-    if (!allowedRoles.includes(userProfile.role)) {
+    if (!allowedRoles.includes(adminProfile.role)) {
       return NextResponse.json({ error: 'Недостатньо прав доступу' }, { status: 403 });
     }
 
-    // 3. Parse request body
+    // 2. Parse request body
     const body = await request.json();
     const { fileName, fileType, fileSize, context } = body;
 
-    // 4. Validate request
+    // 3. Validate request
     if (!fileName || !fileType || !fileSize || !context) {
       return NextResponse.json(
         { error: 'Відсутні обов\'язкові параметри' },
@@ -69,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Validate file type
+    // 4. Validate file type
     if (!isValidFileType(fileType, context)) {
       return NextResponse.json(
         { error: `Непідтримуваний тип файлу: ${fileType}` },
@@ -77,7 +59,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 6. Validate file size
+    // 5. Validate file size
     if (!isValidFileSize(fileSize, context)) {
       const maxSizeMB = context === 'news_document' ? 50 : 10;
       return NextResponse.json(
@@ -86,14 +68,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 7. Generate presigned URL
+    // 6. Generate presigned URL
     const { uploadUrl, publicUrl, s3Key } = await generatePresignedUploadUrl({
       filename: fileName,
       fileType: fileType,
       context: context,
     });
 
-    // 8. Return response
+    // 7. Return response
     return NextResponse.json({
       uploadUrl,
       publicUrl,

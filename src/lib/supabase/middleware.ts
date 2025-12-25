@@ -1,7 +1,52 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+// CORS headers for mobile app requests
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+  'Access-Control-Max-Age': '86400', // 24 hours
+};
+
+// Check if this is a mobile API request (has Authorization header or is to mobile endpoints)
+function isMobileApiRequest(request: NextRequest): boolean {
+  const authHeader = request.headers.get('Authorization');
+  const pathname = request.nextUrl.pathname;
+
+  // Check for Bearer token or mobile-specific endpoints
+  return (
+    authHeader?.startsWith('Bearer ') ||
+    pathname.startsWith('/api/mobile/')
+  );
+}
+
+// Add CORS headers to response
+function addCorsHeaders(response: NextResponse): NextResponse {
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+  return response;
+}
+
 export async function updateSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Handle OPTIONS preflight requests for API routes
+  if (request.method === 'OPTIONS' && pathname.startsWith('/api/')) {
+    return new NextResponse(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  }
+
+  // For mobile API requests with Bearer token, skip cookie-based auth
+  // The API route will handle authentication via the unified auth wrapper
+  if (isMobileApiRequest(request) && pathname.startsWith('/api/')) {
+    const response = NextResponse.next({ request });
+    return addCorsHeaders(response);
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -35,9 +80,6 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const url = request.nextUrl;
-  const pathname = url.pathname;
-
   // Protected routes that require authentication
   const protectedRoutes = ['/dashboard', '/admin', '/onboarding'];
   const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route));
@@ -67,6 +109,11 @@ export async function updateSession(request: NextRequest) {
   if (isAdminRoute && user) {
     // The actual role check will happen in the admin layout
     // This is just to ensure the user is logged in
+  }
+
+  // Add CORS headers to API responses for mobile compatibility
+  if (pathname.startsWith('/api/')) {
+    return addCorsHeaders(supabaseResponse);
   }
 
   return supabaseResponse;

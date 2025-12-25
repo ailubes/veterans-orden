@@ -1,22 +1,17 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, isSuperAdmin } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isSuperAdmin } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 import { NextResponse } from 'next/server';
 
 // GET - Fetch system configuration
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Only super admins can access system config
     if (!isSuperAdmin(adminProfile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-
-    const supabase = await createClient();
 
     // Fetch all system settings
     const { data: settings, error } = await supabase
@@ -53,10 +48,8 @@ export async function GET() {
 // PATCH - Update system configuration
 export async function PATCH(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Only super admins can update system config
     if (!isSuperAdmin(adminProfile.role)) {
@@ -64,7 +57,6 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    const supabase = await createClient();
 
     // Get old settings for audit log
     const { data: oldSettings } = await supabase

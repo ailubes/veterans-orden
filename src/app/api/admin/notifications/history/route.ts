@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, isRegionalLeader } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isRegionalLeader } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,18 +9,13 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = 20;
     const offset = (page - 1) * limit;
-
-    const supabase = await createClient();
 
     // Build query
     let query = supabase

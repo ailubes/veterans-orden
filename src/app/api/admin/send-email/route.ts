@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import {
   sendWelcomeEmail,
   sendEventReminderEmail,
@@ -11,11 +11,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile } = await getAdminProfileFromRequest(request);
 
     // Only super_admin and admin can send emails
     if (!['super_admin', 'admin'].includes(adminProfile.role)) {

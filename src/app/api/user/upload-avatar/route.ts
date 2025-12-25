@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { generatePresignedUploadUrl } from '@/lib/storage/s3-storage';
 
 export const dynamic = 'force-dynamic';
@@ -12,15 +12,10 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Не авторизовано' }, { status: 401 });
     }
 
     // Get user profile to get their ID
@@ -105,15 +100,10 @@ export async function POST(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    // Check authentication
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Не авторизовано' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Не авторизовано' }, { status: 401 });
     }
 
     // Parse request body

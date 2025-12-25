@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/auth/get-user';
 
 export async function POST(
   request: Request,
@@ -7,14 +7,10 @@ export async function POST(
 ) {
   try {
     const { id: taskId } = await params;
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Get user's database ID

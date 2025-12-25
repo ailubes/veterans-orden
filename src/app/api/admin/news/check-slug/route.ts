@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
+    const { auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
+
     const searchParams = request.nextUrl.searchParams;
     const slug = searchParams.get('slug');
     const excludeId = searchParams.get('excludeId');
@@ -15,8 +18,6 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const supabase = await createClient();
 
     let query = supabase
       .from('news_articles')

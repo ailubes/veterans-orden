@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 interface RouteContext {
@@ -17,13 +16,8 @@ interface RouteContext {
 export async function POST(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
-
-    // Check admin access (only super_admin can impersonate)
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     if (adminProfile.role !== 'super_admin') {
       return NextResponse.json(
@@ -135,13 +129,8 @@ export async function POST(request: NextRequest, context: RouteContext) {
 export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
-
-    // Check admin access
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Find and end active impersonation session
     const { data: session, error: fetchError } = await supabase

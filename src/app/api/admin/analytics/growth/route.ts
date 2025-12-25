@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { NextRequest, NextResponse } from 'next/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,15 +7,10 @@ export const dynamic = 'force-dynamic';
  * GET /api/admin/analytics/growth
  * Get member growth data over time
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const supabase = await createClient();
+    const { auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Get last 30 days of growth data
     const { data, error } = await supabase.rpc('get_member_growth_30_days');

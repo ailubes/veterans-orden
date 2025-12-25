@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/auth/get-user';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,13 +15,10 @@ interface SendMessageRequest {
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-
-    // Get authenticated user
-    const { data: { user } } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Get member profile with referrer and oblast info

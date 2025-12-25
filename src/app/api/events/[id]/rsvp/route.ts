@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export async function POST(
   request: Request,
@@ -7,14 +8,10 @@ export async function POST(
 ) {
   try {
     const { id: eventId } = await params;
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Get user's database ID
@@ -85,14 +82,10 @@ export async function DELETE(
 ) {
   try {
     const { id: eventId } = await params;
-    const supabase = await createClient();
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user, supabase, error: authError } = await getAuthenticatedUser(request);
 
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Get user's database ID
@@ -125,7 +118,8 @@ export async function DELETE(
   }
 }
 
-async function updateEventCounters(supabase: Awaited<ReturnType<typeof createClient>>, eventId: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function updateEventCounters(supabase: SupabaseClient<any, 'public', any>, eventId: string) {
   // Count going
   const { count: goingCount } = await supabase
     .from('event_rsvps')

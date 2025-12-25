@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { NextResponse } from 'next/server';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { verify2FACode } from '@/lib/two-factor';
 
 export const dynamic = 'force-dynamic';
@@ -8,14 +7,10 @@ export const dynamic = 'force-dynamic';
 /**
  * Disable 2FA after verifying current code
  */
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const { code } = await request.json();
 

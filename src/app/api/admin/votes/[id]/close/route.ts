@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 interface RouteContext {
@@ -16,10 +15,10 @@ interface RouteContext {
 export async function POST(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
-    const supabase = await createClient();
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Check admin access
-    const adminProfile = await getAdminProfile();
     if (!adminProfile) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 export interface ActivityItem {
   id: string;
@@ -17,12 +16,8 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = await createClient();
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const { id: memberId } = await context.params;
 

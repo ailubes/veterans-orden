@@ -1,15 +1,12 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, canChangeRole, UserRole } from '@/lib/permissions';
+import { getAdminProfileFromRequest, canChangeRole, UserRole } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 import { NextResponse } from 'next/server';
 
 // POST - Assign/change user role
 export async function POST(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Regional leaders cannot change roles
     if (adminProfile.role === 'regional_leader') {
@@ -25,8 +22,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    const supabase = await createClient();
 
     // Get current user data
     const { data: targetUser, error: fetchError } = await supabase

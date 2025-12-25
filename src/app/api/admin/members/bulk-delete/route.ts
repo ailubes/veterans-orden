@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, isSuperAdmin } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isSuperAdmin } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,11 +9,8 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Only super admins can bulk delete
     if (!isSuperAdmin(adminProfile.role)) {
@@ -33,8 +29,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    const supabase = await createClient();
 
     // Prevent deleting other super admins or yourself
     const { data: membersToDelete } = await supabase

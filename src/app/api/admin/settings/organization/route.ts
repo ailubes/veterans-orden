@@ -1,17 +1,12 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 import { NextResponse } from 'next/server';
 
 // GET - Fetch organization settings
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const supabase = await createClient();
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Fetch all organization settings
     const { data: settings, error } = await supabase
@@ -40,10 +35,8 @@ export async function GET() {
 // PATCH - Update organization settings
 export async function PATCH(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Regional leaders cannot edit organization settings
     if (adminProfile.role === 'regional_leader') {
@@ -51,7 +44,6 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    const supabase = await createClient();
 
     // Get old settings for audit log
     const { data: oldSettings } = await supabase

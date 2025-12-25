@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 
 interface ImportRow {
   first_name: string;
@@ -24,12 +23,8 @@ interface ImportResult {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Only super_admin and admin can import members
     if (!['super_admin', 'admin'].includes(adminProfile.role)) {

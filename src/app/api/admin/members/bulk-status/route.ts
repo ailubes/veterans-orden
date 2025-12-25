@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile, canSuspendMembers } from '@/lib/permissions';
+import { getAdminProfileFromRequest, canSuspendMembers } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,11 +9,8 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    const adminProfile = await getAdminProfile();
-
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     const body = await request.json();
     const { memberIds, status } = body;
@@ -40,8 +36,6 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
-
-    const supabase = await createClient();
 
     // Update member statuses
     const { error: updateError } = await supabase

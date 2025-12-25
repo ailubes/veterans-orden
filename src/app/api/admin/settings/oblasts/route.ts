@@ -1,16 +1,11 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { NextResponse } from 'next/server';
 
 // GET - Fetch all oblasts with member counts and regional leaders
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const supabase = await createClient();
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Fetch all oblasts
     const { data: oblasts, error: oblastsError } = await supabase

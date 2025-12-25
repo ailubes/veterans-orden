@@ -1,21 +1,16 @@
-import { createClient } from '@/lib/supabase/server';
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { NextResponse } from 'next/server';
 
 // GET - Fetch users with elevated roles
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const adminProfile = await getAdminProfile();
-    if (!adminProfile) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    const supabase = auth.supabase;
 
     // Regional leaders cannot access role management
     if (adminProfile.role === 'regional_leader') {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
-
-    const supabase = await createClient();
 
     // Fetch users with elevated roles
     const { data: users, error } = await supabase

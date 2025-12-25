@@ -10,6 +10,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { getAuthenticatedUser, type AuthResult } from '@/lib/auth/get-user';
 import {
   type UserRole,
   isAdmin,
@@ -47,12 +48,15 @@ export interface AdminProfile {
 /**
  * Check if a user (regional leader) has access to a specific member
  * by checking if the member is in their referral tree
+ * @param supabaseClient Optional supabase client (for mobile auth support)
  */
 export async function checkReferralTreeAccess(
   regionalLeaderId: string,
-  targetUserId: string
+  targetUserId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabaseClient?: any
 ): Promise<boolean> {
-  const supabase = await createClient();
+  const supabase = supabaseClient || await createClient();
 
   // Get all members in the regional leader's referral tree
   const { data, error } = await supabase.rpc('get_referral_tree', {
@@ -71,6 +75,7 @@ export async function checkReferralTreeAccess(
 /**
  * Get admin profile for current user
  * Returns null if user is not authenticated or not an admin
+ * @deprecated Use getAdminProfileFromRequest for API routes
  */
 export async function getAdminProfile(): Promise<AdminProfile | null> {
   const supabase = await createClient();
@@ -94,6 +99,39 @@ export async function getAdminProfile(): Promise<AdminProfile | null> {
   }
 
   return profile as AdminProfile;
+}
+
+/**
+ * Get admin profile from request (supports both web and mobile auth)
+ * Returns admin profile and supabase client for further queries
+ * Throws an error response if user is not authenticated or not an admin
+ */
+export async function getAdminProfileFromRequest(
+  request: Request
+): Promise<{ profile: AdminProfile; auth: AuthResult }> {
+  const auth = await getAuthenticatedUser(request);
+
+  if (!auth.user) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const { data: profile } = await auth.supabase
+    .from('users')
+    .select('id, clerk_id, role, email, first_name, last_name')
+    .eq('clerk_id', auth.user.id)
+    .single();
+
+  if (!profile || !isAdmin(profile.role as UserRole)) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  return { profile: profile as AdminProfile, auth };
 }
 
 /**
