@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Sidebar } from '@/components/dashboard/sidebar';
 import { MobileNav } from '@/components/dashboard/mobile-nav';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { GrainOverlay } from '@/components/layout/grain-overlay';
 import { checkProfileCompletion, type UserProfile } from '@/lib/profile-completion';
 
@@ -40,6 +41,7 @@ export default async function DashboardLayout({
         <Sidebar />
         <div className="flex-1 flex flex-col min-h-screen">
           <MobileNav />
+          <DashboardHeader />
           <main className="flex-1 p-4 lg:p-8">{children}</main>
         </div>
       </div>

@@ -15,6 +15,7 @@ import {
   LogOut,
   Trophy,
   Shield,
+  Bell,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
+  { href: '/dashboard/notifications', icon: Bell, label: 'ПОВІДОМЛЕННЯ' },
   { href: '/dashboard/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];
 

@@ -18,7 +18,6 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/logo';
 import { useEffect, useState } from 'react';
-import { NotificationBell } from './notification-bell';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -27,6 +26,7 @@ const navItems = [
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
+  { href: '/dashboard/notifications', icon: Bell, label: 'ПОВІДОМЛЕННЯ' },
   { href: '/dashboard/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];
 
@@ -64,13 +64,12 @@ export function Sidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-timber-dark text-canvas min-h-screen">
-      {/* Logo & Notifications */}
-      <div className="p-6 border-b border-canvas/10 flex items-center justify-between">
+      {/* Logo */}
+      <div className="p-6 border-b border-canvas/10">
         <Link href="/" className="flex items-center gap-3">
           <Logo size={40} className="text-canvas" />
           <span className="font-syne font-bold text-lg tracking-tight">МЕРЕЖА</span>
         </Link>
-        <NotificationBell variant="dark" />
       </div>
 
       {/* Navigation */}
