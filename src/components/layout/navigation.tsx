@@ -96,6 +96,7 @@ export function Navigation() {
         >
           <Logo />
           <span className="hide-mobile">МЕРЕЖА ВІЛЬНИХ ЛЮДЕЙ</span>
+          <span className="show-mobile-only">МЕРЕЖА</span>
         </Link>
 
         {/* Desktop Navigation */}

@@ -148,6 +148,11 @@ body {
   cursor: pointer;
 }
 
+/* Show only on mobile - hidden by default */
+.show-mobile-only {
+  display: none;
+}
+
 /* Mobile menu overlay */
 .mobile-menu-overlay {
   position: fixed;
@@ -210,6 +215,10 @@ body {
 
   .show-mobile {
     display: block !important;
+  }
+
+  .show-mobile-only {
+    display: inline !important;
   }
 
   .mobile-full {
