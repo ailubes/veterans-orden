@@ -3,9 +3,9 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
+import TiptapLink from '@tiptap/extension-link';
 import {
   Bold,
   Italic,
@@ -42,11 +42,7 @@ export function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [2, 3],
-        },
-      }),
+      StarterKit,
       Image.configure({
         inline: true,
         allowBase64: false,
@@ -54,7 +50,7 @@ export function RichTextEditor({
           class: 'max-w-full h-auto rounded',
         },
       }),
-      Link.configure({
+      TiptapLink.configure({
         openOnClick: false,
         HTMLAttributes: {
           class: 'text-[--accent] underline hover:text-[--timber-dark]',

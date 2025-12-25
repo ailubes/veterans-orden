@@ -63,33 +63,56 @@ export async function generatePresignedUploadUrl(params: {
 }): Promise<{ uploadUrl: string; publicUrl: string; s3Key: string }> {
   const { filename, fileType, context } = params;
 
-  const s3Client = getS3Client();
-  const bucketName = process.env.S3_BUCKET_NAME!;
+  try {
+    // Validate required env vars
+    if (!process.env.S3_ACCESS_KEY || !process.env.S3_SECRET_KEY) {
+      throw new Error('S3 credentials not configured. Please set S3_ACCESS_KEY and S3_SECRET_KEY.');
+    }
 
-  // Generate unique filename
-  const uniqueFilename = generateUniqueFilename(filename);
-  const s3Key = getFilePath(context, uniqueFilename);
+    if (!process.env.S3_BUCKET_NAME) {
+      throw new Error('S3_BUCKET_NAME not configured');
+    }
 
-  // Create PUT command
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: s3Key,
-    ContentType: fileType,
-  });
+    if (!process.env.NEXT_PUBLIC_S3_ENDPOINT_URL) {
+      throw new Error('NEXT_PUBLIC_S3_ENDPOINT_URL not configured');
+    }
 
-  // Generate presigned URL (valid for 5 minutes)
-  const uploadUrl = await getSignedUrl(s3Client, command, {
-    expiresIn: 300, // 5 minutes
-  });
+    const s3Client = getS3Client();
+    const bucketName = process.env.S3_BUCKET_NAME;
 
-  // Public URL for accessing the file
-  const publicUrl = `${process.env.NEXT_PUBLIC_S3_ENDPOINT_URL}/${bucketName}/${s3Key}`;
+    // Generate unique filename
+    const uniqueFilename = generateUniqueFilename(filename);
+    const s3Key = getFilePath(context, uniqueFilename);
 
-  return {
-    uploadUrl,
-    publicUrl,
-    s3Key,
-  };
+    // Create PUT command
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: s3Key,
+      ContentType: fileType,
+    });
+
+    // Generate presigned URL (valid for 5 minutes)
+    const uploadUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 300, // 5 minutes
+    });
+
+    // Public URL for accessing the file
+    const publicUrl = `${process.env.NEXT_PUBLIC_S3_ENDPOINT_URL}/${bucketName}/${s3Key}`;
+
+    return {
+      uploadUrl,
+      publicUrl,
+      s3Key,
+    };
+  } catch (error) {
+    console.error('[S3 Storage] Error generating presigned URL:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      context,
+      filename,
+    });
+    throw error;
+  }
 }
 
 /**

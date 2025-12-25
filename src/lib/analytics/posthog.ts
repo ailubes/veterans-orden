@@ -6,7 +6,7 @@ export const initPostHog = () => {
     const host = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.posthog.com';
 
     if (!apiKey) {
-      console.warn('PostHog API key not found');
+      // PostHog is optional - silently skip if not configured
       return;
     }
 

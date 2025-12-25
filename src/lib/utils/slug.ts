@@ -1,4 +1,4 @@
-import { transliterate } from 'transliteration';
+import tr from 'transliteration';
 import slugify from 'slugify';
 
 /**
@@ -15,7 +15,7 @@ export function generateSlug(title: string): string {
   }
 
   // Step 1: Transliterate Cyrillic to Latin
-  const latinized = transliterate(title);
+  const latinized = tr.transliterate(title);
 
   // Step 2: Convert to URL-safe slug
   return slugify(latinized, {

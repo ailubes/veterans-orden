@@ -83,9 +83,16 @@ export async function POST(request: NextRequest) {
       expiresIn: 300, // 5 minutes
     });
   } catch (error) {
-    console.error('[Avatar Upload API] Error:', error);
+    console.error('[Avatar Upload API] Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      error,
+    });
     return NextResponse.json(
-      { error: 'Не вдалося створити URL для завантаження' },
+      {
+        error: 'Не вдалося створити URL для завантаження',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }
