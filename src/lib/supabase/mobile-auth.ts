@@ -1,4 +1,4 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { createClient as createSupabaseClient, SupabaseClient } from '@supabase/supabase-js';
 import { NextRequest } from 'next/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -11,7 +11,8 @@ export interface MobileAuthResult {
     email: string;
     user_metadata?: Record<string, unknown>;
   } | null;
-  supabase: ReturnType<typeof createSupabaseClient>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: SupabaseClient<any, any, any>;
   error: string | null;
 }
 
