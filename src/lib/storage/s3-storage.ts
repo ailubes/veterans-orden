@@ -225,16 +225,66 @@ export async function deleteFromS3(s3Key: string): Promise<void> {
 }
 
 /**
+ * Allowed MIME types by category
+ */
+const imageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+const documentTypes = [
+  // PDF
+  'application/pdf',
+  // Microsoft Word
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  // Microsoft Excel
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  // Microsoft PowerPoint
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  // OpenDocument formats
+  'application/vnd.oasis.opendocument.text',
+  'application/vnd.oasis.opendocument.spreadsheet',
+  'application/vnd.oasis.opendocument.presentation',
+  // Text formats
+  'text/plain',
+  'text/markdown',
+  'text/rtf',
+  'application/rtf',
+  // Rich text
+  'application/x-rtf',
+];
+
+/**
+ * File size limits (after optimization)
+ * - User avatars: 100KB (optimized on client)
+ * - News images: 200KB (optimized on client)
+ * - Documents: 5MB (no optimization)
+ */
+export const FILE_SIZE_LIMITS = {
+  user_avatar: 100 * 1024, // 100KB
+  news_featured: 200 * 1024, // 200KB
+  news_inline: 200 * 1024, // 200KB
+  news_document: 5 * 1024 * 1024, // 5MB
+  event_image: 200 * 1024, // 200KB
+  other: 5 * 1024 * 1024, // 5MB
+} as const;
+
+/**
+ * Max file size before optimization (what user can upload)
+ */
+export const MAX_UPLOAD_SIZE = {
+  user_avatar: 10 * 1024 * 1024, // 10MB before compression
+  news_featured: 10 * 1024 * 1024, // 10MB before compression
+  news_inline: 10 * 1024 * 1024, // 10MB before compression
+  news_document: 5 * 1024 * 1024, // 5MB (no compression)
+  event_image: 10 * 1024 * 1024, // 10MB before compression
+  other: 5 * 1024 * 1024, // 5MB
+} as const;
+
+/**
  * Validate file type based on upload context
  */
 export function isValidFileType(fileType: string, context: string): boolean {
-  const imageTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-  const documentTypes = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  ];
-
   const allowedTypes: Record<string, string[]> = {
     // User content
     user_avatar: imageTypes,
@@ -257,29 +307,18 @@ export function isValidFileType(fileType: string, context: string): boolean {
 
 /**
  * Validate file size based on upload context
+ * This checks the max upload size (before optimization)
  */
 export function isValidFileSize(fileSize: number, context: string): boolean {
-  const maxImageSize = parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'); // 10MB
-  const maxDocumentSize = parseInt(process.env.NEXT_PUBLIC_MAX_DOCUMENT_SIZE || '52428800'); // 50MB
-
-  const maxSizes: Record<string, number> = {
-    // User content
-    user_avatar: 5 * 1024 * 1024, // 5MB
-
-    // News/Articles
-    news_featured: maxImageSize,
-    news_inline: maxImageSize,
-    news_document: maxDocumentSize,
-
-    // Events
-    event_image: maxImageSize,
-
-    // Other
-    other: maxDocumentSize,
-  };
-
-  const maxSize = maxSizes[context] || maxImageSize;
+  const maxSize = MAX_UPLOAD_SIZE[context as keyof typeof MAX_UPLOAD_SIZE] || MAX_UPLOAD_SIZE.other;
   return fileSize <= maxSize;
+}
+
+/**
+ * Get target file size for optimization
+ */
+export function getTargetFileSize(context: string): number {
+  return FILE_SIZE_LIMITS[context as keyof typeof FILE_SIZE_LIMITS] || FILE_SIZE_LIMITS.other;
 }
 
 /**

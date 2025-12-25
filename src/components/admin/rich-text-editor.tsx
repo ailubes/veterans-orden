@@ -116,16 +116,17 @@ export function RichTextEditor({
     try {
       setIsUploading(true);
 
-      // Compress image if > 2MB
-      let fileToUpload = file;
-      if (file.size > 2 * 1024 * 1024) {
-        fileToUpload = await imageCompression(file, {
-          maxSizeMB: 2,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-          initialQuality: 0.8,
-        });
-      }
+      // Always compress inline images to ~200KB
+      const fileToUpload = await imageCompression(file, {
+        maxSizeMB: 0.2, // 200KB target
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/jpeg',
+        initialQuality: 0.85,
+      });
+      console.log(
+        `[Editor Image] ${(file.size / 1024).toFixed(0)}KB → ${(fileToUpload.size / 1024).toFixed(0)}KB`
+      );
 
       // Request presigned URL
       const response = await fetch('/api/admin/upload', {

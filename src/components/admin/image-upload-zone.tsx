@@ -79,21 +79,19 @@ export function ImageUploadZone({
       setIsUploading(true);
       setProgress(10);
 
-      // Compress image if enabled and size > 2MB
+      // Always compress images to ~200KB for news, events
       let fileToUpload = file;
-      if (compress && file.size > 2 * 1024 * 1024) {
+      if (compress) {
         setProgress(20);
         fileToUpload = await imageCompression(file, {
-          maxSizeMB: 2,
-          maxWidthOrHeight: 1920,
+          maxSizeMB: 0.2, // 200KB target
+          maxWidthOrHeight: 1920, // Max dimension
           useWebWorker: true,
-          initialQuality: 0.8,
+          fileType: 'image/jpeg', // Convert to JPEG for better compression
+          initialQuality: 0.85,
         });
         console.log(
-          `[Image Compression] ${file.size} → ${fileToUpload.size} (${(
-            (fileToUpload.size / file.size) *
-            100
-          ).toFixed(0)}%)`
+          `[Image Compression] ${(file.size / 1024).toFixed(0)}KB → ${(fileToUpload.size / 1024).toFixed(0)}KB`
         );
       }
 
@@ -226,7 +224,7 @@ export function ImageUploadZone({
               </p>
               {compress && (
                 <p className="text-xs text-gray-400 mt-1">
-                  Зображення {'>'}2MB будуть автоматично стиснуті
+                  Буде оптимізовано до ~200KB
                 </p>
               )}
             </>

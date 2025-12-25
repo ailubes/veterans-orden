@@ -128,15 +128,8 @@ export function Navigation() {
 
         {/* Mobile Hamburger Button */}
         <button
-          className="show-mobile"
+          className="mobile-menu-toggle"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: '10px',
-            cursor: 'pointer',
-            display: 'none',
-          }}
           aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
         >
           <HamburgerIcon isOpen={isMenuOpen} />
@@ -145,24 +138,7 @@ export function Navigation() {
 
       {/* Mobile Menu Overlay */}
       <div
-        className="mobile-menu-overlay"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'var(--canvas)',
-          zIndex: 99,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '30px',
-          opacity: isMenuOpen ? 1 : 0,
-          visibility: isMenuOpen ? 'visible' : 'hidden',
-          transition: 'all 0.3s ease',
-        }}
+        className={`mobile-menu-overlay ${isMenuOpen ? 'is-open' : ''}`}
       >
         {navLinks.map((link) => (
           <Link

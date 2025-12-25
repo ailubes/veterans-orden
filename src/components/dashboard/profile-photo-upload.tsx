@@ -32,26 +32,24 @@ export function ProfilePhotoUpload({
       return;
     }
 
-    // Validate file size (5MB)
-    const maxSize = 5 * 1024 * 1024;
+    // Validate file size (10MB max before compression)
+    const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError('Максимальний розмір файлу: 5MB');
+      setError('Максимальний розмір файлу: 10MB');
       return;
     }
 
     try {
       setUploading(true);
+      setUploadProgress(10);
 
-      // Compress image if larger than 1MB
-      let fileToUpload = file;
-      if (file.size > 1024 * 1024) {
-        setUploadProgress(10);
-        fileToUpload = await imageCompression(file, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 800,
-          useWebWorker: true,
-        });
-      }
+      // Always compress avatar to ~100KB, 400x400 max
+      const fileToUpload = await imageCompression(file, {
+        maxSizeMB: 0.1, // 100KB target
+        maxWidthOrHeight: 400, // Avatar size
+        useWebWorker: true,
+        fileType: 'image/jpeg', // Convert to JPEG for better compression
+      });
 
       // Create preview
       const reader = new FileReader();
@@ -189,7 +187,7 @@ export function ProfilePhotoUpload({
           </label>
 
           <p className="text-xs text-timber-beam mt-2">
-            JPG, PNG, WebP або GIF. Максимум 5MB.
+            JPG, PNG, WebP або GIF. Буде оптимізовано до 100KB.
           </p>
 
           {error && (

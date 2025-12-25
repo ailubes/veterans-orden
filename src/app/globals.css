@@ -139,6 +139,39 @@ body {
   grid-column: 2 / 5;
 }
 
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Mobile menu overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--canvas);
+  z-index: 99;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* Mobile grid */
 @media (max-width: 900px) {
   .skeleton-container {
@@ -161,6 +194,16 @@ body {
     padding: 20px 0;
   }
 
+  /* Show hamburger menu on mobile */
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  /* Show mobile menu overlay on mobile (visibility controlled by .is-open) */
+  .mobile-menu-overlay {
+    display: flex;
+  }
+
   .hide-mobile {
     display: none !important;
   }
@@ -172,52 +215,39 @@ body {
   .mobile-full {
     grid-template-columns: 1fr !important;
   }
-
-  /* Mobile menu overlay - hide on desktop */
-  .mobile-menu-overlay {
-    display: none;
-  }
-}
-
-@media (min-width: 901px) {
-  .show-mobile {
-    display: none !important;
-  }
-
-  .mobile-menu-overlay {
-    display: none !important;
-  }
 }
 
 /* Mobile responsive sections */
 @media (max-width: 900px) {
-  /* Hero section */
-  header[style*="gridTemplateColumns"] {
+  /* Prevent horizontal overflow on mobile */
+  .skeleton-container,
+  .skeleton-container > * {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* Hero section - make single column */
+  .hero-grid {
     grid-template-columns: 1fr !important;
     gap: 30px !important;
     padding: 40px 0 60px !important;
   }
 
-  /* Counter card mobile */
-  div[style*="width: '640px'"],
-  div[style*="width:'640px'"] {
+  /* Counter card and all fixed-width elements */
+  .hero-grid > div,
+  .skeleton-container div[style*="width"] {
     width: 100% !important;
     max-width: 100% !important;
-  }
-
-  /* News grid */
-  div[style*="gridTemplateColumns: 'repeat(3, 1fr)'"],
-  div[style*="grid-template-columns: repeat(3, 1fr)"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* Featured article grid */
-  div[style*="gridTemplateColumns: '1fr 1fr'"] {
-    grid-template-columns: 1fr !important;
+    box-sizing: border-box !important;
   }
 
   /* Frameworks grid */
-  div[style*="gridTemplateColumns: 'repeat(3, 1fr)'"] {
+  .frameworks-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* News grid - single column */
+  .news-grid {
     grid-template-columns: 1fr !important;
   }
 
@@ -227,7 +257,7 @@ body {
   }
 
   /* Footer grid */
-  footer > div[style*="display: 'grid'"] {
+  .footer-grid {
     grid-template-columns: 1fr !important;
     gap: 40px !important;
   }

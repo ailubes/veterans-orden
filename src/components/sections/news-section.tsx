@@ -81,7 +81,7 @@ export function NewsSection({ news = sampleNews }: NewsSectionProps) {
       </div>
 
       <div
-        className="mobile-full"
+        className="mobile-full news-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '1.5fr 1fr',
