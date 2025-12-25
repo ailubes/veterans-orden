@@ -101,9 +101,16 @@ export async function POST(request: NextRequest) {
       expiresIn: 300, // 5 minutes
     });
   } catch (error) {
-    console.error('[Upload API] Error:', error);
+    console.error('[Upload API] Error:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      error,
+    });
     return NextResponse.json(
-      { error: 'Помилка при створенні URL для завантаження' },
+      {
+        error: 'Помилка при створенні URL для завантаження',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     );
   }

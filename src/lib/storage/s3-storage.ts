@@ -3,12 +3,26 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 // S3 client configuration (server-side only)
 function getS3Client() {
+  const accessKeyId = process.env.S3_ACCESS_KEY;
+  const secretAccessKey = process.env.S3_SECRET_KEY;
+  const endpoint = process.env.S3_ENDPOINT_URL;
+
+  if (!accessKeyId || !secretAccessKey) {
+    throw new Error(
+      `S3 credentials missing. S3_ACCESS_KEY: ${accessKeyId ? 'set' : 'MISSING'}, S3_SECRET_KEY: ${secretAccessKey ? 'set' : 'MISSING'}`
+    );
+  }
+
+  if (!endpoint) {
+    throw new Error('S3_ENDPOINT_URL is not configured');
+  }
+
   return new S3Client({
     region: process.env.S3_REGION || 'us-east-1',
-    endpoint: process.env.S3_ENDPOINT_URL,
+    endpoint: endpoint,
     credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY!,
-      secretAccessKey: process.env.S3_SECRET_KEY!,
+      accessKeyId,
+      secretAccessKey,
     },
     forcePathStyle: true, // Required for MinIO
   });

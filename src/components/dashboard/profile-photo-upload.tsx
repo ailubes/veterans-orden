@@ -75,7 +75,10 @@ export function ProfilePhotoUpload({
 
       if (!presignResponse.ok) {
         const errorData = await presignResponse.json();
-        throw new Error(errorData.error || 'Не вдалося отримати URL для завантаження');
+        const errorMessage = errorData.details
+          ? `${errorData.error}: ${errorData.details}`
+          : errorData.error || 'Не вдалося отримати URL для завантаження';
+        throw new Error(errorMessage);
       }
 
       const { uploadUrl, publicUrl } = await presignResponse.json();

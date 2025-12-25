@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { ArrowLeft, AlertCircle } from 'lucide-react';
+import { ArrowLeft, AlertCircle, RefreshCw } from 'lucide-react';
 import { RichTextEditor } from '@/components/admin/rich-text-editor';
 import { ImageUploadZone } from '@/components/admin/image-upload-zone';
 import { generateSlug, validateSlugFormat } from '@/lib/utils/slug';
@@ -15,6 +15,7 @@ export default function NewNewsPage() {
   const [error, setError] = useState('');
   const [slugError, setSlugError] = useState('');
   const [isCheckingSlug, setIsCheckingSlug] = useState(false);
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -26,19 +27,29 @@ export default function NewNewsPage() {
     featured_image_url: '',
   });
 
-  // Debounced auto-slug generation from title
-  useEffect(() => {
+  // Generate slug when title field loses focus (only if not manually edited)
+  const handleTitleBlur = () => {
+    if (!formData.title || slugManuallyEdited) return;
+
+    const autoSlug = generateSlug(formData.title);
+    if (autoSlug && autoSlug !== formData.slug) {
+      setFormData((prev) => ({ ...prev, slug: autoSlug }));
+    }
+  };
+
+  // Regenerate slug from title (button action)
+  const handleRegenerateSlug = () => {
     if (!formData.title) return;
+    const autoSlug = generateSlug(formData.title);
+    setFormData((prev) => ({ ...prev, slug: autoSlug }));
+    setSlugManuallyEdited(false);
+  };
 
-    const timer = setTimeout(async () => {
-      const autoSlug = generateSlug(formData.title);
-      if (autoSlug !== formData.slug) {
-        setFormData((prev) => ({ ...prev, slug: autoSlug }));
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [formData.title]);
+  // Track manual slug edits
+  const handleSlugChange = (value: string) => {
+    setFormData({ ...formData, slug: value });
+    setSlugManuallyEdited(true);
+  };
 
   // Validate slug uniqueness
   useEffect(() => {
@@ -190,12 +201,13 @@ export default function NewNewsPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
+                onBlur={handleTitleBlur}
                 className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
                 placeholder="Наприклад: Новини з України"
                 required
               />
               <p className="text-xs text-gray-500 mt-1">
-                Slug буде згенеровано автоматично з кирилиці
+                Slug буде згенеровано автоматично після виходу з поля
               </p>
             </div>
 
@@ -203,6 +215,11 @@ export default function NewNewsPage() {
             <div>
               <label className="block text-sm font-medium text-timber-dark mb-2">
                 URL (SLUG) *
+                {slugManuallyEdited && (
+                  <span className="ml-2 text-xs text-amber-600 font-normal">
+                    (редаговано вручну)
+                  </span>
+                )}
               </label>
               <div className="flex items-center">
                 <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-timber-dark text-sm text-timber-beam whitespace-nowrap">
@@ -211,15 +228,22 @@ export default function NewNewsPage() {
                 <input
                   type="text"
                   value={formData.slug}
-                  onChange={(e) =>
-                    setFormData({ ...formData, slug: e.target.value })
-                  }
+                  onChange={(e) => handleSlugChange(e.target.value)}
                   className={`flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none ${
                     slugError ? 'border-red-500' : ''
                   }`}
                   placeholder="novini-z-ukraini"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={handleRegenerateSlug}
+                  disabled={!formData.title}
+                  title="Згенерувати slug з заголовка"
+                  className="px-3 py-3 border-2 border-l-0 border-timber-dark hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </button>
                 {isCheckingSlug && (
                   <span className="ml-2 text-xs text-gray-500">Перевірка...</span>
                 )}
@@ -230,6 +254,9 @@ export default function NewNewsPage() {
                   <span>{slugError}</span>
                 </div>
               )}
+              <p className="text-xs text-gray-500 mt-1">
+                Можете редагувати slug вручну або натиснути ↻ для генерації з заголовка
+              </p>
             </div>
 
             {/* Excerpt */}
