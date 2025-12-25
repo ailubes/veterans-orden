@@ -210,7 +210,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               <button type="submit" className="btn">
                 Застосувати фільтри
               </button>
-              <Link href="/admin/settings/audit-log" className="btn-outline">
+              <Link href="/admin/settings/audit-log" className="btn btn-outline">
                 Скинути
               </Link>
             </div>
@@ -229,7 +229,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
           <h2 className="font-syne text-xl font-bold">
             Записи ({totalCount || 0})
           </h2>
-          <button className="btn-outline inline-flex items-center gap-2">
+          <button className="btn btn-outline inline-flex items-center gap-2">
             <Download className="w-4 h-4" />
             Експорт CSV
           </button>
@@ -288,7 +288,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               {page > 1 && (
                 <Link
                   href={`/admin/settings/audit-log?page=${page - 1}${userFilter ? `&user=${userFilter}` : ''}${actionFilter ? `&action=${actionFilter}` : ''}${entityTypeFilter ? `&entity_type=${entityTypeFilter}` : ''}`}
-                  className="btn-outline"
+                  className="btn btn-outline"
                 >
                   Попередня
                 </Link>

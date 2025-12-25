@@ -109,10 +109,11 @@ export async function generatePresignedUploadUrl(params: {
     });
 
     // Generate presigned URL (valid for 5 minutes)
-    // Exclude checksum headers for S3-compatible storage compatibility
+    // Include Content-Type in signed headers for S3-compatible storage
     const uploadUrl = await getSignedUrl(s3Client, command, {
       expiresIn: 300, // 5 minutes
       unhoistableHeaders: new Set(['x-amz-checksum-crc32']),
+      signableHeaders: new Set(['host', 'content-type']),
     });
 
     // Public URL for accessing the file

@@ -637,6 +637,17 @@ export const auditLog = pgTable('audit_log', {
   createdAtIdx: index('audit_log_created_at_idx').on(table.createdAt),
 }));
 
+// ----- ORGANIZATION SETTINGS -----
+export const organizationSettings = pgTable('organization_settings', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  key: varchar('key', { length: 100 }).notNull().unique(),
+  value: jsonb('value').notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  updatedBy: uuid('updated_by').references(() => users.id),
+}, (table) => ({
+  keyIdx: uniqueIndex('organization_settings_key_idx').on(table.key),
+}));
+
 // ===========================================
 // RELATIONS
 // ===========================================

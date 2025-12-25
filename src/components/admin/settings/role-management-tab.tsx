@@ -280,7 +280,7 @@ export default function RoleManagementTab({
             <button
               type="button"
               onClick={() => setShowDialog(false)}
-              className="btn-outline"
+              className="btn btn-outline"
               disabled={updating}
             >
               Скасувати
