@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
+import { ProfilePhotoUpload } from '@/components/dashboard/profile-photo-upload';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function SettingsPage() {
     firstName: string;
     lastName: string;
     membershipTier: string;
+    avatarUrl: string | null;
   } | null>(null);
 
   const [firstName, setFirstName] = useState('');
@@ -35,10 +37,10 @@ export default function SettingsPage() {
       } = await supabase.auth.getUser();
 
       if (authUser) {
-        // Fetch profile to get membership tier
+        // Fetch profile to get membership tier and avatar
         const { data: profile } = await supabase
           .from('users')
-          .select('membership_tier')
+          .select('membership_tier, avatar_url')
           .eq('clerk_id', authUser.id)
           .single();
 
@@ -47,6 +49,7 @@ export default function SettingsPage() {
           firstName: authUser.user_metadata?.first_name || '',
           lastName: authUser.user_metadata?.last_name || '',
           membershipTier: profile?.membership_tier || 'free',
+          avatarUrl: profile?.avatar_url || null,
         });
         setFirstName(authUser.user_metadata?.first_name || '');
         setLastName(authUser.user_metadata?.last_name || '');
@@ -106,6 +109,25 @@ export default function SettingsPage() {
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">
           Мій профіль
         </h1>
+      </div>
+
+      {/* Profile Photo */}
+      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
+        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+        <p className="label text-accent mb-6">ФОТО ПРОФІЛЮ</p>
+
+        <ProfilePhotoUpload
+          currentAvatarUrl={user.avatarUrl}
+          onUploadComplete={(avatarUrl) => {
+            setUser((prev) => prev ? { ...prev, avatarUrl } : null);
+            setMessage('Фото профілю успішно оновлено!');
+            setTimeout(() => setMessage(''), 3000);
+          }}
+        />
       </div>
 
       {/* Profile Form */}

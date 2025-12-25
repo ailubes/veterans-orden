@@ -41,6 +41,7 @@ export function getFilePath(context: string, filename: string): string {
     news_featured: 'news/featured',
     news_inline: 'news/inline',
     news_document: 'news/documents',
+    user_avatar: 'avatars',
   };
 
   const folder = paths[context] || 'news/other';
@@ -161,6 +162,7 @@ export function isValidFileType(fileType: string, context: string): boolean {
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ],
+    user_avatar: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
   };
 
   const allowed = allowedTypes[context] || allowedTypes.news_featured;
@@ -175,6 +177,7 @@ export function isValidFileSize(fileSize: number, context: string): boolean {
     news_featured: parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'), // 10MB
     news_inline: parseInt(process.env.NEXT_PUBLIC_MAX_IMAGE_SIZE || '10485760'), // 10MB
     news_document: parseInt(process.env.NEXT_PUBLIC_MAX_DOCUMENT_SIZE || '52428800'), // 50MB
+    user_avatar: 5 * 1024 * 1024, // 5MB
   };
 
   const maxSize = maxSizes[context] || maxSizes.news_featured;
