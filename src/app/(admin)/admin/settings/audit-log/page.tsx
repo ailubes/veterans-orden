@@ -146,18 +146,18 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
 
       {/* Filters */}
       {!isRegionalLeader(adminProfile.role) && (
-        <div className="border-2 border-timber-dark p-6 bg-canvas relative mb-6">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="border-2 border-timber-dark p-4 sm:p-6 bg-canvas relative mb-6">
+          <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
+          <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
 
           <div className="flex items-center gap-2 mb-4">
             <Filter className="w-5 h-5 text-accent" />
             <h2 className="font-syne text-lg font-bold">Фільтри</h2>
           </div>
 
-          <form className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <form className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div>
               <label className="label mb-1 block">Користувач</label>
               <select
@@ -206,11 +206,11 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               </select>
             </div>
 
-            <div className="md:col-span-3 flex gap-2">
-              <button type="submit" className="btn">
-                Застосувати фільтри
+            <div className="sm:col-span-2 md:col-span-3 flex flex-wrap gap-2">
+              <button type="submit" className="btn text-sm">
+                Застосувати
               </button>
-              <Link href="/admin/settings/audit-log" className="btn btn-outline">
+              <Link href="/admin/settings/audit-log" className="btn btn-outline text-sm">
                 Скинути
               </Link>
             </div>
@@ -220,23 +220,23 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
 
       {/* Audit Log Table */}
       <div className="border-2 border-timber-dark bg-canvas relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
 
-        <div className="p-6 border-b-2 border-timber-dark flex items-center justify-between">
-          <h2 className="font-syne text-xl font-bold">
+        <div className="p-4 sm:p-6 border-b-2 border-timber-dark flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <h2 className="font-syne text-lg sm:text-xl font-bold">
             Записи ({totalCount || 0})
           </h2>
-          <button className="btn btn-outline inline-flex items-center gap-2">
+          <button className="btn btn-outline inline-flex items-center gap-2 text-sm">
             <Download className="w-4 h-4" />
             Експорт CSV
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <Table>
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
                 <TableHead className="font-syne font-bold">Дата/Час</TableHead>
@@ -280,7 +280,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="p-6 border-t-2 border-timber-dark flex items-center justify-between">
+          <div className="p-4 sm:p-6 border-t-2 border-timber-dark flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-sm text-timber-beam">
               Сторінка {page} з {totalPages}
             </p>
@@ -288,7 +288,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               {page > 1 && (
                 <Link
                   href={`/admin/settings/audit-log?page=${page - 1}${userFilter ? `&user=${userFilter}` : ''}${actionFilter ? `&action=${actionFilter}` : ''}${entityTypeFilter ? `&entity_type=${entityTypeFilter}` : ''}`}
-                  className="btn btn-outline"
+                  className="btn btn-outline text-sm"
                 >
                   Попередня
                 </Link>
@@ -296,7 +296,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               {page < totalPages && (
                 <Link
                   href={`/admin/settings/audit-log?page=${page + 1}${userFilter ? `&user=${userFilter}` : ''}${actionFilter ? `&action=${actionFilter}` : ''}${entityTypeFilter ? `&entity_type=${entityTypeFilter}` : ''}`}
-                  className="btn"
+                  className="btn text-sm"
                 >
                   Наступна
                 </Link>

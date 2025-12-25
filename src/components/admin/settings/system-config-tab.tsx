@@ -104,13 +104,13 @@ export default function SystemConfigTab({
 
   if (!canEdit) {
     return (
-      <div className="border-2 border-timber-dark p-8 bg-canvas relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas relative">
+        <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
 
-        <h2 className="font-syne text-2xl font-bold mb-4">Системна конфігурація</h2>
+        <h2 className="font-syne text-xl sm:text-2xl font-bold mb-4">Системна конфігурація</h2>
         <div className="p-8 border-2 border-accent bg-canvas/50 text-center">
           <p className="text-accent font-medium">
             ⚠️ Доступ заборонено
@@ -136,15 +136,15 @@ export default function SystemConfigTab({
   }
 
   return (
-    <div className="border-2 border-timber-dark p-8 bg-canvas relative">
+    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas relative">
       {/* Joints */}
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
+      <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
+      <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
+      <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
 
       <div className="mb-6">
-        <h2 className="font-syne text-2xl font-bold mb-2">Системна конфігурація</h2>
+        <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Системна конфігурація</h2>
         <p className="text-timber-beam text-sm">
           Глобальні налаштування системи (доступно тільки супер адміністраторам)
         </p>

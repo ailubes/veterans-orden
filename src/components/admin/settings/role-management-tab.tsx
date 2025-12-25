@@ -138,22 +138,22 @@ export default function RoleManagementTab({
 
   return (
     <>
-      <div className="border-2 border-timber-dark p-8 bg-canvas relative">
+      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas relative">
         {/* Joints */}
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', left: '-6px' }} />
+        <div className="joint hidden sm:block" style={{ bottom: '-6px', right: '-6px' }} />
 
         <div className="mb-6">
-          <h2 className="font-syne text-2xl font-bold mb-2">Управління ролями</h2>
+          <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Управління ролями</h2>
           <p className="text-timber-beam text-sm">
             Користувачі з підвищеними привілеями та їх ролі
           </p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
           <div className="border-2 border-timber-dark p-4">
             <div className="flex items-center gap-2 text-timber-beam mb-1">
               <Shield className="w-4 h-4" />
@@ -186,8 +186,8 @@ export default function RoleManagementTab({
         </div>
 
         {/* Users Table */}
-        <div className="border-2 border-timber-dark">
-          <Table>
+        <div className="border-2 border-timber-dark overflow-x-auto">
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
                 <TableHead className="font-syne font-bold">Ім&apos;я</TableHead>
