@@ -9,8 +9,20 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
-    const supabase = auth.supabase;
+    let adminProfile;
+    let supabase;
+
+    try {
+      const result = await getAdminProfileFromRequest(request);
+      adminProfile = result.profile;
+      supabase = result.auth.supabase;
+    } catch (authError) {
+      console.error('[Send Notification] Auth error:', authError);
+      return NextResponse.json(
+        { error: 'Authentication failed' },
+        { status: 401 }
+      );
+    }
 
     const body = await request.json();
     const { title, message, type, scope, scopeValue } = body;
@@ -160,29 +172,38 @@ export async function POST(request: NextRequest) {
     }
 
     // Create notification record
+    const notificationData = {
+      sender_id: adminProfile.id,
+      title,
+      message,
+      type: type || 'info',
+      scope,
+      scope_value: scopeValue || null,
+      recipient_count: recipients.length,
+      message_type: 'admin_to_member',
+      metadata: {
+        sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
+        sent_by_role: adminProfile.role,
+      },
+    };
+
+    console.log('[Send Notification] Inserting:', JSON.stringify(notificationData));
+
     const { data: notification, error: notificationError } = await supabase
       .from('notifications')
-      .insert({
-        sender_id: adminProfile.id,
-        title,
-        message,
-        type: type || 'info',
-        scope,
-        scope_value: scopeValue || null,
-        recipient_count: recipients.length,
-        message_type: 'admin_to_member',
-        metadata: {
-          sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
-          sent_by_role: adminProfile.role,
-        },
-      })
+      .insert(notificationData)
       .select()
       .single();
 
     if (notificationError || !notification) {
-      console.error('Error creating notification:', notificationError);
+      console.error('[Send Notification] Insert error:', notificationError);
       return NextResponse.json(
-        { error: 'Failed to create notification', details: notificationError?.message },
+        {
+          error: 'Failed to create notification',
+          details: notificationError?.message,
+          code: notificationError?.code,
+          hint: notificationError?.hint,
+        },
         { status: 500 }
       );
     }
