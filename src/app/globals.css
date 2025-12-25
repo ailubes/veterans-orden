@@ -330,7 +330,16 @@ body {
 /* Card with joints - ensure joints are visible outside */
 .card-with-joints {
   position: relative;
-  overflow: visible;
+  overflow: visible !important;
+}
+
+/* Hero counter card needs joints visible */
+.counter-card {
+  overflow: visible !important;
+}
+
+.hero-grid {
+  overflow: visible !important;
 }
 
 /* Stats strip */

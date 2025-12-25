@@ -163,11 +163,12 @@ export function Hero() {
           color: '#e8e2d6',
           padding: '40px',
           position: 'absolute',
-          /* Right edge aligns with right beam (at right edge of hero) */
-          right: '0',
+          /* Right edge aligns with right beam (at right edge of hero), with room for joints */
+          right: '10px',
           top: '80px',
           /* Left edge is 20px right of center (50% of hero) */
           left: 'calc(50% + 20px)',
+          border: '2px solid var(--timber-dark)',
         }}
       >
         {/* Corner joints - positioned so card corner is in center of joint */}
