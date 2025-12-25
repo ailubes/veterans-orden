@@ -431,6 +431,11 @@ body {
     min-height: auto !important;
   }
 
+  /* Hero title - bigger on mobile */
+  .hero-grid h1.syne {
+    font-size: clamp(56px, 12vw, 80px) !important;
+  }
+
   /* Hero left column - full width on mobile */
   .hero-grid > div:first-child {
     max-width: 100% !important;
