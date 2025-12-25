@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { AdminSidebar } from '@/components/admin/admin-sidebar';
 import { GrainOverlay } from '@/components/layout/grain-overlay';
 import ImpersonationBanner from '@/components/admin/impersonation-banner';
+import { GlobalSearch } from '@/components/admin/global-search';
 
 export default async function AdminLayout({
   children,
@@ -35,6 +36,8 @@ export default async function AdminLayout({
       <GrainOverlay />
       {/* Impersonation Banner - shows when admin is impersonating a user */}
       <ImpersonationBanner />
+      {/* Global Search - Cmd+K / Ctrl+K */}
+      <GlobalSearch />
       <div className="flex">
         <AdminSidebar />
         <div className="flex-1 flex flex-col min-h-screen">
