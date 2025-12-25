@@ -75,140 +75,147 @@ export function Footer() {
 
   return (
     <>
-      <footer
-        style={{
-          gridColumn: '2 / 5',
-          padding: '60px 0',
-          borderTop: '2px solid var(--timber-dark)',
-        }}
-      >
-        {/* Main Footer Content */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr 1fr',
-            gap: '40px',
-            marginBottom: '60px',
-          }}
-          className="footer-grid"
-        >
-          {/* Logo & Copyright */}
-          <div>
-            <Link
-              href="/"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textDecoration: 'none',
-                color: 'var(--timber-dark)',
-                marginBottom: '20px',
-              }}
-            >
-              <Logo />
-              <span className="syne" style={{ fontSize: '14px', fontWeight: 800 }}>
-                МЕРЕЖА<br />ВІЛЬНИХ ЛЮДЕЙ
-              </span>
-            </Link>
-            <p style={{ fontSize: '12px', opacity: 0.6, lineHeight: 1.6 }}>
-              © {year} ГО «Мережа Вільних Людей»
-              <br />
-              Всі права захищені.
-            </p>
-          </div>
-
-          {/* Navigation */}
-          <div>
-            <p className="label" style={{ marginBottom: '20px' }}>НАВІГАЦІЯ</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  style={{
-                    fontSize: '13px',
-                    textDecoration: 'none',
-                    color: 'var(--timber-dark)',
-                    opacity: 0.8,
-                  }}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Legal Links */}
-          <div>
-            <p className="label" style={{ marginBottom: '20px' }}>ПРАВОВА ІНФОРМАЦІЯ</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {legalLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  style={{
-                    fontSize: '13px',
-                    textDecoration: 'none',
-                    color: 'var(--timber-dark)',
-                    opacity: 0.8,
-                  }}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Contacts */}
-          <div>
-            <p className="label" style={{ marginBottom: '20px' }}>КОНТАКТИ</p>
-            <div style={{ fontSize: '13px', lineHeight: 1.8, opacity: 0.8 }}>
-              <p style={{ marginBottom: '10px' }}>
-                <a
-                  href="tel:+380977826978"
-                  style={{ color: 'var(--timber-dark)', textDecoration: 'none' }}
-                >
-                  +38 097 782 6978
-                </a>
-              </p>
-              <p style={{ marginBottom: '15px' }}>
-                <a
-                  href="mailto:info@freepeople.org.ua"
-                  style={{ color: 'var(--timber-dark)', textDecoration: 'none' }}
-                >
-                  info@freepeople.org.ua
-                </a>
-              </p>
-              <p style={{ fontSize: '12px', lineHeight: 1.6 }}>
-                Київська обл., Бучанський р-н,
-                <br />
-                с. Петропавлівська Борщагівка
-                <br />
-                <span style={{ opacity: 0.6 }}>ЄДРПОУ: 45854363</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </footer>
-
-      {/* Partners & Social - Dark Section */}
+      {/* Full-width dark footer wrapper */}
       <div
         style={{
           gridColumn: '1 / -1',
           background: 'var(--timber-dark)',
           color: 'var(--canvas)',
-          padding: '40px 0',
         }}
       >
+        <footer
+          style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
+            padding: '60px 80px',
+          }}
+          className="footer-wrapper"
+        >
+          {/* Main Footer Content */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr 1fr',
+              gap: '40px',
+              marginBottom: '60px',
+            }}
+            className="footer-grid"
+          >
+            {/* Logo & Copyright */}
+            <div>
+              <Link
+                href="/"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  textDecoration: 'none',
+                  color: 'var(--canvas)',
+                  marginBottom: '20px',
+                }}
+              >
+                <Logo />
+                <span className="syne" style={{ fontSize: '14px', fontWeight: 800 }}>
+                  МЕРЕЖА<br />ВІЛЬНИХ ЛЮДЕЙ
+                </span>
+              </Link>
+              <p style={{ fontSize: '12px', opacity: 0.6, lineHeight: 1.6 }}>
+                © {year} ГО «Мережа Вільних Людей»
+                <br />
+                Всі права захищені.
+              </p>
+            </div>
+
+            {/* Navigation */}
+            <div>
+              <p className="label" style={{ marginBottom: '20px', color: 'var(--accent)' }}>НАВІГАЦІЯ</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    style={{
+                      fontSize: '13px',
+                      textDecoration: 'none',
+                      color: 'var(--canvas)',
+                      opacity: 0.8,
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <p className="label" style={{ marginBottom: '20px', color: 'var(--accent)' }}>ПРАВОВА ІНФОРМАЦІЯ</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {legalLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    style={{
+                      fontSize: '13px',
+                      textDecoration: 'none',
+                      color: 'var(--canvas)',
+                      opacity: 0.8,
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Contacts */}
+            <div>
+              <p className="label" style={{ marginBottom: '20px', color: 'var(--accent)' }}>КОНТАКТИ</p>
+              <div style={{ fontSize: '13px', lineHeight: 1.8, opacity: 0.8 }}>
+                <p style={{ marginBottom: '10px' }}>
+                  <a
+                    href="tel:+380977826978"
+                    style={{ color: 'var(--canvas)', textDecoration: 'none' }}
+                  >
+                    +38 097 782 6978
+                  </a>
+                </p>
+                <p style={{ marginBottom: '15px' }}>
+                  <a
+                    href="mailto:info@freepeople.org.ua"
+                    style={{ color: 'var(--canvas)', textDecoration: 'none' }}
+                  >
+                    info@freepeople.org.ua
+                  </a>
+                </p>
+                <p style={{ fontSize: '12px', lineHeight: 1.6 }}>
+                  Київська обл., Бучанський р-н,
+                  <br />
+                  с. Петропавлівська Борщагівка
+                  <br />
+                  <span style={{ opacity: 0.6 }}>ЄДРПОУ: 45854363</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+        {/* Partners & Social */}
         <div
           style={{
             maxWidth: '1440px',
             margin: '0 auto',
-            padding: '0 80px',
+            padding: '0 80px 40px',
+          }}
+          className="footer-wrapper"
+        >
+        <div
+          style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            paddingTop: '40px',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
           }}
           className="footer-bottom"
         >
@@ -224,50 +231,50 @@ export function Footer() {
             >
               НАШІ ПАРТНЕРИ
             </p>
-            <div className="footer-partners" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            <div className="footer-partners" style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
               <a
                 href="https://www.youtube.com/@ZBROIOVYILOBIST"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.85, transition: 'opacity 0.2s', display: 'flex', alignItems: 'center' }}
                 className="partner-link"
               >
                 <Image
                   src="/images/partners/zb-lobist.png"
                   alt="Збройовий Лобіст"
-                  width={76}
+                  width={120}
                   height={40}
-                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                  style={{ height: '28px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
               <a
                 href="https://uavz.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.85, transition: 'opacity 0.2s', display: 'flex', alignItems: 'center' }}
                 className="partner-link"
               >
                 <Image
                   src="/images/partners/uavz.png"
                   alt="УАВЗ"
-                  width={87}
-                  height={32}
-                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                  width={120}
+                  height={40}
+                  style={{ height: '28px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
               <a
                 href="https://ppdo.org.ua"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.85, transition: 'opacity 0.2s', display: 'flex', alignItems: 'center' }}
                 className="partner-link"
               >
                 <Image
                   src="/images/partners/ppdo.png"
                   alt="ППДО"
-                  width={203}
-                  height={50}
-                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+                  width={200}
+                  height={40}
+                  style={{ height: '28px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
             </div>
@@ -284,7 +291,7 @@ export function Footer() {
                 aria-label={social.label}
                 style={{
                   color: 'var(--canvas)',
-                  opacity: 0.8,
+                  opacity: 0.7,
                   transition: 'all 0.2s ease',
                 }}
                 className="social-link"
@@ -294,22 +301,24 @@ export function Footer() {
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div
-        style={{
-          gridColumn: '2 / 5',
-          padding: '20px 0 40px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          fontSize: '11px',
-          opacity: 0.5,
-        }}
-      >
-        <span>ГУРТУЄМОСЬ, ЩОБ ВПЛИВАТИ!</span>
-        <span>Діємо разом, бо свободу захищають.</span>
+        {/* Bottom Bar */}
+        <div
+          style={{
+            marginTop: '40px',
+            paddingTop: '20px',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            fontSize: '11px',
+            opacity: 0.5,
+          }}
+        >
+          <span>ГУРТУЄМОСЬ, ЩОБ ВПЛИВАТИ!</span>
+          <span>Діємо разом, бо свободу захищають.</span>
+        </div>
+        </div>
       </div>
     </>
   );

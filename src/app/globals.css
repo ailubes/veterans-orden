@@ -276,11 +276,11 @@ body {
   }
 
   .btn-outline {
-    @apply bg-transparent text-timber-dark border-2 border-timber-dark;
+    @apply bg-transparent text-accent border-2 border-accent;
   }
 
   .btn-outline:hover {
-    @apply bg-timber-dark text-canvas;
+    @apply bg-accent text-canvas;
   }
 
   .btn-sm {

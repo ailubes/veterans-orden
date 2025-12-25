@@ -149,8 +149,8 @@ export function Hero() {
           <Link href="/sign-up" className="btn">
             ВСТУПИТИ ДО МЕРЕЖІ →
           </Link>
-          <Link href="/manifest" className="btn btn-outline">
-            МАНІФЕСТ
+          <Link href="/sign-in" className="btn btn-outline">
+            УВІЙТИ
           </Link>
         </div>
       </div>
