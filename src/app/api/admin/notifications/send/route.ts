@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, canSendNotificationTo } from '@/lib/permissions';
+import { createAdminClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,12 +11,10 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   try {
     let adminProfile;
-    let supabase;
 
     try {
       const result = await getAdminProfileFromRequest(request);
       adminProfile = result.profile;
-      supabase = result.auth.supabase;
     } catch (authError) {
       console.error('[Send Notification] Auth error:', authError);
       return NextResponse.json(
@@ -23,6 +22,9 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    // Use admin client for database operations (bypasses RLS)
+    const supabase = await createAdminClient();
 
     const body = await request.json();
     const { title, message, type, scope, scopeValue } = body;
