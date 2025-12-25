@@ -190,61 +190,84 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Partners & Social */}
+      </footer>
+
+      {/* Partners & Social - Dark Section */}
+      <div
+        style={{
+          gridColumn: '1 / -1',
+          background: 'var(--timber-dark)',
+          color: 'var(--canvas)',
+          padding: '40px 0',
+        }}
+      >
         <div
           style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
+            padding: '0 80px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            paddingTop: '40px',
-            borderTop: '1px solid var(--grid-line)',
           }}
           className="footer-bottom"
         >
           {/* Partners */}
           <div className="footer-section">
-            <p className="label" style={{ marginBottom: '15px' }}>НАШІ ПАРТНЕРИ</p>
+            <p
+              className="label"
+              style={{
+                marginBottom: '15px',
+                color: 'var(--accent)',
+                opacity: 1,
+              }}
+            >
+              НАШІ ПАРТНЕРИ
+            </p>
             <div className="footer-partners" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
               <a
                 href="https://www.youtube.com/@ZBROIOVYILOBIST"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                className="partner-link"
               >
                 <Image
-                  src="/images/partners/zb-lobist.png"
+                  src="/images/partners/zb-lobist-light.png"
                   alt="Збройовий Лобіст"
                   width={76}
                   height={40}
-                  style={{ height: '32px', width: 'auto' }}
+                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
               <a
                 href="https://uavz.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                className="partner-link"
               >
                 <Image
                   src="/images/partners/uavz.png"
                   alt="УАВЗ"
                   width={87}
                   height={32}
-                  style={{ height: '32px', width: 'auto' }}
+                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
               <a
                 href="https://ppdo.org.ua"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ opacity: 0.8, transition: 'opacity 0.2s' }}
+                style={{ opacity: 0.9, transition: 'opacity 0.2s' }}
+                className="partner-link"
               >
                 <Image
                   src="/images/partners/ppdo.png"
                   alt="ППДО"
                   width={203}
                   height={50}
-                  style={{ height: '32px', width: 'auto' }}
+                  style={{ height: '32px', width: 'auto', filter: 'brightness(0) invert(1)' }}
                 />
               </a>
             </div>
@@ -260,17 +283,18 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label={social.label}
                 style={{
-                  color: 'var(--timber-dark)',
-                  opacity: 0.7,
-                  transition: 'opacity 0.2s ease',
+                  color: 'var(--canvas)',
+                  opacity: 0.8,
+                  transition: 'all 0.2s ease',
                 }}
+                className="social-link"
               >
                 <social.icon />
               </a>
             ))}
           </div>
         </div>
-      </footer>
+      </div>
 
       {/* Bottom Bar */}
       <div

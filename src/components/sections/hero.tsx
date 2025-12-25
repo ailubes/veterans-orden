@@ -157,7 +157,7 @@ export function Hero() {
 
       {/* Right Column - Counter Card */}
       <div
-        className="counter-card"
+        className="counter-card card-with-joints"
         style={{
           background: '#2c2824',
           color: '#e8e2d6',
@@ -168,14 +168,13 @@ export function Hero() {
           top: '80px',
           /* Left edge is 20px right of center (50% of hero) */
           left: 'calc(50% + 20px)',
-          overflow: 'hidden',
         }}
       >
-        {/* Corner joints - 12x12px black squares */}
-        <div className="joint" style={{ top: '0', left: '0' }} />
-        <div className="joint" style={{ top: '0', right: '0' }} />
-        <div className="joint" style={{ bottom: '0', left: '0' }} />
-        <div className="joint" style={{ bottom: '0', right: '0' }} />
+        {/* Corner joints - positioned so card corner is in center of joint */}
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label" style={{ color: '#d45d3a', marginBottom: '10px' }}>
           ЧЛЕНІВ У МЕРЕЖІ
