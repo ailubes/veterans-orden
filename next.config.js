@@ -14,6 +14,16 @@ const nextConfig = {
     ],
   },
   serverExternalPackages: ['postgres'],
+  // Enable polling for hot reload on WSL2 with Windows file system
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = nextConfig;
