@@ -170,6 +170,7 @@ export async function POST(request: NextRequest) {
         scope,
         scope_value: scopeValue || null,
         recipient_count: recipients.length,
+        message_type: 'admin_to_member',
         metadata: {
           sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
           sent_by_role: adminProfile.role,
@@ -181,7 +182,7 @@ export async function POST(request: NextRequest) {
     if (notificationError || !notification) {
       console.error('Error creating notification:', notificationError);
       return NextResponse.json(
-        { error: 'Failed to create notification' },
+        { error: 'Failed to create notification', details: notificationError?.message },
         { status: 500 }
       );
     }
