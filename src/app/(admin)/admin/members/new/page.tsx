@@ -3,9 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Save, UserPlus } from 'lucide-react';
+import { ArrowLeft, Save, UserPlus, Copy, Check, Eye, EyeOff } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { generateReferralCode } from '@/lib/utils';
 
 interface Oblast {
   id: string;
@@ -28,12 +27,23 @@ interface NewMember {
   points: number;
 }
 
+interface CreatedMemberInfo {
+  id: string;
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+}
+
 export default function NewMemberPage() {
   const router = useRouter();
   const [oblasts, setOblasts] = useState<Oblast[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [createdMember, setCreatedMember] = useState<CreatedMemberInfo | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [member, setMember] = useState<NewMember>({
     first_name: '',
     last_name: '',
@@ -102,48 +112,12 @@ export default function NewMemberPage() {
     setError(null);
 
     try {
-      const supabase = createClient();
-
-      // Check if email already exists
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', member.email)
-        .single();
-
-      if (existingUser) {
-        setError('Користувач з таким email вже існує');
-        setSaving(false);
-        return;
-      }
-
-      // Generate unique clerk_id for manually created members
-      const manualClerkId = `manual_${crypto.randomUUID()}`;
-
-      // Generate unique referral code
-      let referralCode = generateReferralCode();
-
-      // Check if referral code exists and regenerate if needed
-      let codeExists = true;
-      while (codeExists) {
-        const { data: existingCode } = await supabase
-          .from('users')
-          .select('id')
-          .eq('referral_code', referralCode)
-          .single();
-
-        if (!existingCode) {
-          codeExists = false;
-        } else {
-          referralCode = generateReferralCode();
-        }
-      }
-
-      // Create new member
-      const { data: newMember, error: insertError } = await supabase
-        .from('users')
-        .insert({
-          clerk_id: manualClerkId,
+      const response = await fetch('/api/admin/members/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           first_name: member.first_name,
           last_name: member.last_name,
           patronymic: member.patronymic || null,
@@ -157,29 +131,38 @@ export default function NewMemberPage() {
           membership_tier: member.membership_tier,
           membership_paid_until: member.membership_paid_until || null,
           points: member.points,
-          level: 1,
-          referral_code: referralCode,
-          referral_count: 0,
-          is_email_verified: false,
-          is_phone_verified: false,
-          is_identity_verified: false,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (insertError) {
-        throw insertError;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Помилка створення члена');
       }
 
-      // Redirect to new member's page
-      router.push(`/admin/members/${newMember.id}`);
+      // Show success with credentials
+      setCreatedMember({
+        id: data.member.id,
+        email: data.credentials.email,
+        password: data.credentials.password,
+        first_name: data.member.first_name,
+        last_name: data.member.last_name,
+      });
+      setSaving(false);
     } catch (err) {
       console.error('Error creating member:', err);
-      setError('Помилка створення члена');
+      setError(err instanceof Error ? err.message : 'Помилка створення члена');
       setSaving(false);
     }
+  };
+
+  const copyCredentials = async () => {
+    if (!createdMember) return;
+
+    const text = `Email: ${createdMember.email}\nПароль: ${createdMember.password}`;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   if (loading) {
@@ -187,6 +170,114 @@ export default function NewMemberPage() {
       <div className="max-w-4xl mx-auto">
         <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
           <p className="text-timber-beam">Завантаження...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Success screen with credentials
+  if (createdMember) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-canvas border-2 border-timber-dark p-8 relative">
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
+
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Check size={32} className="text-white" />
+            </div>
+            <h2 className="font-syne text-2xl font-bold mb-2">
+              Члена створено успішно!
+            </h2>
+            <p className="text-timber-beam">
+              {createdMember.first_name} {createdMember.last_name}
+            </p>
+          </div>
+
+          <div className="bg-timber-dark/5 border-2 border-timber-dark p-4 mb-6">
+            <p className="label text-accent mb-3">ДАНІ ДЛЯ ВХОДУ</p>
+
+            <div className="space-y-3">
+              <div>
+                <p className="text-xs text-timber-beam mb-1">Email</p>
+                <p className="font-mono text-sm bg-canvas p-2 border border-timber-dark/20">
+                  {createdMember.email}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-timber-beam mb-1">Пароль</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-mono text-sm bg-canvas p-2 border border-timber-dark/20 flex-1">
+                    {showPassword ? createdMember.password : '••••••••••••'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={copyCredentials}
+              className="mt-4 w-full btn btn-outline flex items-center justify-center gap-2"
+            >
+              {copied ? (
+                <>
+                  <Check size={18} />
+                  СКОПІЙОВАНО!
+                </>
+              ) : (
+                <>
+                  <Copy size={18} />
+                  КОПІЮВАТИ ДАНІ ДЛЯ ВХОДУ
+                </>
+              )}
+            </button>
+          </div>
+
+          <p className="text-xs text-timber-beam text-center mb-6">
+            Надішліть ці дані користувачу. Він зможе змінити пароль після входу.
+          </p>
+
+          <div className="flex gap-4">
+            <Link
+              href={`/admin/members/${createdMember.id}`}
+              className="btn flex-1 text-center"
+            >
+              ПЕРЕГЛЯНУТИ ПРОФІЛЬ
+            </Link>
+            <button
+              onClick={() => {
+                setCreatedMember(null);
+                setMember({
+                  first_name: '',
+                  last_name: '',
+                  patronymic: '',
+                  email: '',
+                  phone: '',
+                  date_of_birth: '',
+                  oblast_id: '',
+                  city: '',
+                  role: 'full_member',
+                  status: 'active',
+                  membership_tier: 'free',
+                  membership_paid_until: '',
+                  points: 0,
+                });
+              }}
+              className="btn btn-outline"
+            >
+              СТВОРИТИ ЩЕ
+            </button>
+          </div>
         </div>
       </div>
     );
