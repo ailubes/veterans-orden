@@ -16,7 +16,7 @@ export function DashboardHeader() {
         href="/dashboard/settings"
         className={`p-2 rounded-lg transition-colors ${
           isSettingsActive
-            ? 'bg-accent text-white'
+            ? 'bg-timber-dark text-white'
             : 'text-timber-beam hover:bg-timber-dark/5 hover:text-timber-dark'
         }`}
         title="Налаштування"

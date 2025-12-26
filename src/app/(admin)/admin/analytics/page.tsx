@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Users, TrendingUp, Calendar, Vote, CheckSquare, DollarSign } from 'lucide-react';
 import { GrowthChart } from '@/components/admin/analytics/growth-chart';
 import { EngagementChart } from '@/components/admin/analytics/engagement-chart';
+import { TaskAnalytics } from '@/components/admin/analytics/task-analytics';
 
 export default async function AdminAnalyticsPage() {
   const supabase = await createClient();
@@ -194,6 +195,12 @@ export default async function AdminAnalyticsPage() {
       <div className="grid grid-cols-1 gap-6 mb-8">
         <GrowthChart />
         <EngagementChart />
+      </div>
+
+      {/* Task Analytics Section */}
+      <div className="mb-8">
+        <h2 className="font-syne text-2xl font-bold mb-6">Аналітика завдань</h2>
+        <TaskAnalytics />
       </div>
 
       {/* Charts Section */}

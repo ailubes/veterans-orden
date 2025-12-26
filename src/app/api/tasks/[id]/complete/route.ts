@@ -43,21 +43,62 @@ export async function POST(
       return NextResponse.json({ error: 'Task already completed' }, { status: 400 });
     }
 
-    // Get proof URL if provided
+    // Get proof data if provided
     const body = await request.json().catch(() => ({}));
-    const { proofUrl } = body;
+    const { proofType, proofUrl, proofImageUrl } = body;
 
-    if (task.requires_proof && !proofUrl) {
-      return NextResponse.json({ error: 'Proof required' }, { status: 400 });
+    // If task requires proof, create a submission and set to pending review
+    if (task.requires_proof) {
+      if (!proofUrl && !proofImageUrl) {
+        return NextResponse.json({ error: 'Proof required' }, { status: 400 });
+      }
+
+      // Create task submission record
+      const { error: submissionError } = await supabase
+        .from('task_submissions')
+        .insert({
+          task_id: taskId,
+          user_id: profile.id,
+          proof_type: proofType || (proofImageUrl ? 'image' : 'url'),
+          proof_url: proofUrl || null,
+          proof_image_url: proofImageUrl || null,
+          status: 'pending',
+        });
+
+      if (submissionError) {
+        console.error('Submission creation error:', submissionError);
+        // If it's a unique constraint violation, the user already submitted
+        if (submissionError.code === '23505') {
+          return NextResponse.json({ error: 'Ви вже надіслали підтвердження для цього завдання' }, { status: 400 });
+        }
+        throw submissionError;
+      }
+
+      // Update task status to pending review
+      const { error: updateError } = await supabase
+        .from('tasks')
+        .update({
+          status: 'pending_review',
+          proof_url: proofUrl || proofImageUrl || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', taskId);
+
+      if (updateError) throw updateError;
+
+      return NextResponse.json({
+        success: true,
+        message: 'Підтвердження надіслано на перевірку',
+        pendingReview: true,
+      });
     }
 
-    // Complete the task
+    // No proof required - complete immediately
     const { error: updateError } = await supabase
       .from('tasks')
       .update({
         status: 'completed',
         completed_at: new Date().toISOString(),
-        proof_url: proofUrl || null,
         updated_at: new Date().toISOString(),
       })
       .eq('id', taskId);

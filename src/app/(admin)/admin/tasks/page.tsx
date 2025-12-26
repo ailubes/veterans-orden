@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, CheckSquare, Edit2, Trash2, Eye } from 'lucide-react';
+import { Plus, CheckSquare, Edit2, Trash2, Eye, FileCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function AdminTasksPage() {
@@ -15,6 +15,7 @@ export default async function AdminTasksPage() {
   const statusColors: Record<string, string> = {
     open: 'bg-blue-100 text-blue-700',
     in_progress: 'bg-yellow-100 text-yellow-700',
+    pending_review: 'bg-purple-100 text-purple-700',
     completed: 'bg-green-100 text-green-700',
     cancelled: 'bg-red-100 text-red-600',
   };
@@ -22,6 +23,7 @@ export default async function AdminTasksPage() {
   const statusLabels: Record<string, string> = {
     open: 'Відкрито',
     in_progress: 'В роботі',
+    pending_review: 'На перевірці',
     completed: 'Виконано',
     cancelled: 'Скасовано',
   };
@@ -52,6 +54,13 @@ export default async function AdminTasksPage() {
   const openCount = tasks?.filter((t) => t.status === 'open').length || 0;
   const inProgressCount = tasks?.filter((t) => t.status === 'in_progress').length || 0;
   const completedCount = tasks?.filter((t) => t.status === 'completed').length || 0;
+  const pendingReviewCount = tasks?.filter((t) => t.status === 'pending_review').length || 0;
+
+  // Fetch pending submissions count
+  const { count: submissionsCount } = await supabase
+    .from('task_submissions')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending');
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -61,13 +70,27 @@ export default async function AdminTasksPage() {
           <p className="label mb-2">АДМІНІСТРУВАННЯ</p>
           <h1 className="font-syne text-3xl font-bold">Завдання</h1>
         </div>
-        <Link
-          href="/admin/tasks/new"
-          className="btn flex items-center gap-2"
-        >
-          <Plus size={18} />
-          СТВОРИТИ ЗАВДАННЯ
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/tasks/submissions"
+            className="btn btn-outline flex items-center gap-2 relative"
+          >
+            <FileCheck size={18} />
+            ПЕРЕВІРКИ
+            {(submissionsCount || 0) > 0 && (
+              <span className="absolute -top-2 -right-2 min-w-[20px] h-5 flex items-center justify-center text-xs font-bold text-white bg-orange-500 rounded-full px-1">
+                {submissionsCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/admin/tasks/new"
+            className="btn flex items-center gap-2"
+          >
+            <Plus size={18} />
+            СТВОРИТИ ЗАВДАННЯ
+          </Link>
+        </div>
       </div>
 
       {/* Stats */}

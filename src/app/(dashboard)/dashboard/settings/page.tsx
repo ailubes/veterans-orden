@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
 import { ProfilePhotoUpload } from '@/components/dashboard/profile-photo-upload';
 import { MessageToLeader } from '@/components/dashboard/message-to-leader';
+import { NovaPoshtaSelector } from '@/components/dashboard/nova-poshta-selector';
 import {
   Copy,
   Check,
@@ -17,7 +18,15 @@ import {
   Shield,
   Star,
   Award,
+  Home,
+  Package,
+  ChevronDown,
 } from 'lucide-react';
+
+interface Oblast {
+  id: string;
+  name: string;
+}
 
 interface UserProfile {
   id: string;
@@ -33,8 +42,16 @@ interface UserProfile {
   referralCount: number;
   referredById: string | null;
   referredByName: string | null;
+  oblastId: string | null;
   oblastName: string | null;
   city: string | null;
+  // Address fields
+  streetAddress: string | null;
+  postalCode: string | null;
+  // Nova Poshta fields
+  novaPoshtaCity: string | null;
+  novaPoshtaBranch: string | null;
+  // Stats
   points: number;
   level: number;
   role: string;
@@ -59,6 +76,19 @@ export default function SettingsPage() {
   const [lastName, setLastName] = useState('');
   const [patronymic, setPatronymic] = useState('');
 
+  // Location fields
+  const [oblasts, setOblasts] = useState<Oblast[]>([]);
+  const [oblastId, setOblastId] = useState<string | null>(null);
+  const [city, setCity] = useState('');
+
+  // Address fields
+  const [streetAddress, setStreetAddress] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+
+  // Nova Poshta fields
+  const [novaPoshtaCity, setNovaPoshtaCity] = useState('');
+  const [novaPoshtaBranch, setNovaPoshtaBranch] = useState('');
+
   useEffect(() => {
     // Check for payment success
     if (searchParams.get('payment') === 'success') {
@@ -69,6 +99,17 @@ export default function SettingsPage() {
   useEffect(() => {
     const getUser = async () => {
       const supabase = createClient();
+
+      // Fetch oblasts list
+      const { data: oblastsList } = await supabase
+        .from('oblasts')
+        .select('id, name')
+        .order('name');
+
+      if (oblastsList) {
+        setOblasts(oblastsList);
+      }
+
       const {
         data: { user: authUser },
       } = await supabase.auth.getUser();
@@ -92,6 +133,10 @@ export default function SettingsPage() {
             referred_by_id,
             oblast_id,
             city,
+            street_address,
+            postal_code,
+            nova_poshta_city,
+            nova_poshta_branch,
             points,
             level,
             role,
@@ -156,10 +201,15 @@ export default function SettingsPage() {
             referralCount: profile.referral_count || 0,
             referredById: profile.referred_by_id || null,
             referredByName,
+            oblastId: profile.oblast_id || null,
             oblastName: Array.isArray(profile.oblast)
               ? profile.oblast[0]?.name || null
               : (profile.oblast as { name: string } | null)?.name || null,
             city: profile.city,
+            streetAddress: profile.street_address,
+            postalCode: profile.postal_code,
+            novaPoshtaCity: profile.nova_poshta_city,
+            novaPoshtaBranch: profile.nova_poshta_branch,
             points: profile.points || 0,
             level: profile.level || 1,
             role: profile.role,
@@ -174,6 +224,12 @@ export default function SettingsPage() {
           setFirstName(profile.first_name || '');
           setLastName(profile.last_name || '');
           setPatronymic(profile.patronymic || '');
+          setOblastId(profile.oblast_id || null);
+          setCity(profile.city || '');
+          setStreetAddress(profile.street_address || '');
+          setPostalCode(profile.postal_code || '');
+          setNovaPoshtaCity(profile.nova_poshta_city || '');
+          setNovaPoshtaBranch(profile.nova_poshta_branch || '');
         }
       }
     };
@@ -260,6 +316,12 @@ export default function SettingsPage() {
           first_name: firstName.trim(),
           last_name: lastName.trim(),
           patronymic: patronymic.trim() || null,
+          oblast_id: oblastId || null,
+          city: city.trim() || null,
+          street_address: streetAddress.trim() || null,
+          postal_code: postalCode.trim() || null,
+          nova_poshta_city: novaPoshtaCity.trim() || null,
+          nova_poshta_branch: novaPoshtaBranch.trim() || null,
           updated_at: new Date().toISOString(),
         })
         .eq('clerk_id', authUser.id);
@@ -537,7 +599,102 @@ export default function SettingsPage() {
             />
           </div>
 
-          <p className="text-xs text-timber-beam">
+          {/* Location Section */}
+          <div className="border-t border-timber-dark/20 pt-6 mt-6">
+            <p className="label text-accent mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              ЛОКАЦІЯ
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="label block mb-2">ОБЛАСТЬ</label>
+                <div className="relative">
+                  <select
+                    value={oblastId || ''}
+                    onChange={(e) => setOblastId(e.target.value || null)}
+                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none appearance-none cursor-pointer"
+                  >
+                    <option value="">Оберіть область</option>
+                    {oblasts.map((oblast) => (
+                      <option key={oblast.id} value={oblast.id}>
+                        {oblast.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam pointer-events-none" />
+                </div>
+              </div>
+              <div>
+                <label className="label block mb-2">МІСТО / НАСЕЛЕНИЙ ПУНКТ</label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Наприклад: Київ"
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Delivery Address Section */}
+          <div className="border-t border-timber-dark/20 pt-6 mt-2">
+            <p className="label text-accent mb-4 flex items-center gap-2">
+              <Home className="w-4 h-4" />
+              АДРЕСА ДОСТАВКИ
+            </p>
+            <p className="text-xs text-timber-beam mb-4">
+              Вкажіть адресу для отримання матеріалів Мережі
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="label block mb-2">ВУЛИЦЯ, БУДИНОК, КВАРТИРА</label>
+                <input
+                  type="text"
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
+                  placeholder="Наприклад: вул. Хрещатик, 1, кв. 10"
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="label block mb-2">ПОШТОВИЙ ІНДЕКС</label>
+                  <input
+                    type="text"
+                    value={postalCode}
+                    onChange={(e) => setPostalCode(e.target.value)}
+                    placeholder="01001"
+                    maxLength={10}
+                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Nova Poshta Section */}
+          <div className="border-t border-timber-dark/20 pt-6 mt-2">
+            <p className="label text-accent mb-4 flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              НОВА ПОШТА
+            </p>
+            <p className="text-xs text-timber-beam mb-4">
+              Вкажіть відділення Нової Пошти для отримання посилок
+            </p>
+
+            <NovaPoshtaSelector
+              city={novaPoshtaCity}
+              branch={novaPoshtaBranch}
+              onCityChange={(city) => setNovaPoshtaCity(city)}
+              onBranchChange={(branch) => setNovaPoshtaBranch(branch)}
+            />
+          </div>
+
+          <p className="text-xs text-timber-beam mt-6">
             Для зміни інших особистих даних (телефон, дата народження) зверніться до адміністратора
           </p>
 

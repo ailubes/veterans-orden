@@ -251,6 +251,16 @@ export const users = pgTable('users', {
   groupId: uuid('group_id').references(() => groups.id),
   city: varchar('city', { length: 100 }),
 
+  // Delivery Address
+  streetAddress: varchar('street_address', { length: 255 }), // Street, building, apartment
+  postalCode: varchar('postal_code', { length: 10 }),
+
+  // Nova Poshta Delivery
+  novaPoshtaCity: varchar('nova_poshta_city', { length: 100 }),      // City name for Nova Poshta
+  novaPoshtaCityRef: varchar('nova_poshta_city_ref', { length: 50 }), // Nova Poshta city reference
+  novaPoshtaBranch: varchar('nova_poshta_branch', { length: 100 }),   // Branch number/name
+  novaPoshtaBranchRef: varchar('nova_poshta_branch_ref', { length: 50 }), // Nova Poshta branch reference
+
   // Membership
   memberSince: timestamp('member_since'),
   membershipTier: membershipTierEnum('membership_tier').default('free'),

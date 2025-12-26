@@ -102,6 +102,8 @@ export const AUDIT_ACTIONS = {
   CREATE_TASK: 'create_task',
   UPDATE_TASK: 'update_task',
   DELETE_TASK: 'delete_task',
+  APPROVE_SUBMISSION: 'approve_submission',
+  REJECT_SUBMISSION: 'reject_submission',
 
   // News
   CREATE_NEWS: 'create_news',

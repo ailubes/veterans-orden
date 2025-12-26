@@ -70,6 +70,7 @@ export type UploadContext =
   | 'news_inline'
   | 'news_document'
   | 'event_image'
+  | 'task_proof'
   | 'other';
 
 /**
@@ -87,6 +88,9 @@ export function getFilePath(context: string, filename: string): string {
 
     // Events
     event_image: 'events/images',
+
+    // Task proofs/screenshots
+    task_proof: 'task-proofs',
 
     // Other
     other: 'uploads/other',
@@ -266,6 +270,7 @@ export const FILE_SIZE_LIMITS = {
   news_inline: 200 * 1024, // 200KB
   news_document: 5 * 1024 * 1024, // 5MB
   event_image: 200 * 1024, // 200KB
+  task_proof: 100 * 1024, // 100KB - compressed screenshots
   other: 5 * 1024 * 1024, // 5MB
 } as const;
 
@@ -278,6 +283,7 @@ export const MAX_UPLOAD_SIZE = {
   news_inline: 10 * 1024 * 1024, // 10MB before compression
   news_document: 5 * 1024 * 1024, // 5MB (no compression)
   event_image: 10 * 1024 * 1024, // 10MB before compression
+  task_proof: 10 * 1024 * 1024, // 10MB before compression
   other: 5 * 1024 * 1024, // 5MB
 } as const;
 
@@ -296,6 +302,9 @@ export function isValidFileType(fileType: string, context: string): boolean {
 
     // Events
     event_image: imageTypes,
+
+    // Task proofs - screenshots
+    task_proof: imageTypes,
 
     // Other - allow both images and documents
     other: [...imageTypes, ...documentTypes],

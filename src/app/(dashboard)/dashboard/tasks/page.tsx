@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
-import { CheckSquare, Clock, Star } from 'lucide-react';
+import { CheckSquare, Clock, Star, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { ClaimButton, CompleteButton } from '@/components/tasks/task-actions';
 import { TaskFilters } from '@/components/tasks/task-filters';
+import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface PageProps {
   searchParams: Promise<{ type?: string; priority?: string }>;
@@ -44,13 +45,13 @@ export default async function TasksPage({ searchParams }: PageProps) {
     .order('due_date', { ascending: true })
     .limit(20);
 
-  // Fetch user's in-progress tasks
+  // Fetch user's in-progress and pending review tasks
   const { data: myTasks } = profile
     ? await supabase
         .from('tasks')
         .select('*')
         .eq('assignee_id', profile.id)
-        .eq('status', 'in_progress')
+        .in('status', ['in_progress', 'pending_review'])
         .order('due_date', { ascending: true })
     : { data: null };
 
@@ -119,11 +120,11 @@ export default async function TasksPage({ searchParams }: PageProps) {
                       priorityColors[task.priority as keyof typeof priorityColors]
                     }`}
                   />
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <h3 className="font-bold mb-1">{task.title}</h3>
-                    <p className="text-sm text-timber-beam line-clamp-1">
-                      {task.description}
-                    </p>
+                    <div className="text-sm text-timber-beam line-clamp-2">
+                      <LinkifyText text={task.description || ''} maxUrlLength={35} />
+                    </div>
                     <div className="flex items-center gap-4 mt-2 text-xs text-timber-beam">
                       {task.due_date && (
                         <span className="flex items-center gap-1">
@@ -138,11 +139,18 @@ export default async function TasksPage({ searchParams }: PageProps) {
                       </span>
                     </div>
                   </div>
-                  <CompleteButton
-                    taskId={task.id}
-                    requiresProof={task.requires_proof}
-                    points={task.points || 0}
-                  />
+                  {task.status === 'pending_review' ? (
+                    <div className="flex-shrink-0 px-4 py-2 bg-purple-100 text-purple-700 text-sm font-bold flex items-center gap-2">
+                      <Loader2 size={16} className="animate-spin" />
+                      НА ПЕРЕВІРЦІ
+                    </div>
+                  ) : (
+                    <CompleteButton
+                      taskId={task.id}
+                      requiresProof={task.requires_proof}
+                      points={task.points || 0}
+                    />
+                  )}
                 </div>
               </div>
             ))}
@@ -185,9 +193,9 @@ export default async function TasksPage({ searchParams }: PageProps) {
                       </span>
                     </div>
                     <h3 className="font-bold mb-1">{task.title}</h3>
-                    <p className="text-sm text-timber-beam line-clamp-2">
-                      {task.description}
-                    </p>
+                    <div className="text-sm text-timber-beam line-clamp-2">
+                      <LinkifyText text={task.description || ''} maxUrlLength={35} />
+                    </div>
                     <div className="flex items-center gap-4 mt-2 text-xs text-timber-beam">
                       {task.due_date && (
                         <span className="flex items-center gap-1">

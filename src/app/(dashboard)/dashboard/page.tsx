@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { StatsCard } from '@/components/dashboard/stats-card';
+import { UserTaskStats } from '@/components/dashboard/user-task-stats';
 import Link from 'next/link';
 import { Vote, Calendar, CheckSquare, Users } from 'lucide-react';
 
@@ -236,6 +237,11 @@ export default async function DashboardPage() {
             {membershipTier === 'free' ? 'ОНОВИТИ ЧЛЕНСТВО →' : 'НАЛАШТУВАННЯ →'}
           </Link>
         </div>
+      </div>
+
+      {/* Task Progress Stats */}
+      <div className="mb-8">
+        <UserTaskStats />
       </div>
 
       {/* Recent Activity */}
