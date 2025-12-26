@@ -119,111 +119,177 @@ export default async function AdminTasksPage() {
         </div>
       </div>
 
-      {/* Tasks Table */}
-      <div className="bg-canvas border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+      {/* Tasks List */}
+      {tasks && tasks.length > 0 ? (
+        <>
+          {/* Mobile Cards */}
+          <div className="space-y-3 md:hidden">
+            {tasks.map((task) => (
+              <div
+                key={task.id}
+                className="bg-canvas border-2 border-timber-dark p-4 relative"
+              >
+                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm line-clamp-2">{task.title}</h3>
+                    <p className="text-xs text-timber-beam mt-1 line-clamp-1">
+                      {task.description}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-2 py-1 text-xs font-bold flex-shrink-0 ${
+                      statusColors[task.status as keyof typeof statusColors]
+                    }`}
+                  >
+                    {statusLabels[task.status as keyof typeof statusLabels]}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs mb-3">
+                  <span className="px-2 py-1 bg-timber-dark/10">
+                    {typeLabels[task.type as keyof typeof typeLabels] || task.type}
+                  </span>
+                  <span
+                    className={`px-2 py-1 font-bold ${
+                      priorityColors[task.priority as keyof typeof priorityColors]
+                    }`}
+                  >
+                    {priorityLabels[task.priority as keyof typeof priorityLabels]}
+                  </span>
+                  <span className="font-bold text-accent">+{task.points || 0} балів</span>
+                </div>
+                {task.assignee && (
+                  <p className="text-xs text-timber-beam mb-3">
+                    Виконавець: {task.assignee.first_name} {task.assignee.last_name?.charAt(0)}.
+                  </p>
+                )}
+                <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                  <Link
+                    href={`/admin/tasks/${task.id}`}
+                    className="flex-1 btn btn-sm text-center"
+                  >
+                    ПЕРЕГЛЯНУТИ
+                  </Link>
+                  <Link
+                    href={`/admin/tasks/${task.id}/edit`}
+                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10"
+                  >
+                    <Edit2 size={16} />
+                  </Link>
+                  <button className="p-2 border-2 border-red-200 text-red-500 hover:bg-red-50">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        {tasks && tasks.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b-2 border-timber-dark">
-                <tr>
-                  <th className="text-left p-4 font-bold text-xs">ЗАВДАННЯ</th>
-                  <th className="text-left p-4 font-bold text-xs">ТИП</th>
-                  <th className="text-left p-4 font-bold text-xs">ПРІОРИТЕТ</th>
-                  <th className="text-left p-4 font-bold text-xs">СТАТУС</th>
-                  <th className="text-left p-4 font-bold text-xs">ВИКОНАВЕЦЬ</th>
-                  <th className="text-left p-4 font-bold text-xs">БАЛИ</th>
-                  <th className="text-left p-4 font-bold text-xs">ДІЇ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tasks.map((task) => (
-                  <tr key={task.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
-                    <td className="p-4">
-                      <div className="font-bold">{task.title}</div>
-                      <div className="text-xs text-timber-beam line-clamp-1">
-                        {task.description}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2 py-1 bg-timber-dark/10 text-xs">
-                        {typeLabels[task.type as keyof typeof typeLabels] || task.type}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-2 py-1 text-xs font-bold ${
-                          priorityColors[task.priority as keyof typeof priorityColors]
-                        }`}
-                      >
-                        {priorityLabels[task.priority as keyof typeof priorityLabels]}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-2 py-1 text-xs font-bold ${
-                          statusColors[task.status as keyof typeof statusColors]
-                        }`}
-                      >
-                        {statusLabels[task.status as keyof typeof statusLabels]}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      {task.assignee ? (
-                        <span className="text-sm">
-                          {task.assignee.first_name} {task.assignee.last_name?.charAt(0)}.
-                        </span>
-                      ) : (
-                        <span className="text-sm text-timber-beam">—</span>
-                      )}
-                    </td>
-                    <td className="p-4">
-                      <span className="font-bold text-accent">{task.points || 0}</span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/admin/tasks/${task.id}`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
-                          title="Переглянути"
-                        >
-                          <Eye size={16} />
-                        </Link>
-                        <Link
-                          href={`/admin/tasks/${task.id}/edit`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
-                          title="Редагувати"
-                        >
-                          <Edit2 size={16} />
-                        </Link>
-                        <button
-                          className="p-2 hover:bg-red-50 rounded text-red-500"
-                          title="Видалити"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+          {/* Desktop Table */}
+          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="border-b-2 border-timber-dark">
+                  <tr>
+                    <th className="text-left p-4 font-bold text-xs">ЗАВДАННЯ</th>
+                    <th className="text-left p-4 font-bold text-xs">ТИП</th>
+                    <th className="text-left p-4 font-bold text-xs">ПРІОРИТЕТ</th>
+                    <th className="text-left p-4 font-bold text-xs">СТАТУС</th>
+                    <th className="text-left p-4 font-bold text-xs">ВИКОНАВЕЦЬ</th>
+                    <th className="text-left p-4 font-bold text-xs">БАЛИ</th>
+                    <th className="text-left p-4 font-bold text-xs">ДІЇ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {tasks.map((task) => (
+                    <tr key={task.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
+                      <td className="p-4">
+                        <div className="font-bold">{task.title}</div>
+                        <div className="text-xs text-timber-beam line-clamp-1">
+                          {task.description}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                          {typeLabels[task.type as keyof typeof typeLabels] || task.type}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-2 py-1 text-xs font-bold ${
+                            priorityColors[task.priority as keyof typeof priorityColors]
+                          }`}
+                        >
+                          {priorityLabels[task.priority as keyof typeof priorityLabels]}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-2 py-1 text-xs font-bold ${
+                            statusColors[task.status as keyof typeof statusColors]
+                          }`}
+                        >
+                          {statusLabels[task.status as keyof typeof statusLabels]}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        {task.assignee ? (
+                          <span className="text-sm">
+                            {task.assignee.first_name} {task.assignee.last_name?.charAt(0)}.
+                          </span>
+                        ) : (
+                          <span className="text-sm text-timber-beam">—</span>
+                        )}
+                      </td>
+                      <td className="p-4">
+                        <span className="font-bold text-accent">{task.points || 0}</span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/admin/tasks/${task.id}`}
+                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            title="Переглянути"
+                          >
+                            <Eye size={16} />
+                          </Link>
+                          <Link
+                            href={`/admin/tasks/${task.id}/edit`}
+                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            title="Редагувати"
+                          >
+                            <Edit2 size={16} />
+                          </Link>
+                          <button
+                            className="p-2 hover:bg-red-50 rounded text-red-500"
+                            title="Видалити"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        ) : (
-          <div className="p-12 text-center">
-            <CheckSquare className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
-            <h3 className="font-syne text-xl font-bold mb-2">Немає завдань</h3>
-            <p className="text-sm text-timber-beam mb-6">
-              Створіть перше завдання для членів Мережі
-            </p>
-            <Link href="/admin/tasks/new" className="btn">
-              СТВОРИТИ ЗАВДАННЯ →
-            </Link>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <CheckSquare className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <h3 className="font-syne text-xl font-bold mb-2">Немає завдань</h3>
+          <p className="text-sm text-timber-beam mb-6">
+            Створіть перше завдання для членів Мережі
+          </p>
+          <Link href="/admin/tasks/new" className="btn">
+            СТВОРИТИ ЗАВДАННЯ →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

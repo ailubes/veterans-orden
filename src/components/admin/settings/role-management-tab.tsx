@@ -185,8 +185,59 @@ export default function RoleManagementTab({
           </div>
         </div>
 
-        {/* Users Table */}
-        <div className="border-2 border-timber-dark overflow-x-auto">
+        {/* Mobile Cards */}
+        <div className="space-y-3 md:hidden">
+          {users.length === 0 ? (
+            <div className="text-center text-timber-beam py-8 border-2 border-timber-dark">
+              Немає користувачів з підвищеними ролями
+            </div>
+          ) : (
+            users.map((user) => (
+              <div
+                key={user.id}
+                className="border-2 border-timber-dark p-4"
+              >
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold">{user.first_name} {user.last_name}</h3>
+                    <p className="text-xs text-timber-beam truncate">{user.email}</p>
+                  </div>
+                  <span className={`px-2 py-1 text-xs rounded flex-shrink-0 ${getRoleBadgeColor(user.role)}`}>
+                    {getRoleLabel(user.role)}
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-timber-beam mb-3">
+                  {user.oblast?.name && (
+                    <span className="px-2 py-1 bg-timber-dark/10">{user.oblast.name}</span>
+                  )}
+                  <span>Рефералів: {user.referral_count || 0}</span>
+                </div>
+                {assignableRoles.length > 0 && (
+                  <div className="pt-3 border-t border-timber-dark/10">
+                    <Select
+                      value={user.role}
+                      onValueChange={(value) => handleRoleChange(user, value as UserRole)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <span>Змінити роль</span>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {assignableRoles.map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {getRoleLabel(role)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table */}
+        <div className="hidden md:block border-2 border-timber-dark overflow-x-auto">
           <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">

@@ -98,7 +98,7 @@ export default async function AdminSettingsPage() {
             </p>
             <Link
               href="/admin/settings/audit-log"
-              className="mt-4 inline-block px-6 py-2 border-2 border-timber-dark bg-accent text-canvas hover:bg-timber-dark transition-colors"
+              className="mt-4 btn btn-outline"
             >
               Відкрити журнал аудиту
             </Link>

@@ -102,8 +102,54 @@ export default function OblastsManagementTab() {
         </div>
       </div>
 
-      {/* Oblasts Table */}
-      <div className="border-2 border-timber-dark overflow-x-auto">
+      {/* Mobile Cards */}
+      <div className="space-y-3 md:hidden">
+        {oblasts.length === 0 ? (
+          <div className="text-center text-timber-beam py-8 border-2 border-timber-dark">
+            Немає даних про області
+          </div>
+        ) : (
+          oblasts
+            .sort((a, b) => b.member_count - a.member_count)
+            .map((oblast) => (
+              <div
+                key={oblast.id}
+                className="border-2 border-timber-dark p-4"
+              >
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <h3 className="font-bold">{oblast.name}</h3>
+                    <p className="text-xs text-timber-beam font-mono">{oblast.code}</p>
+                  </div>
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-timber-dark/10 text-sm font-bold">
+                    <Users className="w-4 h-4" />
+                    {oblast.member_count}
+                  </span>
+                </div>
+                <div className="pt-2 border-t border-timber-dark/10">
+                  <p className="text-xs text-timber-beam mb-1">Регіональні лідери:</p>
+                  {oblast.regional_leaders.length === 0 ? (
+                    <span className="text-sm text-timber-beam">Немає</span>
+                  ) : (
+                    <div className="flex flex-wrap gap-1">
+                      {oblast.regional_leaders.map((leader) => (
+                        <span
+                          key={leader.id}
+                          className="text-xs border border-timber-beam/30 px-2 py-1"
+                        >
+                          {leader.first_name} {leader.last_name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+        )}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block border-2 border-timber-dark overflow-x-auto">
         <Table className="min-w-[500px]">
           <TableHeader>
             <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">

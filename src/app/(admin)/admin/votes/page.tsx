@@ -79,106 +79,165 @@ export default async function AdminVotesPage() {
         </div>
       </div>
 
-      {/* Votes Table */}
-      <div className="bg-canvas border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-
-        {votes && votes.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="border-b-2 border-timber-dark">
-                <tr>
-                  <th className="text-left p-4 font-bold text-xs">НАЗВА</th>
-                  <th className="text-left p-4 font-bold text-xs">ТИП</th>
-                  <th className="text-left p-4 font-bold text-xs">СТАТУС</th>
-                  <th className="text-left p-4 font-bold text-xs">ГОЛОСІВ</th>
-                  <th className="text-left p-4 font-bold text-xs">ДАТА</th>
-                  <th className="text-left p-4 font-bold text-xs">ДІЇ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {votes.map((vote) => (
-                  <tr
-                    key={vote.id}
-                    className="border-b border-timber-dark/20 hover:bg-timber-dark/5"
+      {/* Votes List */}
+      {votes && votes.length > 0 ? (
+        <>
+          {/* Mobile Cards */}
+          <div className="space-y-3 md:hidden">
+            {votes.map((vote) => (
+              <div
+                key={vote.id}
+                className="bg-canvas border-2 border-timber-dark p-4 relative"
+              >
+                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-sm line-clamp-2">{vote.title}</h3>
+                    <p className="text-xs text-timber-beam mt-1">
+                      {vote.scope === 'national'
+                        ? 'Національне'
+                        : vote.scope === 'regional'
+                        ? 'Регіональне'
+                        : 'Групове'}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-2 py-1 text-xs font-bold flex-shrink-0 ${
+                      statusColors[vote.status as keyof typeof statusColors]
+                    }`}
                   >
-                    <td className="p-4">
-                      <div className="font-bold">{vote.title}</div>
-                      <div className="text-xs text-timber-beam">
-                        {vote.scope === 'national'
-                          ? 'Національне'
-                          : vote.scope === 'regional'
-                          ? 'Регіональне'
-                          : 'Групове'}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2 py-1 bg-timber-dark/10 text-xs">
-                        {typeLabels[vote.type as keyof typeof typeLabels]}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-2 py-1 text-xs font-bold ${
-                          statusColors[vote.status as keyof typeof statusColors]
-                        }`}
-                      >
-                        {statusLabels[vote.status as keyof typeof statusLabels]}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="font-bold">{vote.total_votes || 0}</span>
-                    </td>
-                    <td className="p-4">
-                      <div className="font-mono text-sm">
-                        {formatDate(vote.end_date)}
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
-                        <Link
-                          href={`/admin/votes/${vote.id}`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
-                          title="Результати"
-                        >
-                          <BarChart3 size={16} />
-                        </Link>
-                        <Link
-                          href={`/admin/votes/${vote.id}/edit`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
-                          title="Редагувати"
-                        >
-                          <Edit2 size={16} />
-                        </Link>
-                        <button
-                          className="p-2 hover:bg-red-50 rounded text-red-500"
-                          title="Видалити"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
+                    {statusLabels[vote.status as keyof typeof statusLabels]}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-xs text-timber-beam mb-3">
+                  <span className="px-2 py-1 bg-timber-dark/10">
+                    {typeLabels[vote.type as keyof typeof typeLabels]}
+                  </span>
+                  <span>{vote.total_votes || 0} голосів</span>
+                  <span>{formatDate(vote.end_date)}</span>
+                </div>
+                <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                  <Link
+                    href={`/admin/votes/${vote.id}`}
+                    className="flex-1 btn btn-sm text-center"
+                  >
+                    РЕЗУЛЬТАТИ
+                  </Link>
+                  <Link
+                    href={`/admin/votes/${vote.id}/edit`}
+                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10"
+                  >
+                    <Edit2 size={16} />
+                  </Link>
+                  <button className="p-2 border-2 border-red-200 text-red-500 hover:bg-red-50">
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table */}
+          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="border-b-2 border-timber-dark">
+                  <tr>
+                    <th className="text-left p-4 font-bold text-xs">НАЗВА</th>
+                    <th className="text-left p-4 font-bold text-xs">ТИП</th>
+                    <th className="text-left p-4 font-bold text-xs">СТАТУС</th>
+                    <th className="text-left p-4 font-bold text-xs">ГОЛОСІВ</th>
+                    <th className="text-left p-4 font-bold text-xs">ДАТА</th>
+                    <th className="text-left p-4 font-bold text-xs">ДІЇ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {votes.map((vote) => (
+                    <tr
+                      key={vote.id}
+                      className="border-b border-timber-dark/20 hover:bg-timber-dark/5"
+                    >
+                      <td className="p-4">
+                        <div className="font-bold">{vote.title}</div>
+                        <div className="text-xs text-timber-beam">
+                          {vote.scope === 'national'
+                            ? 'Національне'
+                            : vote.scope === 'regional'
+                            ? 'Регіональне'
+                            : 'Групове'}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                          {typeLabels[vote.type as keyof typeof typeLabels]}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span
+                          className={`px-2 py-1 text-xs font-bold ${
+                            statusColors[vote.status as keyof typeof statusColors]
+                          }`}
+                        >
+                          {statusLabels[vote.status as keyof typeof statusLabels]}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="font-bold">{vote.total_votes || 0}</span>
+                      </td>
+                      <td className="p-4">
+                        <div className="font-mono text-sm">
+                          {formatDate(vote.end_date)}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <Link
+                            href={`/admin/votes/${vote.id}`}
+                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            title="Результати"
+                          >
+                            <BarChart3 size={16} />
+                          </Link>
+                          <Link
+                            href={`/admin/votes/${vote.id}/edit`}
+                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            title="Редагувати"
+                          >
+                            <Edit2 size={16} />
+                          </Link>
+                          <button
+                            className="p-2 hover:bg-red-50 rounded text-red-500"
+                            title="Видалити"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        ) : (
-          <div className="p-12 text-center">
-            <Vote className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
-            <h3 className="font-syne text-xl font-bold mb-2">
-              Немає голосувань
-            </h3>
-            <p className="text-sm text-timber-beam mb-6">
-              Створіть перше голосування для членів Мережі
-            </p>
-            <Link href="/admin/votes/new" className="btn">
-              СТВОРИТИ ГОЛОСУВАННЯ →
-            </Link>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <Vote className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <h3 className="font-syne text-xl font-bold mb-2">
+            Немає голосувань
+          </h3>
+          <p className="text-sm text-timber-beam mb-6">
+            Створіть перше голосування для членів Мережі
+          </p>
+          <Link href="/admin/votes/new" className="btn">
+            СТВОРИТИ ГОЛОСУВАННЯ →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
