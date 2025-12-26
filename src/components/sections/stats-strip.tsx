@@ -12,29 +12,30 @@ const stats = [
 export function StatsStrip() {
   return (
     <div
+      className="
+        col-span-full
+        bg-timber-beam text-grain
+        py-12 px-4
+        sm:py-14 sm:px-8
+        md:py-16 md:px-12
+        lg:px-20
+        grid grid-cols-2 gap-6
+        sm:grid-cols-4 sm:gap-8
+        md:flex md:justify-between md:items-center md:gap-10
+        my-5 mb-12
+        sm:mb-16
+        md:mb-20
+      "
       style={{
-        gridColumn: '1 / 6',
-        background: 'var(--timber-beam)',
-        color: 'var(--grain)',
-        padding: '60px 80px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        gap: '40px',
-        clipPath: 'polygon(0 15%, 100% 0, 100% 85%, 0 100%)',
-        margin: '20px 0 80px',
+        clipPath: 'polygon(0 8%, 100% 0, 100% 92%, 0 100%)',
       }}
     >
       {stats.map((stat, index) => (
-        <div key={index} style={{ textAlign: 'center' }}>
-          <p className="label" style={{ color: 'var(--grain)', opacity: 0.7 }}>
+        <div key={index} className="text-center">
+          <p className="label text-grain/70 text-[10px] sm:text-xs">
             {stat.label}
           </p>
-          <p
-            className="syne"
-            style={{ fontSize: '48px', fontWeight: 800, lineHeight: 1 }}
-          >
+          <p className="font-syne font-extrabold leading-none text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
             {stat.text ? (
               stat.text
             ) : (
@@ -44,7 +45,7 @@ export function StatsStrip() {
               </>
             )}
           </p>
-          <p style={{ fontSize: '11px', opacity: 0.7 }}>{stat.sublabel}</p>
+          <p className="text-[9px] sm:text-[11px] text-grain/70">{stat.sublabel}</p>
         </div>
       ))}
     </div>
