@@ -428,8 +428,10 @@ export default function NewMemberPage() {
               <label className="block text-sm font-bold mb-2">Початкові бали</label>
               <input
                 type="number"
-                value={member.points}
-                onChange={(e) => setMember({ ...member, points: parseInt(e.target.value) || 0 })}
+                min="0"
+                value={member.points || ''}
+                onChange={(e) => setMember({ ...member, points: e.target.value === '' ? 0 : parseInt(e.target.value, 10) })}
+                onBlur={(e) => { if (e.target.value === '') setMember({ ...member, points: 0 }); }}
                 className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
               />
             </div>

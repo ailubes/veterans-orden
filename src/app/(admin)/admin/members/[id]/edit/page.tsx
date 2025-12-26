@@ -556,8 +556,9 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                 </label>
                 <input
                   type="number"
-                  value={pointsAdjustment}
-                  onChange={(e) => setPointsAdjustment(parseInt(e.target.value) || 0)}
+                  value={pointsAdjustment || ''}
+                  onChange={(e) => setPointsAdjustment(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                  onBlur={(e) => { if (e.target.value === '') setPointsAdjustment(0); }}
                   placeholder="0"
                   className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
                 />
