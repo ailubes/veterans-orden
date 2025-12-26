@@ -40,7 +40,7 @@ export default async function ReferralsPage() {
       <ReferralClient referralCode={referralCode} />
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <p className="label mb-2">ЗАПРОШЕНО ВСЬОГО</p>
@@ -111,7 +111,7 @@ export default async function ReferralsPage() {
 
         <p className="label text-accent mb-4">ЯК ЦЕ ПРАЦЮЄ</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
             <div className="w-10 h-10 bg-timber-dark text-canvas flex items-center justify-center font-syne font-bold mb-3">
               1

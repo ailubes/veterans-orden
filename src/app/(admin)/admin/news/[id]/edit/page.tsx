@@ -337,7 +337,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
             </div>
 
             {/* Categories and Status */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-timber-dark mb-2">
                   КАТЕГОРІЯ *
@@ -425,20 +425,20 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-4 pt-4">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-4">
+          <Link
+            href={`/admin/news/${newsId}`}
+            className="btn btn-outline text-center"
+          >
+            СКАСУВАТИ
+          </Link>
           <button
             type="submit"
             disabled={saving || !!slugError || isCheckingSlug}
-            className="px-6 py-3 bg-timber-dark text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+            className="btn disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'ЗБЕРЕЖЕННЯ...' : '💾 ЗБЕРЕГТИ ЗМІНИ →'}
           </button>
-          <Link
-            href={`/admin/news/${newsId}`}
-            className="text-sm text-timber-beam hover:text-accent"
-          >
-            Скасувати
-          </Link>
         </div>
       </form>
     </div>

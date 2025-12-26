@@ -58,20 +58,20 @@ export default async function LeaderboardPage() {
 
           <p className="label text-accent mb-4">ВАШ СТАТУС</p>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-3 sm:gap-6">
             <div>
-              <p className="text-sm opacity-60 mb-1">ПОЗИЦІЯ</p>
-              <p className="font-syne text-3xl font-bold">
+              <p className="text-xs sm:text-sm opacity-60 mb-1">ПОЗИЦІЯ</p>
+              <p className="font-syne text-2xl sm:text-3xl font-bold">
                 #{userRank !== undefined && userRank >= 0 ? userRank + 1 : '—'}
               </p>
             </div>
             <div>
-              <p className="text-sm opacity-60 mb-1">БАЛИ</p>
-              <p className="font-syne text-3xl font-bold">{profile.points || 0}</p>
+              <p className="text-xs sm:text-sm opacity-60 mb-1">БАЛИ</p>
+              <p className="font-syne text-2xl sm:text-3xl font-bold">{profile.points || 0}</p>
             </div>
             <div>
-              <p className="text-sm opacity-60 mb-1">РІВЕНЬ</p>
-              <p className="font-syne text-3xl font-bold">{profile.level || 1}</p>
+              <p className="text-xs sm:text-sm opacity-60 mb-1">РІВЕНЬ</p>
+              <p className="font-syne text-2xl sm:text-3xl font-bold">{profile.level || 1}</p>
             </div>
           </div>
         </div>

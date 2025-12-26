@@ -146,7 +146,7 @@ export default function NewTaskPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label block mb-2">ТИП *</label>
                 <select
@@ -184,7 +184,7 @@ export default function NewTaskPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label block mb-2">БАЛИ *</label>
                 <input

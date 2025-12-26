@@ -171,7 +171,7 @@ export default function NewVotePage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label block mb-2">ТИП</label>
                 <select
@@ -276,7 +276,7 @@ export default function NewVotePage() {
 
           <h2 className="font-syne text-xl font-bold mb-6">Час проведення</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label block mb-2">ДАТА ПОЧАТКУ *</label>
               <input
@@ -326,7 +326,7 @@ export default function NewVotePage() {
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label block mb-2">КВОРУМ (мін. голосів)</label>
               <input
@@ -349,7 +349,7 @@ export default function NewVotePage() {
                 max="100"
               />
             </div>
-            <div className="col-span-2">
+            <div className="sm:col-span-2">
               <label className="label block mb-2">СТАТУС</label>
               <select
                 value={formData.status}
@@ -370,8 +370,8 @@ export default function NewVotePage() {
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-4">
-          <Link href="/admin/votes" className="btn btn-outline">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 sm:gap-4">
+          <Link href="/admin/votes" className="btn btn-outline text-center">
             СКАСУВАТИ
           </Link>
           <button

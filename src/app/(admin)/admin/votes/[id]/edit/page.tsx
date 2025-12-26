@@ -262,7 +262,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label block mb-2">ТИП ГОЛОСУВАННЯ</label>
                 <select
@@ -302,7 +302,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
 
           <h2 className="font-syne text-xl font-bold mb-6">Період голосування</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label block mb-2">ДАТА ПОЧАТКУ *</label>
               <input
@@ -406,19 +406,18 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <Link href={`/admin/votes/${voteId}`} className="btn btn-outline text-center">
+            СКАСУВАТИ
+          </Link>
           <button
             type="submit"
             disabled={saving}
-            className="btn flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={18} />
             {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ЗМІНИ'}
           </button>
-
-          <Link href={`/admin/votes/${voteId}`} className="btn btn-outline">
-            СКАСУВАТИ
-          </Link>
         </div>
       </form>
     </div>

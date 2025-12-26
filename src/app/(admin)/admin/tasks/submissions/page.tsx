@@ -71,7 +71,7 @@ export default async function SubmissionsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-canvas border-2 border-timber-dark p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
             <Clock size={24} className="text-yellow-600" />

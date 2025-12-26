@@ -266,7 +266,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
             </div>
 
             {/* Row: Priority + Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label mb-2 block">ПРІОРИТЕТ *</label>
                 <select
@@ -300,7 +300,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
             </div>
 
             {/* Row: Assigned To + Due Date */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label mb-2 block">ПРИЗНАЧЕНО</label>
                 <select
@@ -329,7 +329,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
             </div>
 
             {/* Row: Points Reward + Requires Proof */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label mb-2 block">ВИНАГОРОДА (БАЛИ)</label>
                 <input
@@ -363,18 +363,18 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <Link href={`/admin/tasks/${taskId}`} className="btn btn-outline text-center">
+            СКАСУВАТИ
+          </Link>
           <button
             type="submit"
             disabled={saving}
-            className="btn flex items-center gap-2 disabled:opacity-50"
+            className="btn flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <Save size={18} />
             {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ЗМІНИ'}
           </button>
-          <Link href={`/admin/tasks/${taskId}`} className="btn btn-outline">
-            СКАСУВАТИ
-          </Link>
         </div>
       </form>
     </div>

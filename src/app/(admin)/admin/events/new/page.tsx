@@ -177,7 +177,7 @@ export default function NewEventPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label block mb-2">ТИП ПОДІЇ</label>
                 <select
@@ -258,7 +258,7 @@ export default function NewEventPage() {
 
           <h2 className="font-syne text-xl font-bold mb-6">Дата та час</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label block mb-2">ДАТА ПОЧАТКУ *</label>
               <input
@@ -308,7 +308,7 @@ export default function NewEventPage() {
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
 
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="label block mb-2">МАКСИМУМ УЧАСНИКІВ</label>
               <input
@@ -394,10 +394,10 @@ export default function NewEventPage() {
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-4">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 sm:gap-4">
           <Link
             href="/admin/events"
-            className="btn btn-outline"
+            className="btn btn-outline text-center"
           >
             СКАСУВАТИ
           </Link>
