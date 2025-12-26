@@ -150,15 +150,19 @@ export async function GET(request: NextRequest) {
     completedTasks.forEach(task => {
       if (!task.assignee_id || !task.users) return;
 
+      // Handle both array and single object returns from Supabase
+      const userData = Array.isArray(task.users) ? task.users[0] : task.users;
+      if (!userData) return;
+
       const existing = performerMap.get(task.assignee_id);
       if (existing) {
         existing.completedCount++;
       } else {
         performerMap.set(task.assignee_id, {
           id: task.assignee_id,
-          firstName: task.users.first_name || '',
-          lastName: task.users.last_name || '',
-          avatarUrl: task.users.avatar_url,
+          firstName: userData.first_name || '',
+          lastName: userData.last_name || '',
+          avatarUrl: userData.avatar_url,
           completedCount: 1,
         });
       }
