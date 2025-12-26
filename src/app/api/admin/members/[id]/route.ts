@@ -145,7 +145,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     // Membership
     if (body.membership_tier !== undefined)
       updateData.membership_tier = body.membership_tier;
-    if (body.paid_until !== undefined) updateData.paid_until = body.paid_until;
+    if (body.membership_paid_until !== undefined) updateData.membership_paid_until = body.membership_paid_until;
 
     // Update member
     const { data: updatedMember, error: updateError } = await supabase

@@ -87,7 +87,7 @@ export interface User {
   role: UserRole;
   status: UserStatus;
   membership_tier: MembershipTier;
-  paid_until?: string;
+  membership_paid_until?: string;
   points: number;
   level: number;
   is_email_verified: boolean;

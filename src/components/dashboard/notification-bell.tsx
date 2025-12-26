@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Bell, BellOff, AlertCircle, CheckSquare } from 'lucide-react';
 import Link from 'next/link';
+import { formatDateTime } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -161,13 +162,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
                 <div className="mt-4 pt-4 border-t border-timber-dark/10 text-xs text-timber-beam">
                   <div className="flex justify-between">
                     <span>
-                      {new Date(selectedNotification.deliveredAt).toLocaleDateString('uk-UA', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatDateTime(selectedNotification.deliveredAt)}
                     </span>
                     {selectedNotification.sender && (
                       <span>

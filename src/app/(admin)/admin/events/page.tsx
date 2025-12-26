@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Plus, Calendar, Edit2, Trash2, Eye } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate, formatTime } from '@/lib/utils';
 
 export default async function AdminEventsPage() {
   const supabase = await createClient();
@@ -65,7 +66,7 @@ export default async function AdminEventsPage() {
           <p className="label mb-1">НАЙБЛИЖЧА</p>
           <p className="font-syne text-xl font-bold">
             {events?.find((e) => e.status === 'published' && new Date(e.start_date) > new Date())
-              ? new Date(events.find((e) => e.status === 'published' && new Date(e.start_date) > new Date())!.start_date).toLocaleDateString('uk-UA')
+              ? formatDate(events.find((e) => e.status === 'published' && new Date(e.start_date) > new Date())!.start_date)
               : '—'}
           </p>
         </div>
@@ -100,13 +101,10 @@ export default async function AdminEventsPage() {
                     </td>
                     <td className="p-4">
                       <div className="font-mono text-sm">
-                        {new Date(event.start_date).toLocaleDateString('uk-UA')}
+                        {formatDate(event.start_date)}
                       </div>
                       <div className="text-xs text-timber-beam">
-                        {new Date(event.start_date).toLocaleTimeString('uk-UA', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {formatTime(event.start_date)}
                       </div>
                     </td>
                     <td className="p-4">

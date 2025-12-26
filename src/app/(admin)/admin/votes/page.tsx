@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Plus, Vote, Edit2, Trash2, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 
 export default async function AdminVotesPage() {
   const supabase = await createClient();
@@ -131,7 +132,7 @@ export default async function AdminVotesPage() {
                     </td>
                     <td className="p-4">
                       <div className="font-mono text-sm">
-                        {new Date(vote.end_date).toLocaleDateString('uk-UA')}
+                        {formatDate(vote.end_date)}
                       </div>
                     </td>
                     <td className="p-4">

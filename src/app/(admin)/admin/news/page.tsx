@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Plus, FileText, Edit2, Trash2, Eye, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 
 export default async function AdminNewsPage() {
   const supabase = await createClient();
@@ -74,7 +75,7 @@ export default async function AdminNewsPage() {
           <p className="label mb-1">ОСТАННЯ ПУБЛІКАЦІЯ</p>
           <p className="font-syne text-lg font-bold">
             {articles?.find((a) => a.status === 'published')
-              ? new Date(articles.find((a) => a.status === 'published')!.published_at || articles.find((a) => a.status === 'published')!.created_at).toLocaleDateString('uk-UA')
+              ? formatDate(articles.find((a) => a.status === 'published')!.published_at || articles.find((a) => a.status === 'published')!.created_at)
               : '—'}
           </p>
         </div>
@@ -132,7 +133,7 @@ export default async function AdminNewsPage() {
                     </td>
                     <td className="p-4">
                       <div className="font-mono text-sm">
-                        {new Date(article.published_at || article.created_at).toLocaleDateString('uk-UA')}
+                        {formatDate(article.published_at || article.created_at)}
                       </div>
                     </td>
                     <td className="p-4">

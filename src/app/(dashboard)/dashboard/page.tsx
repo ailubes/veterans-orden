@@ -3,6 +3,7 @@ import { StatsCard } from '@/components/dashboard/stats-card';
 import { UserTaskStats } from '@/components/dashboard/user-task-stats';
 import Link from 'next/link';
 import { Vote, Calendar, CheckSquare, Users } from 'lucide-react';
+import { formatDateShort } from '@/lib/utils';
 
 // Map membership tier to Ukrainian display name
 const TIER_NAMES: Record<string, string> = {
@@ -280,10 +281,7 @@ export default async function DashboardPage() {
                     </p>
                   </div>
                   <span className="text-xs text-timber-beam flex-shrink-0">
-                    {new Date(activity.timestamp).toLocaleDateString('uk-UA', {
-                      day: 'numeric',
-                      month: 'short',
-                    })}
+                    {formatDateShort(activity.timestamp)}
                   </span>
                 </div>
               );

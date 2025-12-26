@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { LinkifyText } from '@/components/ui/linkify-text';
+import { formatDate } from '@/lib/utils';
 
 interface TaskDetailPageProps {
   params: Promise<{
@@ -43,16 +44,6 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   const canEdit =
     adminProfile.role === 'super_admin' ||
     adminProfile.role === 'admin';
-
-  // Format dates
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return '—';
-    return new Date(dateString).toLocaleDateString('uk-UA', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
 
   // Status labels
   const statusLabels: Record<string, string> = {

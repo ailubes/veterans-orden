@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { CheckSquare, Clock, Star, Trophy, TrendingUp, ArrowRight } from 'lucide-react';
+import { formatDateShort } from '@/lib/utils';
 
 interface UserStats {
   taskStats: {
@@ -164,10 +165,7 @@ export function UserTaskStats() {
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-accent font-bold">+{task.points}</span>
                   <span className="text-xs text-timber-beam">
-                    {new Date(task.completedAt).toLocaleDateString('uk-UA', {
-                      day: 'numeric',
-                      month: 'short',
-                    })}
+                    {formatDateShort(task.completedAt)}
                   </span>
                 </div>
               </div>

@@ -23,7 +23,7 @@ interface NewMember {
   role: string;
   status: string;
   membership_tier: string;
-  paid_until: string;
+  membership_paid_until: string;
   points: number;
 }
 
@@ -45,7 +45,7 @@ export default function NewMemberPage() {
     role: 'full_member',
     status: 'active',
     membership_tier: 'free',
-    paid_until: '',
+    membership_paid_until: '',
     points: 0,
   });
 
@@ -131,7 +131,7 @@ export default function NewMemberPage() {
           role: member.role,
           status: member.status,
           membership_tier: member.membership_tier,
-          paid_until: member.paid_until || null,
+          membership_paid_until: member.membership_paid_until || null,
           points: member.points,
           is_email_verified: false,
           is_phone_verified: false,
@@ -390,8 +390,8 @@ export default function NewMemberPage() {
               <label className="block text-sm font-bold mb-2">Оплачено до</label>
               <input
                 type="date"
-                value={member.paid_until}
-                onChange={(e) => setMember({ ...member, paid_until: e.target.value })}
+                value={member.membership_paid_until}
+                onChange={(e) => setMember({ ...member, membership_paid_until: e.target.value })}
                 className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
               />
             </div>

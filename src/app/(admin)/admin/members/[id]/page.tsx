@@ -16,7 +16,7 @@ import {
   Users,
   Activity,
 } from 'lucide-react';
-import { formatNumber } from '@/lib/utils';
+import { formatNumber, formatDate } from '@/lib/utils';
 import { MemberActivityTimeline } from '@/components/admin/member-activity-timeline';
 
 interface MemberDetailPageProps {
@@ -69,19 +69,9 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
     .limit(10);
 
   // Get membership status info
-  const membershipActive = member.paid_until
-    ? new Date(member.paid_until) > new Date()
+  const membershipActive = member.membership_paid_until
+    ? new Date(member.membership_paid_until) > new Date()
     : false;
-
-  // Format dates
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return '—';
-    return new Date(dateString).toLocaleDateString('uk-UA', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
 
   // Role labels
   const roleLabels: Record<string, string> = {
@@ -285,9 +275,9 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
                 <p className="text-sm mb-2">
                   {tierLabels[member.membership_tier] || member.membership_tier}
                 </p>
-                {member.paid_until && (
+                {member.membership_paid_until && (
                   <p className="text-xs text-timber-beam">
-                    Оплачено до: {formatDate(member.paid_until)}
+                    Оплачено до: {formatDate(member.membership_paid_until)}
                     {membershipActive ? (
                       <span className="text-green-600 ml-2">● Активно</span>
                     ) : (

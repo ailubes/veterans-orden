@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { CheckSquare, Clock, Star, Trophy, TrendingUp, Users } from 'lucide-react';
 import Link from 'next/link';
+import { formatDateShort } from '@/lib/utils';
 
 interface TaskAnalyticsData {
   overview: {
@@ -188,7 +189,7 @@ export function TaskAnalytics() {
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-timber-dark text-canvas text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                     {day.count} завд.
                     <br />
-                    {new Date(day.date).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })}
+                    {formatDateShort(day.date)}
                   </div>
                 )}
               </div>

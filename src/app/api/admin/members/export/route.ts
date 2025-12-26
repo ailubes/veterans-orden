@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       member.role || '',
       member.status || '',
       member.membership_tier || '',
-      member.paid_until || '',
+      member.membership_paid_until || '',
       member.points || 0,
       member.level || 1,
       member.is_email_verified ? 'Так' : 'Ні',

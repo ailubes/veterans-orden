@@ -33,7 +33,7 @@ interface Member {
   is_phone_verified: boolean;
   is_identity_verified: boolean;
   membership_tier: string;
-  paid_until: string | null;
+  membership_paid_until: string | null;
   points: number;
 }
 
@@ -161,7 +161,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         is_phone_verified: member.is_phone_verified,
         is_identity_verified: member.is_identity_verified,
         membership_tier: member.membership_tier,
-        paid_until: member.paid_until,
+        membership_paid_until: member.membership_paid_until,
       };
 
       // Only admins can change role
@@ -525,8 +525,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
               <label className="block text-sm font-bold mb-2">Оплачено до</label>
               <input
                 type="date"
-                value={member.paid_until || ''}
-                onChange={(e) => setMember({ ...member, paid_until: e.target.value })}
+                value={member.membership_paid_until || ''}
+                onChange={(e) => setMember({ ...member, membership_paid_until: e.target.value })}
                 className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
               />
             </div>

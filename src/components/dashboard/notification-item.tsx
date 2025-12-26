@@ -2,6 +2,7 @@
 
 import { Bell, Vote, Calendar, CheckSquare, Trophy, Newspaper, Users, AlertCircle } from 'lucide-react';
 import type { Notification, NotificationType } from '@/types/notifications';
+import { formatRelativeTime } from '@/lib/utils';
 
 interface NotificationItemProps {
   notification: Notification;
@@ -16,26 +17,6 @@ const typeConfig: Record<NotificationType, { icon: typeof Bell; colorClass: stri
   warning: { icon: AlertCircle, colorClass: 'text-yellow-500 bg-yellow-500/10' },
   alert: { icon: AlertCircle, colorClass: 'text-red-500 bg-red-500/10' },
 };
-
-function formatTimeAgo(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return 'Щойно';
-  if (diffMins < 60) return `${diffMins} хв тому`;
-  if (diffHours < 24) return `${diffHours} год тому`;
-  if (diffDays === 1) return 'Вчора';
-  if (diffDays < 7) return `${diffDays} дн тому`;
-
-  return date.toLocaleDateString('uk-UA', {
-    day: 'numeric',
-    month: 'short',
-  });
-}
 
 export function NotificationItem({
   notification,
@@ -72,7 +53,7 @@ export function NotificationItem({
               {notification.title}
             </p>
             <p className="text-xs text-timber-beam mt-0.5">
-              {formatTimeAgo(notification.deliveredAt)}
+              {formatRelativeTime(notification.deliveredAt)}
             </p>
           </div>
           {!notification.isRead && (
@@ -112,7 +93,7 @@ export function NotificationItem({
             {notification.message}
           </p>
           <div className="flex items-center gap-2 mt-2 text-xs text-timber-beam/70">
-            <span>{formatTimeAgo(notification.deliveredAt)}</span>
+            <span>{formatRelativeTime(notification.deliveredAt)}</span>
             {notification.sender && (
               <>
                 <span>•</span>
