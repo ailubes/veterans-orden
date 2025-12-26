@@ -62,7 +62,7 @@ export default function NewTaskPage() {
           due_date: formData.due_date || null,
           requires_proof: formData.requires_proof,
           status: 'open',
-          created_by: profile.id,
+          created_by_id: profile.id,
         })
         .select()
         .single();

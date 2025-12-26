@@ -8,7 +8,7 @@ export default async function AdminTasksPage() {
   // Fetch all tasks
   const { data: tasks } = await supabase
     .from('tasks')
-    .select('*, assignee:users!tasks_assignee_id_fkey(first_name, last_name), creator:users!tasks_created_by_fkey(first_name, last_name)')
+    .select('*, assignee:users!tasks_assignee_id_users_id_fk(first_name, last_name), creator:users!tasks_created_by_id_users_id_fk(first_name, last_name)')
     .order('created_at', { ascending: false })
     .limit(50);
 

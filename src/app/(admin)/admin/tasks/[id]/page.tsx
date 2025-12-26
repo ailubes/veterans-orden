@@ -30,7 +30,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   // Get task data
   const { data: task, error } = await supabase
     .from('tasks')
-    .select('*, created_by_user:users!tasks_created_by_fkey(first_name, last_name, email), assigned_to_user:users!tasks_assigned_to_fkey(first_name, last_name, email)')
+    .select('*, created_by_user:users!tasks_created_by_id_users_id_fk(first_name, last_name, email), assigned_to_user:users!tasks_assignee_id_users_id_fk(first_name, last_name, email)')
     .eq('id', id)
     .single();
 

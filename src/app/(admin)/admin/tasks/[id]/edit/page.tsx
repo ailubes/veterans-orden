@@ -31,7 +31,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
     due_date: '',
     points_reward: '',
     requires_proof: false,
-    created_by: '',
+    created_by_id: '',
   });
 
   useEffect(() => {
@@ -116,11 +116,11 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
         requirements: task.requirements || '',
         status: task.status || 'pending',
         priority: task.priority || 'medium',
-        assigned_to: task.assigned_to || '',
+        assigned_to: task.assignee_id || '',
         due_date: dueDate,
-        points_reward: task.points_reward?.toString() || '',
+        points_reward: task.points?.toString() || '',
         requires_proof: task.requires_proof || false,
-        created_by: task.created_by || '',
+        created_by_id: task.created_by_id || '',
       });
 
       setLoading(false);
