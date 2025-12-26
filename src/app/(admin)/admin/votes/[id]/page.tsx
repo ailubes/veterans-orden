@@ -31,7 +31,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
   // Get vote data with options
   const { data: vote, error } = await supabase
     .from('votes')
-    .select('*, created_by_user:users!votes_created_by_fkey(first_name, last_name, email)')
+    .select('*, created_by:users(first_name, last_name, email)')
     .eq('id', id)
     .single();
 
@@ -76,7 +76,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
   const canEdit =
     adminProfile.role === 'super_admin' ||
     adminProfile.role === 'admin' ||
-    (adminProfile.role === 'regional_leader' && vote.created_by === adminProfile.id);
+    (adminProfile.role === 'regional_leader' && vote.created_by_id === adminProfile.id);
 
   // Can only edit draft votes
   const canEditContent = vote.status === 'draft' && canEdit;
@@ -329,9 +329,9 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
 
             <p className="label text-accent mb-2">ОРГАНІЗАТОР</p>
             <p className="text-sm font-bold">
-              {vote.created_by_user?.first_name} {vote.created_by_user?.last_name}
+              {vote.created_by?.first_name} {vote.created_by?.last_name}
             </p>
-            <p className="text-xs text-timber-beam">{vote.created_by_user?.email}</p>
+            <p className="text-xs text-timber-beam">{vote.created_by?.email}</p>
             <p className="text-xs text-timber-beam mt-2">
               Створено: {formatDate(vote.created_at)}
             </p>

@@ -31,7 +31,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
   // Get event data
   const { data: event, error } = await supabase
     .from('events')
-    .select('*, created_by_user:users!events_created_by_fkey(first_name, last_name, email)')
+    .select('*, organizer:users(first_name, last_name, email)')
     .eq('id', id)
     .single();
 
@@ -43,7 +43,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
   const canEdit =
     adminProfile.role === 'super_admin' ||
     adminProfile.role === 'admin' ||
-    (adminProfile.role === 'regional_leader' && event.created_by === adminProfile.id);
+    (adminProfile.role === 'regional_leader' && event.organizer_id === adminProfile.id);
 
   // Get RSVPs
   const { data: rsvps } = await supabase
@@ -211,9 +211,9 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
             <p className="label text-accent mb-2">ОРГАНІЗАТОР</p>
             <p className="text-sm font-bold">
-              {event.created_by_user?.first_name} {event.created_by_user?.last_name}
+              {event.organizer?.first_name} {event.organizer?.last_name}
             </p>
-            <p className="text-xs text-timber-beam">{event.created_by_user?.email}</p>
+            <p className="text-xs text-timber-beam">{event.organizer?.email}</p>
             <p className="text-xs text-timber-beam mt-2">
               Створено: {formatDate(event.created_at)}
             </p>
