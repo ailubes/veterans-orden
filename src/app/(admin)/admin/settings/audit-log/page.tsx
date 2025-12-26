@@ -138,7 +138,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
           Назад до налаштувань
         </Link>
         <p className="label text-accent mb-2">АУДИТ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">Журнал аудиту</h1>
+        <h1 className="font-syne text-2xl sm:text-3xl lg:text-4xl font-bold">Журнал аудиту</h1>
         <p className="text-timber-beam mt-2">
           Історія дій адміністраторів у системі
         </p>
@@ -218,7 +218,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
         </div>
       )}
 
-      {/* Audit Log Table */}
+      {/* Audit Log Header */}
       <div className="border-2 border-timber-dark bg-canvas card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
@@ -235,8 +235,53 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <Table className="min-w-[600px]">
+        {/* Mobile Cards */}
+        <div className="md:hidden">
+          {logs && logs.length > 0 ? (
+            <div className="divide-y divide-timber-dark/20">
+              {logs.map((log) => (
+                <div key={log.id} className="p-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <span className="text-sm font-bold text-timber-dark">
+                      {formatAction(log.action)}
+                    </span>
+                    <span className="px-2 py-1 bg-timber-dark/10 text-xs font-medium flex-shrink-0">
+                      {log.entity_type}
+                    </span>
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="text-timber-beam">Користувач:</span>
+                      <span className="font-medium">
+                        {log.user?.first_name} {log.user?.last_name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-timber-beam">Час:</span>
+                      <span className="font-mono">{formatDate(log.created_at)}</span>
+                    </div>
+                    {log.entity_id && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-timber-beam">ID:</span>
+                        <span className="font-mono text-timber-beam truncate max-w-[200px]">
+                          {log.entity_id}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-timber-beam py-12 px-4">
+              Немає записів для відображення
+            </div>
+          )}
+        </div>
+
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
+          <Table>
             <TableHeader>
               <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
                 <TableHead className="font-syne font-bold">Дата/Час</TableHead>
