@@ -33,7 +33,8 @@
 
 The Telegram bot serves as a companion channel for Мережа Вільних Людей, enabling:
 
-- **Account Linking**: Connect Telegram account to web platform account
+- **Direct Registration**: Sign up for membership directly in Telegram (no website visit required)
+- **Account Linking**: Connect existing web account to Telegram
 - **Referral Invitations**: Invite contacts directly from Telegram using personal referral codes
 - **Notifications**: Receive platform updates (votes, events, tasks) via Telegram
 - **Quick Actions**: Vote, RSVP, view stats without opening the web app
@@ -52,6 +53,7 @@ Description: Офіційний бот Мережі Вільних Людей.
 
 | Priority | Feature | Description |
 |----------|---------|-------------|
+| P0 | **Direct Registration** | Sign up directly in Telegram without website |
 | P0 | Account Linking | Link Telegram to platform account |
 | P0 | Referral Sharing | Share referral code/link to contacts |
 | P0 | Contact Invitations | Bulk invite from Telegram contacts |
@@ -94,7 +96,8 @@ Description: Офіційний бот Мережі Вільних Людей.
 
 /setcommands
 start - Почати роботу з ботом
-link - Прив'язати акаунт
+register - Зареєструватися в Мережі
+link - Прив'язати існуючий акаунт
 invite - Запросити друзів
 mystats - Моя статистика
 referrals - Мої запрошення
@@ -1641,13 +1644,14 @@ function generateUniqueReferralCode(): string {
 
 | Command | Description | Access |
 |---------|-------------|--------|
-| `/start` | Welcome message & linking prompt | All users |
-| `/link` | Link Telegram to platform account | Unlinked users |
-| `/invite` | Open invitation menu | Linked users |
-| `/mystats` | View personal statistics | Linked users |
-| `/referrals` | View referral list | Linked users |
+| `/start` | Welcome message & registration/linking options | All users |
+| `/register` | Start direct registration in Telegram | Unregistered users |
+| `/link` | Link existing web account to Telegram | Unlinked users |
+| `/invite` | Open invitation menu | Registered users |
+| `/mystats` | View personal statistics | Registered users |
+| `/referrals` | View referral list | Registered users |
 | `/help` | Show help message | All users |
-| `/settings` | Notification settings | Linked users |
+| `/settings` | Notification settings | Registered users |
 
 ### 6.2 Command Implementations
 
