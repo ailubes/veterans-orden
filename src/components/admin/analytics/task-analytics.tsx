@@ -112,55 +112,55 @@ export function TaskAnalytics() {
   return (
     <div className="space-y-6">
       {/* Task Overview Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-              <CheckSquare className="text-accent" size={20} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <CheckSquare className="text-accent" size={16} />
             </div>
-            <div>
-              <p className="text-xs text-timber-beam">ВИКОНАНО</p>
-              <p className="font-syne text-2xl font-bold">{data.overview.completedTasks}</p>
+            <div className="min-w-0">
+              <p className="text-xs text-timber-beam truncate">ВИКОНАНО</p>
+              <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.completedTasks}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-              <TrendingUp className="text-green-500" size={20} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+              <TrendingUp className="text-green-500" size={16} />
             </div>
-            <div>
-              <p className="text-xs text-timber-beam">КОНВЕРСІЯ</p>
-              <p className="font-syne text-2xl font-bold">{data.overview.completionRate}%</p>
+            <div className="min-w-0">
+              <p className="text-xs text-timber-beam truncate">КОНВЕРСІЯ</p>
+              <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.completionRate}%</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
-              <Star className="text-yellow-500" size={20} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
+              <Star className="text-yellow-500" size={16} />
             </div>
-            <div>
-              <p className="text-xs text-timber-beam">БАЛІВ</p>
-              <p className="font-syne text-2xl font-bold">{data.pointsStats.totalAwarded.toLocaleString()}</p>
+            <div className="min-w-0">
+              <p className="text-xs text-timber-beam truncate">БАЛІВ</p>
+              <p className="font-syne text-xl sm:text-2xl font-bold">{data.pointsStats.totalAwarded.toLocaleString()}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
-              <Clock className="text-purple-500" size={20} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+              <Clock className="text-purple-500" size={16} />
             </div>
-            <div>
-              <p className="text-xs text-timber-beam">СЕР. ЧАС</p>
-              <p className="font-syne text-2xl font-bold">{data.overview.avgCompletionTimeHours}г</p>
+            <div className="min-w-0">
+              <p className="text-xs text-timber-beam truncate">СЕР. ЧАС</p>
+              <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.avgCompletionTimeHours}г</p>
             </div>
           </div>
         </div>
@@ -168,13 +168,13 @@ export function TaskAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Trend Chart */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="joint" style={{ top: '-6px', right: '-6px' }} />
 
-          <h3 className="font-syne text-lg font-bold mb-4">Виконання за останні 30 днів</h3>
+          <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Виконання за останні 30 днів</h3>
 
-          <div className="h-40 flex items-end gap-1">
+          <div className="h-32 sm:h-40 flex items-end gap-px sm:gap-1">
             {data.dailyTrend.map((day, index) => (
               <div
                 key={day.date}
@@ -202,13 +202,13 @@ export function TaskAnalytics() {
         </div>
 
         {/* Top Performers */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="joint" style={{ top: '-6px', right: '-6px' }} />
 
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-syne text-lg font-bold flex items-center gap-2">
-              <Trophy className="text-yellow-500" size={20} />
+            <h3 className="font-syne text-base sm:text-lg font-bold flex items-center gap-2">
+              <Trophy className="text-yellow-500" size={18} />
               Топ виконавці
             </h3>
             <Link href="/admin/members" className="text-xs text-accent hover:underline">
@@ -257,10 +257,10 @@ export function TaskAnalytics() {
       {/* Status and Priority Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
 
-          <h3 className="font-syne text-lg font-bold mb-4">Розподіл за статусом</h3>
+          <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за статусом</h3>
 
           <div className="space-y-3">
             {[
@@ -293,10 +293,10 @@ export function TaskAnalytics() {
         </div>
 
         {/* Priority Distribution */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
 
-          <h3 className="font-syne text-lg font-bold mb-4">Розподіл за пріоритетом</h3>
+          <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за пріоритетом</h3>
 
           <div className="space-y-3">
             {['urgent', 'high', 'medium', 'low'].map(priority => {
@@ -324,12 +324,12 @@ export function TaskAnalytics() {
       </div>
 
       {/* Submissions Stats */}
-      <div className="bg-timber-dark text-canvas p-6 relative">
+      <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
         <div className="joint" style={{ top: '-6px', right: '-6px' }} />
 
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-syne text-lg font-bold">Статистика підтверджень</h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <h3 className="font-syne text-base sm:text-lg font-bold">Статистика підтверджень</h3>
           <Link
             href="/admin/tasks/submissions"
             className="text-sm text-accent hover:underline"
@@ -338,26 +338,26 @@ export function TaskAnalytics() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <div>
             <p className="text-xs opacity-60">ВСЬОГО</p>
-            <p className="font-syne text-2xl font-bold">{data.submissionStats.total}</p>
+            <p className="font-syne text-xl sm:text-2xl font-bold">{data.submissionStats.total}</p>
           </div>
           <div>
             <p className="text-xs opacity-60">ОЧІКУЮТЬ</p>
-            <p className="font-syne text-2xl font-bold text-yellow-400">
+            <p className="font-syne text-xl sm:text-2xl font-bold text-yellow-400">
               {data.submissionStats.pending}
             </p>
           </div>
           <div>
             <p className="text-xs opacity-60">ПІДТВЕРДЖЕНО</p>
-            <p className="font-syne text-2xl font-bold text-green-400">
+            <p className="font-syne text-xl sm:text-2xl font-bold text-green-400">
               {data.submissionStats.approved}
             </p>
           </div>
           <div>
             <p className="text-xs opacity-60">ВІДХИЛЕНО</p>
-            <p className="font-syne text-2xl font-bold text-red-400">
+            <p className="font-syne text-xl sm:text-2xl font-bold text-red-400">
               {data.submissionStats.rejected}
             </p>
           </div>

@@ -168,17 +168,17 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
                 >
                   {statusLabels[member.status] || member.status}
                 </span>
-                {member.email_verified && (
+                {member.is_email_verified && (
                   <span className="px-3 py-1 bg-blue-500 text-white text-xs font-bold">
                     EMAIL ✓
                   </span>
                 )}
-                {member.phone_verified && (
+                {member.is_phone_verified && (
                   <span className="px-3 py-1 bg-blue-500 text-white text-xs font-bold">
                     ТЕЛЕФОН ✓
                   </span>
                 )}
-                {member.identity_verified && (
+                {member.is_identity_verified && (
                   <span className="px-3 py-1 bg-green-600 text-white text-xs font-bold">
                     ОСОБА ✓
                   </span>

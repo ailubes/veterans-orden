@@ -109,9 +109,9 @@ export async function GET(request: NextRequest) {
       member.paid_until || '',
       member.points || 0,
       member.level || 1,
-      member.email_verified ? 'Так' : 'Ні',
-      member.phone_verified ? 'Так' : 'Ні',
-      member.identity_verified ? 'Так' : 'Ні',
+      member.is_email_verified ? 'Так' : 'Ні',
+      member.is_phone_verified ? 'Так' : 'Ні',
+      member.is_identity_verified ? 'Так' : 'Ні',
       member.created_at || '',
     ]);
 

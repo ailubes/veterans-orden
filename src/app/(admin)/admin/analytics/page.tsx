@@ -101,92 +101,92 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       {/* Main Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <div className="bg-timber-dark text-canvas p-6 relative">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
+        <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label text-accent mb-2">ВСЬОГО ЧЛЕНІВ</p>
-              <p className="font-syne text-4xl font-bold">{totalMembers || 0}</p>
-              <p className="text-sm opacity-60 mt-2">
+              <p className="label text-accent mb-1 sm:mb-2">ВСЬОГО ЧЛЕНІВ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold">{totalMembers || 0}</p>
+              <p className="text-xs sm:text-sm opacity-60 mt-1 sm:mt-2">
                 {activeMembers || 0} активних
               </p>
             </div>
-            <Users className="text-accent" size={32} />
+            <Users className="text-accent hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label mb-2">НОВИХ ЗА ТИЖДЕНЬ</p>
-              <p className="font-syne text-4xl font-bold text-green-600">
+              <p className="label mb-1 sm:mb-2">НОВИХ ЗА ТИЖДЕНЬ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold text-green-600">
                 +{newMembersWeek || 0}
               </p>
-              <p className="text-sm text-timber-beam mt-2">
+              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
                 +{newMembersMonth || 0} за місяць
               </p>
             </div>
-            <TrendingUp className="text-green-600" size={32} />
+            <TrendingUp className="text-green-600 hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label mb-2">ПОДІЇ</p>
-              <p className="font-syne text-4xl font-bold">{totalEvents || 0}</p>
-              <p className="text-sm text-timber-beam mt-2">
+              <p className="label mb-1 sm:mb-2">ПОДІЇ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold">{totalEvents || 0}</p>
+              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
                 {upcomingEvents || 0} найближчих
               </p>
             </div>
-            <Calendar className="text-accent" size={32} />
+            <Calendar className="text-accent hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label mb-2">ГОЛОСУВАННЯ</p>
-              <p className="font-syne text-4xl font-bold">{totalVotes || 0}</p>
-              <p className="text-sm text-timber-beam mt-2">
+              <p className="label mb-1 sm:mb-2">ГОЛОСУВАННЯ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold">{totalVotes || 0}</p>
+              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
                 {activeVotes || 0} активних
               </p>
             </div>
-            <Vote className="text-accent" size={32} />
+            <Vote className="text-accent hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label mb-2">ЗАВДАННЯ</p>
-              <p className="font-syne text-4xl font-bold">{totalTasks || 0}</p>
-              <p className="text-sm text-timber-beam mt-2">
+              <p className="label mb-1 sm:mb-2">ЗАВДАННЯ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold">{totalTasks || 0}</p>
+              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
                 {completedTasks || 0} виконано
               </p>
             </div>
-            <CheckSquare className="text-accent" size={32} />
+            <CheckSquare className="text-accent hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
           <div className="joint" style={{ top: '-6px', left: '-6px' }} />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label mb-2">КОНВЕРСІЯ</p>
-              <p className="font-syne text-4xl font-bold">
+              <p className="label mb-1 sm:mb-2">КОНВЕРСІЯ</p>
+              <p className="font-syne text-2xl sm:text-4xl font-bold">
                 {totalMembers && totalMembers > 0
                   ? Math.round(((tierCounts['basic_49'] || 0) + (tierCounts['supporter_100'] || 0) + (tierCounts['supporter_200'] || 0) + (tierCounts['patron_500'] || 0)) / totalMembers * 100)
                   : 0}%
               </p>
-              <p className="text-sm text-timber-beam mt-2">платних членів</p>
+              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">платних членів</p>
             </div>
-            <DollarSign className="text-accent" size={32} />
+            <DollarSign className="text-accent hidden sm:block" size={32} />
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default async function AdminAnalyticsPage() {
 
       {/* Task Analytics Section */}
       <div className="mb-8">
-        <h2 className="font-syne text-2xl font-bold mb-6">Аналітика завдань</h2>
+        <h2 className="font-syne text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Аналітика завдань</h2>
         <TaskAnalytics />
       </div>
 
@@ -285,24 +285,24 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       {/* Goal Progress */}
-      <div className="bg-timber-dark text-canvas p-6 relative">
+      <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
         <div className="joint" style={{ top: '-6px', right: '-6px' }} />
         <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
         <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
 
-        <h2 className="font-syne text-xl font-bold mb-6 text-accent">
+        <h2 className="font-syne text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-accent">
           Прогрес до мети: 1,000,000 членів
         </h2>
 
         <div className="mb-4">
-          <div className="flex justify-between text-sm mb-2">
+          <div className="flex justify-between text-xs sm:text-sm mb-2">
             <span>0</span>
             <span>100K</span>
             <span>500K</span>
             <span>1M</span>
           </div>
-          <div className="h-6 bg-canvas/10 relative">
+          <div className="h-4 sm:h-6 bg-canvas/10 relative">
             <div
               className="absolute left-0 top-0 bottom-0 bg-accent transition-all"
               style={{ width: `${Math.min(((totalMembers || 0) / 1000000) * 100, 100)}%` }}
@@ -315,16 +315,16 @@ export default async function AdminAnalyticsPage() {
 
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-syne text-3xl font-bold">
+            <p className="font-syne text-xl sm:text-3xl font-bold">
               {((totalMembers || 0) / 1000000 * 100).toFixed(3)}%
             </p>
-            <p className="text-sm opacity-60">до мети</p>
+            <p className="text-xs sm:text-sm opacity-60">до мети</p>
           </div>
           <div className="text-right">
-            <p className="font-syne text-3xl font-bold">
+            <p className="font-syne text-xl sm:text-3xl font-bold">
               {(1000000 - (totalMembers || 0)).toLocaleString('uk-UA')}
             </p>
-            <p className="text-sm opacity-60">залишилось</p>
+            <p className="text-xs sm:text-sm opacity-60">залишилось</p>
           </div>
         </div>
       </div>

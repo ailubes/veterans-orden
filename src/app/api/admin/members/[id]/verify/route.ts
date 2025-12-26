@@ -56,10 +56,10 @@ export async function POST(request: NextRequest, context: RouteContext) {
     // Determine which field to update
     const updateField =
       verifyType === 'email'
-        ? 'email_verified'
+        ? 'is_email_verified'
         : verifyType === 'phone'
-        ? 'phone_verified'
-        : 'identity_verified';
+        ? 'is_phone_verified'
+        : 'is_identity_verified';
 
     // Toggle verification status
     const newValue = !member[updateField];

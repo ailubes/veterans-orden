@@ -29,9 +29,9 @@ interface Member {
   city: string | null;
   role: string;
   status: string;
-  email_verified: boolean;
-  phone_verified: boolean;
-  identity_verified: boolean;
+  is_email_verified: boolean;
+  is_phone_verified: boolean;
+  is_identity_verified: boolean;
   membership_tier: string;
   paid_until: string | null;
   points: number;
@@ -157,9 +157,9 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         oblast_id: member.oblast_id,
         city: member.city,
         status: member.status,
-        email_verified: member.email_verified,
-        phone_verified: member.phone_verified,
-        identity_verified: member.identity_verified,
+        is_email_verified: member.is_email_verified,
+        is_phone_verified: member.is_phone_verified,
+        is_identity_verified: member.is_identity_verified,
         membership_tier: member.membership_tier,
         paid_until: member.paid_until,
       };
@@ -463,8 +463,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={member.email_verified}
-                onChange={(e) => setMember({ ...member, email_verified: e.target.checked })}
+                checked={member.is_email_verified}
+                onChange={(e) => setMember({ ...member, is_email_verified: e.target.checked })}
                 className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
               />
               <span className="text-sm font-bold">Email підтверджено</span>
@@ -473,8 +473,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={member.phone_verified}
-                onChange={(e) => setMember({ ...member, phone_verified: e.target.checked })}
+                checked={member.is_phone_verified}
+                onChange={(e) => setMember({ ...member, is_phone_verified: e.target.checked })}
                 className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
               />
               <span className="text-sm font-bold">Телефон підтверджено</span>
@@ -483,8 +483,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={member.identity_verified}
-                onChange={(e) => setMember({ ...member, identity_verified: e.target.checked })}
+                checked={member.is_identity_verified}
+                onChange={(e) => setMember({ ...member, is_identity_verified: e.target.checked })}
                 className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
                 disabled={isRegionalLeader}
               />

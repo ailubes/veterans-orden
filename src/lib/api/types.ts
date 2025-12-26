@@ -90,9 +90,9 @@ export interface User {
   paid_until?: string;
   points: number;
   level: number;
-  email_verified: boolean;
-  phone_verified: boolean;
-  identity_verified: boolean;
+  is_email_verified: boolean;
+  is_phone_verified: boolean;
+  is_identity_verified: boolean;
   two_factor_enabled: boolean;
   avatar_url?: string;
   referral_code?: string;

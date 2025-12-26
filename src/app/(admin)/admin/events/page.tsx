@@ -29,14 +29,14 @@ export default async function AdminEventsPage() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <p className="label mb-2">АДМІНІСТРУВАННЯ</p>
-          <h1 className="font-syne text-3xl font-bold">Події</h1>
+          <h1 className="font-syne text-2xl sm:text-3xl font-bold">Події</h1>
         </div>
         <Link
           href="/admin/events/new"
-          className="btn flex items-center gap-2"
+          className="btn flex items-center justify-center gap-2 w-full sm:w-auto"
         >
           <Plus size={18} />
           СТВОРИТИ ПОДІЮ
@@ -44,7 +44,7 @@ export default async function AdminEventsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
         <div className="bg-canvas border-2 border-timber-dark p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{events?.length || 0}</p>

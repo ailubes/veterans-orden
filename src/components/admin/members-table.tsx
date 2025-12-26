@@ -239,17 +239,17 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
     <>
       {/* Export Buttons */}
       {showExportButtons && (
-        <div className="flex justify-end gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-4">
           <button
             onClick={handleExportExcel}
-            className="btn btn-outline btn-sm flex items-center gap-2"
+            className="btn btn-outline btn-sm flex items-center justify-center gap-2"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Експорт Excel
           </button>
           <button
             onClick={handleExportPDF}
-            className="btn btn-outline btn-sm flex items-center gap-2"
+            className="btn btn-outline btn-sm flex items-center justify-center gap-2"
           >
             <FileText className="w-4 h-4" />
             Експорт PDF
@@ -298,18 +298,25 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 isSelected ? 'bg-accent/10' : 'hover:bg-timber-dark/5'
               }`}
             >
-              {/* Checkbox */}
-              <div className="hidden md:flex md:col-span-1 items-center">
+              {/* Checkbox - show on mobile too */}
+              <div className="md:col-span-1 flex items-start md:items-center">
                 <input
                   type="checkbox"
                   checked={isSelected}
                   onChange={() => toggleSelect(member.id)}
-                  className="w-5 h-5 border-2 border-timber-dark cursor-pointer accent-accent"
+                  className="w-5 h-5 border-2 border-timber-dark cursor-pointer accent-accent mr-3 md:mr-0 mt-1 md:mt-0"
                 />
+                {/* Mobile: inline member info after checkbox */}
+                <div className="md:hidden flex-1">
+                  <div className="font-bold">
+                    {member.first_name} {member.last_name}
+                  </div>
+                  <div className="text-xs text-timber-beam">{member.email}</div>
+                </div>
               </div>
 
-              {/* Member info */}
-              <div className="col-span-1 md:col-span-3">
+              {/* Member info - desktop only */}
+              <div className="hidden md:block md:col-span-3">
                 <div className="font-bold">
                   {member.first_name} {member.last_name}
                 </div>
@@ -321,8 +328,47 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 )}
               </div>
 
-              {/* Role */}
-              <div className="col-span-1 md:col-span-2">
+              {/* Mobile: Status badges + Actions row */}
+              <div className="md:hidden flex flex-wrap items-center gap-2 pl-8">
+                <span className="px-2 py-1 bg-timber-dark/10 text-xs font-bold">
+                  {member.role === 'super_admin' && 'Супер-адмін'}
+                  {member.role === 'admin' && 'Адмін'}
+                  {member.role === 'regional_leader' && 'Рег. лідер'}
+                  {member.role === 'group_leader' && 'Лідер групи'}
+                  {member.role === 'full_member' && 'Повноцінний'}
+                  {member.role === 'silent_member' && 'Мовчазний'}
+                  {member.role === 'prospect' && 'Потенційний'}
+                  {member.role === 'free_viewer' && 'Спостерігач'}
+                </span>
+                <span
+                  className={`px-2 py-1 text-xs font-bold ${
+                    member.status === 'active'
+                      ? 'bg-green-100 text-green-700'
+                      : member.status === 'pending'
+                      ? 'bg-yellow-100 text-yellow-700'
+                      : member.status === 'suspended'
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  {member.status === 'active' && 'Активний'}
+                  {member.status === 'pending' && 'Перевірка'}
+                  {member.status === 'suspended' && 'Блок'}
+                  {member.status === 'churned' && 'Відійшов'}
+                </span>
+                <span className="font-bold text-accent text-sm">
+                  {member.points || 0} балів
+                </span>
+                <Link
+                  href={`/admin/members/${member.id}`}
+                  className="ml-auto text-xs text-accent hover:underline font-bold"
+                >
+                  ПЕРЕГЛЯНУТИ →
+                </Link>
+              </div>
+
+              {/* Role - desktop only */}
+              <div className="hidden md:block md:col-span-2">
                 <span className="px-2 py-1 bg-timber-dark/10 text-xs font-bold">
                   {member.role === 'super_admin' && 'Супер-адмін'}
                   {member.role === 'admin' && 'Адмін'}
@@ -335,8 +381,8 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 </span>
               </div>
 
-              {/* Status */}
-              <div className="col-span-1 md:col-span-1">
+              {/* Status - desktop only */}
+              <div className="hidden md:block md:col-span-1">
                 <span
                   className={`px-2 py-1 text-xs font-bold ${
                     member.status === 'active'
@@ -355,8 +401,8 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 </span>
               </div>
 
-              {/* Tier */}
-              <div className="col-span-1 md:col-span-2">
+              {/* Tier - desktop only */}
+              <div className="hidden md:block md:col-span-2">
                 <span className="text-sm">
                   {member.membership_tier === 'patron_500' && 'Патрон'}
                   {member.membership_tier === 'supporter_200' &&
@@ -368,15 +414,15 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 </span>
               </div>
 
-              {/* Points */}
-              <div className="col-span-1 md:col-span-1">
+              {/* Points - desktop only */}
+              <div className="hidden md:block md:col-span-1">
                 <span className="font-bold text-accent">
                   {member.points || 0}
                 </span>
               </div>
 
-              {/* Actions */}
-              <div className="col-span-1 md:col-span-2 text-right">
+              {/* Actions - desktop only */}
+              <div className="hidden md:block md:col-span-2 text-right">
                 <Link
                   href={`/admin/members/${member.id}`}
                   className="text-xs text-accent hover:underline font-bold"

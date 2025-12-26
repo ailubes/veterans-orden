@@ -132,7 +132,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
         <div className="bg-canvas border-2 border-timber-dark p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{totalCount || 0}</p>
@@ -162,20 +162,20 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
         <div className="joint" style={{ top: '-6px', right: '-6px' }} />
 
-        <form method="GET" className="flex flex-wrap gap-4">
-          <div className="flex-1 min-w-[200px]">
+        <form method="GET" className="flex flex-wrap gap-2 sm:gap-4">
+          <div className="w-full sm:flex-1 sm:min-w-[200px]">
             <input
               type="text"
               name="search"
               defaultValue={search}
               placeholder="Пошук за ім'ям або email..."
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
             />
           </div>
           <select
             name="role"
             defaultValue={roleFilter}
-            className="px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
           >
             <option value="">Всі ролі</option>
             <option value="free_viewer">Спостерігач</option>
@@ -190,7 +190,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           <select
             name="status"
             defaultValue={statusFilter}
-            className="px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
           >
             <option value="">Всі статуси</option>
             <option value="pending">На перевірці</option>
@@ -201,7 +201,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           <select
             name="tier"
             defaultValue={tierFilter}
-            className="px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
           >
             <option value="">Всі плани</option>
             <option value="free">Безкоштовний</option>
@@ -210,14 +210,16 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             <option value="supporter_200">Прихильник (200 грн)</option>
             <option value="patron_500">Патрон (500 грн)</option>
           </select>
-          <button type="submit" className="btn btn-sm">
-            ФІЛЬТР
-          </button>
-          {(search || roleFilter || statusFilter || tierFilter) && (
-            <Link href="/admin/members" className="btn btn-outline btn-sm">
-              СКИНУТИ
-            </Link>
-          )}
+          <div className="flex gap-2 w-full sm:w-auto">
+            <button type="submit" className="btn btn-sm flex-1 sm:flex-none">
+              ФІЛЬТР
+            </button>
+            {(search || roleFilter || statusFilter || tierFilter) && (
+              <Link href="/admin/members" className="btn btn-outline btn-sm flex-1 sm:flex-none">
+                СКИНУТИ
+              </Link>
+            )}
+          </div>
         </form>
       </div>
 
@@ -230,8 +232,8 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-6">
-          <p className="text-sm text-timber-beam">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+          <p className="text-sm text-timber-beam text-center sm:text-left">
             Показано {offset + 1}-{Math.min(offset + limit, filteredCount || 0)}{' '}
             з {filteredCount || 0} записів
           </p>

@@ -133,9 +133,9 @@ export default function NewMemberPage() {
           membership_tier: member.membership_tier,
           paid_until: member.paid_until || null,
           points: member.points,
-          email_verified: false,
-          phone_verified: false,
-          identity_verified: false,
+          is_email_verified: false,
+          is_phone_verified: false,
+          is_identity_verified: false,
           created_at: new Date().toISOString(),
         })
         .select()

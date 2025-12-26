@@ -131,15 +131,15 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     }
 
     // Verification
-    if (body.email_verified !== undefined)
-      updateData.email_verified = body.email_verified;
-    if (body.phone_verified !== undefined)
-      updateData.phone_verified = body.phone_verified;
+    if (body.is_email_verified !== undefined)
+      updateData.is_email_verified = body.is_email_verified;
+    if (body.is_phone_verified !== undefined)
+      updateData.is_phone_verified = body.is_phone_verified;
     if (
-      body.identity_verified !== undefined &&
+      body.is_identity_verified !== undefined &&
       adminProfile.role !== 'regional_leader'
     ) {
-      updateData.identity_verified = body.identity_verified;
+      updateData.is_identity_verified = body.is_identity_verified;
     }
 
     // Membership
