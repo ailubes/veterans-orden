@@ -1,6 +1,39 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, CheckSquare, Edit2, Trash2, Eye, FileCheck } from 'lucide-react';
+import { Plus, CheckSquare, Edit2, Trash2, Eye, FileCheck, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+
+/**
+ * Extracts and shortens a URL from text for display
+ */
+function extractAndShortenUrl(text: string, maxLength: number = 30): { url: string; displayText: string } | null {
+  const urlPattern = /(https?:\/\/[^\s<]+)/i;
+  const match = text.match(urlPattern);
+
+  if (!match) return null;
+
+  const url = match[0];
+  try {
+    const urlObj = new URL(url);
+    const domain = urlObj.hostname.replace(/^www\./, '');
+    const path = urlObj.pathname;
+
+    let displayText = domain;
+    if (path && path !== '/') {
+      const remainingLength = maxLength - domain.length;
+      if (remainingLength > 5) {
+        displayText += path.slice(0, remainingLength - 3) + '...';
+      }
+    }
+
+    if (displayText.length > maxLength) {
+      displayText = displayText.slice(0, maxLength - 3) + '...';
+    }
+
+    return { url, displayText };
+  } catch {
+    return { url, displayText: url.slice(0, maxLength - 3) + '...' };
+  }
+}
 
 export default async function AdminTasksPage() {
   const supabase = await createClient();
@@ -133,9 +166,27 @@ export default async function AdminTasksPage() {
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-sm line-clamp-2">{task.title}</h3>
-                    <p className="text-xs text-timber-beam mt-1 line-clamp-1">
-                      {task.description}
-                    </p>
+                    {(() => {
+                      const urlInfo = task.description ? extractAndShortenUrl(task.description) : null;
+                      if (urlInfo) {
+                        return (
+                          <a
+                            href={urlInfo.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-1"
+                          >
+                            <ExternalLink size={12} />
+                            {urlInfo.displayText}
+                          </a>
+                        );
+                      }
+                      return (
+                        <p className="text-xs text-timber-beam mt-1 line-clamp-1 break-all">
+                          {task.description}
+                        </p>
+                      );
+                    })()}
                   </div>
                   <span
                     className={`px-2 py-1 text-xs font-bold flex-shrink-0 ${
@@ -204,11 +255,29 @@ export default async function AdminTasksPage() {
                 <tbody>
                   {tasks.map((task) => (
                     <tr key={task.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
-                      <td className="p-4">
+                      <td className="p-4 max-w-xs">
                         <div className="font-bold">{task.title}</div>
-                        <div className="text-xs text-timber-beam line-clamp-1">
-                          {task.description}
-                        </div>
+                        {(() => {
+                          const urlInfo = task.description ? extractAndShortenUrl(task.description, 35) : null;
+                          if (urlInfo) {
+                            return (
+                              <a
+                                href={urlInfo.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-xs text-accent hover:underline"
+                              >
+                                <ExternalLink size={12} />
+                                {urlInfo.displayText}
+                              </a>
+                            );
+                          }
+                          return (
+                            <div className="text-xs text-timber-beam line-clamp-1 break-all">
+                              {task.description}
+                            </div>
+                          );
+                        })()}
                       </td>
                       <td className="p-4">
                         <span className="px-2 py-1 bg-timber-dark/10 text-xs">
