@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, UserPlus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { generateReferralCode } from '@/lib/auth';
+import { generateReferralCode } from '@/lib/utils';
 
 interface Oblast {
   id: string;

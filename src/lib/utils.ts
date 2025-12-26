@@ -96,3 +96,16 @@ export function formatRelativeTime(date: string | Date | null | undefined): stri
 
   return formatDate(d);
 }
+
+/**
+ * Generate a random referral code
+ * @returns 8-character referral code
+ */
+export function generateReferralCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
