@@ -13,6 +13,7 @@ import {
   CheckSquare,
   FileText,
   BarChart3,
+  Bell,
   Settings,
   ArrowLeft,
   LogOut,
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
+  { href: '/admin/notifications', icon: Bell, label: 'СПОВІЩЕННЯ' },
   { href: '/admin/analytics', icon: BarChart3, label: 'АНАЛІТИКА' },
   { href: '/admin/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];
