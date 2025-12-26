@@ -1,11 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Bell, BellOff, CheckCheck, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { Bell, BellOff, CheckCheck, ChevronLeft, ChevronRight, Filter, AlertCircle, CheckSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useNotifications } from '@/hooks/use-notifications';
 import { NotificationItem } from '@/components/dashboard/notification-item';
-import type { NotificationType } from '@/types/notifications';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import type { Notification, NotificationType } from '@/types/notifications';
 
 const typeLabels: Record<NotificationType, string> = {
   info: 'Системні',
@@ -14,9 +20,18 @@ const typeLabels: Record<NotificationType, string> = {
   alert: 'Важливі',
 };
 
+const typeConfig: Record<NotificationType, { icon: typeof Bell; colorClass: string; label: string }> = {
+  info: { icon: Bell, colorClass: 'text-blue-500 bg-blue-500/10', label: 'Інформація' },
+  success: { icon: CheckSquare, colorClass: 'text-green-500 bg-green-500/10', label: 'Успіх' },
+  warning: { icon: AlertCircle, colorClass: 'text-yellow-500 bg-yellow-500/10', label: 'Попередження' },
+  alert: { icon: AlertCircle, colorClass: 'text-red-500 bg-red-500/10', label: 'Увага' },
+};
+
 export default function NotificationsPage() {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [typeFilter, setTypeFilter] = useState<NotificationType | ''>('');
+  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     notifications,
@@ -41,10 +56,23 @@ export default function NotificationsPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleNotificationClick = (notification: Notification) => {
+    setSelectedNotification(notification);
+    setIsModalOpen(true);
+    if (!notification.isRead) {
+      markAsRead(notification.id);
+    }
+  };
+
   // Filter by type (client-side for now)
   const filteredNotifications = typeFilter
     ? notifications.filter(n => n.type === typeFilter)
     : notifications;
+
+  const config = selectedNotification
+    ? typeConfig[selectedNotification.type] || typeConfig.info
+    : typeConfig.info;
+  const Icon = config.icon;
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -170,6 +198,7 @@ export default function NotificationsPage() {
               notification={notification}
               variant="full"
               onMarkRead={markAsRead}
+              onClick={() => handleNotificationClick(notification)}
             />
           ))}
         </div>
@@ -201,6 +230,56 @@ export default function NotificationsPage() {
           </button>
         </div>
       )}
+
+      {/* Full Notification Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="bg-canvas border-2 border-timber-dark max-w-md">
+          {selectedNotification && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${config.colorClass}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded ${config.colorClass}`}>
+                      {config.label.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+                <DialogTitle className="font-syne text-lg">
+                  {selectedNotification.title}
+                </DialogTitle>
+              </DialogHeader>
+
+              <div className="mt-2">
+                <p className="text-sm text-timber-dark whitespace-pre-wrap">
+                  {selectedNotification.message}
+                </p>
+
+                <div className="mt-4 pt-4 border-t border-timber-dark/10 text-xs text-timber-beam">
+                  <div className="flex justify-between">
+                    <span>
+                      {new Date(selectedNotification.deliveredAt).toLocaleDateString('uk-UA', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                    {selectedNotification.sender && (
+                      <span>
+                        Від: {selectedNotification.sender.firstName} {selectedNotification.sender.lastName}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
