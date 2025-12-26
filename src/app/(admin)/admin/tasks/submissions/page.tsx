@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { isRegionalLeader } from '@/lib/permissions-utils';
 import Link from 'next/link';
 import { ArrowLeft, Clock, FileCheck, FileX } from 'lucide-react';
+import { formatDate } from '@/lib/utils';
 import { SubmissionReviewCard } from '@/components/admin/submissions/submission-review-card';
 
 export default async function SubmissionsPage() {
@@ -195,9 +196,7 @@ export default async function SubmissionsPage() {
                       </td>
                       <td className="p-4">
                         <span className="text-sm text-timber-beam">
-                          {submission.reviewed_at
-                            ? new Date(submission.reviewed_at).toLocaleDateString('uk-UA')
-                            : '—'}
+                          {formatDate(submission.reviewed_at)}
                         </span>
                       </td>
                     </tr>

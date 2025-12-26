@@ -10,6 +10,7 @@ import {
   Circle,
 } from 'lucide-react';
 import { ActivityItem } from '@/app/api/admin/members/[id]/activity/route';
+import { formatDate, formatTime, formatRelativeTime } from '@/lib/utils';
 
 interface MemberActivityTimelineProps {
   memberId: string;
@@ -61,7 +62,7 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
     fetchActivities();
   }, [fetchActivities]);
 
-  const formatDate = (dateString: string) => {
+  const formatActivityDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
@@ -69,23 +70,16 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
 
     // If today, show time
     if (diffDays === 0) {
-      return date.toLocaleTimeString('uk-UA', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
+      return formatTime(dateString);
     }
 
-    // If this week, show day name
+    // If this week, show relative time
     if (diffDays < 7) {
-      return date.toLocaleDateString('uk-UA', { weekday: 'long' });
+      return formatRelativeTime(dateString);
     }
 
     // Otherwise show date
-    return date.toLocaleDateString('uk-UA', {
-      day: 'numeric',
-      month: 'short',
-      year: diffDays > 365 ? 'numeric' : undefined,
-    });
+    return formatDate(dateString);
   };
 
   const groupActivitiesByDate = (activities: ActivityItem[]) => {
@@ -217,7 +211,7 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
                             {activity.description}
                           </p>
                           <p className="text-xs text-timber-beam/60">
-                            {formatDate(activity.timestamp)}
+                            {formatActivityDate(activity.timestamp)}
                           </p>
                         </div>
 

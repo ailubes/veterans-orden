@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Vote, Clock, Users, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 
 export default async function VotesPage() {
   const supabase = await createClient();
@@ -132,8 +133,7 @@ export default async function VotesPage() {
                   <div>
                     <h3 className="font-bold">{vote.title}</h3>
                     <p className="text-xs text-timber-beam">
-                      Завершено{' '}
-                      {new Date(vote.end_date).toLocaleDateString('uk-UA')} •{' '}
+                      Завершено {formatDate(vote.end_date)} •{' '}
                       {vote.total_votes || 0} голосів
                     </p>
                   </div>

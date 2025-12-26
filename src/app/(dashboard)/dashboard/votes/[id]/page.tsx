@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect, notFound } from 'next/navigation';
 import { Clock, Users, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 import { VoteForm } from './vote-form';
 
 export default async function VoteDetailPage({
@@ -140,7 +141,7 @@ export default async function VoteDetailPage({
             <Clock size={16} />
             {isActive
               ? `Залишилось: ${formatTimeLeft(vote.end_date)}`
-              : `Завершено ${new Date(vote.end_date).toLocaleDateString('uk-UA')}`}
+              : `Завершено ${formatDate(vote.end_date)}`}
           </span>
           <span className="flex items-center gap-2">
             <Users size={16} />

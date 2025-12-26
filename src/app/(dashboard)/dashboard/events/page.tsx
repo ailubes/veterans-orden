@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { formatDateShort, formatTime } from '@/lib/utils';
 import { RSVPButton } from '@/components/events/rsvp-button';
 import { EventFilters } from '@/components/events/event-filters';
 
@@ -111,9 +112,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                     {new Date(event.start_date).getDate()}
                   </span>
                   <span className="text-xs uppercase">
-                    {new Date(event.start_date).toLocaleDateString('uk-UA', {
-                      month: 'short',
-                    })}
+                    {formatDateShort(event.start_date).split(' ')[1]}
                   </span>
                 </div>
 
@@ -129,10 +128,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                   <div className="flex flex-wrap gap-4 text-xs text-timber-beam">
                     <span className="flex items-center gap-1">
                       <Clock size={14} />
-                      {new Date(event.start_date).toLocaleTimeString('uk-UA', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatTime(event.start_date)}
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin size={14} />

@@ -7,6 +7,7 @@ import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
 import { ProfilePhotoUpload } from '@/components/dashboard/profile-photo-upload';
 import { MessageToLeader } from '@/components/dashboard/message-to-leader';
 import { NovaPoshtaSelector } from '@/components/dashboard/nova-poshta-selector';
+import { formatDate } from '@/lib/utils';
 import {
   Copy,
   Check,
@@ -243,28 +244,6 @@ export default function SettingsPage() {
     navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const formatDate = (dateString: string | null, includeTime = false) => {
-    if (!dateString) return '—';
-    const date = new Date(dateString);
-
-    if (includeTime) {
-      return date.toLocaleString('uk-UA', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      });
-    }
-
-    return date.toLocaleDateString('uk-UA', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
   };
 
   const getRoleName = (role: string) => {

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { CheckSquare, Clock, Star, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/utils';
 import { ClaimButton, CompleteButton } from '@/components/tasks/task-actions';
 import { TaskFilters } from '@/components/tasks/task-filters';
 import { LinkifyText } from '@/components/ui/linkify-text';
@@ -129,8 +130,7 @@ export default async function TasksPage({ searchParams }: PageProps) {
                       {task.due_date && (
                         <span className="flex items-center gap-1">
                           <Clock size={12} />
-                          До{' '}
-                          {new Date(task.due_date).toLocaleDateString('uk-UA')}
+                          До {formatDate(task.due_date)}
                         </span>
                       )}
                       <span className="flex items-center gap-1">
@@ -200,8 +200,7 @@ export default async function TasksPage({ searchParams }: PageProps) {
                       {task.due_date && (
                         <span className="flex items-center gap-1">
                           <Clock size={12} />
-                          До{' '}
-                          {new Date(task.due_date).toLocaleDateString('uk-UA')}
+                          До {formatDate(task.due_date)}
                         </span>
                       )}
                       <span className="flex items-center gap-1 text-accent font-bold">

@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { ReferralClient } from './referral-client';
+import { formatDate } from '@/lib/utils';
 
 export default async function ReferralsPage() {
   const supabase = await createClient();
@@ -78,8 +79,7 @@ export default async function ReferralsPage() {
                     {referral.first_name} {referral.last_name}
                   </p>
                   <p className="text-sm text-timber-beam">
-                    Приєднався{' '}
-                    {new Date(referral.created_at).toLocaleDateString('uk-UA')}
+                    Приєднався {formatDate(referral.created_at)}
                   </p>
                 </div>
                 <span

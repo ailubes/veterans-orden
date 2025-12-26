@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Save, UserPlus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { generateReferralCode } from '@/lib/auth';
 
 interface Oblast {
   id: string;
@@ -116,10 +117,33 @@ export default function NewMemberPage() {
         return;
       }
 
+      // Generate unique clerk_id for manually created members
+      const manualClerkId = `manual_${crypto.randomUUID()}`;
+
+      // Generate unique referral code
+      let referralCode = generateReferralCode();
+
+      // Check if referral code exists and regenerate if needed
+      let codeExists = true;
+      while (codeExists) {
+        const { data: existingCode } = await supabase
+          .from('users')
+          .select('id')
+          .eq('referral_code', referralCode)
+          .single();
+
+        if (!existingCode) {
+          codeExists = false;
+        } else {
+          referralCode = generateReferralCode();
+        }
+      }
+
       // Create new member
       const { data: newMember, error: insertError } = await supabase
         .from('users')
         .insert({
+          clerk_id: manualClerkId,
           first_name: member.first_name,
           last_name: member.last_name,
           patronymic: member.patronymic || null,
@@ -133,10 +157,14 @@ export default function NewMemberPage() {
           membership_tier: member.membership_tier,
           membership_paid_until: member.membership_paid_until || null,
           points: member.points,
+          level: 1,
+          referral_code: referralCode,
+          referral_count: 0,
           is_email_verified: false,
           is_phone_verified: false,
           is_identity_verified: false,
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         })
         .select()
         .single();

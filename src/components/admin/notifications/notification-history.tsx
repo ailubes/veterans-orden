@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Bell, Users, Eye } from 'lucide-react';
+import { formatDateTime } from '@/lib/utils';
 
 interface Notification {
   id: string;
@@ -144,13 +145,7 @@ export function NotificationHistory() {
                 {formatScope(notification.scope, notification.scope_value)}
               </div>
               <div className="text-right">
-                {new Date(notification.sent_at).toLocaleDateString('uk-UA', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: '2-digit',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {formatDateTime(notification.sent_at)}
               </div>
             </div>
 
