@@ -10,6 +10,7 @@ import {
   CheckCircle,
   TrendingUp,
 } from 'lucide-react';
+import { LinkifyText } from '@/components/ui/linkify-text';
 
 interface TaskDetailPageProps {
   params: Promise<{
@@ -191,13 +192,13 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
             <p className="label text-accent mb-4">ОПИС ЗАВДАННЯ</p>
 
             <div className="prose prose-sm max-w-none">
-              <p className="whitespace-pre-wrap">{task.description}</p>
+              <LinkifyText text={task.description || ''} />
             </div>
 
             {task.requirements && (
               <div className="mt-6 pt-6 border-t border-timber-dark/20">
                 <p className="label text-accent mb-2">ВИМОГИ</p>
-                <p className="text-sm whitespace-pre-wrap">{task.requirements}</p>
+                <LinkifyText text={task.requirements} className="text-sm" />
               </div>
             )}
           </div>
