@@ -17,8 +17,10 @@ import {
   Shield,
   Bell,
   ShoppingBag,
+  ShoppingCart,
   Coins,
   HelpCircle,
+  Target,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -27,6 +29,7 @@ import { NotificationBell } from './notification-bell';
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
   { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
+  { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
@@ -41,6 +44,7 @@ const navItems = [
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -64,6 +68,24 @@ export function MobileNav() {
     checkAdminStatus();
   }, []);
 
+  // Track cart count
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem('marketplace_cart') || '[]');
+      const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      setCartItemCount(count);
+    };
+
+    updateCartCount();
+    window.addEventListener('storage', updateCartCount);
+    const interval = setInterval(updateCartCount, 1000);
+
+    return () => {
+      window.removeEventListener('storage', updateCartCount);
+      clearInterval(interval);
+    };
+  }, []);
+
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -82,6 +104,14 @@ export function MobileNav() {
 
         <div className="flex items-center gap-2">
           <NotificationBell variant="dark" />
+          <Link href="/dashboard/marketplace/checkout" className="relative p-2">
+            <ShoppingCart size={20} />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-accent text-canvas text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </Link>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2"
@@ -117,6 +147,27 @@ export function MobileNav() {
                 </li>
               );
             })}
+
+            {/* Cart Link with Badge */}
+            <li>
+              <Link
+                href="/dashboard/marketplace/checkout"
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider transition-colors relative ${
+                  pathname === '/dashboard/marketplace/checkout'
+                    ? 'bg-accent text-canvas'
+                    : 'hover:bg-canvas/10'
+                }`}
+              >
+                <ShoppingCart size={20} />
+                КОШИК
+                {cartItemCount > 0 && (
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+            </li>
 
             {/* Admin Link - only visible to admins */}
             {isAdmin && (

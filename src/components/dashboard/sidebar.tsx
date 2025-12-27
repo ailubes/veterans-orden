@@ -14,8 +14,10 @@ import {
   Shield,
   Bell,
   ShoppingBag,
+  ShoppingCart,
   Coins,
   HelpCircle,
+  Target,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -25,6 +27,7 @@ import { useEffect, useState } from 'react';
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
   { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
+  { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
@@ -40,6 +43,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -59,6 +63,29 @@ export function Sidebar() {
     };
 
     checkAdminStatus();
+  }, []);
+
+  // Track cart count
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = JSON.parse(localStorage.getItem('marketplace_cart') || '[]');
+      const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      setCartItemCount(count);
+    };
+
+    // Initial count
+    updateCartCount();
+
+    // Listen for storage changes (when cart is updated in another tab/component)
+    window.addEventListener('storage', updateCartCount);
+
+    // Also check periodically in case cart was updated in same tab
+    const interval = setInterval(updateCartCount, 1000);
+
+    return () => {
+      window.removeEventListener('storage', updateCartCount);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSignOut = async () => {
@@ -101,6 +128,26 @@ export function Sidebar() {
               </li>
             );
           })}
+
+          {/* Cart Link with Badge */}
+          <li>
+            <Link
+              href="/dashboard/marketplace/checkout"
+              className={`flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors relative ${
+                pathname === '/dashboard/marketplace/checkout'
+                  ? 'bg-accent text-canvas'
+                  : 'hover:bg-canvas/10'
+              }`}
+            >
+              <ShoppingCart size={18} />
+              КОШИК
+              {cartItemCount > 0 && (
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+          </li>
 
           {/* Admin Link - only visible to admins */}
           {isAdmin && (
