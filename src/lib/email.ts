@@ -1,18 +1,32 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
 
-const FROM_EMAIL = 'Мережа Вільних Людей <noreply@freepeople.org.ua>';
+const FROM_EMAIL = process.env.SMTP_FROM || 'Мережа Вільних Людей <info@freepeople.org.ua>';
 
-let resendInstance: Resend | null = null;
+let transporterInstance: Transporter | null = null;
 
-function getResendInstance() {
-  if (!resendInstance) {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      throw new Error('RESEND_API_KEY is not configured');
+function getTransporter() {
+  if (!transporterInstance) {
+    const host = process.env.SMTP_HOST;
+    const port = process.env.SMTP_PORT;
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASSWORD;
+
+    if (!host || !port || !user || !pass) {
+      throw new Error('SMTP configuration is incomplete. Please check environment variables.');
     }
-    resendInstance = new Resend(apiKey);
+
+    transporterInstance = nodemailer.createTransport({
+      host,
+      port: parseInt(port, 10),
+      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+      auth: {
+        user,
+        pass,
+      },
+    });
   }
-  return resendInstance;
+  return transporterInstance;
 }
 
 export interface EmailOptions {
@@ -23,12 +37,12 @@ export interface EmailOptions {
 }
 
 /**
- * Send an email using Resend
+ * Send an email using SMTP (Nodemailer)
  */
 export async function sendEmail(options: EmailOptions) {
   try {
-    const resend = getResendInstance();
-    const { data, error } = await resend.emails.send({
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
       from: FROM_EMAIL,
       to: options.to,
       subject: options.subject,
@@ -36,13 +50,8 @@ export async function sendEmail(options: EmailOptions) {
       text: options.text,
     });
 
-    if (error) {
-      console.error('[Email] Send error:', error);
-      throw new Error(`Failed to send email: ${error.message}`);
-    }
-
-    console.log('[Email] Sent successfully:', data?.id);
-    return data;
+    console.log('[Email] Sent successfully:', info.messageId);
+    return { id: info.messageId, success: true };
   } catch (error) {
     console.error('[Email] Error:', error);
     throw error;
@@ -334,6 +343,142 @@ export async function sendAdminNotificationEmail(
   return sendEmail({
     to,
     subject: `[ADMIN] ${subject}`,
+    html,
+    text,
+  });
+}
+
+/**
+ * Order confirmation email
+ */
+export interface OrderItem {
+  productName: string;
+  quantity: number;
+  pricePoints: number;
+  priceUah: number;
+}
+
+export async function sendOrderConfirmationEmail(
+  to: string,
+  firstName: string,
+  orderId: string,
+  items: OrderItem[],
+  totalPoints: number,
+  totalUah: number,
+  orderUrl: string
+) {
+  const itemsHtml = items.map(item => `
+    <tr>
+      <td style="padding: 10px; border-bottom: 1px solid #E0E0E0;">${item.productName}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #E0E0E0; text-align: center;">${item.quantity}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #E0E0E0; text-align: right;">${item.pricePoints} балів${item.priceUah > 0 ? ` / ${(item.priceUah / 100).toFixed(2)} грн` : ''}</td>
+    </tr>
+  `).join('');
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1A1A1A; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #1A1A1A; color: #F5F0E8; padding: 30px; text-align: center; }
+    .content { background: #FFFFFF; padding: 30px; }
+    .footer { background: #F5F0E8; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+    .button { display: inline-block; padding: 12px 24px; background: #D4A574; color: #F5F0E8; text-decoration: none; font-weight: bold; margin: 20px 0; }
+    .order-summary { background: #F5F0E8; padding: 20px; margin: 20px 0; }
+    .order-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .order-table th { background: #1A1A1A; color: #F5F0E8; padding: 10px; text-align: left; }
+    .total { font-size: 18px; font-weight: bold; padding-top: 15px; border-top: 2px solid #1A1A1A; }
+    .accent { color: #D4A574; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✅ Замовлення підтверджено!</h1>
+    </div>
+    <div class="content">
+      <p>Привіт, <strong>${firstName}</strong>!</p>
+
+      <p>Дякуємо за ваше замовлення! Ми отримали його та вже працюємо над обробкою.</p>
+
+      <div class="order-summary">
+        <p><strong>Номер замовлення:</strong> <span class="accent">#${orderId.slice(0, 8).toUpperCase()}</span></p>
+      </div>
+
+      <h3>Деталі замовлення:</h3>
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Товар</th>
+            <th style="text-align: center;">Кількість</th>
+            <th style="text-align: right;">Ціна</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${itemsHtml}
+        </tbody>
+      </table>
+
+      <div class="total">
+        <p>Всього: <span class="accent">${totalPoints} балів${totalUah > 0 ? ` / ${(totalUah / 100).toFixed(2)} грн` : ''}</span></p>
+      </div>
+
+      <h3 class="accent">Що далі?</h3>
+      <ul>
+        <li>Ми опрацюємо ваше замовлення протягом 1-2 робочих днів</li>
+        <li>Ви отримаєте повідомлення про статус замовлення</li>
+        <li>Відстежити замовлення можна в особистому кабінеті</li>
+      </ul>
+
+      <p style="text-align: center;">
+        <a href="${orderUrl}" class="button">ПЕРЕГЛЯНУТИ ЗАМОВЛЕННЯ →</a>
+      </p>
+
+      <p>Якщо у вас виникли питання, звертайтесь до нашої служби підтримки.</p>
+
+      <p><strong>Дякуємо за довіру!</strong></p>
+    </div>
+    <div class="footer">
+      <p>Мережа Вільних Людей</p>
+      <p>Ця адреса використовується тільки для інформаційних повідомлень.</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const itemsText = items.map(item =>
+    `${item.productName} x${item.quantity} - ${item.pricePoints} балів${item.priceUah > 0 ? ` / ${(item.priceUah / 100).toFixed(2)} грн` : ''}`
+  ).join('\n');
+
+  const text = `
+Привіт, ${firstName}!
+
+Дякуємо за ваше замовлення!
+
+Номер замовлення: #${orderId.slice(0, 8).toUpperCase()}
+
+Деталі замовлення:
+${itemsText}
+
+Всього: ${totalPoints} балів${totalUah > 0 ? ` / ${(totalUah / 100).toFixed(2)} грн` : ''}
+
+Що далі?
+- Ми опрацюємо ваше замовлення протягом 1-2 робочих днів
+- Ви отримаєте повідомлення про статус замовлення
+- Відстежити замовлення: ${orderUrl}
+
+Дякуємо за довіру!
+
+Мережа Вільних Людей
+  `;
+
+  return sendEmail({
+    to,
+    subject: `✅ Замовлення #${orderId.slice(0, 8).toUpperCase()} підтверджено`,
     html,
     text,
   });

@@ -19,6 +19,7 @@ import {
   LogOut,
   ShoppingBag,
   BookOpen,
+  Target,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -26,6 +27,7 @@ import { Logo } from '@/components/ui/logo';
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'ОГЛЯД' },
   { href: '/admin/members', icon: Users, label: 'ЧЛЕНИ' },
+  { href: '/admin/challenges', icon: Target, label: 'ВИКЛИКИ' },
   { href: '/admin/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },

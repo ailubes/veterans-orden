@@ -1,15 +1,15 @@
 /**
  * Challenges System
- * Re-exports all challenge-related modules
+ *
+ * Client-safe exports only (types and constants).
+ * For server-side services, import directly from:
+ * - '@/lib/challenges/challenge-service'
+ * - '@/lib/challenges/badge-service'
+ * - '@/lib/challenges/challenge-progress'
  */
 
-// Types
+// Types (client-safe)
 export * from './types';
 
-// Constants
+// Constants (client-safe)
 export * from './constants';
-
-// Services
-export * from './challenge-service';
-export * from './badge-service';
-export * from './challenge-progress';

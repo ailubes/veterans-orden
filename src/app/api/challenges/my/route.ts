@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getUserChallenges } from '@/lib/challenges';
+import { getUserChallenges } from '@/lib/challenges/challenge-service';
 
 export const dynamic = 'force-dynamic';
 

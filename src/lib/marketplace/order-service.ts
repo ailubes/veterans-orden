@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { spendPoints, getUserBalance } from '@/lib/points';
 import type { CreateOrderParams, OrderWithItems, CheckoutResult } from './types';
+import { sendOrderConfirmationEmail, type OrderItem as EmailOrderItem } from '@/lib/email';
 
 /**
  * Generate unique order number
@@ -175,6 +176,45 @@ export async function createOrder(params: CreateOrderParams): Promise<CheckoutRe
         })
         .eq('id', product.id);
     }
+  }
+
+  // Send order confirmation email
+  try {
+    // Get user email and name
+    const { data: userProfile } = await supabase
+      .from('users')
+      .select('email, first_name')
+      .eq('id', userId)
+      .single();
+
+    if (userProfile && userProfile.email) {
+      // Format order items for email
+      const emailItems: EmailOrderItem[] = createdItems.map((item) => ({
+        productName: item.product_name,
+        quantity: item.quantity,
+        pricePoints: item.price_points,
+        priceUah: item.price_uah || 0,
+      }));
+
+      // Get base URL from environment
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://freepeople.org.ua';
+      const orderUrl = `${baseUrl}/dashboard/marketplace/orders/${order.id}`;
+
+      await sendOrderConfirmationEmail(
+        userProfile.email,
+        userProfile.first_name || 'Користувач',
+        order.id,
+        emailItems,
+        totalPoints,
+        totalUah,
+        orderUrl
+      );
+
+      console.log(`[Order] Confirmation email sent to ${userProfile.email} for order ${orderNumber}`);
+    }
+  } catch (emailError) {
+    // Don't fail the order if email fails
+    console.error('[Order] Failed to send confirmation email:', emailError);
   }
 
   // Return complete order with items

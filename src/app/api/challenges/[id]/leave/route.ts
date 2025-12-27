@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { leaveChallenge } from '@/lib/challenges';
+import { leaveChallenge } from '@/lib/challenges/challenge-service';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { getUserBadges, getUserBadgeCount } from '@/lib/challenges';
+import { getUserBadges, getUserBadgeCount } from '@/lib/challenges/badge-service';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { listBadges } from '@/lib/challenges';
+import { listBadges } from '@/lib/challenges/badge-service';
 import type { BadgeCategory } from '@/lib/challenges';
 
 export const dynamic = 'force-dynamic';
