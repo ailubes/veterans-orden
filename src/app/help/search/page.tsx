@@ -133,7 +133,7 @@ export default function SearchResultsPage() {
           {results.map((result, index) => (
             <Link
               key={result.id}
-              href={`/help/${result.slug}`}
+              href={`/help/${result.categorySlug}/${result.slug}`}
               className="block bg-white border-2 border-timber-dark p-6 hover:border-accent transition-colors group relative"
             >
               <div className="joint" style={{ top: '-6px', left: '-6px' }} />
