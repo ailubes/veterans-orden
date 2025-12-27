@@ -193,6 +193,44 @@ export const notificationTypeEnum = pgEnum('notification_type', [
   'referral',
 ]);
 
+export const pointsTransactionTypeEnum = pgEnum('points_transaction_type', [
+  'earn_task',
+  'earn_event',
+  'earn_vote',
+  'earn_referral',
+  'earn_daily_login',
+  'earn_content',
+  'earn_challenge',
+  'earn_admin',
+  'spend_marketplace',
+  'spend_event',
+  'expire_annual',
+  'refund',
+]);
+
+export const productTypeEnum = pgEnum('product_type', [
+  'physical',
+  'digital',
+  'event_ticket',
+]);
+
+export const productStatusEnum = pgEnum('product_status', [
+  'draft',
+  'active',
+  'out_of_stock',
+  'discontinued',
+]);
+
+export const orderStatusEnum = pgEnum('order_status', [
+  'pending',
+  'confirmed',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+  'refunded',
+]);
+
 // ===========================================
 // TABLES
 // ===========================================
@@ -274,6 +312,9 @@ export const users = pgTable('users', {
   // Engagement
   points: integer('points').default(0),
   level: integer('level').default(1),
+  currentYearPoints: integer('current_year_points').default(0),
+  lastLoginAt: timestamp('last_login_at'),
+  loginStreak: integer('login_streak').default(0),
 
   // Preferences
   language: varchar('language', { length: 5 }).default('uk'),
@@ -330,6 +371,12 @@ export const events = pgTable('events', {
   maxAttendees: integer('max_attendees'),
   rsvpDeadline: timestamp('rsvp_deadline'),
 
+  // Ticketing (Paid Events)
+  requiresTicketPurchase: boolean('requires_ticket_purchase').default(false),
+  ticketPricePoints: integer('ticket_price_points'),
+  ticketPriceUah: integer('ticket_price_uah'),
+  ticketQuantity: integer('ticket_quantity'), // null = unlimited
+
   // Counters (denormalized)
   goingCount: integer('going_count').default(0),
   maybeCount: integer('maybe_count').default(0),
@@ -357,6 +404,10 @@ export const eventRsvps = pgTable('event_rsvps', {
   status: rsvpStatusEnum('status').notNull(),
   respondedAt: timestamp('responded_at').defaultNow().notNull(),
   attendedAt: timestamp('attended_at'),
+
+  // Paid event ticket tracking
+  ticketPurchased: boolean('ticket_purchased').default(false),
+  orderId: uuid('order_id').references(() => orders.id),
 }, (table) => ({
   eventUserIdx: uniqueIndex('event_rsvps_event_user_idx').on(table.eventId, table.userId),
   eventIdx: index('event_rsvps_event_idx').on(table.eventId),
@@ -658,6 +709,174 @@ export const organizationSettings = pgTable('organization_settings', {
   keyIdx: uniqueIndex('organization_settings_key_idx').on(table.key),
 }));
 
+// ----- POINTS TRANSACTIONS -----
+export const pointsTransactions = pgTable('points_transactions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id).notNull(),
+
+  type: pointsTransactionTypeEnum('type').notNull(),
+  amount: integer('amount').notNull(), // positive for earn, negative for spend
+  balanceAfter: integer('balance_after').notNull(),
+
+  // Year tracking for expiration
+  earnedYear: integer('earned_year'),
+  expiresAt: timestamp('expires_at'),
+
+  // Reference to source
+  referenceType: varchar('reference_type', { length: 50 }),
+  referenceId: uuid('reference_id'),
+
+  // Metadata
+  description: text('description'),
+  metadata: jsonb('metadata'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdById: uuid('created_by_id').references(() => users.id), // For admin adjustments
+}, (table) => ({
+  userIdx: index('points_transactions_user_idx').on(table.userId),
+  typeIdx: index('points_transactions_type_idx').on(table.type),
+  yearIdx: index('points_transactions_year_idx').on(table.earnedYear),
+  createdAtIdx: index('points_transactions_created_at_idx').on(table.createdAt),
+}));
+
+// ----- MARKETPLACE: PRODUCTS -----
+export const products = pgTable('products', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
+  // Basic info
+  name: varchar('name', { length: 255 }).notNull(),
+  nameUk: varchar('name_uk', { length: 255 }).notNull(),
+  description: text('description'),
+  descriptionUk: text('description_uk'),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+
+  // Product configuration
+  type: productTypeEnum('type').notNull(),
+  status: productStatusEnum('status').default('draft').notNull(),
+
+  // Pricing
+  pricePoints: integer('price_points').notNull(),
+  priceUah: integer('price_uah'), // Optional UAH price (in kopecks)
+
+  // Inventory
+  stockQuantity: integer('stock_quantity'), // null = unlimited
+  maxPerUser: integer('max_per_user').default(1),
+
+  // Media
+  imageUrl: text('image_url'),
+  images: jsonb('images'), // Array of image URLs
+
+  // Shipping (for physical products)
+  requiresShipping: boolean('requires_shipping').default(false),
+  weight: integer('weight'), // grams
+  dimensions: jsonb('dimensions'), // { length, width, height } in cm
+
+  // Digital delivery (for digital products)
+  digitalAssetUrl: text('digital_asset_url'),
+  downloadLimit: integer('download_limit'), // null = unlimited
+
+  // Access control
+  requiredLevel: integer('required_level').default(1),
+  requiredRole: varchar('required_role', { length: 50 }),
+
+  // Availability
+  availableFrom: timestamp('available_from'),
+  availableUntil: timestamp('available_until'),
+
+  // Metadata
+  featured: boolean('featured').default(false),
+  sortOrder: integer('sort_order').default(0),
+  tags: jsonb('tags'), // Array of tags
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdById: uuid('created_by_id').references(() => users.id),
+}, (table) => ({
+  typeIdx: index('products_type_idx').on(table.type),
+  statusIdx: index('products_status_idx').on(table.status),
+  slugIdx: uniqueIndex('products_slug_idx').on(table.slug),
+  featuredIdx: index('products_featured_idx').on(table.featured),
+}));
+
+// ----- MARKETPLACE: ORDERS -----
+export const orders = pgTable('orders', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  orderNumber: varchar('order_number', { length: 20 }).notNull().unique(),
+
+  // User
+  userId: uuid('user_id').references(() => users.id).notNull(),
+
+  // Status
+  status: orderStatusEnum('status').default('pending').notNull(),
+
+  // Pricing
+  totalPoints: integer('total_points').notNull(),
+  totalUah: integer('total_uah').default(0), // In kopecks
+
+  // Shipping info (for physical products)
+  requiresShipping: boolean('requires_shipping').default(false),
+  shippingAddress: jsonb('shipping_address'), // Full address object
+
+  // Nova Poshta delivery
+  novaPoshtaCity: varchar('nova_poshta_city', { length: 100 }),
+  novaPoshtaCityRef: varchar('nova_poshta_city_ref', { length: 50 }),
+  novaPoshtaBranch: varchar('nova_poshta_branch', { length: 100 }),
+  novaPoshtaBranchRef: varchar('nova_poshta_branch_ref', { length: 50 }),
+
+  // Fulfillment
+  trackingNumber: varchar('tracking_number', { length: 100 }),
+  shippedAt: timestamp('shipped_at'),
+  deliveredAt: timestamp('delivered_at'),
+
+  // Notes
+  customerNotes: text('customer_notes'),
+  adminNotes: text('admin_notes'),
+
+  // Metadata
+  metadata: jsonb('metadata'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  cancelledAt: timestamp('cancelled_at'),
+  refundedAt: timestamp('refunded_at'),
+}, (table) => ({
+  userIdx: index('orders_user_idx').on(table.userId),
+  statusIdx: index('orders_status_idx').on(table.status),
+  orderNumberIdx: uniqueIndex('orders_order_number_idx').on(table.orderNumber),
+  createdAtIdx: index('orders_created_at_idx').on(table.createdAt),
+}));
+
+// ----- MARKETPLACE: ORDER ITEMS -----
+export const orderItems = pgTable('order_items', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
+  // Relations
+  orderId: uuid('order_id').references(() => orders.id).notNull(),
+  productId: uuid('product_id').references(() => products.id).notNull(),
+
+  // Item details
+  quantity: integer('quantity').notNull().default(1),
+  pricePoints: integer('price_points').notNull(), // Price at time of purchase
+  priceUah: integer('price_uah'), // UAH price at time of purchase (kopecks)
+
+  // Product snapshot (in case product changes/deleted)
+  productName: varchar('product_name', { length: 255 }).notNull(),
+  productType: productTypeEnum('product_type').notNull(),
+
+  // Variant info (size, color, etc)
+  variant: jsonb('variant'),
+
+  // Digital delivery
+  downloadUrl: text('download_url'),
+  downloadCount: integer('download_count').default(0),
+  downloadExpiresAt: timestamp('download_expires_at'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  orderIdx: index('order_items_order_idx').on(table.orderId),
+  productIdx: index('order_items_product_idx').on(table.productId),
+}));
+
 // ===========================================
 // RELATIONS
 // ===========================================
@@ -712,6 +931,8 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   payments: many(payments),
   newsArticles: many(newsArticles),
   notifications: many(notifications),
+  orders: many(orders),
+  createdProducts: many(products),
 }));
 
 export const eventsRelations = relations(events, ({ one, many }) => ({
@@ -833,5 +1054,32 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   user: one(users, {
     fields: [notifications.userId],
     references: [users.id],
+  }),
+}));
+
+export const productsRelations = relations(products, ({ one, many }) => ({
+  createdBy: one(users, {
+    fields: [products.createdById],
+    references: [users.id],
+  }),
+  orderItems: many(orderItems),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId],
+    references: [users.id],
+  }),
+  items: many(orderItems),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+  }),
+  product: one(products, {
+    fields: [orderItems.productId],
+    references: [products.id],
   }),
 }));

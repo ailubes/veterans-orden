@@ -32,10 +32,43 @@ export async function POST(
       return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
     }
 
+    // Check if event requires ticket purchase
+    const { data: event } = await supabase
+      .from('events')
+      .select('requires_ticket_purchase, ticket_price_points')
+      .eq('id', eventId)
+      .single();
+
+    if (!event) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    // For paid events, users cannot RSVP as "going" without purchasing a ticket
+    if (event.requires_ticket_purchase && status === 'going') {
+      const { data: existingRsvp } = await supabase
+        .from('event_rsvps')
+        .select('ticket_purchased')
+        .eq('event_id', eventId)
+        .eq('user_id', profile.id)
+        .single();
+
+      if (!existingRsvp || !existingRsvp.ticket_purchased) {
+        return NextResponse.json(
+          {
+            error: 'Ticket purchase required',
+            message: 'Ви повинні придбати квиток, щоб підтвердити участь у цій події',
+            ticketPricePoints: event.ticket_price_points,
+            requiresTicket: true,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Check if user already has an RSVP
     const { data: existingRsvp } = await supabase
       .from('event_rsvps')
-      .select('id, status')
+      .select('id, status, ticket_purchased')
       .eq('event_id', eventId)
       .eq('user_id', profile.id)
       .single();
@@ -97,6 +130,25 @@ export async function DELETE(
 
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
+    // Check if RSVP has a purchased ticket
+    const { data: rsvp } = await supabase
+      .from('event_rsvps')
+      .select('ticket_purchased, order_id')
+      .eq('event_id', eventId)
+      .eq('user_id', profile.id)
+      .single();
+
+    if (rsvp && rsvp.ticket_purchased) {
+      return NextResponse.json(
+        {
+          error: 'Cannot cancel ticket purchase',
+          message: 'Щоб скасувати квиток, зверніться до адміністратора для повернення коштів',
+          orderId: rsvp.order_id,
+        },
+        { status: 400 }
+      );
     }
 
     // Delete RSVP

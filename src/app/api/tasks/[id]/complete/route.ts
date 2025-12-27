@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { awardPoints } from '@/lib/points';
 
 export async function POST(
   request: Request,
@@ -105,16 +106,22 @@ export async function POST(
 
     if (updateError) throw updateError;
 
-    // Award points to user
+    // Award points to user using points service
     const taskPoints = task.points || 0;
     if (taskPoints > 0) {
-      await supabase
-        .from('users')
-        .update({
-          points: (profile.points || 0) + taskPoints,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', profile.id);
+      try {
+        await awardPoints({
+          userId: profile.id,
+          amount: taskPoints,
+          type: 'earn_task',
+          referenceType: 'task',
+          referenceId: taskId,
+          description: `Виконання завдання: ${task.title}`,
+        });
+      } catch (pointsError) {
+        console.error('Points award error:', pointsError);
+        // Continue even if points fail - task is still completed
+      }
     }
 
     return NextResponse.json({ success: true, pointsEarned: taskPoints });

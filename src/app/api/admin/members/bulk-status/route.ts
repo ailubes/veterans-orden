@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, canSuspendMembers } from '@/lib/permissions';
+import { awardPoints } from '@/lib/points';
+import { DEFAULT_POINTS } from '@/lib/points/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,6 +39,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get member data before update (to check previous status and referrers)
+    const { data: membersBeforeUpdate } = await supabase
+      .from('users')
+      .select('id, status, referred_by_id, first_name, last_name')
+      .in('id', memberIds);
+
     // Update member statuses
     const { error: updateError } = await supabase
       .from('users')
@@ -49,6 +57,43 @@ export async function POST(request: NextRequest) {
         { error: 'Failed to update member statuses' },
         { status: 500 }
       );
+    }
+
+    // Award referral points if activating users
+    if (status === 'active' && membersBeforeUpdate) {
+      for (const member of membersBeforeUpdate) {
+        // Only award if user was not already active and has a referrer
+        if (member.status !== 'active' && member.referred_by_id) {
+          try {
+            await awardPoints({
+              userId: member.referred_by_id,
+              amount: DEFAULT_POINTS.REFERRAL_SUCCESS,
+              type: 'earn_referral',
+              referenceType: 'user',
+              referenceId: member.id,
+              description: `Запрошення члена: ${member.first_name} ${member.last_name}`,
+              createdById: adminProfile.id,
+            });
+
+            // Increment referral count
+            const { data: referrer } = await supabase
+              .from('users')
+              .select('referral_count')
+              .eq('id', member.referred_by_id)
+              .single();
+
+            if (referrer) {
+              await supabase
+                .from('users')
+                .update({ referral_count: (referrer.referral_count || 0) + 1 })
+                .eq('id', member.referred_by_id);
+            }
+          } catch (pointsError) {
+            console.error('Referral points award error:', pointsError);
+            // Continue even if points fail
+          }
+        }
+      }
     }
 
     // Create audit log entry for each member

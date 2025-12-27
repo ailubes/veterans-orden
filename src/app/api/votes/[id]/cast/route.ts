@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { awardPoints } from '@/lib/points';
+import { DEFAULT_POINTS } from '@/lib/points/constants';
 
 export async function POST(
   request: Request,
@@ -13,10 +15,10 @@ export async function POST(
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's database ID, role and points
+    // Get user's database ID and role
     const { data: profile } = await supabase
       .from('users')
-      .select('id, role, points')
+      .select('id, role')
       .eq('clerk_id', user.id)
       .single();
 
@@ -105,16 +107,23 @@ export async function POST(
       })
       .eq('id', voteId);
 
-    // Award points to user for voting
-    await supabase
-      .from('users')
-      .update({
-        points: (profile.points || 0) + 5, // 5 points for voting
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', profile.id);
+    // Award points to user for voting using points service
+    const pointsToAward = vote.points_reward || DEFAULT_POINTS.VOTE_CAST;
+    try {
+      await awardPoints({
+        userId: profile.id,
+        amount: pointsToAward,
+        type: 'earn_vote',
+        referenceType: 'vote',
+        referenceId: voteId,
+        description: `Участь у голосуванні: ${vote.title}`,
+      });
+    } catch (pointsError) {
+      console.error('Points award error:', pointsError);
+      // Continue even if points fail - vote is still recorded
+    }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, pointsEarned: pointsToAward });
   } catch (error) {
     console.error('Vote cast error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });

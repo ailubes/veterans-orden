@@ -2,92 +2,130 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-const NOVA_POSHTA_API_URL = 'https://api.novapost.com/v.1.0/divisions';
+// Nova Poshta API v2.0 (official, no API key required for public endpoints)
+const NOVA_POSHTA_API_URL = 'https://api.novaposhta.ua/v2.0/json/';
 
-interface NovaPoshtaDivision {
-  id: string;
-  name: string;
-  shortName: string;
-  number: string;
-  countryCode: string;
-  settlement: {
-    name: string;
-    region?: {
-      name: string;
-    };
-  };
-  address: string;
-  status: string;
-  divisionCategory: string;
-  latitude: number;
-  longitude: number;
+interface NovaPoshtaWarehouse {
+  Ref: string;
+  Description: string;
+  ShortAddress: string;
+  Number: string;
+  CityDescription: string;
+  CityRef: string;
+  SettlementAreaDescription: string;
+  TypeOfWarehouse: string;
+  WarehouseStatus: string;
+  CategoryOfWarehouse: string;
+}
+
+interface NovaPoshtaCity {
+  Ref: string;
+  Description: string;
+  AreaDescription: string;
 }
 
 /**
  * GET /api/nova-poshta/divisions
  *
- * Proxy for Nova Poshta divisions API to avoid CORS issues
+ * Proxy for Nova Poshta API to search warehouses/divisions
  *
  * Query params:
- * - city: City name to search (will be wrapped with wildcards)
+ * - city: City name to search
+ * - cityRef: City reference (if known, for faster warehouse lookup)
  * - limit: Max results (default 50)
- * - category: Filter by category (PostBranch, CargoBranch, Postomat, PUDO)
  */
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const city = searchParams.get('city') || '';
-    const limit = searchParams.get('limit') || '50';
-    const category = searchParams.get('category');
+    const cityRef = searchParams.get('cityRef') || '';
+    const limit = parseInt(searchParams.get('limit') || '50', 10);
 
     if (!city || city.length < 2) {
       return NextResponse.json({ divisions: [] });
     }
 
-    // Build Nova Poshta API URL
-    const apiUrl = new URL(NOVA_POSHTA_API_URL);
-    apiUrl.searchParams.append('countryCodes[]', 'UA');
-    apiUrl.searchParams.append('limit', limit);
-    apiUrl.searchParams.append('name', `*${city}*`);
-
-    if (category) {
-      apiUrl.searchParams.append('divisionCategories[]', category);
-    }
-
-    const response = await fetch(apiUrl.toString(), {
+    // Step 1: Search for cities matching the query
+    const citiesResponse = await fetch(NOVA_POSHTA_API_URL, {
+      method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Accept-Language': 'uk',
+        'Content-Type': 'application/json',
       },
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      body: JSON.stringify({
+        modelName: 'Address',
+        calledMethod: 'searchSettlements',
+        methodProperties: {
+          CityName: city,
+          Limit: '20',
+          Page: '1',
+        },
+      }),
     });
 
-    if (!response.ok) {
-      console.error('[Nova Poshta API] Error:', response.status, response.statusText);
-      return NextResponse.json(
-        { error: 'Failed to fetch from Nova Poshta API' },
-        { status: response.status }
-      );
+    const citiesData = await citiesResponse.json();
+
+    if (!citiesData.success || !citiesData.data?.[0]?.Addresses?.length) {
+      return NextResponse.json({ divisions: [] });
     }
 
-    const data = await response.json();
-
-    // Transform response to simpler format
-    const divisions = (data || []).map((div: NovaPoshtaDivision) => ({
-      id: div.id,
-      name: div.name,
-      shortName: div.shortName,
-      number: div.number,
-      city: div.settlement?.name || '',
-      region: div.settlement?.region?.name || '',
-      address: div.address,
-      status: div.status,
-      category: div.divisionCategory,
-      latitude: div.latitude,
-      longitude: div.longitude,
+    const cities: NovaPoshtaCity[] = citiesData.data[0].Addresses.map((addr: { DeliveryCity: string; Present: string; Area: string }) => ({
+      Ref: addr.DeliveryCity,
+      Description: addr.Present,
+      AreaDescription: addr.Area,
     }));
 
-    return NextResponse.json({ divisions });
+    // Step 2: Get warehouses for the first matching city (or use provided cityRef)
+    const targetCityRef = cityRef || cities[0]?.Ref;
+
+    if (!targetCityRef) {
+      return NextResponse.json({ divisions: [], cities });
+    }
+
+    const warehousesResponse = await fetch(NOVA_POSHTA_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        modelName: 'Address',
+        calledMethod: 'getWarehouses',
+        methodProperties: {
+          CityRef: targetCityRef,
+          Limit: String(limit),
+          Page: '1',
+        },
+      }),
+    });
+
+    const warehousesData = await warehousesResponse.json();
+
+    if (!warehousesData.success) {
+      console.error('[Nova Poshta API] Warehouses error:', warehousesData.errors);
+      return NextResponse.json({ divisions: [], cities });
+    }
+
+    // Transform warehouses to our format
+    const divisions = (warehousesData.data || []).map((wh: NovaPoshtaWarehouse) => ({
+      id: wh.Ref,
+      name: wh.Description,
+      shortName: `Відділення №${wh.Number}`,
+      number: wh.Number,
+      city: wh.CityDescription,
+      cityRef: wh.CityRef,
+      region: wh.SettlementAreaDescription,
+      address: wh.ShortAddress,
+      status: wh.WarehouseStatus === 'Working' ? 'Working' : 'NotWorking',
+      category: mapWarehouseCategory(wh.CategoryOfWarehouse),
+    }));
+
+    return NextResponse.json({
+      divisions,
+      cities: cities.map(c => ({
+        ref: c.Ref,
+        name: c.Description,
+        region: c.AreaDescription,
+      })),
+    });
   } catch (error) {
     console.error('[Nova Poshta API] Error:', error);
     return NextResponse.json(
@@ -95,4 +133,15 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+function mapWarehouseCategory(category: string): string {
+  // Map Nova Poshta category to our simplified categories
+  if (category?.includes('Postomat') || category?.includes('поштомат')) {
+    return 'Postomat';
+  }
+  if (category?.includes('Cargo') || category?.includes('вантаж')) {
+    return 'CargoBranch';
+  }
+  return 'Branch';
 }

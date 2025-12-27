@@ -10,10 +10,17 @@ interface Division {
   shortName: string;
   number: string;
   city: string;
+  cityRef?: string;
   region: string;
   address: string;
   status: string;
   category: string;
+}
+
+interface City {
+  ref: string;
+  name: string;
+  region: string;
 }
 
 interface NovaPoshtaSelectorProps {
@@ -33,38 +40,36 @@ export function NovaPoshtaSelector({
 }: NovaPoshtaSelectorProps) {
   const [cityInput, setCityInput] = useState(city);
   const [divisions, setDivisions] = useState<Division[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCity, setSelectedCity] = useState(city);
+  const [selectedCityRef, setSelectedCityRef] = useState('');
 
-  const debouncedCity = useDebounce(cityInput, 300);
+  const debouncedCity = useDebounce(cityInput, 400);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Extract unique cities from divisions
-  const uniqueCities = Array.from(
-    new Map(
-      divisions.map((d) => [d.city, { city: d.city, region: d.region }])
-    ).values()
-  );
-
-  // Filter divisions by selected city
-  const cityDivisions = divisions.filter((d) => d.city === selectedCity);
-
-  // Fetch divisions when city input changes
-  const fetchDivisions = useCallback(async (searchCity: string) => {
+  // Fetch cities and divisions when city input changes
+  const fetchDivisions = useCallback(async (searchCity: string, cityRef?: string) => {
     if (!searchCity || searchCity.length < 2) {
       setDivisions([]);
+      setCities([]);
       return;
     }
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `/api/nova-poshta/divisions?city=${encodeURIComponent(searchCity)}&limit=100`
-      );
+      const url = cityRef
+        ? `/api/nova-poshta/divisions?city=${encodeURIComponent(searchCity)}&cityRef=${encodeURIComponent(cityRef)}&limit=100`
+        : `/api/nova-poshta/divisions?city=${encodeURIComponent(searchCity)}&limit=100`;
+
+      const response = await fetch(url);
       const data = await response.json();
 
+      if (data.cities) {
+        setCities(data.cities);
+      }
       if (data.divisions) {
         setDivisions(data.divisions);
       }
@@ -94,13 +99,16 @@ export function NovaPoshtaSelector({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleCitySelect = (cityName: string) => {
-    setSelectedCity(cityName);
-    setCityInput(cityName);
-    onCityChange(cityName);
+  const handleCitySelect = async (cityItem: City) => {
+    setSelectedCity(cityItem.name);
+    setSelectedCityRef(cityItem.ref);
+    setCityInput(cityItem.name);
+    onCityChange(cityItem.name, cityItem.ref);
     setShowDropdown(false);
     // Clear branch when city changes
     onBranchChange('');
+    // Fetch warehouses for this city
+    await fetchDivisions(cityItem.name, cityItem.ref);
   };
 
   const handleBranchSelect = (division: Division) => {
@@ -111,9 +119,11 @@ export function NovaPoshtaSelector({
   const handleClearCity = () => {
     setCityInput('');
     setSelectedCity('');
+    setSelectedCityRef('');
     onCityChange('');
     onBranchChange('');
     setDivisions([]);
+    setCities([]);
     inputRef.current?.focus();
   };
 
@@ -187,16 +197,16 @@ export function NovaPoshtaSelector({
           </div>
 
           {/* City Dropdown */}
-          {showDropdown && uniqueCities.length > 0 && !selectedCity && (
+          {showDropdown && cities.length > 0 && !selectedCity && (
             <div className="absolute z-50 w-full mt-1 bg-canvas border-2 border-timber-dark shadow-lg max-h-60 overflow-y-auto">
-              {uniqueCities.map((item, idx) => (
+              {cities.map((item, idx) => (
                 <button
-                  key={`${item.city}-${idx}`}
+                  key={`${item.ref}-${idx}`}
                   type="button"
-                  onClick={() => handleCitySelect(item.city)}
+                  onClick={() => handleCitySelect(item)}
                   className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-timber-dark/10 last:border-b-0"
                 >
-                  <div className="font-medium">{item.city}</div>
+                  <div className="font-medium">{item.name}</div>
                   {item.region && (
                     <div className="text-xs text-timber-beam">{item.region}</div>
                   )}
@@ -240,9 +250,9 @@ export function NovaPoshtaSelector({
                   <Loader2 className="w-5 h-5 animate-spin mx-auto text-timber-beam" />
                   <p className="text-sm text-timber-beam mt-2">Завантаження...</p>
                 </div>
-              ) : cityDivisions.length > 0 ? (
+              ) : divisions.length > 0 ? (
                 <div>
-                  {cityDivisions.map((division) => (
+                  {divisions.map((division) => (
                     <button
                       key={division.id}
                       type="button"
@@ -287,7 +297,7 @@ export function NovaPoshtaSelector({
           )}
 
           <p className="text-xs text-timber-beam mt-2">
-            Знайдено {cityDivisions.length} відділень у місті {selectedCity}
+            Знайдено {divisions.length} відділень у місті {selectedCity}
           </p>
         </div>
       )}

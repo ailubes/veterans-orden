@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
+import { awardPoints, spendPoints } from '@/lib/points';
 
 interface RouteContext {
   params: Promise<{
@@ -59,25 +60,50 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Member not found' }, { status: 404 });
     }
 
-    // Calculate new points
     const oldPoints = member.points || 0;
-    const newPoints = Math.max(0, oldPoints + adjustment); // Ensure points don't go below 0
 
-    // Update member points
-    const { data: updatedMember, error: updateError } = await supabase
-      .from('users')
-      .update({ points: newPoints })
-      .eq('id', id)
-      .select()
-      .single();
+    // Use points service for adjustment
+    let transaction;
+    try {
+      if (adjustment > 0) {
+        // Award points for positive adjustment
+        transaction = await awardPoints({
+          userId: id,
+          amount: adjustment,
+          type: 'earn_admin',
+          description: `Адмін нарахування: ${reason}`,
+          createdById: adminProfile.id,
+          metadata: { reason, adjustedBy: adminProfile.email || adminProfile.id },
+        });
+      } else {
+        // Spend points for negative adjustment
+        const amountToSpend = Math.abs(adjustment);
 
-    if (updateError) {
-      console.error('[POST /api/admin/members/[id]/adjust-points] Update error:', updateError);
+        // Check if user has enough points
+        if (oldPoints < amountToSpend) {
+          return NextResponse.json(
+            { error: `Insufficient points. User has ${oldPoints} points, cannot deduct ${amountToSpend}` },
+            { status: 400 }
+          );
+        }
+
+        transaction = await spendPoints({
+          userId: id,
+          amount: amountToSpend,
+          type: 'spend_admin',
+          description: `Адмін коригування: ${reason}`,
+          metadata: { reason, adjustedBy: adminProfile.email || adminProfile.id },
+        });
+      }
+    } catch (pointsError) {
+      console.error('[POST /api/admin/members/[id]/adjust-points] Points service error:', pointsError);
       return NextResponse.json(
-        { error: 'Failed to adjust points' },
+        { error: pointsError instanceof Error ? pointsError.message : 'Failed to adjust points' },
         { status: 500 }
       );
     }
+
+    const newPoints = transaction.balanceAfter;
 
     // Create audit log
     await createAuditLog({
@@ -103,7 +129,16 @@ export async function POST(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json(
       {
-        data: updatedMember,
+        data: {
+          id,
+          points: newPoints,
+          transaction: {
+            id: transaction.id,
+            type: transaction.type,
+            amount: transaction.amount,
+            balanceAfter: transaction.balanceAfter,
+          },
+        },
         message: 'Points adjusted successfully',
         adjustment: {
           old: oldPoints,

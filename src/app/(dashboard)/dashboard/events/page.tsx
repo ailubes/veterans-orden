@@ -118,9 +118,11 @@ export default async function EventsPage({ searchParams }: PageProps) {
 
                 {/* Event Info */}
                 <div className="flex-1">
-                  <h3 className="font-syne text-xl font-bold mb-2">
-                    {event.title}
-                  </h3>
+                  <Link href={`/dashboard/events/${event.id}`}>
+                    <h3 className="font-syne text-xl font-bold mb-2 hover:text-accent transition-colors cursor-pointer">
+                      {event.title}
+                    </h3>
+                  </Link>
                   <p className="text-sm text-timber-beam mb-4 line-clamp-2">
                     {event.description}
                   </p>
