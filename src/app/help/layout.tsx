@@ -79,7 +79,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                     href="/help"
                     className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                       pathname === '/help'
-                        ? 'bg-accent text-canvas shadow-[2px_2px_0px_0px_rgba(44,40,36,0.3)]'
+                        ? 'bg-accent text-canvas border-2 border-timber-dark shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
                         : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                     }`}
                   >
@@ -97,7 +97,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                           href={`/help/${category.slug}`}
                           className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                             isActive
-                              ? 'bg-accent text-canvas shadow-[2px_2px_0px_0px_rgba(44,40,36,0.3)]'
+                              ? 'bg-accent text-canvas border-2 border-timber-dark shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
                               : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                           }`}
                         >
@@ -118,7 +118,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                                   href={`/help/${sub.slug}`}
                                   className={`flex items-center gap-2 px-3 py-1.5 text-xs transition-all rounded ${
                                     isSubActive
-                                      ? 'bg-accent/90 text-canvas shadow-[1px_1px_0px_0px_rgba(44,40,36,0.3)]'
+                                      ? 'bg-accent text-canvas border border-timber-dark shadow-[2px_2px_0px_0px_rgba(44,40,36,1)]'
                                       : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                                   }`}
                                 >
