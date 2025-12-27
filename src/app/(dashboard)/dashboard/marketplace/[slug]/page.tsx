@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Package, Download, Ticket, ShoppingCart, Check } from 'lucide-react';
@@ -14,7 +14,8 @@ interface ProductResponse {
   remainingQuantity: number;
 }
 
-export default function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [userPurchaseCount, setUserPurchaseCount] = useState(0);
@@ -28,7 +29,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const response = await fetch(`/api/marketplace/products/${params.slug}`);
+        const response = await fetch(`/api/marketplace/products/${slug}`);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error('Товар не знайдено');
@@ -49,7 +50,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     }
 
     fetchProduct();
-  }, [params.slug]);
+  }, [slug]);
 
   const handleAddToCart = () => {
     if (!product) return;
