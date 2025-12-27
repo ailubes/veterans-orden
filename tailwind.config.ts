@@ -14,8 +14,8 @@ const config: Config = {
   			'timber-dark': '#2c2824',
   			'timber-beam': '#4a4238',
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
+  				DEFAULT: '#d45d3a',
+  				foreground: '#f4f1eb'
   			},
   			grain: '#e8e2d6',
   			joint: '#1a1816',
