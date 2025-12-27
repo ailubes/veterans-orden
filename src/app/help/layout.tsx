@@ -42,7 +42,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
               </div>
             </div>
             <Link
-              href="/"
+              href="/dashboard"
               className="flex items-center gap-2 text-sm font-bold hover:text-accent transition-colors"
             >
               <Home size={18} />
