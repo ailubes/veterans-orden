@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Target,
   Trophy,
@@ -14,13 +15,15 @@ import {
   ChevronRight,
   Star,
   Loader2,
+  Award,
 } from 'lucide-react';
 import {
   CHALLENGE_TYPE_LABELS,
   CHALLENGE_STATUS_LABELS,
   CHALLENGE_GOAL_TYPE_LABELS,
+  BADGE_RARITY_LABELS,
 } from '@/lib/challenges';
-import type { ChallengeWithProgress, ChallengeType, ChallengeStatus } from '@/lib/challenges';
+import type { ChallengeWithProgress, ChallengeType, ChallengeStatus, UserBadge, BadgeRarity } from '@/lib/challenges';
 
 const goalIcons = {
   referrals: Users,
@@ -43,9 +46,17 @@ const typeColors = {
   special: 'border-orange-500 bg-orange-500/10',
 };
 
+const rarityColors: Record<BadgeRarity, string> = {
+  common: 'border-gray-400',
+  rare: 'border-blue-500',
+  epic: 'border-purple-500',
+  legendary: 'border-orange-500',
+};
+
 export default function ChallengesPage() {
   const [challenges, setChallenges] = useState<ChallengeWithProgress[]>([]);
   const [myChallenges, setMyChallenges] = useState<ChallengeWithProgress[]>([]);
+  const [myBadges, setMyBadges] = useState<UserBadge[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<{ type?: ChallengeType; status?: ChallengeStatus }>({
     status: 'active',
@@ -59,6 +70,7 @@ export default function ChallengesPage() {
   useEffect(() => {
     fetchChallenges();
     fetchMyChallenges();
+    fetchMyBadges();
   }, [filter]);
 
   async function fetchChallenges() {
@@ -94,6 +106,18 @@ export default function ChallengesPage() {
       }
     } catch (error) {
       console.error('Failed to fetch my challenges:', error);
+    }
+  }
+
+  async function fetchMyBadges() {
+    try {
+      const res = await fetch('/api/badges/my');
+      if (res.ok) {
+        const data = await res.json();
+        setMyBadges(data.badges || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch my badges:', error);
     }
   }
 
@@ -161,6 +185,48 @@ export default function ChallengesPage() {
           </div>
         </div>
       </div>
+
+      {/* My Badges */}
+      {myBadges.length > 0 && (
+        <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-8">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Award className="text-accent" size={20} />
+              <p className="label">МОЇ ВІДЗНАКИ ({myBadges.length})</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            {myBadges.slice(0, 8).map((userBadge) => (
+              <div
+                key={userBadge.id}
+                className={`w-14 h-14 rounded-lg border-2 ${rarityColors[userBadge.badge.rarity]} overflow-hidden bg-canvas hover:scale-110 transition-transform`}
+                title={`${userBadge.badge.nameUk} - ${BADGE_RARITY_LABELS[userBadge.badge.rarity].uk}`}
+              >
+                {userBadge.badge.iconUrl ? (
+                  <Image
+                    src={userBadge.badge.iconUrl}
+                    alt={userBadge.badge.nameUk}
+                    width={56}
+                    height={56}
+                    className="object-contain"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🏅</div>
+                )}
+              </div>
+            ))}
+            {myBadges.length > 8 && (
+              <div className="w-14 h-14 rounded-lg border-2 border-timber-dark/30 flex items-center justify-center text-sm font-bold text-timber-beam">
+                +{myBadges.length - 8}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* My Active Challenges */}
       {activeParticipations.length > 0 && (
