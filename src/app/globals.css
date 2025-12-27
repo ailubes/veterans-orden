@@ -362,30 +362,58 @@ body {
 }
 
 /* Joint (structural node) */
+/* Mobile/Tablet: 4x4px */
 .joint {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   background: var(--timber-dark);
   position: absolute;
   z-index: 5;
 }
 
 /* Joint corner positions - centered on card corners */
-.joint-tl { top: -3px; left: -3px; }
-.joint-tr { top: -3px; right: -3px; }
-.joint-bl { bottom: -3px; left: -3px; }
-.joint-br { bottom: -3px; right: -3px; }
-.joint-ct { top: -3px; left: 50%; transform: translateX(-50%); }
+/* Mobile/Tablet: -2px offset */
+.joint-tl { top: -2px; left: -2px; }
+.joint-tr { top: -2px; right: -2px; }
+.joint-bl { bottom: -2px; left: -2px; }
+.joint-br { bottom: -2px; right: -2px; }
+.joint-ct { top: -2px; left: 50%; transform: translateX(-50%); }
 
-/* Large joints for dialogs/modals (8x8px) */
-.joint-lg {
-  width: 8px;
-  height: 8px;
+/* Desktop: 6x6px with -3px offset */
+@media (min-width: 1024px) {
+  .joint {
+    width: 6px;
+    height: 6px;
+  }
+  .joint-tl { top: -3px; left: -3px; }
+  .joint-tr { top: -3px; right: -3px; }
+  .joint-bl { bottom: -3px; left: -3px; }
+  .joint-br { bottom: -3px; right: -3px; }
+  .joint-ct { top: -3px; left: 50%; transform: translateX(-50%); }
 }
-.joint-lg.joint-tl { top: -4px; left: -4px; }
-.joint-lg.joint-tr { top: -4px; right: -4px; }
-.joint-lg.joint-bl { bottom: -4px; left: -4px; }
-.joint-lg.joint-br { bottom: -4px; right: -4px; }
+
+/* Large joints for dialogs/modals */
+/* Mobile/Tablet: 6x6px */
+.joint-lg {
+  width: 6px;
+  height: 6px;
+}
+.joint-lg.joint-tl { top: -3px; left: -3px; }
+.joint-lg.joint-tr { top: -3px; right: -3px; }
+.joint-lg.joint-bl { bottom: -3px; left: -3px; }
+.joint-lg.joint-br { bottom: -3px; right: -3px; }
+
+/* Desktop: 8x8px */
+@media (min-width: 1024px) {
+  .joint-lg {
+    width: 8px;
+    height: 8px;
+  }
+  .joint-lg.joint-tl { top: -4px; left: -4px; }
+  .joint-lg.joint-tr { top: -4px; right: -4px; }
+  .joint-lg.joint-bl { bottom: -4px; left: -4px; }
+  .joint-lg.joint-br { bottom: -4px; right: -4px; }
+}
 
 /* Card with joints - ensure joints are visible outside */
 .card-with-joints {
