@@ -125,7 +125,7 @@ export default function AdminProductsPage() {
         </div>
         <Link
           href="/admin/marketplace/products/new"
-          className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors"
+          className="btn btn-primary"
         >
           <Plus size={20} />
           Додати товар
@@ -171,7 +171,7 @@ export default function AdminProductsPage() {
           <p className="text-timber-beam mb-6">Немає товарів</p>
           <Link
             href="/admin/marketplace/products/new"
-            className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors"
+            className="btn btn-primary"
           >
             <Plus size={20} />
             Додати перший товар
