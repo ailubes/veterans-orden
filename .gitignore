@@ -39,3 +39,6 @@ npm-debug.log*
 *.tsbuildinfo
 .vercel
 .env*.local
+
+# Sensitive documentation (credentials, passwords)
+docs/SMTP.md
