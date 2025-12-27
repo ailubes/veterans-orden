@@ -420,7 +420,7 @@ export default function NewProductPage() {
                     type="number"
                     min="0"
                     step="0.01"
-                    value={formData.price_uah ? (formData.price_uah / 100).toFixed(2) : ''}
+                    value={(formData.price_uah / 100).toFixed(2)}
                     onChange={(e) => {
                       const uah = parseFloat(e.target.value) || 0;
                       setFormData({ ...formData, price_uah: Math.round(uah * 100) });
