@@ -1,7 +1,17 @@
 /**
  * Upload context types
  */
-export type UploadContext = 'news_featured' | 'news_inline' | 'news_document';
+export type UploadContext =
+  | 'user_avatar'
+  | 'news_featured'
+  | 'news_inline'
+  | 'news_document'
+  | 'event_image'
+  | 'task_proof'
+  | 'product_featured'
+  | 'product_gallery'
+  | 'product_digital_asset'
+  | 'other';
 
 /**
  * Request to generate presigned URL
