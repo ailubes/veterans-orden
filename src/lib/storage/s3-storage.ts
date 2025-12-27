@@ -61,6 +61,10 @@ export function generateUniqueFilename(originalFilename: string): string {
  * │   └── documents/     - PDF and document attachments
  * ├── events/
  * │   └── images/        - Event cover images
+ * ├── products/
+ * │   ├── featured/      - Product cover images
+ * │   ├── gallery/       - Product gallery images
+ * │   └── digital/       - Digital product assets (PDFs, ZIPs, etc.)
  * └── uploads/
  *     └── other/         - Miscellaneous uploads
  */
@@ -71,6 +75,9 @@ export type UploadContext =
   | 'news_document'
   | 'event_image'
   | 'task_proof'
+  | 'product_featured'
+  | 'product_gallery'
+  | 'product_digital_asset'
   | 'other';
 
 /**
@@ -91,6 +98,11 @@ export function getFilePath(context: string, filename: string): string {
 
     // Task proofs/screenshots
     task_proof: 'task-proofs',
+
+    // Marketplace Products
+    product_featured: 'products/featured',
+    product_gallery: 'products/gallery',
+    product_digital_asset: 'products/digital',
 
     // Other
     other: 'uploads/other',
@@ -263,6 +275,8 @@ const documentTypes = [
  * - User avatars: 100KB (optimized on client)
  * - News images: 200KB (optimized on client)
  * - Documents: 5MB (no optimization)
+ * - Product images: 200KB (optimized on client)
+ * - Digital assets: 100MB (no optimization)
  */
 export const FILE_SIZE_LIMITS = {
   user_avatar: 100 * 1024, // 100KB
@@ -271,6 +285,9 @@ export const FILE_SIZE_LIMITS = {
   news_document: 5 * 1024 * 1024, // 5MB
   event_image: 200 * 1024, // 200KB
   task_proof: 100 * 1024, // 100KB - compressed screenshots
+  product_featured: 200 * 1024, // 200KB
+  product_gallery: 150 * 1024, // 150KB - smaller for gallery images
+  product_digital_asset: 100 * 1024 * 1024, // 100MB - large files for digital products
   other: 5 * 1024 * 1024, // 5MB
 } as const;
 
@@ -284,6 +301,9 @@ export const MAX_UPLOAD_SIZE = {
   news_document: 5 * 1024 * 1024, // 5MB (no compression)
   event_image: 10 * 1024 * 1024, // 10MB before compression
   task_proof: 10 * 1024 * 1024, // 10MB before compression
+  product_featured: 10 * 1024 * 1024, // 10MB before compression
+  product_gallery: 10 * 1024 * 1024, // 10MB before compression
+  product_digital_asset: 100 * 1024 * 1024, // 100MB (no compression)
   other: 5 * 1024 * 1024, // 5MB
 } as const;
 
@@ -291,6 +311,18 @@ export const MAX_UPLOAD_SIZE = {
  * Validate file type based on upload context
  */
 export function isValidFileType(fileType: string, context: string): boolean {
+  const digitalAssetTypes = [
+    ...imageTypes,
+    ...documentTypes,
+    'application/zip',
+    'application/x-zip-compressed',
+    'video/mp4',
+    'video/quicktime',
+    'audio/mpeg',
+    'audio/mp3',
+    'audio/wav',
+  ];
+
   const allowedTypes: Record<string, string[]> = {
     // User content
     user_avatar: imageTypes,
@@ -305,6 +337,11 @@ export function isValidFileType(fileType: string, context: string): boolean {
 
     // Task proofs - screenshots
     task_proof: imageTypes,
+
+    // Marketplace Products
+    product_featured: imageTypes,
+    product_gallery: imageTypes,
+    product_digital_asset: digitalAssetTypes,
 
     // Other - allow both images and documents
     other: [...imageTypes, ...documentTypes],
