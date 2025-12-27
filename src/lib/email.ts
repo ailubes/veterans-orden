@@ -1,5 +1,11 @@
 import nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
+import {
+  getEmailTemplate,
+  substituteVariables,
+  logEmailSend,
+  validateTemplateVariables,
+} from '@/lib/email-templates';
 
 const FROM_EMAIL = process.env.SMTP_FROM || 'Мережа Вільних Людей <info@freepeople.org.ua>';
 
@@ -54,6 +60,90 @@ export async function sendEmail(options: EmailOptions) {
     return { id: info.messageId, success: true };
   } catch (error) {
     console.error('[Email] Error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Send templated email with database template or hardcoded fallback
+ */
+async function sendTemplatedEmail(
+  templateKey: string,
+  to: string,
+  variables: Record<string, string | number>,
+  fallbackHtml: string,
+  fallbackText: string,
+  fallbackSubject: string,
+  userId?: string
+) {
+  try {
+    let subject: string;
+    let html: string;
+    let text: string | undefined;
+    let templateVersion: number | null = null;
+
+    // Try to get custom template from database
+    const customTemplate = await getEmailTemplate(templateKey);
+
+    if (customTemplate) {
+      // Use custom template
+      console.log(`[Email] Using custom template for ${templateKey}`);
+
+      // Validate variables
+      const validation = validateTemplateVariables(
+        customTemplate.available_variables as string[],
+        variables
+      );
+
+      if (!validation.valid) {
+        console.warn(`[Email] Missing variables for ${templateKey}:`, validation.missing);
+      }
+
+      subject = substituteVariables(customTemplate.subject, variables);
+      html = substituteVariables(customTemplate.html_content, variables);
+      text = customTemplate.text_content
+        ? substituteVariables(customTemplate.text_content, variables)
+        : undefined;
+      templateVersion = customTemplate.version;
+    } else {
+      // Fallback to hardcoded template
+      console.log(`[Email] Using hardcoded template for ${templateKey}`);
+      subject = fallbackSubject;
+      html = fallbackHtml;
+      text = fallbackText;
+    }
+
+    // Send email
+    const result = await sendEmail({ to, subject, html, text });
+
+    // Log send event
+    await logEmailSend({
+      templateKey,
+      templateVersion,
+      recipientEmail: to,
+      recipientUserId: userId,
+      subject,
+      variablesUsed: variables,
+      status: 'sent',
+      providerMessageId: result.id,
+    });
+
+    return result;
+  } catch (error) {
+    console.error(`[Email] Error sending ${templateKey}:`, error);
+
+    // Log failed send
+    await logEmailSend({
+      templateKey,
+      templateVersion: null,
+      recipientEmail: to,
+      recipientUserId: userId,
+      subject: `Failed: ${templateKey}`,
+      variablesUsed: variables,
+      status: 'failed',
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+    });
+
     throw error;
   }
 }
@@ -133,12 +223,14 @@ export async function sendWelcomeEmail(
 ГУРТУЄМОСЬ, ЩОБ ВПЛИВАТИ!
   `;
 
-  return sendEmail({
+  return sendTemplatedEmail(
+    'welcome',
     to,
-    subject: '🎉 Ласкаво просимо до Мережі Вільних Людей!',
+    { firstName, lastName },
     html,
     text,
-  });
+    '🎉 Ласкаво просимо до Мережі Вільних Людей!'
+  );
 }
 
 /**
