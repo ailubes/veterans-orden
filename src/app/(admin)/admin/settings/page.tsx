@@ -5,6 +5,7 @@ import OrganizationProfileTab from '@/components/admin/settings/organization-pro
 import RoleManagementTab from '@/components/admin/settings/role-management-tab';
 import OblastsManagementTab from '@/components/admin/settings/oblasts-management-tab';
 import SystemConfigTab from '@/components/admin/settings/system-config-tab';
+import EmailTemplatesTab from '@/components/admin/settings/email-templates-tab';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -64,6 +65,12 @@ export default async function AdminSettingsPage() {
             Аудит
           </TabsTrigger>
           <TabsTrigger
+            value="email-templates"
+            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+          >
+            Email
+          </TabsTrigger>
+          <TabsTrigger
             value="system"
             className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
             disabled={!isSuperAdmin(adminProfile.role)}
@@ -103,6 +110,10 @@ export default async function AdminSettingsPage() {
               Відкрити журнал аудиту
             </Link>
           </div>
+        </TabsContent>
+
+        <TabsContent value="email-templates" className="mt-0">
+          <EmailTemplatesTab adminProfile={adminProfile} />
         </TabsContent>
 
         <TabsContent value="system" className="mt-0">
