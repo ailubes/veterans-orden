@@ -247,10 +247,10 @@ export default function EventEditPage({ params }: EventEditPageProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Основна інформація</h2>
 
@@ -320,10 +320,10 @@ export default function EventEditPage({ params }: EventEditPageProps) {
 
         {/* Location */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Місце проведення</h2>
 
@@ -366,10 +366,10 @@ export default function EventEditPage({ params }: EventEditPageProps) {
 
         {/* Date & Time */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Дата та час</h2>
 
@@ -423,10 +423,10 @@ export default function EventEditPage({ params }: EventEditPageProps) {
 
         {/* Settings */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
 

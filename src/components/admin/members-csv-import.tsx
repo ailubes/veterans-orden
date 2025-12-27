@@ -149,8 +149,8 @@ export function MembersCSVImport() {
     <div className="space-y-6">
       {/* Instructions Card */}
       <div className="bg-blue-50 border-2 border-blue-200 p-4 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
 
         <h3 className="font-bold mb-2 flex items-center gap-2">
           <AlertCircle className="w-5 h-5 text-blue-600" />
@@ -173,10 +173,10 @@ export function MembersCSVImport() {
 
       {/* Upload Card */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <h3 className="font-bold mb-4">Завантаження CSV файлу</h3>
 
@@ -202,10 +202,10 @@ export function MembersCSVImport() {
       {/* Preview */}
       {parsedData.length > 0 && !results && (
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h3 className="font-bold mb-4">
             Попередній перегляд ({parsedData.length} записів)
@@ -257,10 +257,10 @@ export function MembersCSVImport() {
       {/* Results */}
       {results && summary && (
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <h3 className="font-bold mb-4">Результати імпорту</h3>
 

@@ -346,10 +346,10 @@ export default function SettingsPage() {
 
       {/* Account Summary */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-6">ІНФОРМАЦІЯ ПРО АКАУНТ</p>
 
@@ -396,10 +396,10 @@ export default function SettingsPage() {
 
       {/* Referral Section */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-6">РЕФЕРАЛЬНА ПРОГРАМА</p>
 
@@ -460,10 +460,10 @@ export default function SettingsPage() {
       {/* Message to Leader Section */}
       {(user.referredById || user.regionalLeaderId) && (
         <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <p className="label text-accent mb-6">НАПИСАТИ ЛІДЕРУ</p>
 
@@ -479,10 +479,10 @@ export default function SettingsPage() {
 
       {/* Profile Photo */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-6">ФОТО ПРОФІЛЮ</p>
 
@@ -498,10 +498,10 @@ export default function SettingsPage() {
 
       {/* Profile Form */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-6">ОСОБИСТІ ДАНІ</p>
 
@@ -701,10 +701,10 @@ export default function SettingsPage() {
 
       {/* Verification Status */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-6">СТАТУС ВЕРИФІКАЦІЇ</p>
 
@@ -755,10 +755,10 @@ export default function SettingsPage() {
 
       {/* Membership */}
       <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-4">ЧЛЕНСТВО</p>
 

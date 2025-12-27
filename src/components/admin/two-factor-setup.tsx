@@ -137,10 +137,10 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
   if (!setupMode && !isEnabled) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <div className="flex items-start gap-4">
           <Shield className="w-8 h-8 text-timber-beam flex-shrink-0" />
@@ -166,10 +166,10 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
   if (setupMode) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
           <Shield className="w-6 h-6 text-accent" />
@@ -276,10 +276,10 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
   // 2FA is enabled
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">

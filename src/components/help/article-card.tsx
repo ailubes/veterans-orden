@@ -23,10 +23,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
       href={`/help/${categorySlug}/${article.slug}`}
       className="bg-canvas border-2 border-timber-dark relative hover:border-accent transition-colors group block"
     >
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <div className="p-6">
         {/* Category Badge */}

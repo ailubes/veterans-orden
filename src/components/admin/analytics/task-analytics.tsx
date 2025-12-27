@@ -90,7 +90,7 @@ export function TaskAnalytics() {
   if (loading) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint joint-tl" />
         <div className="animate-pulse space-y-4">
           <div className="h-6 bg-timber-dark/10 w-1/3" />
           <div className="h-40 bg-timber-dark/10" />
@@ -115,7 +115,7 @@ export function TaskAnalytics() {
       {/* Task Overview Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
               <CheckSquare className="text-accent" size={16} />
@@ -128,7 +128,7 @@ export function TaskAnalytics() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
               <TrendingUp className="text-green-500" size={16} />
@@ -141,7 +141,7 @@ export function TaskAnalytics() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
               <Star className="text-yellow-500" size={16} />
@@ -154,7 +154,7 @@ export function TaskAnalytics() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
               <Clock className="text-purple-500" size={16} />
@@ -170,8 +170,8 @@ export function TaskAnalytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Trend Chart */}
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Виконання за останні 30 днів</h3>
 
@@ -204,8 +204,8 @@ export function TaskAnalytics() {
 
         {/* Top Performers */}
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-syne text-base sm:text-lg font-bold flex items-center gap-2">
@@ -259,7 +259,7 @@ export function TaskAnalytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
 
           <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за статусом</h3>
 
@@ -295,7 +295,7 @@ export function TaskAnalytics() {
 
         {/* Priority Distribution */}
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
 
           <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за пріоритетом</h3>
 
@@ -326,8 +326,8 @@ export function TaskAnalytics() {
 
       {/* Submissions Stats */}
       <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <h3 className="font-syne text-base sm:text-lg font-bold">Статистика підтверджень</h3>

@@ -49,10 +49,10 @@ export default function NewsPage() {
                 alignItems: 'center',
               }}
             >
-              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-              <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+              <div className="joint joint-tl" />
+              <div className="joint joint-tr" />
+              <div className="joint joint-bl" />
+              <div className="joint joint-br" />
 
               <div>
                 <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>

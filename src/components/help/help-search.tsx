@@ -187,8 +187,8 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
           ref={dropdownRef}
           className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-timber-dark shadow-lg max-h-96 overflow-y-auto z-50"
         >
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <div className="p-2">
             {results.map((result, index) => (
@@ -249,8 +249,8 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
           ref={dropdownRef}
           className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-timber-dark p-6 text-center z-50"
         >
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <Search className="mx-auto mb-2 text-timber-beam" size={32} />
           <p className="text-timber-beam text-sm">

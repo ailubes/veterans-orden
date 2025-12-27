@@ -57,10 +57,10 @@ export function DeleteConfirmationDialog({
       {/* Dialog */}
       <div className="relative bg-canvas border-4 border-timber-dark max-w-md w-full shadow-2xl">
         {/* Joints */}
-        <div className="joint" style={{ top: '-8px', left: '-8px' }} />
-        <div className="joint" style={{ top: '-8px', right: '-8px' }} />
-        <div className="joint" style={{ bottom: '-8px', left: '-8px' }} />
-        <div className="joint" style={{ bottom: '-8px', right: '-8px' }} />
+        <div className="joint joint-lg joint-tl" />
+        <div className="joint joint-lg joint-tr" />
+        <div className="joint joint-lg joint-bl" />
+        <div className="joint joint-lg joint-br" />
 
         {/* Close button */}
         {!isDeleting && (

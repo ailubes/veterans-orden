@@ -121,8 +121,8 @@ export default async function SubmissionsPage() {
       {/* Empty state for pending */}
       {pendingSubmissions.length === 0 && (
         <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center mb-8">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
           <FileCheck className="w-12 h-12 mx-auto mb-4 text-green-500" />
           <h3 className="font-syne text-xl font-bold mb-2">
             Всі підтвердження перевірені!
@@ -140,8 +140,8 @@ export default async function SubmissionsPage() {
             Історія перевірок ({reviewedSubmissions.length})
           </h2>
           <div className="bg-canvas border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="border-b-2 border-timber-dark">

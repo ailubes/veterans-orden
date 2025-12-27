@@ -120,8 +120,8 @@ export default function MarketplacePage() {
 
       {/* Filters */}
       <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
 
         <div className="flex items-center gap-2 mb-4">
           <Filter className="text-accent" size={20} />
@@ -189,7 +189,7 @@ export default function MarketplacePage() {
       {/* Products Grid */}
       {products.length === 0 ? (
         <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <ShoppingBag className="mx-auto mb-4 text-timber-beam" size={48} />
           <p className="text-timber-beam">Немає товарів за обраними фільтрами</p>
         </div>
@@ -206,10 +206,10 @@ export default function MarketplacePage() {
                 href={`/dashboard/marketplace/${product.slug}`}
                 className="bg-canvas border-2 border-timber-dark relative hover:border-accent transition-colors group"
               >
-                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-                <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-                <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+                <div className="joint joint-tl" />
+                <div className="joint joint-tr" />
+                <div className="joint joint-bl" />
+                <div className="joint joint-br" />
 
                 {/* Image */}
                 {product.imageUrl ? (

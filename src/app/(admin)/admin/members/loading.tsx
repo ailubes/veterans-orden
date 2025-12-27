@@ -27,8 +27,8 @@ export default function MembersLoading() {
 
       {/* Filters Skeleton */}
       <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
         <div className="flex flex-wrap gap-4">
           <Skeleton className="h-10 flex-1 min-w-[200px]" />
           <Skeleton className="h-10 w-32" />
@@ -40,10 +40,10 @@ export default function MembersLoading() {
 
       {/* Table Skeleton */}
       <div className="bg-canvas border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         {/* Header */}
         <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-timber-dark bg-timber-dark/5">

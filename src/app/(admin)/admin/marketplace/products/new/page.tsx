@@ -261,8 +261,8 @@ export default function NewProductPage() {
         {/* Tab 1: Basic Information */}
         <Tabs.Content value="basic" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <h2 className="text-xl font-bold mb-4">Основна інформація</h2>
 
@@ -385,8 +385,8 @@ export default function NewProductPage() {
         {/* Tab 2: Pricing & Stock */}
         <Tabs.Content value="pricing" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <h2 className="text-xl font-bold mb-4">Ціни і склад</h2>
 
@@ -512,8 +512,8 @@ export default function NewProductPage() {
         {/* Tab 3: Media */}
         <Tabs.Content value="media" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <h2 className="text-xl font-bold mb-4">Медіа</h2>
 
@@ -543,8 +543,8 @@ export default function NewProductPage() {
         {/* Tab 4: Delivery/Digital */}
         <Tabs.Content value="delivery" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <h2 className="text-xl font-bold mb-4">
               {formData.type === 'physical' && 'Доставка'}
@@ -712,8 +712,8 @@ export default function NewProductPage() {
         {/* Tab 5: Advanced */}
         <Tabs.Content value="advanced" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <h2 className="text-xl font-bold mb-4">Розширені налаштування</h2>
 

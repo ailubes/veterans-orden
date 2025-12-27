@@ -7,31 +7,29 @@ export interface JointProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'default' | 'lg';
 }
 
-const positionStyles = {
-  'top-left': { top: '-3px', left: '-3px' },
-  'top-right': { top: '-3px', right: '-3px' },
-  'bottom-left': { bottom: '-3px', left: '-3px' },
-  'bottom-right': { bottom: '-3px', right: '-3px' },
-  'center-top': { top: '-3px', left: '50%', transform: 'translateX(-50%)' },
+const positionClasses = {
+  'top-left': 'joint-tl',
+  'top-right': 'joint-tr',
+  'bottom-left': 'joint-bl',
+  'bottom-right': 'joint-br',
+  'center-top': 'joint-ct',
 };
 
-const sizeStyles = {
-  sm: 'w-2 h-2',
-  default: 'w-3 h-3',
-  lg: 'w-4 h-4',
+const sizeClasses = {
+  sm: '', // Uses default 6x6px
+  default: '', // Uses default 6x6px
+  lg: 'joint-lg', // Uses 8x8px
 };
 
 export function Joint({
   position = 'top-left',
   size = 'default',
   className,
-  style,
   ...props
 }: JointProps) {
   return (
     <div
-      className={cn('joint', sizeStyles[size], className)}
-      style={{ ...positionStyles[position], ...style }}
+      className={cn('joint', positionClasses[position], sizeClasses[size], className)}
       aria-hidden="true"
       {...props}
     />

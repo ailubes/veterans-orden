@@ -53,8 +53,8 @@ export default async function LeaderboardPage() {
       {/* User Stats */}
       {profile && (
         <div className="bg-timber-dark text-canvas p-6 relative mb-8">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <p className="label text-accent mb-4">ВАШ СТАТУС</p>
 
@@ -80,8 +80,8 @@ export default async function LeaderboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top by Points */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <div className="flex items-center gap-2 mb-6">
             <Star className="text-accent" size={20} />
@@ -127,8 +127,8 @@ export default async function LeaderboardPage() {
 
         {/* Top by Referrals */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp className="text-accent" size={20} />
@@ -172,7 +172,7 @@ export default async function LeaderboardPage() {
 
       {/* Levels Info */}
       <div className="mt-8 bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint joint-tl" />
 
         <h2 className="font-syne text-xl font-bold mb-4">Система рівнів</h2>
 

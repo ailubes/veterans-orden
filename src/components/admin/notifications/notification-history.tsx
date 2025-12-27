@@ -69,8 +69,8 @@ export function NotificationHistory() {
   if (loading) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
         <div className="text-center py-8 text-timber-beam">
           <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-2" />
           <p className="text-sm">Завантаження...</p>
@@ -82,10 +82,10 @@ export function NotificationHistory() {
   if (notifications.length === 0) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <div className="text-center py-8 text-timber-beam">
           <Bell className="w-12 h-12 mx-auto mb-3 opacity-30" />
@@ -97,10 +97,10 @@ export function NotificationHistory() {
 
   return (
     <div className="bg-canvas border-2 border-timber-dark relative">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <div className="max-h-[600px] overflow-y-auto">
         {notifications.map((notification) => (

@@ -144,8 +144,8 @@ export function HelpTooltip({
             ref={popoverRef}
             className={`absolute z-50 w-80 bg-white border-2 border-timber-dark shadow-lg ${getPositionClasses()}`}
           >
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             {/* Header */}
             <div className="flex items-center justify-between p-3 border-b-2 border-timber-dark bg-timber-dark/5">

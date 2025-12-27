@@ -96,10 +96,10 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
   if (!referralCode) {
     return (
       <div className="bg-timber-dark text-canvas p-6 lg:p-8 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="text-center py-4">
           Завершіть онбординг, щоб отримати ваше запрошувальне посилання
@@ -110,10 +110,10 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
 
   return (
     <div className="bg-timber-dark text-canvas p-6 lg:p-8 relative mb-8">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <p className="label text-accent mb-4">ТВОЄ ЗАПРОШУВАЛЬНЕ ПОСИЛАННЯ</p>
 

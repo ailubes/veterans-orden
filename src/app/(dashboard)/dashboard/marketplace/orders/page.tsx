@@ -146,7 +146,7 @@ export default function OrdersPage() {
       {/* Orders List */}
       {orders.length === 0 ? (
         <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <Package className="mx-auto mb-4 text-timber-beam" size={48} />
           <p className="text-timber-beam mb-6">У вас ще немає замовлень</p>
           <Link
@@ -167,10 +167,10 @@ export default function OrdersPage() {
                 href={`/dashboard/marketplace/orders/${order.id}`}
                 className="block bg-canvas border-2 border-timber-dark p-6 relative hover:border-accent transition-colors"
               >
-                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-                <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-                <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+                <div className="joint joint-tl" />
+                <div className="joint joint-tr" />
+                <div className="joint joint-bl" />
+                <div className="joint joint-br" />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1">

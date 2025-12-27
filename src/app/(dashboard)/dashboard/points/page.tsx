@@ -113,10 +113,10 @@ export default function PointsPage() {
 
       {/* Balance Card */}
       <div className="bg-timber-dark text-canvas p-6 relative mb-8">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <div className="flex items-center gap-2 mb-6">
           <Coins className="text-accent" size={24} />
@@ -170,8 +170,8 @@ export default function PointsPage() {
       {/* Level Progress */}
       {pointsToNext !== null && (
         <div className="bg-canvas border-2 border-timber-dark p-6 mb-8 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -198,8 +198,8 @@ export default function PointsPage() {
 
       {/* Transaction History */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
 
         <div className="flex items-center gap-2 mb-6">
           <History className="text-accent" size={20} />

@@ -105,10 +105,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
   if (loading) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
         <div className="animate-pulse space-y-3">
@@ -129,10 +129,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
   if (error) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
         <div className="text-center py-8 text-timber-beam">
@@ -145,10 +145,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
   if (activities.length === 0) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
         <div className="text-center py-8 text-timber-beam">
@@ -162,10 +162,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <p className="label text-accent mb-6">АКТИВНІСТЬ ЧЛЕНА</p>
 

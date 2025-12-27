@@ -44,10 +44,10 @@ export function VideoEmbed({ url, title }: VideoEmbedProps) {
 
   return (
     <div className="bg-white border-2 border-timber-dark relative overflow-hidden">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
+      <div className="joint joint-bl" />
+      <div className="joint joint-br" />
 
       <div className="aspect-video">
         <iframe

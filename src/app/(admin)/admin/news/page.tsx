@@ -83,8 +83,8 @@ export default async function AdminNewsPage() {
 
       {/* Articles Table */}
       <div className="bg-canvas border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
 
         {articles && articles.length > 0 ? (
           <div className="overflow-x-auto">

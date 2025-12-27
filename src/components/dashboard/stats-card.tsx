@@ -14,8 +14,8 @@ export function StatsCard({ label, value, change, changeType = 'neutral' }: Stat
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint joint-tl" />
+      <div className="joint joint-tr" />
 
       <p className="label mb-2">{label}</p>
       <p className="font-syne text-4xl font-bold">{value}</p>

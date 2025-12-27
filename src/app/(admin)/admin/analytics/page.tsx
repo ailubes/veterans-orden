@@ -103,7 +103,7 @@ export default async function AdminAnalyticsPage() {
       {/* Main Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
         <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label text-accent mb-1 sm:mb-2">ВСЬОГО ЧЛЕНІВ</p>
@@ -117,7 +117,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">НОВИХ ЗА ТИЖДЕНЬ</p>
@@ -133,7 +133,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ПОДІЇ</p>
@@ -147,7 +147,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ГОЛОСУВАННЯ</p>
@@ -161,7 +161,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ЗАВДАННЯ</p>
@@ -175,7 +175,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">КОНВЕРСІЯ</p>
@@ -207,8 +207,8 @@ export default async function AdminAnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Regional Distribution */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Топ-10 регіонів</h2>
 
@@ -252,8 +252,8 @@ export default async function AdminAnalyticsPage() {
 
         {/* Membership Tiers */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Рівні членства</h2>
 
@@ -286,10 +286,10 @@ export default async function AdminAnalyticsPage() {
 
       {/* Goal Progress */}
       <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <h2 className="font-syne text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-accent">
           Прогрес до мети: 1,000,000 членів

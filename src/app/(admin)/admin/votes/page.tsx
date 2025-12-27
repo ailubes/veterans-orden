@@ -89,7 +89,7 @@ export default async function AdminVotesPage() {
                 key={vote.id}
                 className="bg-canvas border-2 border-timber-dark p-4 relative"
               >
-                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint joint-tl" />
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-sm line-clamp-2">{vote.title}</h3>
@@ -139,8 +139,8 @@ export default async function AdminVotesPage() {
 
           {/* Desktop Table */}
           <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="border-b-2 border-timber-dark">
@@ -224,8 +224,8 @@ export default async function AdminVotesPage() {
         </>
       ) : (
         <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
           <Vote className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
           <h3 className="font-syne text-xl font-bold mb-2">
             Немає голосувань

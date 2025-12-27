@@ -165,7 +165,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint joint-tl" />
           <ShoppingCart className="mx-auto mb-4 text-timber-beam" size={48} />
           <p className="text-timber-beam mb-6">Ваш кошик порожній</p>
           <Link
@@ -207,8 +207,8 @@ export default function CheckoutPage() {
                 key={item.productId}
                 className="bg-canvas border-2 border-timber-dark p-4 relative"
               >
-                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+                <div className="joint joint-tl" />
+                <div className="joint joint-tr" />
 
                 <div className="flex gap-4">
                   {item.product.imageUrl && (
@@ -260,8 +260,8 @@ export default function CheckoutPage() {
           {/* Shipping Form */}
           {requiresShipping && (
             <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+              <div className="joint joint-tl" />
+              <div className="joint joint-tr" />
 
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="text-accent" size={20} />
@@ -385,7 +385,7 @@ export default function CheckoutPage() {
 
           {/* Notes */}
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint joint-tl" />
             <label className="block font-bold mb-2">Коментар до замовлення</label>
             <textarea
               value={customerNotes}

@@ -121,10 +121,10 @@ export default function HelpAnalyticsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           {/* Total Articles */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <FileText className="text-timber-beam mb-2" size={24} />
             <p className="text-sm text-timber-beam uppercase tracking-wider mb-1">
@@ -135,10 +135,10 @@ export default function HelpAnalyticsPage() {
 
           {/* Published */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <TrendingUp className="text-green-600 mb-2" size={24} />
             <p className="text-sm text-timber-beam uppercase tracking-wider mb-1">
@@ -149,10 +149,10 @@ export default function HelpAnalyticsPage() {
 
           {/* Total Views */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <Eye className="text-accent mb-2" size={24} />
             <p className="text-sm text-timber-beam uppercase tracking-wider mb-1">
@@ -163,10 +163,10 @@ export default function HelpAnalyticsPage() {
 
           {/* Helpful Rate */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <ThumbsUp className="text-green-600 mb-2" size={24} />
             <p className="text-sm text-timber-beam uppercase tracking-wider mb-1">
@@ -181,10 +181,10 @@ export default function HelpAnalyticsPage() {
 
           {/* Total Feedback */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <MessageSquare className="text-timber-beam mb-2" size={24} />
             <p className="text-sm text-timber-beam uppercase tracking-wider mb-1">
@@ -196,10 +196,10 @@ export default function HelpAnalyticsPage() {
 
         {/* Top Viewed Articles */}
         <div className="bg-white border-2 border-timber-dark p-6 mb-8 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="text-accent" size={24} />
@@ -284,10 +284,10 @@ export default function HelpAnalyticsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Low Performing Articles */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="text-red-600" size={24} />
@@ -331,10 +331,10 @@ export default function HelpAnalyticsPage() {
 
           {/* Category Performance */}
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
+            <div className="joint joint-br" />
 
             <div className="flex items-center gap-2 mb-4">
               <BarChart3 className="text-accent" size={24} />
@@ -392,10 +392,10 @@ export default function HelpAnalyticsPage() {
 
         {/* Recent Feedback */}
         <div className="bg-white border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
-          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
+          <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <div className="flex items-center gap-2 mb-4">
             <MessageSquare className="text-accent" size={24} />

@@ -171,7 +171,7 @@ export default async function TasksPage({ searchParams }: PageProps) {
                 key={task.id}
                 className="bg-canvas border-2 border-timber-dark p-4 relative hover:border-accent transition-colors"
               >
-                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint joint-tl" />
 
                 <div className="flex items-start gap-4">
                   <div
@@ -216,8 +216,8 @@ export default async function TasksPage({ searchParams }: PageProps) {
           </div>
         ) : (
           <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
 
             <CheckSquare className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
             <h3 className="font-syne text-xl font-bold mb-2">
@@ -235,7 +235,7 @@ export default async function TasksPage({ searchParams }: PageProps) {
 
       {/* Points Info */}
       <div className="mt-8 bg-timber-dark text-canvas p-4 relative">
-        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint joint-tl" />
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs opacity-60">ВАШІ БАЛИ</p>
