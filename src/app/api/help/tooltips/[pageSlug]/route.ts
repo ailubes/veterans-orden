@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * GET /api/help/tooltips/[pageSlug]
@@ -13,27 +12,18 @@ export async function GET(
 ) {
   try {
     const { pageSlug } = await params;
-    const supabase = await createClient();
 
     // Get user role for audience filtering
     let userRole = 'all';
-    const { userId } = await auth();
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
 
-    if (userId) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('clerk_id', userId)
-        .single();
-
-      if (userData) {
-        userRole = userData.role;
-      }
+    if (user && profile) {
+      userRole = profile.role;
     }
 
     // Fetch active tooltips for this page
     // Filter by audience: show if audience is 'all' OR matches user role
-    const { data: tooltips, error } = await supabase
+    const { data: tooltips, error: dbError } = await supabase
       .from('help_tooltips')
       .select(`
         id,
@@ -49,9 +39,9 @@ export async function GET(
       .or(`audience.eq.all,audience.eq.${userRole === 'admin' ? 'admins' : userRole === 'leader' ? 'leaders' : 'members'}`)
       .order('element_id', { ascending: true });
 
-    if (error) {
-      console.error('[Get Tooltips] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     // Transform to a map for easy lookup by elementId
@@ -66,7 +56,7 @@ export async function GET(
 
     return NextResponse.json({ tooltips: tooltipsMap });
   } catch (error) {
-    console.error('[Get Tooltips] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

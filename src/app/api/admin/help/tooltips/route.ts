@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * GET /api/admin/help/tooltips
@@ -8,21 +7,14 @@ import { createClient } from '@/lib/db/supabase-server';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
 
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -50,16 +42,16 @@ export async function GET(request: NextRequest) {
       query = query.eq('is_active', isActive === 'true');
     }
 
-    const { data: tooltips, error } = await query;
+    const { data: tooltips, error: dbError } = await query;
 
-    if (error) {
-      console.error('[Admin Get Tooltips] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ tooltips: tooltips || [] });
   } catch (error) {
-    console.error('[Admin Get Tooltips] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -73,21 +65,14 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
 
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -125,7 +110,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create tooltip
-    const { data: tooltip, error } = await supabase
+    const { data: tooltip, error: dbError } = await supabase
       .from('help_tooltips')
       .insert({
         page_slug: pageSlug,
@@ -138,14 +123,14 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (error) {
-      console.error('[Admin Create Tooltip] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ tooltip }, { status: 201 });
   } catch (error) {
-    console.error('[Admin Create Tooltip] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

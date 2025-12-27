@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * GET /api/admin/help/categories
@@ -8,26 +7,19 @@ import { createClient } from '@/lib/db/supabase-server';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
 
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Fetch all categories with article counts
-    const { data: categories, error } = await supabase
+    const { data: categories, error: dbError } = await supabase
       .from('help_categories')
       .select(`
         *,
@@ -35,9 +27,9 @@ export async function GET(request: NextRequest) {
       `)
       .order('order', { ascending: true });
 
-    if (error) {
-      console.error('[Admin Get Categories] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     // Transform to include article count
@@ -48,7 +40,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ categories: categoriesWithCount || [] });
   } catch (error) {
-    console.error('[Admin Get Categories] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -62,21 +54,14 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
 
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -115,7 +100,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create category
-    const { data: category, error } = await supabase
+    const { data: category, error: dbError } = await supabase
       .from('help_categories')
       .insert({
         name_uk: nameUk,
@@ -130,14 +115,14 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (error) {
-      console.error('[Admin Create Category] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ category }, { status: 201 });
   } catch (error) {
-    console.error('[Admin Create Category] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

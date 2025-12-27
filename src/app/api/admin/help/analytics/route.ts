@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * GET /api/admin/help/analytics
@@ -8,21 +7,14 @@ import { createClient } from '@/lib/db/supabase-server';
  */
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
-
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -203,7 +195,7 @@ export async function GET(request: NextRequest) {
       viewsOverTime,
     });
   } catch (error) {
-    console.error('[Admin Help Analytics] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

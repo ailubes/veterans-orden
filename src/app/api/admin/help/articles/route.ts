@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * POST /api/admin/help/articles
@@ -8,33 +7,15 @@ import { createClient } from '@/lib/db/supabase-server';
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
 
-    const supabase = await createClient();
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
+    }
 
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-
-    // Get current user ID for authorId
-    const { data: currentUser } = await supabase
-      .from('users')
-      .select('id')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!currentUser) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -76,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create article
-    const { data: article, error } = await supabase
+    const { data: article, error: dbError } = await supabase
       .from('help_articles')
       .insert({
         category_id: categoryId,
@@ -91,20 +72,20 @@ export async function POST(request: NextRequest) {
         meta_description: metaDescription || null,
         related_article_ids: relatedArticleIds || [],
         status: status || 'draft',
-        author_id: currentUser.id,
+        author_id: profile.id,
         published_at: status === 'published' ? new Date().toISOString() : null,
       })
       .select()
       .single();
 
-    if (error) {
-      console.error('[Admin Create Article] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ article }, { status: 201 });
   } catch (error) {
-    console.error('[Admin Create Article] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

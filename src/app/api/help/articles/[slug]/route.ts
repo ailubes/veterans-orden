@@ -49,16 +49,16 @@ export async function GET(request: NextRequest, context: RouteContext) {
     }
 
     // Increment view count (fire and forget)
-    supabase
-      .from('help_articles')
-      .update({ view_count: (article.view_count || 0) + 1 })
-      .eq('id', article.id)
-      .then(() => {
-        // View count updated
-      })
-      .catch((err: any) => {
+    void (async () => {
+      try {
+        await supabase
+          .from('help_articles')
+          .update({ view_count: (article.view_count || 0) + 1 })
+          .eq('id', article.id);
+      } catch (err) {
         console.error('Failed to increment view count:', err);
-      });
+      }
+    })();
 
     // Get related articles
     let relatedArticles: any[] = [];

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/db/supabase-server';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 /**
  * PUT /api/admin/help/articles/[id]
@@ -11,21 +10,13 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
-
     // Verify admin/leader role
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || !['admin', 'leader'].includes(userData.role)) {
+    if (!profile || !['admin', 'leader', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -101,21 +92,21 @@ export async function PUT(
     }
 
     // Update article
-    const { data: article, error } = await supabase
+    const { data: article, error: dbError } = await supabase
       .from('help_articles')
       .update(updateData)
       .eq('id', id)
       .select()
       .single();
 
-    if (error) {
-      console.error('[Admin Update Article] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ article });
   } catch (error) {
-    console.error('[Admin Update Article] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -132,21 +123,13 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, profile, supabase, error } = await getAuthenticatedUserWithProfile(request);
+    if (!user || error) {
+      return NextResponse.json({ error: error || 'Unauthorized' }, { status: 401 });
     }
 
-    const supabase = await createClient();
-
     // Verify admin role (only admins can delete)
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('clerk_id', userId)
-      .single();
-
-    if (!userData || userData.role !== 'admin') {
+    if (!profile || !['admin', 'super_admin'].includes(profile.role)) {
       return NextResponse.json({ error: 'Forbidden - Admin only' }, { status: 403 });
     }
 
@@ -164,19 +147,19 @@ export async function DELETE(
     }
 
     // Delete article
-    const { error } = await supabase
+    const { error: dbError } = await supabase
       .from('help_articles')
       .delete()
       .eq('id', id);
 
-    if (error) {
-      console.error('[Admin Delete Article] Error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    if (dbError) {
+      console.error('Error:', error);
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ message: 'Article deleted successfully' });
   } catch (error) {
-    console.error('[Admin Delete Article] Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
