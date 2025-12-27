@@ -148,6 +148,7 @@ export const challengeStatusEnum = pgEnum('challenge_status', [
   'upcoming',
   'active',
   'completed',
+  'cancelled',
 ]);
 
 export const paymentTypeEnum = pgEnum('payment_type', [
@@ -546,6 +547,13 @@ export const challenges = pgTable('challenges', {
   points: integer('points').default(0),
   badgeId: varchar('badge_id', { length: 50 }),
 
+  // Competition
+  isCompetitive: boolean('is_competitive').default(false),
+  maxWinners: integer('max_winners').default(1),
+
+  // Display
+  imageUrl: text('image_url'),
+
   // Time
   startDate: timestamp('start_date').notNull(),
   endDate: timestamp('end_date').notNull(),
@@ -553,11 +561,16 @@ export const challenges = pgTable('challenges', {
   // Status
   status: challengeStatusEnum('status').default('upcoming').notNull(),
 
+  // Creator
+  createdById: uuid('created_by_id').references(() => users.id),
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   statusIdx: index('challenges_status_idx').on(table.status),
   startDateIdx: index('challenges_start_date_idx').on(table.startDate),
+  isCompetitiveIdx: index('challenges_is_competitive_idx').on(table.isCompetitive),
+  createdByIdx: index('challenges_created_by_idx').on(table.createdById),
 }));
 
 // ----- CHALLENGE PARTICIPANTS -----
@@ -568,10 +581,28 @@ export const challengeParticipants = pgTable('challenge_participants', {
   progress: integer('progress').default(0),
   completedAt: timestamp('completed_at'),
   joinedAt: timestamp('joined_at').defaultNow().notNull(),
+  rewardClaimed: boolean('reward_claimed').default(false),
+  finalRank: integer('final_rank'),
 }, (table) => ({
   challengeUserIdx: uniqueIndex('challenge_participants_unique').on(table.challengeId, table.userId),
   challengeIdx: index('challenge_participants_challenge_idx').on(table.challengeId),
   userIdx: index('challenge_participants_user_idx').on(table.userId),
+}));
+
+// ----- BADGES -----
+export const badges = pgTable('badges', {
+  id: varchar('id', { length: 50 }).primaryKey(),
+  nameUk: varchar('name_uk', { length: 100 }).notNull(),
+  nameEn: varchar('name_en', { length: 100 }).notNull(),
+  descriptionUk: text('description_uk'),
+  descriptionEn: text('description_en'),
+  iconUrl: text('icon_url'),
+  category: varchar('category', { length: 50 }).default('challenge'),
+  rarity: varchar('rarity', { length: 20 }).default('common'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  categoryIdx: index('badges_category_idx').on(table.category),
+  rarityIdx: index('badges_rarity_idx').on(table.rarity),
 }));
 
 // ----- PAYMENTS -----
@@ -1128,8 +1159,20 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
   }),
 }));
 
-export const challengesRelations = relations(challenges, ({ many }) => ({
+export const challengesRelations = relations(challenges, ({ one, many }) => ({
   participants: many(challengeParticipants),
+  createdBy: one(users, {
+    fields: [challenges.createdById],
+    references: [users.id],
+  }),
+  badge: one(badges, {
+    fields: [challenges.badgeId],
+    references: [badges.id],
+  }),
+}));
+
+export const badgesRelations = relations(badges, ({ many }) => ({
+  challenges: many(challenges),
 }));
 
 export const challengeParticipantsRelations = relations(challengeParticipants, ({ one }) => ({

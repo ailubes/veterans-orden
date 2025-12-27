@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, AlertCircle, RefreshCw, Trash2, Loader2 } from 'lucide-react';
@@ -42,7 +42,8 @@ interface Product {
   tags: string[] | null;
 }
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -83,7 +84,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const response = await fetch(`/api/admin/marketplace/products/${params.id}`);
+        const response = await fetch(`/api/admin/marketplace/products/${id}`);
         if (!response.ok) {
           throw new Error('Не вдалося завантажити товар');
         }
@@ -124,7 +125,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
 
     fetchProduct();
-  }, [params.id]);
+  }, [id]);
 
   // Regenerate slug from title
   const handleRegenerateSlug = () => {
@@ -159,7 +160,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       setIsCheckingSlug(true);
       try {
         const response = await fetch(
-          `/api/admin/marketplace/products/check-slug?slug=${encodeURIComponent(formData.slug)}&excludeId=${params.id}`
+          `/api/admin/marketplace/products/check-slug?slug=${encodeURIComponent(formData.slug)}&excludeId=${id}`
         );
         const data = await response.json();
 
@@ -176,7 +177,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [formData.slug, params.id]);
+  }, [formData.slug, id]);
 
   const handleUpdate = async (statusOverride?: ProductStatus) => {
     setError('');
@@ -234,7 +235,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         tags: formData.tags,
       };
 
-      const response = await fetch(`/api/admin/marketplace/products/${params.id}`, {
+      const response = await fetch(`/api/admin/marketplace/products/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -264,7 +265,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     setError('');
 
     try {
-      const response = await fetch(`/api/admin/marketplace/products/${params.id}`, {
+      const response = await fetch(`/api/admin/marketplace/products/${id}`, {
         method: 'DELETE',
       });
 
