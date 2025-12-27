@@ -168,6 +168,9 @@ function getIconComponent(iconName: string | null) {
     ShoppingBag: require('lucide-react').ShoppingBag,
     Coins: require('lucide-react').Coins,
     Bell: require('lucide-react').Bell,
+    Target: require('lucide-react').Target,
+    Trophy: require('lucide-react').Trophy,
+    Award: require('lucide-react').Award,
   };
 
   return icons[iconName] || null;
