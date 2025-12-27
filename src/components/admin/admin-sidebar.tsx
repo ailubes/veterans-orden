@@ -14,6 +14,8 @@ import {
   Settings,
   ArrowLeft,
   LogOut,
+  ShoppingBag,
+  BookOpen,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -25,6 +27,8 @@ const navItems = [
   { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
+  { href: '/admin/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
+  { href: '/admin/help', icon: BookOpen, label: 'ДОВІДКА' },
   { href: '/admin/notifications', icon: Bell, label: 'СПОВІЩЕННЯ' },
   { href: '/admin/analytics', icon: BarChart3, label: 'АНАЛІТИКА' },
   { href: '/admin/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },

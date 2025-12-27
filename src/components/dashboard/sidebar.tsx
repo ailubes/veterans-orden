@@ -13,6 +13,9 @@ import {
   Trophy,
   Shield,
   Bell,
+  ShoppingBag,
+  Coins,
+  HelpCircle,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -25,7 +28,10 @@ const navItems = [
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
+  { href: '/dashboard/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
+  { href: '/dashboard/points', icon: Coins, label: 'МОЇ БАЛИ' },
   { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
+  { href: '/help', icon: HelpCircle, label: 'ДОПОМОГА' },
   { href: '/dashboard/notifications', icon: Bell, label: 'ПОВІДОМЛЕННЯ' },
   { href: '/dashboard/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];

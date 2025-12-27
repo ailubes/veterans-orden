@@ -1,0 +1,517 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, Plus, X, Eye, Save, Send } from 'lucide-react';
+import { RichTextEditor } from '@/components/admin/rich-text-editor';
+import { VideoEmbed } from '@/components/help/video-embed';
+import type { HelpCategory } from '@/lib/help/types';
+
+export default function NewArticlePage() {
+  const router = useRouter();
+  const [categories, setCategories] = useState<HelpCategory[]>([]);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Form fields
+  const [title, setTitle] = useState('');
+  const [slug, setSlug] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [content, setContent] = useState('');
+  const [excerpt, setExcerpt] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
+  const [keywords, setKeywords] = useState<string[]>([]);
+  const [keywordInput, setKeywordInput] = useState('');
+  const [audience, setAudience] = useState<'all' | 'members' | 'leaders' | 'admins'>('all');
+  const [metaTitle, setMetaTitle] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
+  const [relatedArticleIds, setRelatedArticleIds] = useState<string[]>([]);
+  const [status, setStatus] = useState<'draft' | 'published'>('draft');
+
+  // Preview mode
+  const [showPreview, setShowPreview] = useState(false);
+
+  // Fetch categories and articles
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [categoriesRes, articlesRes] = await Promise.all([
+          fetch('/api/help/categories'),
+          fetch('/api/help/articles?limit=1000'),
+        ]);
+
+        const categoriesData = await categoriesRes.json();
+        const articlesData = await articlesRes.json();
+
+        setCategories(categoriesData.categories || []);
+        setArticles(articlesData.articles || []);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Auto-generate slug from title
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle);
+    if (!slug || slug === slugify(title)) {
+      setSlug(slugify(newTitle));
+    }
+  };
+
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  // Keyword management
+  const addKeyword = () => {
+    const keyword = keywordInput.trim().toLowerCase();
+    if (keyword && !keywords.includes(keyword)) {
+      setKeywords([...keywords, keyword]);
+      setKeywordInput('');
+    }
+  };
+
+  const removeKeyword = (keyword: string) => {
+    setKeywords(keywords.filter((k) => k !== keyword));
+  };
+
+  // Form submission
+  const handleSubmit = async (publishImmediately: boolean = false) => {
+    // Validation
+    if (!title.trim()) {
+      alert('Будь ласка, введіть назву статті');
+      return;
+    }
+
+    if (!slug.trim()) {
+      alert('Будь ласка, введіть URL-слаг');
+      return;
+    }
+
+    if (!categoryId) {
+      alert('Будь ласка, оберіть категорію');
+      return;
+    }
+
+    if (!content.trim() || content.trim() === '<p></p>') {
+      alert('Будь ласка, додайте вміст статті');
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const response = await fetch('/api/admin/help/articles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          slug,
+          categoryId,
+          content,
+          excerpt,
+          videoUrl: videoUrl || null,
+          keywords,
+          audience,
+          metaTitle: metaTitle || null,
+          metaDescription: metaDescription || null,
+          relatedArticleIds,
+          status: publishImmediately ? 'published' : status,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create article');
+      }
+
+      alert(
+        publishImmediately
+          ? 'Статтю успішно опубліковано!'
+          : 'Статтю успішно збережено як чернетку!'
+      );
+      router.push('/admin/help/articles');
+    } catch (error: any) {
+      console.error('Failed to create article:', error);
+      alert(`Помилка: ${error.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Get flat category list for dropdown
+  const flatCategories: HelpCategory[] = [];
+  const flattenCategories = (cats: HelpCategory[], depth = 0) => {
+    cats.forEach((cat) => {
+      flatCategories.push({ ...cat, depth } as any);
+      if (cat.subcategories && cat.subcategories.length > 0) {
+        flattenCategories(cat.subcategories, depth + 1);
+      }
+    });
+  };
+  flattenCategories(categories);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
+          <p className="mt-4 text-timber-beam">Завантаження...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/admin/help/articles"
+            className="p-2 hover:bg-timber-dark/10 transition-colors"
+          >
+            <ArrowLeft size={24} />
+          </Link>
+          <div>
+            <h1 className="font-syne text-3xl font-bold">Нова стаття довідки</h1>
+            <p className="text-timber-beam">Створіть нову статтю для центру допомоги</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowPreview(!showPreview)}
+            className="flex items-center gap-2 px-4 py-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold"
+          >
+            <Eye size={18} />
+            {showPreview ? 'Редагувати' : 'Попередній перегляд'}
+          </button>
+
+          <button
+            onClick={() => handleSubmit(false)}
+            disabled={submitting}
+            className="flex items-center gap-2 px-4 py-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold disabled:opacity-50"
+          >
+            <Save size={18} />
+            Зберегти чернетку
+          </button>
+
+          <button
+            onClick={() => handleSubmit(true)}
+            disabled={submitting}
+            className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+          >
+            <Send size={18} />
+            Опублікувати
+          </button>
+        </div>
+      </div>
+
+      {/* Preview Mode */}
+      {showPreview ? (
+        <div className="bg-white border-2 border-timber-dark p-8 relative">
+          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-4">
+              <span className="text-xs font-bold text-accent uppercase tracking-wider">
+                {categories.find((c) => c.id === categoryId)?.nameUk || 'Категорія не обрана'}
+              </span>
+            </div>
+
+            <h1 className="font-syne text-4xl font-bold mb-4">{title || 'Назва статті'}</h1>
+
+            {excerpt && <p className="text-lg text-timber-beam mb-8">{excerpt}</p>}
+
+            {videoUrl && (
+              <div className="mb-8">
+                <VideoEmbed url={videoUrl} />
+              </div>
+            )}
+
+            <div
+              className="article-content prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          </div>
+        </div>
+      ) : (
+        /* Editor Mode */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Basic Info */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-xl font-bold mb-4">Основна інформація</h2>
+
+              <div className="space-y-4">
+                {/* Title */}
+                <div>
+                  <label className="block font-bold mb-2">
+                    Назва статті <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                    placeholder="Напр: Як проголосувати у голосуванні"
+                    className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none"
+                    maxLength={255}
+                  />
+                  <p className="text-xs text-timber-beam mt-1">{title.length}/255 символів</p>
+                </div>
+
+                {/* Slug */}
+                <div>
+                  <label className="block font-bold mb-2">
+                    URL-слаг <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={slug}
+                    onChange={(e) => setSlug(slugify(e.target.value))}
+                    placeholder="yak-progolosuvaty-u-golosuvanni"
+                    className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+                  />
+                  <p className="text-xs text-timber-beam mt-1">
+                    Буде доступно за адресою: /help/категорія/{slug || 'slug'}
+                  </p>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block font-bold mb-2">
+                    Категорія <span className="text-red-600">*</span>
+                  </label>
+                  <select
+                    value={categoryId}
+                    onChange={(e) => setCategoryId(e.target.value)}
+                    className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold"
+                  >
+                    <option value="">Оберіть категорію...</option>
+                    {flatCategories.map((cat: any) => (
+                      <option key={cat.id} value={cat.id}>
+                        {'  '.repeat(cat.depth || 0)}
+                        {cat.nameUk}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Excerpt */}
+                <div>
+                  <label className="block font-bold mb-2">Короткий опис</label>
+                  <textarea
+                    value={excerpt}
+                    onChange={(e) => setExcerpt(e.target.value)}
+                    placeholder="Короткий опис статті (2-3 речення)"
+                    className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none resize-none"
+                    rows={3}
+                    maxLength={500}
+                  />
+                  <p className="text-xs text-timber-beam mt-1">{excerpt.length}/500 символів</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-xl font-bold mb-4">
+                Вміст статті <span className="text-red-600">*</span>
+              </h2>
+
+              <RichTextEditor
+                content={content}
+                onChange={setContent}
+                placeholder="Напишіть вміст статті тут..."
+                minHeight="500px"
+                maxLength={50000}
+              />
+            </div>
+
+            {/* Video */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-xl font-bold mb-4">Відео (опціонально)</h2>
+
+              <div>
+                <label className="block font-bold mb-2">URL YouTube</label>
+                <input
+                  type="text"
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+                />
+                <p className="text-xs text-timber-beam mt-1">Вставте посилання на YouTube відео</p>
+
+                {videoUrl && (
+                  <div className="mt-4">
+                    <p className="font-bold mb-2 text-sm">Попередній перегляд:</p>
+                    <VideoEmbed url={videoUrl} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Audience */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-lg font-bold mb-4">Аудиторія</h2>
+
+              <select
+                value={audience}
+                onChange={(e) => setAudience(e.target.value as any)}
+                className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+              >
+                <option value="all">Всі користувачі</option>
+                <option value="members">Лише учасники</option>
+                <option value="leaders">Лідери</option>
+                <option value="admins">Адміністратори</option>
+              </select>
+            </div>
+
+            {/* Keywords */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-lg font-bold mb-4">Ключові слова</h2>
+
+              <div className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={keywordInput}
+                  onChange={(e) => setKeywordInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addKeyword();
+                    }
+                  }}
+                  placeholder="Додати слово..."
+                  className="flex-1 px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm"
+                />
+                <button
+                  onClick={addKeyword}
+                  className="p-2 bg-accent text-canvas hover:shadow-[2px_2px_0px_0px_rgba(44,40,36,1)] transition-all"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {keywords.map((keyword) => (
+                  <span
+                    key={keyword}
+                    className="flex items-center gap-1 px-3 py-1 bg-timber-dark/10 border border-timber-dark text-sm"
+                  >
+                    {keyword}
+                    <button
+                      onClick={() => removeKeyword(keyword)}
+                      className="hover:text-red-600 transition-colors"
+                    >
+                      <X size={14} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Related Articles */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-lg font-bold mb-4">Пов'язані статті</h2>
+
+              <select
+                multiple
+                value={relatedArticleIds}
+                onChange={(e) =>
+                  setRelatedArticleIds(Array.from(e.target.selectedOptions, (option) => option.value))
+                }
+                className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm h-40"
+              >
+                {articles
+                  .filter((a) => a.status === 'published')
+                  .map((article) => (
+                    <option key={article.id} value={article.id}>
+                      {article.title}
+                    </option>
+                  ))}
+              </select>
+              <p className="text-xs text-timber-beam mt-2">
+                Утримуйте Ctrl/Cmd для вибору кількох статей
+              </p>
+            </div>
+
+            {/* SEO */}
+            <div className="bg-white border-2 border-timber-dark p-6 relative">
+              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+
+              <h2 className="font-syne text-lg font-bold mb-4">SEO</h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block font-bold mb-2 text-sm">Meta заголовок</label>
+                  <input
+                    type="text"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    placeholder={title || 'Автоматично з назви'}
+                    className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm"
+                    maxLength={70}
+                  />
+                  <p className="text-xs text-timber-beam mt-1">{metaTitle.length}/70</p>
+                </div>
+
+                <div>
+                  <label className="block font-bold mb-2 text-sm">Meta опис</label>
+                  <textarea
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    placeholder={excerpt || 'Автоматично з опису'}
+                    className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm resize-none"
+                    rows={3}
+                    maxLength={160}
+                  />
+                  <p className="text-xs text-timber-beam mt-1">{metaDescription.length}/160</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
