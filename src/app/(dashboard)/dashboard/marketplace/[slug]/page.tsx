@@ -27,6 +27,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   const [addedToCart, setAddedToCart] = useState(false);
 
   useEffect(() => {
+    // Guard against undefined slug during initial render
+    if (!slug) return;
+
     async function fetchProduct() {
       try {
         const response = await fetch(`/api/marketplace/products/${slug}`);
