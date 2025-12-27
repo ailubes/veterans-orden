@@ -54,11 +54,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [activeTab, setActiveTab] = useState('basic');
 
   const [formData, setFormData] = useState({
-    name: '',
     name_uk: '',
     slug: '',
     type: 'physical' as ProductType,
-    description: '',
     description_uk: '',
     status: 'draft' as ProductStatus,
     price_points: 0,
@@ -93,11 +91,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         const { product }: { product: Product } = await response.json();
 
         setFormData({
-          name: product.name,
           name_uk: product.name_uk,
           slug: product.slug,
           type: product.type,
-          description: product.description || '',
           description_uk: product.description_uk || '',
           status: product.status,
           price_points: product.price_points,
@@ -193,7 +189,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
 
     // Validate required fields
-    if (!formData.name || !formData.name_uk || !formData.slug) {
+    if (!formData.name_uk || !formData.slug) {
       setError('Заповніть всі обов\'язкові поля (назва, slug)');
       setActiveTab('basic');
       return;
@@ -209,12 +205,13 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
     try {
       // Transform snake_case to camelCase for API
+      // Send Ukrainian values for both name and nameUk (same for description)
       const payload = {
-        name: formData.name,
+        name: formData.name_uk,
         nameUk: formData.name_uk,
         slug: formData.slug,
         type: formData.type,
-        description: formData.description,
+        description: formData.description_uk,
         descriptionUk: formData.description_uk,
         status: statusOverride || formData.status,
         pricePoints: formData.price_points,
@@ -368,18 +365,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">НАЗВА (ENGLISH) *</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">НАЗВА (УКРАЇНСЬКА) *</label>
+                <label className="block text-sm font-medium text-timber-dark mb-2">НАЗВА *</label>
                 <input
                   type="text"
                   value={formData.name_uk}
@@ -458,22 +444,11 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ОПИС (ENGLISH)</label>
-                <RichTextEditor
-                  content={formData.description}
-                  onChange={(html) => setFormData({ ...formData, description: html })}
-                  placeholder="Product description in English..."
-                  minHeight="300px"
-                  maxLength={10000}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ОПИС (УКРАЇНСЬКА)</label>
+                <label className="block text-sm font-medium text-timber-dark mb-2">ОПИС</label>
                 <RichTextEditor
                   content={formData.description_uk}
                   onChange={(html) => setFormData({ ...formData, description_uk: html })}
-                  placeholder="Опис товару українською..."
+                  placeholder="Опис товару..."
                   minHeight="300px"
                   maxLength={10000}
                 />

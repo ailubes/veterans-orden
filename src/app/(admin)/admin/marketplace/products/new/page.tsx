@@ -24,11 +24,9 @@ export default function NewProductPage() {
 
   const [formData, setFormData] = useState({
     // Basic Info
-    name: '',
     name_uk: '',
     slug: '',
     type: 'physical' as ProductType,
-    description: '',
     description_uk: '',
     status: 'draft' as ProductStatus,
 
@@ -134,7 +132,7 @@ export default function NewProductPage() {
     }
 
     // Validate required fields
-    if (!formData.name || !formData.name_uk || !formData.slug) {
+    if (!formData.name_uk || !formData.slug) {
       setError('Заповніть всі обов\'язкові поля (назва, slug)');
       setActiveTab('basic');
       return;
@@ -150,12 +148,13 @@ export default function NewProductPage() {
 
     try {
       // Transform snake_case to camelCase for API
+      // Send Ukrainian values for both name and nameUk (same for description)
       const payload = {
-        name: formData.name,
+        name: formData.name_uk,
         nameUk: formData.name_uk,
         slug: formData.slug,
         type: formData.type,
-        description: formData.description,
+        description: formData.description_uk,
         descriptionUk: formData.description_uk,
         status: statusOverride || formData.status,
         pricePoints: formData.price_points,
@@ -268,25 +267,10 @@ export default function NewProductPage() {
             <h2 className="text-xl font-bold mb-4">Основна інформація</h2>
 
             <div className="space-y-4">
-              {/* English Title */}
+              {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-timber-dark mb-2">
-                  НАЗВА (ENGLISH) *
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                  placeholder="e.g., Network Membership Card"
-                  required
-                />
-              </div>
-
-              {/* Ukrainian Title */}
-              <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
-                  НАЗВА (УКРАЇНСЬКА) *
+                  НАЗВА *
                 </label>
                 <input
                   type="text"
@@ -297,7 +281,7 @@ export default function NewProductPage() {
                   required
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Slug буде згенеровано автоматично з української назви
+                  Slug буде згенеровано автоматично з назви
                 </p>
               </div>
 
@@ -381,29 +365,15 @@ export default function NewProductPage() {
                 </select>
               </div>
 
-              {/* English Description */}
+              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-timber-dark mb-2">
-                  ОПИС (ENGLISH)
-                </label>
-                <RichTextEditor
-                  content={formData.description}
-                  onChange={(html) => setFormData({ ...formData, description: html })}
-                  placeholder="Product description in English..."
-                  minHeight="300px"
-                  maxLength={10000}
-                />
-              </div>
-
-              {/* Ukrainian Description */}
-              <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
-                  ОПИС (УКРАЇНСЬКА)
+                  ОПИС
                 </label>
                 <RichTextEditor
                   content={formData.description_uk}
                   onChange={(html) => setFormData({ ...formData, description_uk: html })}
-                  placeholder="Опис товару українською..."
+                  placeholder="Опис товару..."
                   minHeight="300px"
                   maxLength={10000}
                 />
