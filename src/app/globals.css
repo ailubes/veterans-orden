@@ -363,18 +363,18 @@ body {
 
 /* Joint (structural node) */
 .joint {
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
   background: var(--timber-dark);
   position: absolute;
   z-index: 5;
 }
 
 /* Joint corner positions - centered on card corners */
-.joint-tl { top: -6px; left: -6px; }
-.joint-tr { top: -6px; right: -6px; }
-.joint-bl { bottom: -6px; left: -6px; }
-.joint-br { bottom: -6px; right: -6px; }
+.joint-tl { top: -3px; left: -3px; }
+.joint-tr { top: -3px; right: -3px; }
+.joint-bl { bottom: -3px; left: -3px; }
+.joint-br { bottom: -3px; right: -3px; }
 
 /* Card with joints - ensure joints are visible outside */
 .card-with-joints {
@@ -719,17 +719,6 @@ body {
     padding-right: 0 !important;
   }
 
-  /* Joint decorations - smaller on mobile */
-  .joint {
-    width: 8px;
-    height: 8px;
-  }
-
-  /* Responsive joint positions for mobile */
-  .joint-tl { top: -4px; left: -4px; }
-  .joint-tr { top: -4px; right: -4px; }
-  .joint-bl { bottom: -4px; left: -4px; }
-  .joint-br { bottom: -4px; right: -4px; }
 }
 
 /* Tablet adjustments (between 600px and 900px) */
@@ -768,17 +757,6 @@ body {
   h2 {
     font-size: 22px !important;
   }
-
-  .joint {
-    width: 6px;
-    height: 6px;
-  }
-
-  /* Responsive joint positions for small mobile */
-  .joint-tl { top: -3px; left: -3px; }
-  .joint-tr { top: -3px; right: -3px; }
-  .joint-bl { bottom: -3px; left: -3px; }
-  .joint-br { bottom: -3px; right: -3px; }
 
   /* Footer single column on very small screens */
   .footer-grid {
