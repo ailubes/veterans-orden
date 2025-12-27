@@ -64,8 +64,41 @@ export async function GET(request: NextRequest, context: RouteContext) {
       }
     }
 
+    // Transform snake_case to camelCase for frontend
+    const transformedProduct = {
+      id: product.id,
+      name: product.name,
+      nameUk: product.name_uk,
+      description: product.description,
+      descriptionUk: product.description_uk,
+      slug: product.slug,
+      type: product.type,
+      status: product.status,
+      pricePoints: product.price_points,
+      priceUah: product.price_uah,
+      stockQuantity: product.stock_quantity,
+      maxPerUser: product.max_per_user,
+      imageUrl: product.image_url,
+      images: product.images,
+      requiresShipping: product.requires_shipping,
+      weight: product.weight,
+      dimensions: product.dimensions,
+      digitalAssetUrl: product.digital_asset_url,
+      downloadLimit: product.download_limit,
+      requiredLevel: product.required_level,
+      requiredRole: product.required_role,
+      availableFrom: product.available_from,
+      availableUntil: product.available_until,
+      featured: product.featured,
+      sortOrder: product.sort_order,
+      tags: product.tags,
+      createdAt: product.created_at,
+      updatedAt: product.updated_at,
+      createdById: product.created_by_id,
+    };
+
     return NextResponse.json({
-      product,
+      product: transformedProduct,
       userPurchaseCount,
       canPurchase: product.max_per_user > userPurchaseCount,
       remainingQuantity: product.max_per_user - userPurchaseCount,

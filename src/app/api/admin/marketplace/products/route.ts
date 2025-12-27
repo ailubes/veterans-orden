@@ -52,8 +52,41 @@ export async function GET(request: NextRequest) {
       throw error;
     }
 
+    // Transform snake_case to camelCase for frontend
+    const transformedProducts = (products || []).map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      nameUk: p.name_uk,
+      description: p.description,
+      descriptionUk: p.description_uk,
+      slug: p.slug,
+      type: p.type,
+      status: p.status,
+      pricePoints: p.price_points,
+      priceUah: p.price_uah,
+      stockQuantity: p.stock_quantity,
+      maxPerUser: p.max_per_user,
+      imageUrl: p.image_url,
+      images: p.images,
+      requiresShipping: p.requires_shipping,
+      weight: p.weight,
+      dimensions: p.dimensions,
+      digitalAssetUrl: p.digital_asset_url,
+      downloadLimit: p.download_limit,
+      requiredLevel: p.required_level,
+      requiredRole: p.required_role,
+      availableFrom: p.available_from,
+      availableUntil: p.available_until,
+      featured: p.featured,
+      sortOrder: p.sort_order,
+      tags: p.tags,
+      createdAt: p.created_at,
+      updatedAt: p.updated_at,
+      createdById: p.created_by_id,
+    }));
+
     return NextResponse.json({
-      products: products || [],
+      products: transformedProducts,
       pagination: {
         limit,
         offset,
@@ -151,7 +184,40 @@ export async function POST(request: NextRequest) {
       throw error;
     }
 
-    return NextResponse.json({ product }, { status: 201 });
+    // Transform snake_case to camelCase for frontend
+    const transformedProduct = {
+      id: product.id,
+      name: product.name,
+      nameUk: product.name_uk,
+      description: product.description,
+      descriptionUk: product.description_uk,
+      slug: product.slug,
+      type: product.type,
+      status: product.status,
+      pricePoints: product.price_points,
+      priceUah: product.price_uah,
+      stockQuantity: product.stock_quantity,
+      maxPerUser: product.max_per_user,
+      imageUrl: product.image_url,
+      images: product.images,
+      requiresShipping: product.requires_shipping,
+      weight: product.weight,
+      dimensions: product.dimensions,
+      digitalAssetUrl: product.digital_asset_url,
+      downloadLimit: product.download_limit,
+      requiredLevel: product.required_level,
+      requiredRole: product.required_role,
+      availableFrom: product.available_from,
+      availableUntil: product.available_until,
+      featured: product.featured,
+      sortOrder: product.sort_order,
+      tags: product.tags,
+      createdAt: product.created_at,
+      updatedAt: product.updated_at,
+      createdById: product.created_by_id,
+    };
+
+    return NextResponse.json({ product: transformedProduct }, { status: 201 });
   } catch (error) {
     console.error('[POST /api/admin/marketplace/products]', error);
     return NextResponse.json(

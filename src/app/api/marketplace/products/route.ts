@@ -56,8 +56,41 @@ export async function GET(request: NextRequest) {
       throw error;
     }
 
+    // Transform snake_case to camelCase for frontend
+    const transformedProducts = (products || []).map((p: any) => ({
+      id: p.id,
+      name: p.name,
+      nameUk: p.name_uk,
+      description: p.description,
+      descriptionUk: p.description_uk,
+      slug: p.slug,
+      type: p.type,
+      status: p.status,
+      pricePoints: p.price_points,
+      priceUah: p.price_uah,
+      stockQuantity: p.stock_quantity,
+      maxPerUser: p.max_per_user,
+      imageUrl: p.image_url,
+      images: p.images,
+      requiresShipping: p.requires_shipping,
+      weight: p.weight,
+      dimensions: p.dimensions,
+      digitalAssetUrl: p.digital_asset_url,
+      downloadLimit: p.download_limit,
+      requiredLevel: p.required_level,
+      requiredRole: p.required_role,
+      availableFrom: p.available_from,
+      availableUntil: p.available_until,
+      featured: p.featured,
+      sortOrder: p.sort_order,
+      tags: p.tags,
+      createdAt: p.created_at,
+      updatedAt: p.updated_at,
+      createdById: p.created_by_id,
+    }));
+
     return NextResponse.json({
-      products: products || [],
+      products: transformedProducts,
       pagination: {
         limit,
         offset,
