@@ -85,7 +85,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
 
   // Handle result click
   const handleResultClick = (result: SearchResult) => {
-    router.push(`/help/${result.slug}`);
+    router.push(`/help/${result.categorySlug}/${result.slug}`);
     setIsOpen(false);
     setQuery('');
     inputRef.current?.blur();

@@ -140,6 +140,7 @@ export interface SearchResult {
   excerpt: string | null;
   slug: string;
   categoryName: string;
+  categorySlug: string;
   rank: number; // Relevance score
 }
 
