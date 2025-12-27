@@ -62,13 +62,16 @@ export default function HelpHomePage() {
   return (
     <div className="space-y-12">
       {/* Welcome Section */}
-      <div className="bg-white border-2 border-timber-dark p-8 relative">
+      <div className="bg-gradient-to-br from-white to-accent/5 border-2 border-timber-dark p-8 relative overflow-hidden">
         <div className="joint" style={{ top: '-6px', left: '-6px' }} />
         <div className="joint" style={{ top: '-6px', right: '-6px' }} />
         <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
         <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
 
-        <h2 className="font-syne text-3xl font-bold mb-4">
+        {/* Decorative element */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -z-10" />
+
+        <h2 className="font-syne text-3xl font-bold mb-4 text-timber-dark">
           Ласкаво просимо до Центру допомоги!
         </h2>
         <p className="text-lg text-timber-beam mb-6">
@@ -77,30 +80,30 @@ export default function HelpHomePage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t-2 border-timber-dark/20">
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-accent/10">
+          <div className="flex items-start gap-3 p-4 bg-white/80 border border-timber-dark/20 rounded hover:border-accent/50 hover:shadow-md transition-all">
+            <div className="p-3 bg-accent/20 rounded">
               <Rocket className="text-accent" size={24} />
             </div>
             <div>
-              <p className="font-bold">Швидкий старт</p>
+              <p className="font-bold text-timber-dark">Швидкий старт</p>
               <p className="text-sm text-timber-beam">Перші кроки на платформі</p>
             </div>
           </div>
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-accent/10">
+          <div className="flex items-start gap-3 p-4 bg-white/80 border border-timber-dark/20 rounded hover:border-accent/50 hover:shadow-md transition-all">
+            <div className="p-3 bg-accent/20 rounded">
               <Zap className="text-accent" size={24} />
             </div>
             <div>
-              <p className="font-bold">Функції</p>
+              <p className="font-bold text-timber-dark">Функції</p>
               <p className="text-sm text-timber-beam">Детальні інструкції</p>
             </div>
           </div>
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-accent/10">
+          <div className="flex items-start gap-3 p-4 bg-white/80 border border-timber-dark/20 rounded hover:border-accent/50 hover:shadow-md transition-all">
+            <div className="p-3 bg-accent/20 rounded">
               <HelpCircle className="text-accent" size={24} />
             </div>
             <div>
-              <p className="font-bold">FAQ</p>
+              <p className="font-bold text-timber-dark">FAQ</p>
               <p className="text-sm text-timber-beam">Відповіді на питання</p>
             </div>
           </div>
@@ -122,14 +125,14 @@ export default function HelpHomePage() {
               <Link
                 key={category.id}
                 href={`/help/${category.slug}`}
-                className="bg-white border-2 border-timber-dark p-6 hover:border-accent transition-colors group relative"
+                className="bg-white border-2 border-timber-dark p-6 hover:border-accent hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.3)] transition-all group relative"
               >
                 <div className="joint" style={{ top: '-6px', left: '-6px' }} />
                 <div className="joint" style={{ top: '-6px', right: '-6px' }} />
 
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-timber-dark/10 group-hover:bg-accent/10 transition-colors">
-                    <Icon className="text-timber-dark group-hover:text-accent transition-colors" size={24} />
+                  <div className="p-3 bg-accent/10 group-hover:bg-accent/20 border border-accent/30 rounded transition-all">
+                    <Icon className="text-accent transition-transform group-hover:scale-110" size={28} />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-syne text-lg font-bold mb-2 group-hover:text-accent transition-colors">
@@ -161,17 +164,18 @@ export default function HelpHomePage() {
               <Link
                 key={article.id}
                 href={`/help/${article.category?.slug}/${article.slug}`}
-                className="bg-white border-2 border-timber-dark p-6 hover:border-accent transition-colors group relative"
+                className="bg-white border-2 border-timber-dark p-6 hover:border-accent hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.2)] transition-all group relative"
               >
                 <div className="joint" style={{ top: '-6px', left: '-6px' }} />
                 <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
 
                 <div className="flex items-start justify-between mb-3">
-                  <span className="text-xs font-bold text-accent">
+                  <span className="text-xs font-bold text-accent bg-accent/10 px-2 py-1 rounded">
                     {article.category?.name_uk}
                   </span>
-                  <span className="text-xs text-timber-beam">
-                    {article.view_count || 0} переглядів
+                  <span className="text-xs text-timber-beam flex items-center gap-1">
+                    <TrendingUp size={14} className="text-accent" />
+                    {article.view_count || 0}
                   </span>
                 </div>
 
@@ -207,18 +211,20 @@ export default function HelpHomePage() {
                 <Link
                   key={article.id}
                   href={`/help/${article.category?.slug}/${article.slug}`}
-                  className="block p-4 hover:bg-timber-dark/5 transition-colors group"
+                  className="block p-4 hover:bg-accent/5 hover:border-l-4 hover:border-l-accent transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <h3 className="font-bold mb-1 group-hover:text-accent transition-colors">
+                      <h3 className="font-bold mb-1 group-hover:text-accent transition-colors flex items-center gap-2">
                         {article.title}
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity text-accent">→</span>
                       </h3>
-                      <p className="text-xs text-timber-beam">
+                      <p className="text-xs font-bold text-accent bg-accent/10 px-2 py-0.5 rounded inline-block">
                         {article.category?.name_uk}
                       </p>
                     </div>
-                    <span className="text-xs text-timber-beam whitespace-nowrap">
+                    <span className="text-xs text-timber-beam whitespace-nowrap flex items-center gap-1">
+                      <Clock size={12} className="text-accent" />
                       {new Date(article.created_at).toLocaleDateString('uk-UA')}
                     </span>
                   </div>

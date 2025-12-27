@@ -90,7 +90,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
           <button
             onClick={() => handleFeedback(true)}
             disabled={submitting}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+            className="flex-1 btn btn-primary disabled:opacity-50"
           >
             <ThumbsUp size={20} />
             Так, корисно
@@ -98,7 +98,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
           <button
             onClick={() => handleFeedback(false)}
             disabled={submitting}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-timber-dark font-bold hover:bg-timber-dark/10 transition-colors disabled:opacity-50"
+            className="flex-1 btn btn-secondary disabled:opacity-50"
           >
             <ThumbsDown size={20} />
             Ні, не корисно
@@ -123,7 +123,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+              className="btn btn-primary btn-sm disabled:opacity-50"
             >
               {submitting ? 'Надсилання...' : 'Надіслати відгук'}
             </button>
@@ -131,7 +131,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
               type="button"
               onClick={() => submitFeedback(false, '')}
               disabled={submitting}
-              className="px-6 py-2 border-2 border-timber-dark font-bold hover:bg-timber-dark/10 transition-colors"
+              className="btn btn-secondary btn-sm"
             >
               Пропустити
             </button>

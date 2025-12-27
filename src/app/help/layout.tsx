@@ -77,13 +77,13 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                 <nav className="space-y-1">
                   <Link
                     href="/help"
-                    className={`flex items-center gap-2 px-3 py-2 text-sm font-bold transition-colors ${
+                    className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                       pathname === '/help'
-                        ? 'bg-accent text-canvas'
-                        : 'hover:bg-timber-dark/10'
+                        ? 'bg-accent text-canvas shadow-[2px_2px_0px_0px_rgba(44,40,36,0.3)]'
+                        : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                     }`}
                   >
-                    <Home size={16} />
+                    <Home size={16} className={pathname === '/help' ? 'text-canvas' : 'text-accent'} />
                     Головна
                   </Link>
 
@@ -95,13 +95,13 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                       <div key={category.id}>
                         <Link
                           href={`/help/${category.slug}`}
-                          className={`flex items-center gap-2 px-3 py-2 text-sm font-bold transition-colors ${
+                          className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                             isActive
-                              ? 'bg-accent text-canvas'
-                              : 'hover:bg-timber-dark/10'
+                              ? 'bg-accent text-canvas shadow-[2px_2px_0px_0px_rgba(44,40,36,0.3)]'
+                              : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                           }`}
                         >
-                          {Icon && <Icon size={16} />}
+                          {Icon && <Icon size={16} className={isActive ? 'text-canvas' : 'text-accent'} />}
                           {category.nameUk}
                         </Link>
 
@@ -116,14 +116,14 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                                 <Link
                                   key={sub.id}
                                   href={`/help/${sub.slug}`}
-                                  className={`flex items-center gap-2 px-3 py-1 text-xs transition-colors ${
+                                  className={`flex items-center gap-2 px-3 py-1.5 text-xs transition-all rounded ${
                                     isSubActive
-                                      ? 'bg-accent/80 text-canvas'
-                                      : 'hover:bg-timber-dark/10'
+                                      ? 'bg-accent/90 text-canvas shadow-[1px_1px_0px_0px_rgba(44,40,36,0.3)]'
+                                      : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                                   }`}
                                 >
-                                  <ChevronRight size={12} />
-                                  {SubIcon && <SubIcon size={12} />}
+                                  <ChevronRight size={12} className={isSubActive ? 'text-canvas' : 'text-timber-beam'} />
+                                  {SubIcon && <SubIcon size={12} className={isSubActive ? 'text-canvas' : 'text-accent'} />}
                                   {sub.nameUk}
                                 </Link>
                               );

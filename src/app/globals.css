@@ -75,7 +75,44 @@ body {
     color: var(--accent);
     font-weight: 700;
   }
+
+  /* Button Utilities */
+  .btn {
+    @apply px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all duration-200;
+    @apply border-2 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-canvas border-timber-dark;
+    @apply hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)];
+    @apply active:shadow-[2px_2px_0px_0px_rgba(44,40,36,1)] active:translate-x-0.5 active:translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-timber-dark border-timber-dark;
+    @apply hover:border-accent hover:text-accent;
+    @apply hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.3)];
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-timber-dark border-timber-dark;
+    @apply hover:bg-timber-dark hover:text-canvas;
+  }
+
+  .btn-accent-outline {
+    @apply bg-transparent text-accent border-accent;
+    @apply hover:bg-accent hover:text-canvas;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-base;
+  }
 }
+
 
 /* Structural beams */
 .beam-v {
