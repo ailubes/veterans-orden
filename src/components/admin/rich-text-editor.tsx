@@ -42,7 +42,10 @@ export function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        // Disable Link in StarterKit to avoid duplicate
+        link: false,
+      }),
       Image.configure({
         inline: true,
         allowBase64: false,

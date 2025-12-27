@@ -149,11 +149,33 @@ export default function NewProductPage() {
     setLoading(true);
 
     try {
+      // Transform snake_case to camelCase for API
       const payload = {
-        ...formData,
+        name: formData.name,
+        nameUk: formData.name_uk,
+        slug: formData.slug,
+        type: formData.type,
+        description: formData.description,
+        descriptionUk: formData.description_uk,
         status: statusOverride || formData.status,
-        // Set first gallery image as featured image if not set
-        image_url: formData.image_url || (formData.images[0] ?? ''),
+        pricePoints: formData.price_points,
+        priceUah: formData.price_uah,
+        stockQuantity: formData.stock_quantity,
+        maxPerUser: formData.max_per_user,
+        requiredLevel: formData.required_level,
+        requiredRole: formData.required_role || null,
+        imageUrl: formData.image_url || (formData.images[0] ?? ''),
+        images: formData.images,
+        requiresShipping: formData.requires_shipping,
+        weight: formData.weight,
+        dimensions: formData.dimensions,
+        digitalAssetUrl: formData.digital_asset_url,
+        downloadLimit: formData.download_limit,
+        availableFrom: formData.available_from,
+        availableUntil: formData.available_until,
+        featured: formData.featured,
+        sortOrder: formData.sort_order,
+        tags: formData.tags,
       };
 
       const response = await fetch('/api/admin/marketplace/products', {
