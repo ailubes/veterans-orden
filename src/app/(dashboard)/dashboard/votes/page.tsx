@@ -58,8 +58,8 @@ export default async function VotesPage() {
                 key={vote.id}
                 className="bg-canvas border-2 border-timber-dark p-6 relative hover:border-accent transition-colors"
               >
-                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-                <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <div className="flex-1">
@@ -105,7 +105,7 @@ export default async function VotesPage() {
           </div>
         ) : (
           <div className="bg-canvas border-2 border-timber-dark p-8 relative text-center">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
             <Vote className="w-10 h-10 mx-auto mb-3 text-timber-beam" />
             <p className="text-sm text-timber-beam">

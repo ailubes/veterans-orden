@@ -97,10 +97,10 @@ export function EmailTester() {
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       <div className="flex items-center gap-3 mb-6">
         <Mail className="w-6 h-6 text-accent" />

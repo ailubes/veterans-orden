@@ -175,8 +175,8 @@ export default function NotificationsPage() {
         </div>
       ) : filteredNotifications.length === 0 ? (
         <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <BellOff className="w-12 h-12 mx-auto mb-4 text-timber-beam/40" />
           <h3 className="font-syne text-xl font-bold mb-2">

@@ -159,8 +159,8 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
 
       {/* Filters */}
       <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <form method="GET" className="flex flex-wrap gap-2 sm:gap-4">
           <div className="w-full sm:flex-1 sm:min-w-[200px]">

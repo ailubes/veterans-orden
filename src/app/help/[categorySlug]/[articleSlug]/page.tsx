@@ -103,8 +103,8 @@ export default function ArticleDetailPage() {
   if (error || !article) {
     return (
       <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <h2 className="font-syne text-2xl font-bold mb-2">Статтю не знайдено</h2>
         <p className="text-timber-beam mb-6">{error || 'Неможливо знайти статтю'}</p>
@@ -121,8 +121,8 @@ export default function ArticleDetailPage() {
       <div className="lg:col-span-2 space-y-8">
         {/* Article Header */}
         <div className="bg-white border-2 border-timber-dark p-8 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-sm text-timber-beam mb-4">
@@ -182,8 +182,8 @@ export default function ArticleDetailPage() {
 
         {/* Article Content */}
         <div className="bg-white border-2 border-timber-dark p-8 relative prose prose-timber max-w-none">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <div
             dangerouslySetInnerHTML={{ __html: processedContent }}
@@ -200,8 +200,8 @@ export default function ArticleDetailPage() {
         {/* Table of Contents */}
         {tableOfContents.length > 0 && (
           <div className="bg-white border-2 border-timber-dark p-6 sticky top-4 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
               Зміст
@@ -226,8 +226,8 @@ export default function ArticleDetailPage() {
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
               Пов'язані статті

@@ -274,8 +274,8 @@ export default function TooltipsPage() {
 
       {/* Filters */}
       <div className="bg-white border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 mb-4">
           <Search className="text-accent" size={20} />
@@ -318,8 +318,8 @@ export default function TooltipsPage() {
 
       {/* Tooltips Table */}
       <div className="bg-white border-2 border-timber-dark relative overflow-x-auto">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <table className="w-full">
           <thead className="bg-timber-dark text-canvas">
@@ -433,8 +433,8 @@ export default function TooltipsPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white border-2 border-timber-dark max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b-2 border-timber-dark">

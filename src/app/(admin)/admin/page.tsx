@@ -44,10 +44,10 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Members Overview */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <div className="flex items-center justify-between mb-4">
             <p className="label text-accent">НОВІ ЧЛЕНИ</p>
@@ -69,10 +69,10 @@ export default function AdminDashboardPage() {
 
         {/* Recent Activity */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <p className="label text-accent mb-4">ОСТАННЯ АКТИВНІСТЬ</p>
 
@@ -87,8 +87,8 @@ export default function AdminDashboardPage() {
 
       {/* Growth Chart Placeholder */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <p className="label text-accent mb-4">ЗРОСТАННЯ МЕРЕЖІ</p>
 

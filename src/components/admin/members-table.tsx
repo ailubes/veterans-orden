@@ -221,10 +221,10 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
   if (members.length === 0) {
     return (
       <div className="bg-canvas border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
         <div className="text-center py-16 text-timber-beam">
           <p className="text-sm">Поки що немає членів</p>
         </div>
@@ -258,10 +258,10 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
       )}
 
       <div className="bg-canvas border-2 border-timber-dark relative overflow-hidden">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         {/* Table Header */}
         <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-timber-dark bg-timber-dark/5">

@@ -165,8 +165,8 @@ export default function ChallengesPage() {
 
       {/* User Stats */}
       <div className="bg-timber-dark text-canvas p-6 relative mb-8">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <p className="label text-accent mb-4">ВАШ ПРОГРЕС</p>
 
@@ -189,8 +189,8 @@ export default function ChallengesPage() {
       {/* My Badges */}
       {myBadges.length > 0 && (
         <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-8">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -376,7 +376,7 @@ export default function ChallengesPage() {
                   key={challenge.id}
                   className="bg-canvas border-2 border-timber-dark p-4 relative hover:border-accent transition-colors"
                 >
-                  <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+                  <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
                   <div className="flex items-start gap-4">
                     <div className="p-2 bg-timber-dark/10 text-timber-dark rounded">
@@ -458,8 +458,8 @@ export default function ChallengesPage() {
           </div>
         ) : (
           <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <Target className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
             <h3 className="font-syne text-xl font-bold mb-2">

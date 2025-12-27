@@ -66,7 +66,7 @@ export default function ManifestPage() {
             position: 'relative',
           }}
         >
-          <div className="joint" style={{ top: '-6px', left: '50%', transform: 'translateX(-50%)' }} />
+          <div className="joint" style={{ top: '-3px', left: '50%', transform: 'translateX(-50%)' }} />
           <blockquote
             className="syne"
             style={{
@@ -185,10 +185,10 @@ export default function ManifestPage() {
             position: 'relative',
           }}
         >
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <h2
             className="syne"

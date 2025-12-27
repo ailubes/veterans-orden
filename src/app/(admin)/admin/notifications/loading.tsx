@@ -16,10 +16,10 @@ export default function NotificationsLoading() {
         <div>
           <Skeleton className="h-6 w-48 mb-4" />
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="space-y-4">
               <div>
@@ -51,10 +51,10 @@ export default function NotificationsLoading() {
         <div>
           <Skeleton className="h-6 w-40 mb-4" />
           <div className="bg-canvas border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="max-h-[600px] overflow-hidden">
               {[1, 2, 3, 4, 5].map((i) => (

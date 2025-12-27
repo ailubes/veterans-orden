@@ -195,10 +195,10 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Referral Card */}
         <div className="bg-timber-dark text-canvas p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <p className="label text-accent mb-4">ЗАПРОШУЙ ДРУЗІВ</p>
           <h2 className="font-syne text-2xl font-bold mb-4">
@@ -217,10 +217,10 @@ export default async function DashboardPage() {
 
         {/* Membership Status */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <p className="label text-accent mb-4">СТАТУС ЧЛЕНСТВА</p>
           <h2 className="font-syne text-2xl font-bold mb-4">
@@ -247,8 +247,8 @@ export default async function DashboardPage() {
 
       {/* Recent Activity */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <p className="label text-accent mb-4">ОСТАННЯ АКТИВНІСТЬ</p>
 

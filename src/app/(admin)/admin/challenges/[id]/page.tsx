@@ -223,8 +223,8 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
 
       {/* Header */}
       <div className="bg-timber-dark text-canvas p-6 relative mb-6">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex items-start gap-4">
@@ -345,8 +345,8 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
 
           {/* Participants Table */}
           <div className="bg-canvas border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <div className="p-4 border-b border-timber-dark">
               <h2 className="font-syne text-lg font-bold">Учасники ({participants.length})</h2>
@@ -420,7 +420,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
           {/* Leaderboard */}
           {challenge.isCompetitive && leaderboard.length > 0 && (
             <div className="bg-canvas border-2 border-timber-dark p-4 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="text-accent" size={18} />
@@ -445,7 +445,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
 
           {/* Challenge Info */}
           <div className="bg-timber-dark text-canvas p-4 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
             <h3 className="font-syne font-bold mb-4">Деталі</h3>
 

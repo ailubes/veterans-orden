@@ -68,8 +68,8 @@ export default function SearchResultsPage() {
   if (!query.trim()) {
     return (
       <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <Search className="mx-auto mb-4 text-timber-beam" size={64} />
         <h2 className="font-syne text-2xl font-bold mb-2">Введіть запит для пошуку</h2>
@@ -92,8 +92,8 @@ export default function SearchResultsPage() {
   if (error) {
     return (
       <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <AlertCircle className="mx-auto mb-4 text-red-600" size={64} />
         <h2 className="font-syne text-2xl font-bold mb-2">Помилка пошуку</h2>
@@ -106,8 +106,8 @@ export default function SearchResultsPage() {
     <div className="space-y-8">
       {/* Search Header */}
       <div className="bg-white border-2 border-timber-dark p-8 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-3 mb-4">
           <Search className="text-accent" size={32} />
@@ -136,8 +136,8 @@ export default function SearchResultsPage() {
               href={`/help/${result.categorySlug}/${result.slug}`}
               className="block bg-white border-2 border-timber-dark p-6 hover:border-accent transition-colors group relative"
             >
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <div className="flex items-start gap-4">
                 {/* Rank Badge */}
@@ -184,8 +184,8 @@ export default function SearchResultsPage() {
         </div>
       ) : (
         <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <Search className="mx-auto mb-4 text-timber-beam" size={64} />
           <h2 className="font-syne text-2xl font-bold mb-2">Нічого не знайдено</h2>

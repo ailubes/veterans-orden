@@ -14,7 +14,7 @@ export function Quote() {
     >
       <div
         className="joint"
-        style={{ top: '-6px', left: '50%', transform: 'translateX(-50%)' }}
+        style={{ top: '-3px', left: '50%', transform: 'translateX(-50%)' }}
       />
 
       <blockquote

@@ -42,10 +42,10 @@ export default function ResetPasswordPage() {
   if (success) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-8 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         <div className="text-center">
           <div className="w-16 h-16 bg-green-500 text-white flex items-center justify-center mx-auto mb-6 rounded-full">
@@ -71,10 +71,10 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-8 relative">
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       <div className="text-center mb-6">
         <div className="w-12 h-12 bg-timber-dark text-canvas flex items-center justify-center mx-auto mb-4">

@@ -42,19 +42,19 @@ export default async function ReferralsPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
           <p className="label mb-2">ЗАПРОШЕНО ВСЬОГО</p>
           <p className="font-syne text-4xl font-bold">{referralCount}</p>
         </div>
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
           <p className="label mb-2">АКТИВНИХ</p>
           <p className="font-syne text-4xl font-bold">
             {referrals?.filter((r) => r.status === 'active').length || 0}
           </p>
         </div>
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
           <p className="label mb-2">ЗАРОБЛЕНО БАЛІВ</p>
           <p className="font-syne text-4xl font-bold">{earnedPoints}</p>
         </div>
@@ -62,8 +62,8 @@ export default async function ReferralsPage() {
 
       {/* Referral List */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <p className="label text-accent mb-4">МОЇ ЗАПРОШЕНІ</p>
 
@@ -106,8 +106,8 @@ export default async function ReferralsPage() {
 
       {/* How it works */}
       <div className="mt-8 bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <p className="label text-accent mb-4">ЯК ЦЕ ПРАЦЮЄ</p>
 

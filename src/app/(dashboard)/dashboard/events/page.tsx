@@ -102,8 +102,8 @@ export default async function EventsPage({ searchParams }: PageProps) {
               key={event.id}
               className="bg-canvas border-2 border-timber-dark p-6 relative hover:border-accent transition-colors"
             >
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <div className="flex flex-col md:flex-row md:items-start gap-4">
                 {/* Date Block */}
@@ -156,8 +156,8 @@ export default async function EventsPage({ searchParams }: PageProps) {
         </div>
       ) : (
         <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <Calendar className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
           <h3 className="font-syne text-xl font-bold mb-2">

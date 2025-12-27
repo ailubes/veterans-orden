@@ -123,10 +123,10 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
 
       {/* Header Card */}
       <div className="bg-timber-dark text-canvas border-2 border-timber-dark p-6 mb-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           {/* Member info */}
@@ -218,10 +218,10 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
         {/* Profile Info */}
         <div className="lg:col-span-2">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <p className="label text-accent mb-4">ОСОБИСТА ІНФОРМАЦІЯ</p>
 
@@ -293,10 +293,10 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
         {/* Stats Card */}
         <div className="lg:col-span-1">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <p className="label text-accent mb-4">СТАТИСТИКА</p>
 
@@ -338,10 +338,10 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
       {/* Referral Tree */}
       {directReferrals && directReferrals.length > 0 && (
         <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <p className="label text-accent mb-4">ПРЯМІ ЗАПРОШЕННЯ</p>
 

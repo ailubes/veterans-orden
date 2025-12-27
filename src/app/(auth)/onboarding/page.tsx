@@ -271,10 +271,10 @@ export default function OnboardingPage() {
   return (
     <div className="bg-canvas border-2 border-timber-dark p-8 relative max-w-lg mx-auto">
       {/* Corner joints */}
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       {/* Progress */}
       <div className="flex items-center justify-center gap-2 mb-8">

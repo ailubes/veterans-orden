@@ -8,11 +8,11 @@ export interface JointProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const positionStyles = {
-  'top-left': { top: '-6px', left: '-6px' },
-  'top-right': { top: '-6px', right: '-6px' },
-  'bottom-left': { bottom: '-6px', left: '-6px' },
-  'bottom-right': { bottom: '-6px', right: '-6px' },
-  'center-top': { top: '-6px', left: '50%', transform: 'translateX(-50%)' },
+  'top-left': { top: '-3px', left: '-3px' },
+  'top-right': { top: '-3px', right: '-3px' },
+  'bottom-left': { bottom: '-3px', left: '-3px' },
+  'bottom-right': { bottom: '-3px', right: '-3px' },
+  'center-top': { top: '-3px', left: '50%', transform: 'translateX(-50%)' },
 };
 
 const sizeStyles = {

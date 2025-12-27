@@ -81,10 +81,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
       {/* Header Card */}
       <div className="bg-timber-dark text-canvas border-2 border-timber-dark p-6 mb-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
           {/* Article info */}
@@ -159,10 +159,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           {/* Featured Image */}
           {article.featured_image_url && (
             <div className="bg-canvas border-2 border-timber-dark p-4 relative mb-6">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <Image
                 src={article.featured_image_url}
@@ -177,10 +177,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           {/* Excerpt */}
           {article.excerpt && (
             <div className="bg-accent/10 border-2 border-accent p-6 relative mb-6">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <p className="font-bold text-lg">{article.excerpt}</p>
             </div>
@@ -188,10 +188,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
           {/* Content */}
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <p className="label text-accent mb-4">ЗМІСТ СТАТТІ</p>
 
@@ -204,10 +204,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         {/* Article Info Sidebar */}
         <div className="lg:col-span-1">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <p className="label text-accent mb-4">ІНФОРМАЦІЯ</p>
 
@@ -251,10 +251,10 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           </div>
 
           <div className="bg-canvas border-2 border-timber-dark p-4 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <p className="label text-accent mb-2">АВТОР</p>
             {article.author ? (

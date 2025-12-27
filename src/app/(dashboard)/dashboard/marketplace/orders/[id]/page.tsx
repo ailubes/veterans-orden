@@ -117,8 +117,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
       {/* Order Header */}
       <div className="bg-timber-dark text-canvas p-6 mb-6 relative">
-        <div className="joint border-accent" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint border-accent" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -146,8 +146,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         {/* Order Items */}
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="font-syne text-xl font-bold mb-4">Товари</h2>
 
@@ -180,8 +180,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
           {/* Shipping Info */}
           {order.requiresShipping && (
             <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="text-accent" size={20} />
@@ -249,7 +249,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
           {/* Customer Notes */}
           {order.customerNotes && (
             <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
               <h2 className="font-bold mb-2">Ваш коментар</h2>
               <p className="text-sm text-timber-beam">{order.customerNotes}</p>
             </div>
@@ -259,8 +259,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-timber-dark text-canvas p-6 relative sticky top-4">
-            <div className="joint border-accent" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint border-accent" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="font-syne text-xl font-bold mb-4">Разом</h2>
 

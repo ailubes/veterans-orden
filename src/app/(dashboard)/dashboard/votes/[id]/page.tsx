@@ -97,8 +97,8 @@ export default async function VoteDetailPage({
 
       {/* Vote Header */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 mb-4">
           <span className="px-2 py-1 bg-accent/10 text-accent text-xs font-bold">
@@ -152,10 +152,10 @@ export default async function VoteDetailPage({
 
       {/* Voting Section */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         {/* Not eligible warning */}
         {!isEligible && isActive && (

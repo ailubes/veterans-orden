@@ -128,8 +128,8 @@ export default function ContactsPage() {
               position: 'relative',
             }}
           >
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
             <p className="label" style={{ color: 'var(--accent)', marginBottom: '30px' }}>
               ЮРИДИЧНА АДРЕСА
             </p>

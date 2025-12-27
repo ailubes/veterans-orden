@@ -359,8 +359,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         {/* Tab 1: Basic Information */}
         <Tabs.Content value="basic" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="text-xl font-bold mb-4">Основна інформація</h2>
 
@@ -461,8 +461,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         {/* Tab 2: Pricing & Stock - Identical to new page */}
         <Tabs.Content value="pricing" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="text-xl font-bold mb-4">Ціни і склад</h2>
 
@@ -557,8 +557,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         {/* Tab 3: Media - Identical to new page */}
         <Tabs.Content value="media" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="text-xl font-bold mb-4">Медіа</h2>
 
@@ -586,8 +586,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         {/* Tab 4 & 5 - Similar to new page, I'll add them in a follow-up to keep this commit manageable */}
         <Tabs.Content value="delivery" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="text-xl font-bold mb-4">
               {formData.type === 'physical' && 'Доставка'}
@@ -736,8 +736,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
         <Tabs.Content value="advanced" className="space-y-6">
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <h2 className="text-xl font-bold mb-4">Розширені налаштування</h2>
 

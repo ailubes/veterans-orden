@@ -101,10 +101,10 @@ export default function SignInPage() {
   return (
     <div className="bg-canvas border-2 border-timber-dark p-8 relative">
       {/* Corner joints */}
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       <h1 className="font-syne font-bold text-2xl mb-2 text-center">
         ВХІД

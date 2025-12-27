@@ -125,8 +125,8 @@ export default function NewChallengePage() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <div className="space-y-4">
             {/* Title */}
@@ -301,7 +301,7 @@ export default function NewChallengePage() {
 
         {/* Summary */}
         <div className="bg-timber-dark text-canvas p-4 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
           <p className="label text-accent mb-2">ПІДСУМОК</p>
           <p className="text-sm">
             {CHALLENGE_TYPE_LABELS[formData.type].uk} челендж: {formData.goalTarget}{' '}

@@ -105,8 +105,8 @@ export default function AdminArticlesPage() {
 
       {/* Filters */}
       <div className="bg-white border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 mb-4">
           <Filter className="text-accent" size={20} />
@@ -156,8 +156,8 @@ export default function AdminArticlesPage() {
 
       {/* Articles Table */}
       <div className="bg-white border-2 border-timber-dark relative overflow-x-auto">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <table className="w-full">
           <thead className="bg-timber-dark text-canvas">

@@ -142,8 +142,8 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-4xl mx-auto text-center py-12">
         <div className="bg-green-50 border-2 border-green-600 p-8 relative">
-          <div className="joint border-green-600" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint border-green-600" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint border-green-600" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint border-green-600" style={{ top: '-3px', right: '-3px' }} />
           <h2 className="font-syne text-2xl font-bold text-green-600 mb-4">
             Замовлення створено!
           </h2>
@@ -165,7 +165,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
           <ShoppingCart className="mx-auto mb-4 text-timber-beam" size={48} />
           <p className="text-timber-beam mb-6">Ваш кошик порожній</p>
           <Link
@@ -207,8 +207,8 @@ export default function CheckoutPage() {
                 key={item.productId}
                 className="bg-canvas border-2 border-timber-dark p-4 relative"
               >
-                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-                <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
                 <div className="flex gap-4">
                   {item.product.imageUrl && (
@@ -260,8 +260,8 @@ export default function CheckoutPage() {
           {/* Shipping Form */}
           {requiresShipping && (
             <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="text-accent" size={20} />
@@ -385,7 +385,7 @@ export default function CheckoutPage() {
 
           {/* Notes */}
           <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
             <label className="block font-bold mb-2">Коментар до замовлення</label>
             <textarea
               value={customerNotes}
@@ -400,8 +400,8 @@ export default function CheckoutPage() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-timber-dark text-canvas p-6 relative sticky top-4">
-            <div className="joint border-accent" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint border-accent" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
 
             <div className="flex items-center gap-2 mb-4">
               <CreditCard className="text-accent" size={20} />

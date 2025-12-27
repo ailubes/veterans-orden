@@ -34,8 +34,8 @@ export function Frameworks() {
     >
       {frameworks.map((item, i) => (
         <div key={item.num} className="card">
-          {i === 0 && <div className="joint" style={{ top: '-6px', left: '-6px' }} />}
-          {i === 2 && <div className="joint" style={{ top: '-6px', right: '-6px' }} />}
+          {i === 0 && <div className="joint" style={{ top: '-3px', left: '-3px' }} />}
+          {i === 2 && <div className="joint" style={{ top: '-3px', right: '-3px' }} />}
           <p className="label">НАПРЯМОК {item.num}</p>
           <span
             className="card-title syne"

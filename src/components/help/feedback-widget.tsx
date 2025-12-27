@@ -61,8 +61,8 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
   if (submitted) {
     return (
       <div className="bg-white border-2 border-timber-dark p-6 text-center relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <CheckCircle className="mx-auto mb-3 text-accent" size={48} />
         <h3 className="font-syne text-xl font-bold mb-2">Дякуємо за відгук!</h3>
@@ -75,10 +75,10 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
 
   return (
     <div className="bg-white border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       <h3 className="font-syne text-lg font-bold mb-4 flex items-center gap-2">
         <MessageSquare className="text-accent" size={20} />

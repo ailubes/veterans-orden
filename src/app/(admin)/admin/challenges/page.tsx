@@ -236,7 +236,7 @@ export default function AdminChallengesPage() {
                   key={challenge.id}
                   className="bg-canvas border-2 border-timber-dark p-4 relative"
                 >
-                  <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+                  <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2">
@@ -302,8 +302,8 @@ export default function AdminChallengesPage() {
 
           {/* Desktop Table */}
           <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="border-b-2 border-timber-dark">
@@ -429,8 +429,8 @@ export default function AdminChallengesPage() {
         </>
       ) : (
         <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
           <Target className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає челенджів</h3>
           <p className="text-sm text-timber-beam mb-6">

@@ -67,10 +67,10 @@ export default function HelpHomePage() {
     <div className="space-y-12">
       {/* Welcome Section */}
       <div className="bg-gradient-to-br from-white to-accent/5 border-2 border-timber-dark p-8 relative overflow-hidden">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         {/* Decorative element */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -z-10" />
@@ -131,8 +131,8 @@ export default function HelpHomePage() {
                 href={`/help/${category.slug}`}
                 className="bg-white border-2 border-timber-dark p-6 hover:border-accent hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.3)] transition-all group relative"
               >
-                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-                <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-accent/10 group-hover:bg-accent/20 border border-accent/30 rounded transition-all">
@@ -170,8 +170,8 @@ export default function HelpHomePage() {
                 href={`/help/${article.category?.slug}/${article.slug}`}
                 className="bg-white border-2 border-timber-dark p-6 hover:border-accent hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.2)] transition-all group relative"
               >
-                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-                <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
                 <div className="flex items-start justify-between mb-3">
                   <span className="text-xs font-bold text-accent bg-accent/10 px-2 py-1 rounded">
@@ -207,8 +207,8 @@ export default function HelpHomePage() {
           </h2>
 
           <div className="bg-white border-2 border-timber-dark relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
             <div className="divide-y-2 divide-timber-dark/20">
               {recentArticles.slice(0, 5).map((article: any) => (

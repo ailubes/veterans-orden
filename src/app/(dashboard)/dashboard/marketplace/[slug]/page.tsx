@@ -158,10 +158,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Product Image */}
         <div className="bg-canvas border-2 border-timber-dark relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           {product.imageUrl ? (
             <img
@@ -198,8 +198,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
           {/* Price */}
           <div className="bg-timber-dark text-canvas p-6 mb-6 relative">
-            <div className="joint border-accent" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint border-accent" style={{ top: '-6px', right: '-6px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
             <p className="label text-accent mb-2">ЦІНА</p>
             <p className="font-syne text-4xl font-bold">{product.pricePoints}</p>
             <p className="text-sm opacity-80">балів (≈ {uahValue.toFixed(0)} грн)</p>

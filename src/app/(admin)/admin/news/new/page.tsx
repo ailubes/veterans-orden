@@ -209,8 +209,8 @@ export default function NewNewsPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info Card */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <h2 className="text-xl font-bold mb-4">Основна інформація</h2>
 
@@ -364,8 +364,8 @@ export default function NewNewsPage() {
 
         {/* Featured Image Card */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <h2 className="text-xl font-bold mb-4">Головне зображення</h2>
 
@@ -382,8 +382,8 @@ export default function NewNewsPage() {
 
         {/* Content Editor Card */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <h2 className="text-xl font-bold mb-4">Контент статті *</h2>
 

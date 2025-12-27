@@ -245,8 +245,8 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">

@@ -57,7 +57,7 @@ export function UserTaskStats() {
   if (loading) {
     return (
       <div className="bg-canvas border-2 border-timber-dark p-6 relative animate-pulse">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
         <div className="h-6 bg-timber-dark/10 w-1/3 mb-4" />
         <div className="grid grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
@@ -74,10 +74,10 @@ export function UserTaskStats() {
 
   return (
     <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-      <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+      <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+      <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
       <div className="flex items-center justify-between mb-6">
         <div>

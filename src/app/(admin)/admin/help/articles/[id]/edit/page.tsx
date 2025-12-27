@@ -313,8 +313,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
       {/* Preview Mode */}
       {showPreview ? (
         <div className="bg-white border-2 border-timber-dark p-8 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <div className="max-w-4xl mx-auto">
             <div className="mb-4">
@@ -346,8 +346,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Info */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-xl font-bold mb-4">Основна інформація</h2>
 
@@ -423,8 +423,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 
             {/* Content */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-xl font-bold mb-4">
                 Вміст статті <span className="text-red-600">*</span>
@@ -441,8 +441,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 
             {/* Video */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-xl font-bold mb-4">Відео (опціонально)</h2>
 
@@ -471,8 +471,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
           <div className="lg:col-span-1 space-y-6">
             {/* Audience */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-lg font-bold mb-4">Аудиторія</h2>
 
@@ -490,8 +490,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 
             {/* Keywords */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-lg font-bold mb-4">Ключові слова</h2>
 
@@ -537,8 +537,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 
             {/* Related Articles */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-lg font-bold mb-4">Пов'язані статті</h2>
 
@@ -565,8 +565,8 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
 
             {/* SEO */}
             <div className="bg-white border-2 border-timber-dark p-6 relative">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne text-lg font-bold mb-4">SEO</h2>
 

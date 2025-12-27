@@ -60,8 +60,8 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
           {/* Sidebar */}
           <aside className="lg:col-span-1">
             <div className="bg-white border-2 border-timber-dark p-4 sticky top-4">
-              <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-              <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+              <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+              <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
               <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
                 Категорії

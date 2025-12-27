@@ -75,8 +75,8 @@ export default function CategoryPage() {
   if (error || !category) {
     return (
       <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <Folder className="mx-auto mb-4 text-timber-beam" size={64} />
         <h2 className="font-syne text-2xl font-bold mb-2">Категорію не знайдено</h2>
@@ -92,8 +92,8 @@ export default function CategoryPage() {
     <div className="space-y-8">
       {/* Category Header */}
       <div className="bg-white border-2 border-timber-dark p-8 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 text-sm text-timber-beam mb-4">
           <a href="/help" className="hover:text-accent">Допомога</a>
@@ -126,8 +126,8 @@ export default function CategoryPage() {
                 href={`/help/${subcat.slug}`}
                 className="bg-white border-2 border-timber-dark p-4 hover:border-accent transition-colors group relative"
               >
-                <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-                <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+                <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+                <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
                 <h3 className="font-bold mb-1 group-hover:text-accent transition-colors">
                   {subcat.nameUk}
@@ -153,8 +153,8 @@ export default function CategoryPage() {
         </div>
       ) : (
         <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <FileText className="mx-auto mb-4 text-timber-beam" size={48} />
           <p className="text-timber-beam">Статті в цій категорії ще не додані</p>

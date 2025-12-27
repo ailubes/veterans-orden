@@ -88,8 +88,8 @@ export default function AdminHelpPage() {
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="flex items-start justify-between mb-4">
               <FileText className="text-accent" size={32} />
@@ -102,8 +102,8 @@ export default function AdminHelpPage() {
           </div>
 
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="flex items-start justify-between mb-4">
               <Folder className="text-accent" size={32} />
@@ -114,8 +114,8 @@ export default function AdminHelpPage() {
           </div>
 
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="flex items-start justify-between mb-4">
               <Eye className="text-accent" size={32} />
@@ -126,8 +126,8 @@ export default function AdminHelpPage() {
           </div>
 
           <div className="bg-white border-2 border-timber-dark p-6 relative">
-            <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-            <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+            <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+            <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
             <div className="flex items-start justify-between mb-4">
               <ThumbsUp className="text-accent" size={32} />
@@ -147,8 +147,8 @@ export default function AdminHelpPage() {
           href="/admin/help/articles/new"
           className="bg-accent text-canvas border-2 border-timber-dark p-8 hover:shadow-[8px_8px_0px_0px_rgba(44,40,36,1)] transition-all group relative"
         >
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <div className="flex items-center gap-4">
             <div className="p-4 bg-canvas/20">
@@ -165,8 +165,8 @@ export default function AdminHelpPage() {
           href="/admin/help/categories"
           className="bg-white border-2 border-timber-dark p-8 hover:border-accent transition-colors group relative"
         >
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
           <div className="flex items-center gap-4">
             <div className="p-4 bg-timber-dark/10 group-hover:bg-accent/10 transition-colors">
@@ -184,8 +184,8 @@ export default function AdminHelpPage() {
 
       {/* Management Links */}
       <div className="bg-white border-2 border-timber-dark relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="p-6 border-b-2 border-timber-dark/20">
           <h2 className="font-syne text-xl font-bold">Управління контентом</h2>

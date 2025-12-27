@@ -113,10 +113,10 @@ export default function PointsPage() {
 
       {/* Balance Card */}
       <div className="bg-timber-dark text-canvas p-6 relative mb-8">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ bottom: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ bottom: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 mb-6">
           <Coins className="text-accent" size={24} />
@@ -152,8 +152,8 @@ export default function PointsPage() {
       {/* Expiration Warning */}
       {isExpiringSoon && daysUntilExpiration !== null && (
         <div className="bg-accent/10 border-2 border-accent p-4 mb-8 relative">
-          <div className="joint border-accent" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint border-accent" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
           <div className="flex items-start gap-3">
             <Clock className="text-accent flex-shrink-0" size={20} />
             <div>
@@ -170,8 +170,8 @@ export default function PointsPage() {
       {/* Level Progress */}
       {pointsToNext !== null && (
         <div className="bg-canvas border-2 border-timber-dark p-6 mb-8 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -198,8 +198,8 @@ export default function PointsPage() {
 
       {/* Transaction History */}
       <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-        <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+        <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+        <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
         <div className="flex items-center gap-2 mb-6">
           <History className="text-accent" size={20} />

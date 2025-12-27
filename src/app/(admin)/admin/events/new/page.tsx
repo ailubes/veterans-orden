@@ -148,8 +148,8 @@ export default function NewEventPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
-          <div className="joint" style={{ top: '-6px', right: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
+          <div className="joint" style={{ top: '-3px', right: '-3px' }} />
 
           <h2 className="font-syne text-xl font-bold mb-6">Основна інформація</h2>
 
@@ -211,7 +211,7 @@ export default function NewEventPage() {
 
         {/* Location */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
           <h2 className="font-syne text-xl font-bold mb-6">Місце проведення</h2>
 
@@ -254,7 +254,7 @@ export default function NewEventPage() {
 
         {/* Date & Time */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
           <h2 className="font-syne text-xl font-bold mb-6">Дата та час</h2>
 
@@ -304,7 +304,7 @@ export default function NewEventPage() {
 
         {/* Settings */}
         <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint" style={{ top: '-6px', left: '-6px' }} />
+          <div className="joint" style={{ top: '-3px', left: '-3px' }} />
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
 
