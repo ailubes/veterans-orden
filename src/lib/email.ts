@@ -299,12 +299,14 @@ export async function sendEventReminderEmail(
 До зустрічі на події!
   `;
 
-  return sendEmail({
+  return sendTemplatedEmail(
+    'event_reminder',
     to,
-    subject: `📅 Нагадування: ${eventTitle}`,
+    { firstName, eventTitle, eventDate, eventUrl },
     html,
     text,
-  });
+    `📅 Нагадування: ${eventTitle}`
+  );
 }
 
 /**
@@ -376,12 +378,14 @@ ${voteTitle}
 Проголосувати: ${voteUrl}
   `;
 
-  return sendEmail({
+  return sendTemplatedEmail(
+    'vote_reminder',
     to,
-    subject: `🗳️ Нагадування: ${voteTitle}`,
+    { firstName, voteTitle, voteDeadline, voteUrl },
     html,
     text,
-  });
+    `🗳️ Нагадування: ${voteTitle}`
+  );
 }
 
 /**
@@ -432,12 +436,14 @@ export async function sendAdminNotificationEmail(
 
   const text = message;
 
-  return sendEmail({
-    to,
-    subject: `[ADMIN] ${subject}`,
+  return sendTemplatedEmail(
+    'admin_notification',
+    Array.isArray(to) ? to[0] : to, // sendTemplatedEmail expects single email
+    { subject, message },
     html,
     text,
-  });
+    `[ADMIN] ${subject}`
+  );
 }
 
 /**
@@ -568,10 +574,20 @@ ${itemsText}
 Мережа Вільних Людей
   `;
 
-  return sendEmail({
+  return sendTemplatedEmail(
+    'order_confirmation',
     to,
-    subject: `✅ Замовлення #${orderId.slice(0, 8).toUpperCase()} підтверджено`,
+    {
+      firstName,
+      orderNumber: orderId.slice(0, 8).toUpperCase(),
+      orderItemsTable: itemsHtml,
+      orderItemsList: itemsText,
+      totalPoints: totalPoints.toString(),
+      totalUah: totalUah > 0 ? (totalUah / 100).toFixed(2) : '',
+      orderUrl,
+    },
     html,
     text,
-  });
+    `✅ Замовлення #${orderId.slice(0, 8).toUpperCase()} підтверджено`
+  );
 }
