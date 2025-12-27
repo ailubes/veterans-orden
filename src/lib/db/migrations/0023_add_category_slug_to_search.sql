@@ -16,7 +16,7 @@ RETURNS TABLE (
   slug VARCHAR,
   category_name VARCHAR,
   category_slug VARCHAR,
-  rank REAL
+  rank DOUBLE PRECISION
 ) AS $$
 BEGIN
   RETURN QUERY
