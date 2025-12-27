@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { use } from 'react';
 import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 import { getEmailTemplate, substituteVariables } from '@/lib/email-templates';
 import { sendEmail } from '@/lib/email';
@@ -12,7 +11,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ key: string }> }
 ) {
-  const { key } = use(params);
+  const { key } = await params;
   const { user, profile, error } = await getAuthenticatedUserWithProfile(request);
 
   if (!user || error) {

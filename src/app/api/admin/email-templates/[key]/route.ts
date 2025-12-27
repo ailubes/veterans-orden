@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { use } from 'react';
 import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 import { getEmailTemplate, updateEmailTemplate, getTemplateHistory } from '@/lib/email-templates';
 
@@ -11,7 +10,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ key: string }> }
 ) {
-  const { key } = use(params);
+  const { key } = await params;
   const { user, profile, error } = await getAuthenticatedUserWithProfile(request);
 
   if (!user || error) {
@@ -81,7 +80,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ key: string }> }
 ) {
-  const { key } = use(params);
+  const { key } = await params;
   const { user, profile, error } = await getAuthenticatedUserWithProfile(request);
 
   if (!user || error) {
