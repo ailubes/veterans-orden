@@ -6,6 +6,13 @@ import { ShoppingBag, Package, Download, Ticket, Star, Filter } from 'lucide-rea
 import { pointsToUAH } from '@/lib/points/constants';
 import type { Product, ProductType } from '@/lib/marketplace/types';
 
+// Helper function to strip HTML tags from text
+function stripHtml(html: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return div.textContent || div.innerText || '';
+}
+
 interface ProductsResponse {
   products: Product[];
   pagination: {
@@ -239,7 +246,7 @@ export default function MarketplacePage() {
                   {/* Description */}
                   {product.descriptionUk && (
                     <p className="text-sm text-timber-beam mb-3 line-clamp-2">
-                      {product.descriptionUk}
+                      {stripHtml(product.descriptionUk)}
                     </p>
                   )}
 

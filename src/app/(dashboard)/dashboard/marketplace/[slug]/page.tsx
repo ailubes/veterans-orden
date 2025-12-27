@@ -187,9 +187,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           </h1>
 
           {product.descriptionUk && (
-            <p className="text-timber-beam mb-6 whitespace-pre-wrap">
-              {product.descriptionUk}
-            </p>
+            <div
+              className="text-timber-beam mb-6 prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: product.descriptionUk }}
+            />
           )}
 
           {/* Price */}
