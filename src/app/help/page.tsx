@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Rocket, Zap, HelpCircle, Shield, Video, Settings, TrendingUp, Clock } from 'lucide-react';
+import { Rocket, Zap, HelpCircle, Shield, Video, Settings, TrendingUp, Clock, Target, Award, Coins, Trophy } from 'lucide-react';
 import type { HelpCategory, HelpArticle } from '@/lib/help/types';
 
 export default function HelpHomePage() {
@@ -46,6 +46,10 @@ export default function HelpHomePage() {
       Shield,
       Video,
       Settings,
+      Target,
+      Award,
+      Coins,
+      Trophy,
     };
     return icons[iconName || ''] || HelpCircle;
   };
