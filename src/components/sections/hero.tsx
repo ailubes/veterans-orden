@@ -149,7 +149,7 @@ export function Hero() {
           <Link href="/sign-up" className="btn">
             ВСТУПИТИ ДО МЕРЕЖІ →
           </Link>
-          <Link href="/sign-in" className="btn btn-outline">
+          <Link href="/sign-in" className="btn" style={{ backgroundColor: 'var(--accent)', color: 'var(--timber-dark)' }}>
             УВІЙТИ
           </Link>
         </div>
