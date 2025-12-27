@@ -245,6 +245,13 @@ export const articleStatusEnum = pgEnum('article_status', [
   'archived',
 ]);
 
+export const emailSendStatusEnum = pgEnum('email_send_status', [
+  'pending',
+  'sent',
+  'failed',
+  'bounced',
+]);
+
 // ===========================================
 // TABLES
 // ===========================================
@@ -1015,6 +1022,88 @@ export const helpTooltips = pgTable('help_tooltips', {
   articleIdx: index('help_tooltips_article_idx').on(table.articleId),
 }));
 
+// ----- EMAIL TEMPLATES -----
+export const emailTemplates = pgTable('email_templates', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
+  // Template identification
+  templateKey: varchar('template_key', { length: 100 }).notNull().unique(),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+
+  // Email content
+  subject: varchar('subject', { length: 255 }).notNull(),
+  htmlContent: text('html_content').notNull(),
+  textContent: text('text_content'),
+
+  // Template variables documentation
+  availableVariables: jsonb('available_variables').default([]),
+  variableDescriptions: jsonb('variable_descriptions').default({}),
+  previewData: jsonb('preview_data').default({}),
+
+  // Status & metadata
+  isActive: boolean('is_active').default(true),
+  version: integer('version').default(1),
+
+  // Audit
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdById: uuid('created_by_id').references(() => users.id),
+  updatedById: uuid('updated_by_id').references(() => users.id),
+  lastSentAt: timestamp('last_sent_at'),
+}, (table) => ({
+  keyIdx: uniqueIndex('email_templates_key_idx').on(table.templateKey),
+  activeIdx: index('email_templates_active_idx').on(table.isActive),
+  updatedAtIdx: index('email_templates_updated_at_idx').on(table.updatedAt),
+}));
+
+export const emailTemplateHistory = pgTable('email_template_history', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  templateId: uuid('template_id').references(() => emailTemplates.id, { onDelete: 'cascade' }).notNull(),
+
+  // Snapshot
+  version: integer('version').notNull(),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  htmlContent: text('html_content').notNull(),
+  textContent: text('text_content'),
+
+  // Metadata
+  changedById: uuid('changed_by_id').references(() => users.id),
+  changedAt: timestamp('changed_at').defaultNow().notNull(),
+  changeReason: text('change_reason'),
+}, (table) => ({
+  templateIdx: index('email_template_history_template_idx').on(table.templateId),
+  versionIdx: index('email_template_history_version_idx').on(table.templateId, table.version),
+}));
+
+export const emailSendLog = pgTable('email_send_log', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
+  templateKey: varchar('template_key', { length: 100 }).notNull(),
+  templateVersion: integer('template_version'),
+
+  recipientEmail: varchar('recipient_email', { length: 255 }).notNull(),
+  recipientUserId: uuid('recipient_user_id').references(() => users.id),
+
+  subject: varchar('subject', { length: 255 }).notNull(),
+  variablesUsed: jsonb('variables_used'),
+
+  status: emailSendStatusEnum('status').default('pending').notNull(),
+  providerMessageId: varchar('provider_message_id', { length: 255 }),
+  errorMessage: text('error_message'),
+
+  sentAt: timestamp('sent_at').defaultNow().notNull(),
+  deliveredAt: timestamp('delivered_at'),
+  openedAt: timestamp('opened_at'),
+  clickedAt: timestamp('clicked_at'),
+}, (table) => ({
+  templateIdx: index('email_send_log_template_idx').on(table.templateKey),
+  recipientIdx: index('email_send_log_recipient_idx').on(table.recipientEmail),
+  userIdx: index('email_send_log_user_idx').on(table.recipientUserId),
+  sentAtIdx: index('email_send_log_sent_at_idx').on(table.sentAt),
+  statusIdx: index('email_send_log_status_idx').on(table.status),
+}));
+
 // ===========================================
 // RELATIONS
 // ===========================================
@@ -1274,5 +1363,35 @@ export const helpTooltipsRelations = relations(helpTooltips, ({ one }) => ({
   article: one(helpArticles, {
     fields: [helpTooltips.articleId],
     references: [helpArticles.id],
+  }),
+}));
+
+export const emailTemplatesRelations = relations(emailTemplates, ({ one, many }) => ({
+  createdBy: one(users, {
+    fields: [emailTemplates.createdById],
+    references: [users.id],
+  }),
+  updatedBy: one(users, {
+    fields: [emailTemplates.updatedById],
+    references: [users.id],
+  }),
+  history: many(emailTemplateHistory),
+}));
+
+export const emailTemplateHistoryRelations = relations(emailTemplateHistory, ({ one }) => ({
+  template: one(emailTemplates, {
+    fields: [emailTemplateHistory.templateId],
+    references: [emailTemplates.id],
+  }),
+  changedBy: one(users, {
+    fields: [emailTemplateHistory.changedById],
+    references: [users.id],
+  }),
+}));
+
+export const emailSendLogRelations = relations(emailSendLog, ({ one }) => ({
+  recipientUser: one(users, {
+    fields: [emailSendLog.recipientUserId],
+    references: [users.id],
   }),
 }));
