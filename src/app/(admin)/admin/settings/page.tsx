@@ -3,9 +3,11 @@ import { redirect } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import OrganizationProfileTab from '@/components/admin/settings/organization-profile-tab';
 import RoleManagementTab from '@/components/admin/settings/role-management-tab';
+import MembershipProgressionTab from '@/components/admin/settings/membership-progression-tab';
 import OblastsManagementTab from '@/components/admin/settings/oblasts-management-tab';
 import SystemConfigTab from '@/components/admin/settings/system-config-tab';
 import EmailTemplatesTab from '@/components/admin/settings/email-templates-tab';
+import MessagingSettingsTab from '@/components/admin/settings/messaging-settings-tab';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -53,6 +55,12 @@ export default async function AdminSettingsPage() {
             Ролі
           </TabsTrigger>
           <TabsTrigger
+            value="membership"
+            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+          >
+            Прогресія
+          </TabsTrigger>
+          <TabsTrigger
             value="oblasts"
             className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
@@ -71,6 +79,13 @@ export default async function AdminSettingsPage() {
             Email
           </TabsTrigger>
           <TabsTrigger
+            value="messaging"
+            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            disabled={!isSuperAdmin(adminProfile.role)}
+          >
+            Повідомлення
+          </TabsTrigger>
+          <TabsTrigger
             value="system"
             className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
             disabled={!isSuperAdmin(adminProfile.role)}
@@ -85,6 +100,10 @@ export default async function AdminSettingsPage() {
 
         <TabsContent value="roles" className="mt-0">
           <RoleManagementTab adminProfile={adminProfile} />
+        </TabsContent>
+
+        <TabsContent value="membership" className="mt-0">
+          <MembershipProgressionTab adminProfile={adminProfile} />
         </TabsContent>
 
         <TabsContent value="oblasts" className="mt-0">
@@ -114,6 +133,10 @@ export default async function AdminSettingsPage() {
 
         <TabsContent value="email-templates" className="mt-0">
           <EmailTemplatesTab adminProfile={adminProfile} />
+        </TabsContent>
+
+        <TabsContent value="messaging" className="mt-0">
+          <MessagingSettingsTab adminProfile={adminProfile} />
         </TabsContent>
 
         <TabsContent value="system" className="mt-0">

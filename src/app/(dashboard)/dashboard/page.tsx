@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { StatsCard } from '@/components/dashboard/stats-card';
 import { UserTaskStats } from '@/components/dashboard/user-task-stats';
+import RoleProgressCard from '@/components/dashboard/role-progress-card';
 import Link from 'next/link';
 import { Vote, Calendar, CheckSquare, Users } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils';
@@ -215,29 +216,8 @@ export default async function DashboardPage() {
           </Link>
         </div>
 
-        {/* Membership Status */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">СТАТУС ЧЛЕНСТВА</p>
-          <h2 className="font-syne text-2xl font-bold mb-4">
-            {TIER_NAMES[membershipTier] || 'Безкоштовний'}
-          </h2>
-          <p className="text-sm text-timber-beam mb-6">
-            {membershipTier === 'free'
-              ? 'Оновіть членство для отримання додаткових можливостей та впливу в Мережі.'
-              : 'Дякуємо за вашу підтримку Мережі!'}
-          </p>
-          <Link
-            href="/dashboard/settings"
-            className="inline-flex items-center gap-2 bg-timber-dark text-canvas px-6 py-3 font-bold text-sm hover:bg-timber-dark/90 transition-colors"
-          >
-            {membershipTier === 'free' ? 'ОНОВИТИ ЧЛЕНСТВО →' : 'НАЛАШТУВАННЯ →'}
-          </Link>
-        </div>
+        {/* Role Progress */}
+        <RoleProgressCard />
       </div>
 
       {/* Task Progress Stats */}

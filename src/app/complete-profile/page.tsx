@@ -5,11 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 import { checkProfileCompletion, getFieldLabel, type UserProfile } from '@/lib/profile-completion';
-
-interface Oblast {
-  id: string;
-  name: string;
-}
+import { KatottgSelector, type KatottgDetails } from '@/components/ui/katottg-selector';
 
 export default function CompleteProfilePage() {
   const router = useRouter();
@@ -17,7 +13,6 @@ export default function CompleteProfilePage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [oblasts, setOblasts] = useState<Oblast[]>([]);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -25,9 +20,9 @@ export default function CompleteProfilePage() {
     patronymic: '',
     phone: '',
     dateOfBirth: '',
-    oblastId: '',
-    city: '',
+    katottgCode: '' as string | null,
   });
+  const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
 
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [completionPercentage, setCompletionPercentage] = useState(0);
@@ -75,19 +70,25 @@ export default function CompleteProfilePage() {
           dateOfBirth: profile.date_of_birth
             ? new Date(profile.date_of_birth).toISOString().split('T')[0]
             : '',
-          oblastId: profile.oblast_id || '',
-          city: profile.city || '',
+          katottgCode: profile.katottg_code || null,
         });
-      }
 
-      // Load oblasts
-      const { data: oblastsData } = await supabase
-        .from('oblasts')
-        .select('id, name')
-        .order('name');
-
-      if (oblastsData) {
-        setOblasts(oblastsData);
+        // Load KATOTTG details if code exists
+        if (profile.katottg_code) {
+          setKatottgDetails({
+            code: profile.katottg_code,
+            name: profile.settlement_name || '',
+            category: '',
+            level: 4,
+            oblastCode: null,
+            raionCode: null,
+            hromadaCode: null,
+            oblastName: profile.oblast_name_katottg || null,
+            raionName: profile.raion_name || null,
+            hromadaName: profile.hromada_name || null,
+            fullPath: '',
+          });
+        }
       }
 
       setLoading(false);
@@ -112,19 +113,70 @@ export default function CompleteProfilePage() {
         return;
       }
 
+      // Get user's ID for logging
+      const { data: userProfile } = await supabase
+        .from('users')
+        .select('id, katottg_code')
+        .eq('clerk_id', user.id)
+        .single();
+
+      if (!userProfile) {
+        setError('Профіль не знайдено');
+        return;
+      }
+
+      // Log the initial location setup if a location is being set
+      if (formData.katottgCode && !userProfile.katottg_code) {
+        const { error: logError } = await supabase
+          .from('user_location_changes')
+          .insert({
+            user_id: userProfile.id,
+            previous_katottg_code: null,
+            previous_settlement_name: null,
+            previous_hromada_name: null,
+            previous_raion_name: null,
+            previous_oblast_name: null,
+            new_katottg_code: formData.katottgCode,
+            new_settlement_name: katottgDetails?.name || null,
+            new_hromada_name: katottgDetails?.hromadaName || null,
+            new_raion_name: katottgDetails?.raionName || null,
+            new_oblast_name: katottgDetails?.oblastName || null,
+            change_reason: 'initial_setup',
+            changed_by: userProfile.id,
+          });
+
+        if (logError) {
+          console.error('Failed to log initial location setup:', logError);
+          // Don't block the update, just log the error
+        }
+      }
+
       // Update profile in database
+      const updateData: Record<string, unknown> = {
+        first_name: formData.firstName.trim(),
+        last_name: formData.lastName.trim(),
+        patronymic: formData.patronymic.trim() || null,
+        phone: formData.phone.trim(),
+        date_of_birth: formData.dateOfBirth,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Add KATOTTG location fields and set location_last_changed_at
+      if (formData.katottgCode) {
+        updateData.katottg_code = formData.katottgCode;
+        updateData.settlement_name = katottgDetails?.name || null;
+        updateData.hromada_name = katottgDetails?.hromadaName || null;
+        updateData.raion_name = katottgDetails?.raionName || null;
+        updateData.oblast_name_katottg = katottgDetails?.oblastName || null;
+        // Set location_last_changed_at for 30-day restriction
+        if (!userProfile.katottg_code) {
+          updateData.location_last_changed_at = new Date().toISOString();
+        }
+      }
+
       const { error: updateError } = await supabase
         .from('users')
-        .update({
-          first_name: formData.firstName.trim(),
-          last_name: formData.lastName.trim(),
-          patronymic: formData.patronymic.trim() || null,
-          phone: formData.phone.trim(),
-          date_of_birth: formData.dateOfBirth,
-          oblast_id: formData.oblastId,
-          city: formData.city.trim(),
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('clerk_id', user.id);
 
       if (updateError) {
@@ -281,40 +333,16 @@ export default function CompleteProfilePage() {
               />
             </div>
 
-            {/* Oblast */}
-            <div>
-              <label className="label block mb-2">
-                ОБЛАСТЬ <span className="text-red-600">*</span>
-              </label>
-              <select
-                value={formData.oblastId}
-                onChange={(e) => setFormData({ ...formData, oblastId: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              >
-                <option value="">Оберіть область...</option>
-                {oblasts.map((oblast) => (
-                  <option key={oblast.id} value={oblast.id}>
-                    {oblast.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* City */}
-            <div>
-              <label className="label block mb-2">
-                МІСТО <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                placeholder="Київ"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
+            {/* Location (KATOTTG) */}
+            <KatottgSelector
+              value={formData.katottgCode}
+              onChange={(code, details) => {
+                setFormData({ ...formData, katottgCode: code });
+                setKatottgDetails(details);
+              }}
+              required
+              error={!formData.katottgCode ? undefined : undefined}
+            />
           </div>
         </div>
 

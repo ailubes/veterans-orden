@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Save, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Save, AlertTriangle, MapPin, ChevronRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { KatottgSelector, type KatottgDetails } from '@/components/ui/katottg-selector';
 
 interface MemberEditPageProps {
   params: Promise<{
@@ -25,6 +26,14 @@ interface Member {
   email: string;
   phone: string | null;
   date_of_birth: string | null;
+  // KATOTTG location
+  katottg_code: string | null;
+  settlement_name: string | null;
+  hromada_name: string | null;
+  raion_name: string | null;
+  oblast_name_katottg: string | null;
+  location_last_changed_at: string | null;
+  // Legacy location
   oblast_id: string | null;
   city: string | null;
   role: string;
@@ -46,6 +55,11 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [adminRole, setAdminRole] = useState<string>('');
   const [memberId, setMemberId] = useState<string>('');
+
+  // KATOTTG location
+  const [katottgCode, setKatottgCode] = useState<string | null>(null);
+  const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
+  const [originalKatottgCode, setOriginalKatottgCode] = useState<string | null>(null);
 
   // Points adjustment
   const [pointsAdjustment, setPointsAdjustment] = useState<number>(0);
@@ -118,7 +132,26 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
       setMember(memberData);
 
-      // Get oblasts
+      // Initialize KATOTTG state
+      setKatottgCode(memberData.katottg_code || null);
+      setOriginalKatottgCode(memberData.katottg_code || null);
+      if (memberData.katottg_code) {
+        setKatottgDetails({
+          code: memberData.katottg_code,
+          name: memberData.settlement_name || '',
+          category: '',
+          level: 4,
+          oblastCode: null,
+          raionCode: null,
+          hromadaCode: null,
+          oblastName: memberData.oblast_name_katottg || null,
+          raionName: memberData.raion_name || null,
+          hromadaName: memberData.hromada_name || null,
+          fullPath: '',
+        });
+      }
+
+      // Get oblasts (legacy)
       const { data: oblastsData } = await supabase
         .from('oblasts')
         .select('id, name')
@@ -146,6 +179,42 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
     try {
       const supabase = createClient();
 
+      // Get admin user ID for logging
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      const { data: adminData } = await supabase
+        .from('users')
+        .select('id')
+        .eq('clerk_id', authUser?.id)
+        .single();
+
+      // Check if location is being changed
+      const locationChanged = katottgCode !== originalKatottgCode;
+
+      // Log location change by admin (admin override)
+      if (locationChanged && adminData) {
+        const { error: logError } = await supabase
+          .from('user_location_changes')
+          .insert({
+            user_id: member.id,
+            previous_katottg_code: originalKatottgCode,
+            previous_settlement_name: member.settlement_name,
+            previous_hromada_name: member.hromada_name,
+            previous_raion_name: member.raion_name,
+            previous_oblast_name: member.oblast_name_katottg,
+            new_katottg_code: katottgCode,
+            new_settlement_name: katottgDetails?.name || null,
+            new_hromada_name: katottgDetails?.hromadaName || null,
+            new_raion_name: katottgDetails?.raionName || null,
+            new_oblast_name: katottgDetails?.oblastName || null,
+            change_reason: 'admin_override',
+            changed_by: adminData.id,
+          });
+
+        if (logError) {
+          console.error('Failed to log location change:', logError);
+        }
+      }
+
       // Prepare update data
       const updateData: Record<string, unknown> = {
         first_name: member.first_name,
@@ -154,6 +223,13 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         email: member.email,
         phone: member.phone,
         date_of_birth: member.date_of_birth,
+        // KATOTTG location (admin can always update)
+        katottg_code: katottgCode,
+        settlement_name: katottgDetails?.name || null,
+        hromada_name: katottgDetails?.hromadaName || null,
+        raion_name: katottgDetails?.raionName || null,
+        oblast_name_katottg: katottgDetails?.oblastName || null,
+        // Legacy location
         oblast_id: member.oblast_id,
         city: member.city,
         status: member.status,
@@ -163,6 +239,11 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         membership_tier: member.membership_tier,
         membership_paid_until: member.membership_paid_until,
       };
+
+      // Update location_last_changed_at if location was changed
+      if (locationChanged) {
+        updateData.location_last_changed_at = new Date().toISOString();
+      }
 
       // Only admins can change role
       if (adminRole === 'super_admin' || (adminRole === 'admin' && member.role !== 'super_admin')) {
@@ -357,35 +438,85 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
-          <p className="label text-accent mb-4">МІСЦЕЗНАХОДЖЕННЯ</p>
+          <p className="label text-accent mb-4 flex items-center gap-2">
+            <MapPin className="w-4 h-4" />
+            МІСЦЕЗНАХОДЖЕННЯ (KATOTTG)
+          </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-bold mb-2">Область</label>
-              <select
-                value={member.oblast_id || ''}
-                onChange={(e) => setMember({ ...member, oblast_id: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              >
-                <option value="">Оберіть область</option>
-                {oblasts.map((oblast) => (
-                  <option key={oblast.id} value={oblast.id}>
-                    {oblast.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold mb-2">Місто</label>
-              <input
-                type="text"
-                value={member.city || ''}
-                onChange={(e) => setMember({ ...member, city: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              />
-            </div>
+          {/* Admin can always change location */}
+          <div className="bg-blue-50 border border-blue-200 p-3 mb-4 rounded text-sm text-blue-800">
+            <p className="font-medium">Адміністративна зміна локації</p>
+            <p className="text-xs mt-1">
+              Зміни локації, здійснені адміністратором, логуються як &quot;admin_override&quot;.
+            </p>
           </div>
+
+          {/* Current location display */}
+          {katottgDetails && (
+            <div className="mb-4 p-3 bg-timber-dark/5 rounded">
+              <div className="text-sm font-medium">{katottgDetails.name}</div>
+              <div className="text-xs text-timber-beam flex flex-wrap items-center gap-1 mt-1">
+                {katottgDetails.oblastName && (
+                  <span>{katottgDetails.oblastName}</span>
+                )}
+                {katottgDetails.raionName && (
+                  <>
+                    <ChevronRight className="w-3 h-3" />
+                    <span>{katottgDetails.raionName}</span>
+                  </>
+                )}
+                {katottgDetails.hromadaName && (
+                  <>
+                    <ChevronRight className="w-3 h-3" />
+                    <span>{katottgDetails.hromadaName}</span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          <KatottgSelector
+            value={katottgCode}
+            onChange={(code, details) => {
+              setKatottgCode(code);
+              setKatottgDetails(details);
+            }}
+            label="НАСЕЛЕНИЙ ПУНКТ"
+          />
+
+          {/* Legacy location fields (hidden, kept for backwards compatibility) */}
+          <details className="mt-4">
+            <summary className="text-xs text-timber-beam cursor-pointer hover:text-timber-dark">
+              Застарілі поля локації (для сумісності)
+            </summary>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-timber-dark/10">
+              <div>
+                <label className="block text-xs font-bold mb-2 text-timber-beam">Область (застаріле)</label>
+                <select
+                  value={member.oblast_id || ''}
+                  onChange={(e) => setMember({ ...member, oblast_id: e.target.value })}
+                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark/50 font-mono text-sm focus:border-accent focus:outline-none"
+                >
+                  <option value="">Оберіть область</option>
+                  {oblasts.map((oblast) => (
+                    <option key={oblast.id} value={oblast.id}>
+                      {oblast.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold mb-2 text-timber-beam">Місто (застаріле)</label>
+                <input
+                  type="text"
+                  value={member.city || ''}
+                  onChange={(e) => setMember({ ...member, city: e.target.value })}
+                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark/50 font-mono text-sm focus:border-accent focus:outline-none"
+                />
+              </div>
+            </div>
+          </details>
         </div>
 
         {/* Role & Status */}

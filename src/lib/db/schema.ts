@@ -252,9 +252,85 @@ export const emailSendStatusEnum = pgEnum('email_send_status', [
   'bounced',
 ]);
 
+// Membership role enum (8-tier progression system)
+export const membershipRoleEnum = pgEnum('membership_role', [
+  'supporter',        // Level 0: Registered, no contribution
+  'candidate',        // Level 1: Made 49+ UAH contribution, primary voting
+  'member',           // Level 2: 2 recruited candidates, full voting
+  'honorary_member',  // Level 3: 2 recruits became members, loyalty program
+  'network_leader',   // Level 4: 8 personal + 49 total referrals, nomination rights
+  'regional_leader',  // Level 5: 6 helped to leader + 400 total, mayor priority
+  'national_leader',  // Level 6: 4 helped to regional + 4000 total, MP priority
+  'network_guide',    // Level 7: 2 helped to national + 25000 total, budget control
+]);
+
+// Staff role enum (administrative roles, separate from membership)
+export const staffRoleEnum = pgEnum('staff_role', [
+  'none',
+  'news_editor',
+  'admin',
+  'super_admin',
+]);
+
+// Advancement trigger type enum
+export const advancementTriggerEnum = pgEnum('advancement_trigger', [
+  'contribution',      // Made required contribution
+  'referral_count',    // Met direct referral requirement
+  'tree_count',        // Met total referral tree requirement
+  'helped_advance',    // Enough referrals advanced to required role
+  'manual',            // Admin manually advanced
+]);
+
+// Advancement mode enum (for organization settings)
+export const advancementModeEnum = pgEnum('advancement_mode', [
+  'automatic',         // Roles upgrade instantly when requirements met
+  'approval_required', // User requests advancement, admin approves
+]);
+
+// Advancement request status enum
+export const advancementRequestStatusEnum = pgEnum('advancement_request_status', [
+  'pending',
+  'approved',
+  'rejected',
+]);
+
 // ===========================================
 // TABLES
 // ===========================================
+
+// ----- KATOTTG (Ukrainian Administrative Units) -----
+export const katottgCategories = pgTable('katottg_categories', {
+  code: varchar('code', { length: 1 }).primaryKey(),
+  nameUk: varchar('name_uk', { length: 100 }).notNull(),
+  nameEn: varchar('name_en', { length: 100 }).notNull(),
+  descriptionUk: varchar('description_uk', { length: 255 }),
+  level: integer('level').notNull(),
+});
+
+export const katottg = pgTable('katottg', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  code: varchar('code', { length: 19 }).notNull().unique(),
+  category: varchar('category', { length: 1 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull(),
+  level: integer('level').notNull(),
+  oblastCode: varchar('oblast_code', { length: 19 }),
+  raionCode: varchar('raion_code', { length: 19 }),
+  hromadaCode: varchar('hromada_code', { length: 19 }),
+  oblastName: varchar('oblast_name', { length: 255 }),
+  raionName: varchar('raion_name', { length: 255 }),
+  hromadaName: varchar('hromada_name', { length: 255 }),
+  fullPath: text('full_path'),
+  nameNormalized: varchar('name_normalized', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  codeIdx: uniqueIndex('katottg_code_idx').on(table.code),
+  categoryIdx: index('katottg_category_idx').on(table.category),
+  levelIdx: index('katottg_level_idx').on(table.level),
+  oblastCodeIdx: index('katottg_oblast_code_idx').on(table.oblastCode),
+  raionCodeIdx: index('katottg_raion_code_idx').on(table.raionCode),
+  hromadaCodeIdx: index('katottg_hromada_code_idx').on(table.hromadaCode),
+  nameNormalizedIdx: index('katottg_name_normalized_idx').on(table.nameNormalized),
+}));
 
 // ----- OBLASTS (Ukrainian Regions) -----
 export const oblasts = pgTable('oblasts', {
@@ -295,9 +371,15 @@ export const users = pgTable('users', {
   dateOfBirth: timestamp('date_of_birth'),
   avatarUrl: text('avatar_url'),
 
-  // Role & Status
+  // Role & Status (Legacy - kept for backwards compatibility)
   role: userRoleEnum('role').default('prospect').notNull(),
   status: userStatusEnum('status').default('pending').notNull(),
+
+  // New Membership Role System (8-tier progression)
+  membershipRole: membershipRoleEnum('membership_role').default('supporter'),
+  staffRole: staffRoleEnum('staff_role').default('none'),
+  roleAdvancedAt: timestamp('role_advanced_at'),
+  totalReferralCount: integer('total_referral_count').default(0),
 
   // Verification
   isEmailVerified: boolean('is_email_verified').default(false),
@@ -305,10 +387,18 @@ export const users = pgTable('users', {
   isIdentityVerified: boolean('is_identity_verified').default(false),
   verificationMethod: verificationMethodEnum('verification_method').default('none'),
 
-  // Location
+  // Location (Legacy)
   oblastId: uuid('oblast_id').references(() => oblasts.id),
   groupId: uuid('group_id').references(() => groups.id),
   city: varchar('city', { length: 100 }),
+
+  // KATOTTG Location (New - Ukrainian administrative units)
+  katottgCode: varchar('katottg_code', { length: 19 }),
+  settlementName: varchar('settlement_name', { length: 255 }),
+  hromadaName: varchar('hromada_name', { length: 255 }),
+  raionName: varchar('raion_name', { length: 255 }),
+  oblastNameKatottg: varchar('oblast_name_katottg', { length: 255 }),
+  locationLastChangedAt: timestamp('location_last_changed_at'), // For 30-day change restriction
 
   // Delivery Address
   streetAddress: varchar('street_address', { length: 255 }), // Street, building, apartment
@@ -352,6 +442,7 @@ export const users = pgTable('users', {
   oblastIdx: index('users_oblast_idx').on(table.oblastId),
   roleIdx: index('users_role_idx').on(table.role),
   statusIdx: index('users_status_idx').on(table.status),
+  katottgCodeIdx: index('users_katottg_code_idx').on(table.katottgCode),
 }));
 
 // ----- USER ACHIEVEMENTS -----
@@ -749,6 +840,39 @@ export const auditLog = pgTable('audit_log', {
   createdAtIdx: index('audit_log_created_at_idx').on(table.createdAt),
 }));
 
+// ----- USER LOCATION CHANGES (Audit Trail) -----
+// Users can only change location once per 30 days
+export const userLocationChanges = pgTable('user_location_changes', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  // Previous location
+  previousKatottgCode: varchar('previous_katottg_code', { length: 19 }),
+  previousSettlementName: varchar('previous_settlement_name', { length: 255 }),
+  previousHromadaName: varchar('previous_hromada_name', { length: 255 }),
+  previousRaionName: varchar('previous_raion_name', { length: 255 }),
+  previousOblastName: varchar('previous_oblast_name', { length: 255 }),
+
+  // New location
+  newKatottgCode: varchar('new_katottg_code', { length: 19 }),
+  newSettlementName: varchar('new_settlement_name', { length: 255 }),
+  newHromadaName: varchar('new_hromada_name', { length: 255 }),
+  newRaionName: varchar('new_raion_name', { length: 255 }),
+  newOblastName: varchar('new_oblast_name', { length: 255 }),
+
+  // Metadata
+  changeReason: varchar('change_reason', { length: 100 }), // 'initial_setup', 'user_update', 'admin_override'
+  changedBy: uuid('changed_by').references(() => users.id), // NULL if self, user_id if admin
+  ipAddress: varchar('ip_address', { length: 45 }),
+  userAgent: text('user_agent'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  userIdx: index('location_changes_user_idx').on(table.userId),
+  createdAtIdx: index('location_changes_created_at_idx').on(table.createdAt),
+  userDateIdx: index('location_changes_user_date_idx').on(table.userId, table.createdAt),
+}));
+
 // ----- ORGANIZATION SETTINGS -----
 export const organizationSettings = pgTable('organization_settings', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -1104,9 +1228,117 @@ export const emailSendLog = pgTable('email_send_log', {
   statusIdx: index('email_send_log_status_idx').on(table.status),
 }));
 
+// ----- ROLE PROGRESSION: ADVANCEMENTS -----
+export const roleAdvancements = pgTable('role_advancements', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  fromRole: membershipRoleEnum('from_role').notNull(),
+  toRole: membershipRoleEnum('to_role').notNull(),
+  advancedAt: timestamp('advanced_at').defaultNow(),
+  advancedBy: uuid('advanced_by').references(() => users.id, { onDelete: 'set null' }), // The referrer who helped
+  triggerType: advancementTriggerEnum('trigger_type').notNull(),
+  triggerData: jsonb('trigger_data').default({}),
+  approvedBy: uuid('approved_by').references(() => users.id, { onDelete: 'set null' }), // Admin who approved
+  approvedAt: timestamp('approved_at'),
+}, (table) => ({
+  userIdx: index('role_advancements_user_idx').on(table.userId),
+  advancedByIdx: index('role_advancements_advanced_by_idx').on(table.advancedBy),
+  toRoleIdx: index('role_advancements_to_role_idx').on(table.toRole),
+  advancedAtIdx: index('role_advancements_advanced_at_idx').on(table.advancedAt),
+}));
+
+// ----- ROLE PROGRESSION: REQUIREMENTS -----
+export const roleRequirements = pgTable('role_requirements', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  role: membershipRoleEnum('role').notNull().unique(),
+  roleLevel: integer('role_level').notNull(),
+  displayNameUk: varchar('display_name_uk', { length: 100 }).notNull(),
+  descriptionUk: text('description_uk'),
+
+  // Contribution requirement (for candidate level)
+  requiresContribution: boolean('requires_contribution').default(false),
+  minContributionAmount: integer('min_contribution_amount'), // in kopecks
+
+  // Direct referral requirements
+  minDirectReferrals: integer('min_direct_referrals').default(0),
+  minDirectReferralsAtRole: membershipRoleEnum('min_direct_referrals_at_role'),
+
+  // Total tree requirements
+  minTotalReferrals: integer('min_total_referrals').default(0),
+
+  // "Helped advance" requirements
+  minHelpedAdvance: integer('min_helped_advance').default(0),
+  helpedAdvanceFromRole: membershipRoleEnum('helped_advance_from_role'),
+  helpedAdvanceToRole: membershipRoleEnum('helped_advance_to_role'),
+
+  // Privileges
+  privileges: jsonb('privileges').default([]),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// ----- ROLE PROGRESSION: USER STATS CACHE -----
+export const userReferralStats = pgTable('user_referral_stats', {
+  userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Direct referrals by role
+  directSupporters: integer('direct_supporters').default(0),
+  directCandidates: integer('direct_candidates').default(0),
+  directMembers: integer('direct_members').default(0),
+  directHonoraryMembers: integer('direct_honorary_members').default(0),
+  directNetworkLeaders: integer('direct_network_leaders').default(0),
+  directRegionalLeaders: integer('direct_regional_leaders').default(0),
+  directNationalLeaders: integer('direct_national_leaders').default(0),
+  directNetworkGuides: integer('direct_network_guides').default(0),
+
+  // Total tree count
+  totalTreeCount: integer('total_tree_count').default(0),
+
+  // "Helped advance" counts
+  helpedToCandidate: integer('helped_to_candidate').default(0),
+  helpedToMember: integer('helped_to_member').default(0),
+  helpedToHonorary: integer('helped_to_honorary').default(0),
+  helpedToLeader: integer('helped_to_leader').default(0),
+  helpedToRegional: integer('helped_to_regional').default(0),
+  helpedToNational: integer('helped_to_national').default(0),
+  helpedToGuide: integer('helped_to_guide').default(0),
+
+  lastCalculatedAt: timestamp('last_calculated_at').defaultNow(),
+});
+
+// ----- ROLE PROGRESSION: ADVANCEMENT REQUESTS -----
+export const advancementRequests = pgTable('advancement_requests', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  requestedRole: membershipRoleEnum('requested_role').notNull(),
+  currentRole: membershipRoleEnum('current_role').notNull(),
+  requestedAt: timestamp('requested_at').defaultNow(),
+  status: advancementRequestStatusEnum('status').default('pending'),
+  reviewedBy: uuid('reviewed_by').references(() => users.id, { onDelete: 'set null' }),
+  reviewedAt: timestamp('reviewed_at'),
+  rejectionReason: text('rejection_reason'),
+}, (table) => ({
+  userIdx: index('advancement_requests_user_idx').on(table.userId),
+  statusIdx: index('advancement_requests_status_idx').on(table.status),
+  requestedAtIdx: index('advancement_requests_requested_at_idx').on(table.requestedAt),
+}));
+
 // ===========================================
 // RELATIONS
 // ===========================================
+
+// ----- KATOTTG RELATIONS -----
+export const katottgCategoriesRelations = relations(katottgCategories, ({ many }) => ({
+  locations: many(katottg),
+}));
+
+export const katottgRelations = relations(katottg, ({ one }) => ({
+  categoryRef: one(katottgCategories, {
+    fields: [katottg.category],
+    references: [katottgCategories.code],
+  }),
+}));
 
 export const oblastsRelations = relations(oblasts, ({ one, many }) => ({
   leader: one(users, {
@@ -1392,6 +1624,55 @@ export const emailTemplateHistoryRelations = relations(emailTemplateHistory, ({ 
 export const emailSendLogRelations = relations(emailSendLog, ({ one }) => ({
   recipientUser: one(users, {
     fields: [emailSendLog.recipientUserId],
+    references: [users.id],
+  }),
+}));
+
+// ----- USER LOCATION CHANGES RELATIONS -----
+export const userLocationChangesRelations = relations(userLocationChanges, ({ one }) => ({
+  user: one(users, {
+    fields: [userLocationChanges.userId],
+    references: [users.id],
+  }),
+  changedByUser: one(users, {
+    fields: [userLocationChanges.changedBy],
+    references: [users.id],
+    relationName: 'locationChangesAdmin',
+  }),
+}));
+
+// ----- ROLE PROGRESSION RELATIONS -----
+
+export const roleAdvancementsRelations = relations(roleAdvancements, ({ one }) => ({
+  user: one(users, {
+    fields: [roleAdvancements.userId],
+    references: [users.id],
+  }),
+  advancedByUser: one(users, {
+    fields: [roleAdvancements.advancedBy],
+    references: [users.id],
+    relationName: 'helpedAdvancements',
+  }),
+  approvedByUser: one(users, {
+    fields: [roleAdvancements.approvedBy],
+    references: [users.id],
+  }),
+}));
+
+export const userReferralStatsRelations = relations(userReferralStats, ({ one }) => ({
+  user: one(users, {
+    fields: [userReferralStats.userId],
+    references: [users.id],
+  }),
+}));
+
+export const advancementRequestsRelations = relations(advancementRequests, ({ one }) => ({
+  user: one(users, {
+    fields: [advancementRequests.userId],
+    references: [users.id],
+  }),
+  reviewer: one(users, {
+    fields: [advancementRequests.reviewedBy],
     references: [users.id],
   }),
 }));

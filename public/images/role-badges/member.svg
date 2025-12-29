@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background -->
+  <circle cx="64" cy="64" r="62" fill="#f4f1eb"/>
+  <circle cx="64" cy="64" r="56" fill="#22c55e" opacity="0.1"/>
+
+  <!-- Outer ring -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#22c55e" stroke-width="4"/>
+
+  <!-- Inner circle -->
+  <circle cx="64" cy="50" r="36" fill="none" stroke="#22c55e" stroke-width="2"/>
+
+  <!-- Network triangle -->
+  <polygon points="64,22 92,68 36,68"
+           fill="none" stroke="#16a34a" stroke-width="3"/>
+
+  <!-- Three connected nodes -->
+  <circle cx="64" cy="22" r="8" fill="#22c55e"/>
+  <circle cx="92" cy="68" r="8" fill="#22c55e"/>
+  <circle cx="36" cy="68" r="8" fill="#22c55e"/>
+
+  <!-- Inner circles (white) -->
+  <circle cx="64" cy="22" r="4" fill="#f4f1eb"/>
+  <circle cx="92" cy="68" r="4" fill="#f4f1eb"/>
+  <circle cx="36" cy="68" r="4" fill="#f4f1eb"/>
+
+  <!-- Center node -->
+  <circle cx="64" cy="48" r="6" fill="#16a34a"/>
+
+  <!-- Connection lines to center -->
+  <line x1="64" y1="30" x2="64" y2="42" stroke="#16a34a" stroke-width="2"/>
+  <line x1="84" y1="64" x2="70" y2="52" stroke="#16a34a" stroke-width="2"/>
+  <line x1="44" y1="64" x2="58" y2="52" stroke="#16a34a" stroke-width="2"/>
+
+  <!-- Wave ribbon banner -->
+  <path d="M8 108
+           Q24 100 44 104
+           Q64 108 84 104
+           Q104 100 120 108
+           L120 122
+           Q104 114 84 118
+           Q64 122 44 118
+           Q24 114 8 122 Z"
+        fill="#16a34a"/>
+
+  <!-- Ribbon highlight -->
+  <path d="M8 108 Q24 100 44 104 Q64 108 84 104 Q104 100 120 108"
+        fill="none" stroke="#22c55e" stroke-width="1"/>
+
+  <!-- Level text -->
+  <text x="64" y="117" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff">РІВЕНЬ 2</text>
+</svg>

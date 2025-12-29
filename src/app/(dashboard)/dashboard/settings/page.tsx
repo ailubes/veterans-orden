@@ -7,6 +7,7 @@ import { MembershipUpgrade } from '@/components/dashboard/membership-upgrade';
 import { ProfilePhotoUpload } from '@/components/dashboard/profile-photo-upload';
 import { MessageToLeader } from '@/components/dashboard/message-to-leader';
 import { NovaPoshtaSelector } from '@/components/dashboard/nova-poshta-selector';
+import { KatottgSelector, type KatottgDetails } from '@/components/ui/katottg-selector';
 import { formatDate } from '@/lib/utils';
 import {
   Copy,
@@ -21,13 +22,8 @@ import {
   Award,
   Home,
   Package,
-  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
-
-interface Oblast {
-  id: string;
-  name: string;
-}
 
 interface UserProfile {
   id: string;
@@ -43,6 +39,14 @@ interface UserProfile {
   referralCount: number;
   referredById: string | null;
   referredByName: string | null;
+  // KATOTTG location
+  katottgCode: string | null;
+  settlementName: string | null;
+  hromadaName: string | null;
+  raionName: string | null;
+  oblastNameKatottg: string | null;
+  locationLastChangedAt: string | null; // For 30-day restriction
+  // Legacy location (for display)
   oblastId: string | null;
   oblastName: string | null;
   city: string | null;
@@ -65,6 +69,18 @@ interface UserProfile {
   regionalLeaderName: string | null;
 }
 
+// Check if location change is allowed (30 days since last change)
+function canChangeLocation(lastChangedAt: string | null): { allowed: boolean; daysRemaining: number } {
+  if (!lastChangedAt) return { allowed: true, daysRemaining: 0 };
+
+  const lastChanged = new Date(lastChangedAt);
+  const now = new Date();
+  const daysSinceChange = Math.floor((now.getTime() - lastChanged.getTime()) / (1000 * 60 * 60 * 24));
+  const daysRemaining = Math.max(0, 30 - daysSinceChange);
+
+  return { allowed: daysSinceChange >= 30, daysRemaining };
+}
+
 export default function SettingsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -77,10 +93,11 @@ export default function SettingsPage() {
   const [lastName, setLastName] = useState('');
   const [patronymic, setPatronymic] = useState('');
 
-  // Location fields
-  const [oblasts, setOblasts] = useState<Oblast[]>([]);
-  const [oblastId, setOblastId] = useState<string | null>(null);
-  const [city, setCity] = useState('');
+  // KATOTTG location
+  const [katottgCode, setKatottgCode] = useState<string | null>(null);
+  const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
+  // Track original location for change detection
+  const [originalKatottgCode, setOriginalKatottgCode] = useState<string | null>(null);
 
   // Address fields
   const [streetAddress, setStreetAddress] = useState('');
@@ -101,22 +118,12 @@ export default function SettingsPage() {
     const getUser = async () => {
       const supabase = createClient();
 
-      // Fetch oblasts list
-      const { data: oblastsList } = await supabase
-        .from('oblasts')
-        .select('id, name')
-        .order('name');
-
-      if (oblastsList) {
-        setOblasts(oblastsList);
-      }
-
       const {
         data: { user: authUser },
       } = await supabase.auth.getUser();
 
       if (authUser) {
-        // Fetch full profile with oblast and referrer info
+        // Fetch full profile with KATOTTG and referrer info
         const { data: profile } = await supabase
           .from('users')
           .select(`
@@ -132,6 +139,12 @@ export default function SettingsPage() {
             referral_code,
             referral_count,
             referred_by_id,
+            katottg_code,
+            settlement_name,
+            hromada_name,
+            raion_name,
+            oblast_name_katottg,
+            location_last_changed_at,
             oblast_id,
             city,
             street_address,
@@ -202,6 +215,14 @@ export default function SettingsPage() {
             referralCount: profile.referral_count || 0,
             referredById: profile.referred_by_id || null,
             referredByName,
+            // KATOTTG location
+            katottgCode: profile.katottg_code || null,
+            settlementName: profile.settlement_name || null,
+            hromadaName: profile.hromada_name || null,
+            raionName: profile.raion_name || null,
+            oblastNameKatottg: profile.oblast_name_katottg || null,
+            locationLastChangedAt: profile.location_last_changed_at || null,
+            // Legacy location
             oblastId: profile.oblast_id || null,
             oblastName: Array.isArray(profile.oblast)
               ? profile.oblast[0]?.name || null
@@ -225,8 +246,24 @@ export default function SettingsPage() {
           setFirstName(profile.first_name || '');
           setLastName(profile.last_name || '');
           setPatronymic(profile.patronymic || '');
-          setOblastId(profile.oblast_id || null);
-          setCity(profile.city || '');
+          setKatottgCode(profile.katottg_code || null);
+          setOriginalKatottgCode(profile.katottg_code || null); // Track original for change detection
+          // Load KATOTTG details if code exists
+          if (profile.katottg_code) {
+            setKatottgDetails({
+              code: profile.katottg_code,
+              name: profile.settlement_name || '',
+              category: '',
+              level: 4,
+              oblastCode: null,
+              raionCode: null,
+              hromadaCode: null,
+              oblastName: profile.oblast_name_katottg || null,
+              raionName: profile.raion_name || null,
+              hromadaName: profile.hromada_name || null,
+              fullPath: '',
+            });
+          }
           setStreetAddress(profile.street_address || '');
           setPostalCode(profile.postal_code || '');
           setNovaPoshtaCity(profile.nova_poshta_city || '');
@@ -275,6 +312,19 @@ export default function SettingsPage() {
         return;
       }
 
+      // Check if location is being changed
+      const locationChanged = katottgCode !== originalKatottgCode;
+
+      // If location is being changed, check if it's allowed
+      if (locationChanged && user) {
+        const locationStatus = canChangeLocation(user.locationLastChangedAt);
+        if (!locationStatus.allowed) {
+          setMessage(`Помилка: Ви можете змінити локацію через ${locationStatus.daysRemaining} днів`);
+          setLoading(false);
+          return;
+        }
+      }
+
       // Update auth user metadata
       const { error: authError } = await supabase.auth.updateUser({
         data: {
@@ -288,26 +338,81 @@ export default function SettingsPage() {
         return;
       }
 
+      // If location is being changed, log it first
+      if (locationChanged && user) {
+        const { error: logError } = await supabase
+          .from('user_location_changes')
+          .insert({
+            user_id: user.id,
+            previous_katottg_code: originalKatottgCode,
+            previous_settlement_name: user.settlementName,
+            previous_hromada_name: user.hromadaName,
+            previous_raion_name: user.raionName,
+            previous_oblast_name: user.oblastNameKatottg,
+            new_katottg_code: katottgCode,
+            new_settlement_name: katottgDetails?.name || null,
+            new_hromada_name: katottgDetails?.hromadaName || null,
+            new_raion_name: katottgDetails?.raionName || null,
+            new_oblast_name: katottgDetails?.oblastName || null,
+            change_reason: 'user_update',
+            changed_by: user.id,
+          });
+
+        if (logError) {
+          console.error('Failed to log location change:', logError);
+          // Don't block the update, just log the error
+        }
+      }
+
+      // Build update object
+      const updateData: Record<string, unknown> = {
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        patronymic: patronymic.trim() || null,
+        // Address
+        street_address: streetAddress.trim() || null,
+        postal_code: postalCode.trim() || null,
+        nova_poshta_city: novaPoshtaCity.trim() || null,
+        nova_poshta_branch: novaPoshtaBranch.trim() || null,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Only update location fields if location change is allowed
+      if (locationChanged && user) {
+        const locationStatus = canChangeLocation(user.locationLastChangedAt);
+        if (locationStatus.allowed) {
+          updateData.katottg_code = katottgCode;
+          updateData.settlement_name = katottgDetails?.name || null;
+          updateData.hromada_name = katottgDetails?.hromadaName || null;
+          updateData.raion_name = katottgDetails?.raionName || null;
+          updateData.oblast_name_katottg = katottgDetails?.oblastName || null;
+          updateData.location_last_changed_at = new Date().toISOString();
+        }
+      }
+
       // Update users table in database
       const { error: dbError } = await supabase
         .from('users')
-        .update({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          patronymic: patronymic.trim() || null,
-          oblast_id: oblastId || null,
-          city: city.trim() || null,
-          street_address: streetAddress.trim() || null,
-          postal_code: postalCode.trim() || null,
-          nova_poshta_city: novaPoshtaCity.trim() || null,
-          nova_poshta_branch: novaPoshtaBranch.trim() || null,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('clerk_id', authUser.id);
 
       if (dbError) {
         setMessage(`Помилка: ${dbError.message}`);
         return;
+      }
+
+      // Update local state if location was changed
+      if (locationChanged && user) {
+        setOriginalKatottgCode(katottgCode);
+        setUser(prev => prev ? {
+          ...prev,
+          katottgCode,
+          settlementName: katottgDetails?.name || null,
+          hromadaName: katottgDetails?.hromadaName || null,
+          raionName: katottgDetails?.raionName || null,
+          oblastNameKatottg: katottgDetails?.oblastName || null,
+          locationLastChangedAt: new Date().toISOString(),
+        } : null);
       }
 
       setMessage('Профіль успішно оновлено!');
@@ -386,9 +491,11 @@ export default function SettingsPage() {
             <MapPin className="w-4 h-4 text-timber-beam" />
             <span className="text-timber-beam">Локація:</span>
             <span className="font-medium">
-              {user.city && user.oblastName
+              {user.settlementName
+                ? `${user.settlementName}, ${user.oblastNameKatottg || ''}`
+                : user.city && user.oblastName
                 ? `${user.city}, ${user.oblastName}`
-                : user.oblastName || user.city || '—'}
+                : '—'}
             </span>
           </div>
         </div>
@@ -585,36 +692,57 @@ export default function SettingsPage() {
               ЛОКАЦІЯ
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="label block mb-2">ОБЛАСТЬ</label>
-                <div className="relative">
-                  <select
-                    value={oblastId || ''}
-                    onChange={(e) => setOblastId(e.target.value || null)}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none appearance-none cursor-pointer"
-                  >
-                    <option value="">Оберіть область</option>
-                    {oblasts.map((oblast) => (
-                      <option key={oblast.id} value={oblast.id}>
-                        {oblast.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam pointer-events-none" />
+            {/* 30-day restriction warning */}
+            {user.locationLastChangedAt && !canChangeLocation(user.locationLastChangedAt).allowed && (
+              <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800">
+                <p className="font-medium mb-1">⚠️ Зміна локації тимчасово недоступна</p>
+                <p className="text-xs">
+                  Ви зможете змінити локацію через {canChangeLocation(user.locationLastChangedAt).daysRemaining} днів.
+                  Останнє оновлення: {formatDate(user.locationLastChangedAt)}
+                </p>
+              </div>
+            )}
+
+            {/* Current location display */}
+            {katottgDetails && (
+              <div className="mb-4 p-3 bg-timber-dark/5 rounded">
+                <div className="text-sm">
+                  <span className="font-medium">{katottgDetails.name}</span>
+                </div>
+                <div className="text-xs text-timber-beam flex flex-wrap items-center gap-1 mt-1">
+                  {katottgDetails.oblastName && (
+                    <span>{katottgDetails.oblastName}</span>
+                  )}
+                  {katottgDetails.raionName && (
+                    <>
+                      <ChevronRight className="w-3 h-3" />
+                      <span>{katottgDetails.raionName}</span>
+                    </>
+                  )}
+                  {katottgDetails.hromadaName && (
+                    <>
+                      <ChevronRight className="w-3 h-3" />
+                      <span>{katottgDetails.hromadaName}</span>
+                    </>
+                  )}
                 </div>
               </div>
-              <div>
-                <label className="label block mb-2">МІСТО / НАСЕЛЕНИЙ ПУНКТ</label>
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="Наприклад: Київ"
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                />
-              </div>
-            </div>
+            )}
+
+            <KatottgSelector
+              value={katottgCode}
+              onChange={(code, details) => {
+                setKatottgCode(code);
+                setKatottgDetails(details);
+              }}
+              required
+              disabled={user.locationLastChangedAt !== null && !canChangeLocation(user.locationLastChangedAt).allowed}
+            />
+
+            {/* Info about location change restriction */}
+            <p className="text-xs text-timber-beam mt-2">
+              Локацію можна змінювати раз на 30 днів для забезпечення чесності виборчого процесу.
+            </p>
           </div>
 
           {/* Delivery Address Section */}

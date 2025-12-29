@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background -->
+  <circle cx="64" cy="64" r="62" fill="#f4f1eb"/>
+  <circle cx="64" cy="64" r="56" fill="#9ca3af" opacity="0.1"/>
+
+  <!-- Outer ring -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#9ca3af" stroke-width="4"/>
+
+  <!-- Inner decorative ring -->
+  <circle cx="64" cy="52" r="32" fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- Seedling/sprout symbol -->
+  <g fill="none" stroke="#6b7280" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Stem -->
+    <path d="M64 78 L64 50"/>
+    <!-- Left leaf -->
+    <path d="M64 58 Q52 52 48 38 Q58 44 64 50"/>
+    <!-- Right leaf -->
+    <path d="M64 52 Q76 46 80 32 Q70 38 64 50"/>
+  </g>
+
+  <!-- Ground line -->
+  <path d="M44 78 L84 78" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Small accent dots -->
+  <circle cx="40" cy="78" r="2" fill="#9ca3af"/>
+  <circle cx="88" cy="78" r="2" fill="#9ca3af"/>
+
+  <!-- Wave ribbon banner -->
+  <path d="M8 108
+           Q24 100 44 104
+           Q64 108 84 104
+           Q104 100 120 108
+           L120 122
+           Q104 114 84 118
+           Q64 122 44 118
+           Q24 114 8 122 Z"
+        fill="#6b7280"/>
+
+  <!-- Ribbon shadow -->
+  <path d="M8 108 Q24 100 44 104 Q64 108 84 104 Q104 100 120 108"
+        fill="none" stroke="#4b5563" stroke-width="1" opacity="0.3"/>
+
+  <!-- Level text -->
+  <text x="64" y="117" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff">РІВЕНЬ 0</text>
+</svg>

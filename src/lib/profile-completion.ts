@@ -8,8 +8,10 @@ export interface UserProfile {
   last_name: string | null;
   phone: string | null;
   date_of_birth: string | null;
-  oblast_id: string | null;
-  city: string | null;
+  katottg_code: string | null;
+  // Legacy fields (kept for backwards compatibility)
+  oblast_id?: string | null;
+  city?: string | null;
   patronymic?: string | null;
 }
 
@@ -27,8 +29,7 @@ const REQUIRED_FIELDS = [
   'last_name',
   'phone',
   'date_of_birth',
-  'oblast_id',
-  'city',
+  'katottg_code',
 ] as const;
 
 /**
@@ -39,6 +40,8 @@ export const FIELD_LABELS: Record<string, string> = {
   last_name: 'Прізвище',
   phone: 'Телефон',
   date_of_birth: 'Дата народження',
+  katottg_code: 'Населений пункт',
+  // Legacy labels (for display purposes)
   oblast_id: 'Область',
   city: 'Місто',
   patronymic: 'По батькові',

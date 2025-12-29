@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Background -->
+  <circle cx="64" cy="64" r="62" fill="#f4f1eb"/>
+  <circle cx="64" cy="64" r="56" fill="#3b82f6" opacity="0.1"/>
+
+  <!-- Outer ring -->
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#3b82f6" stroke-width="4"/>
+
+  <!-- Inner ring -->
+  <circle cx="64" cy="52" r="36" fill="none" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Gateway/arch symbol -->
+  <path d="M42 75 L42 45 Q42 30 64 30 Q86 30 86 45 L86 75"
+        fill="none" stroke="#2563eb" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Checkmark inside gateway -->
+  <path d="M50 55 L60 65 L78 42"
+        fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Base line -->
+  <path d="M38 75 L90 75" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Corner accents -->
+  <rect x="36" y="73" width="6" height="6" fill="#3b82f6"/>
+  <rect x="86" y="73" width="6" height="6" fill="#3b82f6"/>
+
+  <!-- Wave ribbon banner -->
+  <path d="M8 108
+           Q24 100 44 104
+           Q64 108 84 104
+           Q104 100 120 108
+           L120 122
+           Q104 114 84 118
+           Q64 122 44 118
+           Q24 114 8 122 Z"
+        fill="#2563eb"/>
+
+  <!-- Ribbon highlight -->
+  <path d="M8 108 Q24 100 44 104 Q64 108 84 104 Q104 100 120 108"
+        fill="none" stroke="#3b82f6" stroke-width="1"/>
+
+  <!-- Level text -->
+  <text x="64" y="117" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff">РІВЕНЬ 1</text>
+</svg>

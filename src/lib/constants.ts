@@ -30,7 +30,7 @@ export const MEMBERSHIP_TIERS = {
   },
 } as const;
 
-// User roles hierarchy
+// User roles hierarchy (Legacy - kept for backwards compatibility)
 export const USER_ROLES = {
   free_viewer: { level: 0, label: 'Безкоштовний глядач' },
   prospect: { level: 1, label: 'Кандидат' },
@@ -41,6 +41,122 @@ export const USER_ROLES = {
   admin: { level: 6, label: 'Адміністратор' },
   super_admin: { level: 7, label: 'Супер-адміністратор' },
 } as const;
+
+// New Membership Role Progression System (8-tier hierarchy)
+export const MEMBERSHIP_ROLES = {
+  supporter: {
+    level: 0,
+    key: 'supporter',
+    label: 'Прихильник',
+    description: 'Зареєстрований користувач без внеску',
+    color: 'gray',
+    icon: 'UserPlus',
+    privileges: ['newsletter'],
+  },
+  candidate: {
+    level: 1,
+    key: 'candidate',
+    label: 'Кандидат в члени',
+    description: 'Зробив перший внесок від 49 грн',
+    color: 'blue',
+    icon: 'UserCheck',
+    privileges: ['newsletter', 'primary_voting'],
+  },
+  member: {
+    level: 2,
+    key: 'member',
+    label: 'Член Мережі',
+    description: 'Залучив 2 кандидатів',
+    color: 'green',
+    icon: 'Users',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks'],
+  },
+  honorary_member: {
+    level: 3,
+    key: 'honorary_member',
+    label: 'Почесний Член',
+    description: '2 залучених стали Членами',
+    color: 'purple',
+    icon: 'Award',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks', 'loyalty_program'],
+  },
+  network_leader: {
+    level: 4,
+    key: 'network_leader',
+    label: 'Лідер Мережі',
+    description: '8 особистих + 49 загальних рефералів',
+    color: 'orange',
+    icon: 'Crown',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks', 'loyalty_program', 'nomination', 'leaders_council'],
+  },
+  regional_leader: {
+    level: 5,
+    key: 'regional_leader',
+    label: 'Регіональний лідер',
+    description: '6 допомогли стати Лідерами + 400 загальних',
+    color: 'red',
+    icon: 'MapPin',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks', 'loyalty_program', 'nomination', 'leaders_council', 'mayor_priority'],
+  },
+  national_leader: {
+    level: 6,
+    key: 'national_leader',
+    label: 'Національний лідер',
+    description: '4 допомогли стати Регіональними + 4000 загальних',
+    color: 'gold',
+    icon: 'Globe',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks', 'loyalty_program', 'nomination', 'leaders_council', 'mayor_priority', 'mp_priority', 'president_priority'],
+  },
+  network_guide: {
+    level: 7,
+    key: 'network_guide',
+    label: 'Провідник Мережі',
+    description: '2 допомогли стати Національними + 25000 загальних',
+    color: 'platinum',
+    icon: 'Star',
+    privileges: ['newsletter', 'primary_voting', 'full_voting', 'events', 'tasks', 'loyalty_program', 'nomination', 'leaders_council', 'mayor_priority', 'mp_priority', 'president_priority', 'budget_control'],
+  },
+} as const;
+
+// Staff roles (administrative, separate from membership progression)
+export const STAFF_ROLES = {
+  none: { level: 0, label: 'Без ролі', description: 'Звичайний користувач' },
+  news_editor: { level: 1, label: 'Редактор новин', description: 'Управління контентом та новинами' },
+  admin: { level: 2, label: 'Адміністратор', description: 'Управління користувачами та налаштуваннями' },
+  super_admin: { level: 3, label: 'Супер-адміністратор', description: 'Повний доступ до системи' },
+} as const;
+
+// Privilege labels in Ukrainian
+export const PRIVILEGE_LABELS = {
+  newsletter: 'Розсилка новин',
+  primary_voting: 'Голосування на праймеріз',
+  full_voting: 'Повне голосування',
+  events: 'Участь у подіях',
+  tasks: 'Виконання завдань',
+  loyalty_program: 'Програма лояльності',
+  nomination: 'Право на номінацію',
+  leaders_council: 'Рада Лідерів',
+  mayor_priority: 'Пріоритет на мера',
+  mp_priority: 'Пріоритет на депутата',
+  president_priority: 'Пріоритет на президента',
+  budget_control: 'Контроль 70% бюджету',
+} as const;
+
+// Membership role type
+export type MembershipRole = keyof typeof MEMBERSHIP_ROLES;
+export type StaffRole = keyof typeof STAFF_ROLES;
+
+// Ukrainian labels for membership roles (for UI display)
+export const MEMBERSHIP_ROLES_UA: Record<MembershipRole, string> = {
+  supporter: 'Прихильник',
+  candidate: 'Кандидат',
+  member: 'Член Мережі',
+  honorary_member: 'Почесний Член',
+  network_leader: 'Лідер Мережі',
+  regional_leader: 'Регіональний лідер',
+  national_leader: 'Національний лідер',
+  network_guide: 'Провідник Мережі',
+};
 
 // Event types
 export const EVENT_TYPES = {

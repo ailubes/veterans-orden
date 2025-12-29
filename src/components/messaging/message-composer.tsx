@@ -1,0 +1,161 @@
+'use client';
+
+import { useState, useRef, useEffect, KeyboardEvent } from 'react';
+import { useMessenger } from './messenger-provider';
+import { Send, Paperclip, Smile, X, Loader2 } from 'lucide-react';
+import { AVAILABLE_REACTIONS } from '@/lib/messaging/utils';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+
+interface MessageComposerProps {
+  onTyping?: () => void;
+  onStopTyping?: () => void;
+}
+
+export function MessageComposer({ onTyping, onStopTyping }: MessageComposerProps) {
+  const { sendMessage, currentConversation } = useMessenger();
+  const [content, setContent] = useState('');
+  const [sending, setSending] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const disabled = !currentConversation || (!currentConversation.allowReplies && currentConversation.type === 'group');
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+    }
+  }, [content]);
+
+  // Handle typing indicator
+  const handleTyping = () => {
+    if (onTyping) onTyping();
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Set new timeout to stop typing
+    typingTimeoutRef.current = setTimeout(() => {
+      if (onStopTyping) onStopTyping();
+    }, 1000);
+  };
+
+  // Handle send
+  const handleSend = async () => {
+    if (!content.trim() || sending || disabled) return;
+
+    setSending(true);
+    try {
+      await sendMessage(content.trim());
+      setContent('');
+      if (onStopTyping) onStopTyping();
+    } finally {
+      setSending(false);
+    }
+  };
+
+  // Handle keyboard shortcuts
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  // Insert emoji
+  const insertEmoji = (emoji: string) => {
+    setContent((prev) => prev + emoji);
+    setShowEmoji(false);
+    textareaRef.current?.focus();
+  };
+
+  if (disabled) {
+    return (
+      <div className="text-center text-sm text-timber-beam py-2">
+        Відповіді в цій групі обмежено
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-end gap-2">
+      {/* Emoji picker */}
+      <Popover open={showEmoji} onOpenChange={setShowEmoji}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className="p-2 hover:bg-timber-light rounded transition-colors"
+            aria-label="Емодзі"
+          >
+            <Smile className="w-5 h-5 text-timber-beam" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-2" align="start">
+          <div className="grid grid-cols-6 gap-1">
+            {AVAILABLE_REACTIONS.map((r) => (
+              <button
+                key={r.emoji}
+                onClick={() => insertEmoji(r.emoji)}
+                className="p-2 text-xl hover:bg-timber-light rounded"
+                title={r.label}
+              >
+                {r.emoji}
+              </button>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Text input */}
+      <div className="flex-1 relative">
+        <textarea
+          ref={textareaRef}
+          value={content}
+          onChange={(e) => {
+            setContent(e.target.value);
+            handleTyping();
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Напишіть повідомлення..."
+          className={cn(
+            'w-full resize-none rounded-lg border-2 border-timber-dark/30 px-3 py-2',
+            'text-sm placeholder:text-timber-beam/50',
+            'focus:border-timber-dark focus:outline-none',
+            'min-h-[40px] max-h-[120px]'
+          )}
+          rows={1}
+          disabled={sending}
+        />
+      </div>
+
+      {/* Send button */}
+      <button
+        onClick={handleSend}
+        disabled={!content.trim() || sending}
+        className={cn(
+          'p-2 rounded transition-colors',
+          content.trim() && !sending
+            ? 'bg-timber-dark text-canvas hover:bg-timber-dark/90'
+            : 'bg-timber-light text-timber-beam cursor-not-allowed'
+        )}
+        aria-label="Надіслати"
+      >
+        {sending ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          <Send className="w-5 h-5" />
+        )}
+      </button>
+    </div>
+  );
+}

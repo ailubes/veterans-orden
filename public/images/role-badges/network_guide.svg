@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="guide-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fde047"/>
+      <stop offset="50%" style="stop-color:#eab308"/>
+      <stop offset="100%" style="stop-color:#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="ribbon-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eab308"/>
+      <stop offset="100%" style="stop-color:#a16207"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="64" cy="64" r="62" fill="#f4f1eb"/>
+
+  <!-- Outer glow rings -->
+  <circle cx="64" cy="64" r="58" fill="none" stroke="#eab308" stroke-width="1" opacity="0.3"/>
+  <circle cx="64" cy="64" r="56" fill="none" stroke="#eab308" stroke-width="1" opacity="0.5"/>
+
+  <!-- Platinum outer ring -->
+  <circle cx="64" cy="64" r="54" fill="none" stroke="#2c2824" stroke-width="5"/>
+  <circle cx="64" cy="64" r="50" fill="none" stroke="#e5e7eb" stroke-width="3"/>
+
+  <!-- Inner gold ring -->
+  <circle cx="64" cy="50" r="36" fill="none" stroke="url(#guide-gold)" stroke-width="3"/>
+
+  <!-- 8-pointed star (moved up) -->
+  <g fill="url(#guide-gold)">
+    <!-- Main points -->
+    <polygon points="64,14 67,36 64,30 61,36"/>
+    <polygon points="64,86 67,64 64,70 61,64"/>
+    <polygon points="28,50 50,47 44,50 50,53"/>
+    <polygon points="100,50 78,47 84,50 78,53"/>
+    <!-- Diagonal points -->
+    <polygon points="34,24 48,40 43,40 48,35"/>
+    <polygon points="94,24 80,40 85,40 80,35"/>
+    <polygon points="34,76 48,60 43,60 48,65"/>
+    <polygon points="94,76 80,60 85,60 80,65"/>
+  </g>
+
+  <!-- Central ornate circle -->
+  <circle cx="64" cy="50" r="18" fill="#2c2824"/>
+  <circle cx="64" cy="50" r="14" fill="none" stroke="#eab308" stroke-width="2"/>
+  <circle cx="64" cy="50" r="10" fill="url(#guide-gold)"/>
+
+  <!-- Inner compass/eye symbol -->
+  <circle cx="64" cy="50" r="5" fill="#2c2824"/>
+  <circle cx="64" cy="50" r="2" fill="#eab308"/>
+
+  <!-- Decorative dots around -->
+  <g fill="#eab308">
+    <circle cx="64" cy="20" r="2"/>
+    <circle cx="64" cy="80" r="2"/>
+    <circle cx="34" cy="50" r="2"/>
+    <circle cx="94" cy="50" r="2"/>
+  </g>
+
+  <!-- Wave ribbon banner with gradient -->
+  <path d="M8 108
+           Q24 100 44 104
+           Q64 108 84 104
+           Q104 100 120 108
+           L120 122
+           Q104 114 84 118
+           Q64 122 44 118
+           Q24 114 8 122 Z"
+        fill="url(#ribbon-gold)"/>
+
+  <!-- Ribbon highlight -->
+  <path d="M8 108 Q24 100 44 104 Q64 108 84 104 Q104 100 120 108"
+        fill="none" stroke="#fde047" stroke-width="1"/>
+
+  <!-- Level text -->
+  <text x="64" y="117" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#ffffff">ПРОВІДНИК</text>
+</svg>

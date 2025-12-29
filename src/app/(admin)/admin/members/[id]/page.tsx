@@ -15,9 +15,14 @@ import {
   TrendingUp,
   Users,
   Activity,
+  ChevronRight,
 } from 'lucide-react';
 import { formatNumber, formatDate } from '@/lib/utils';
 import { MemberActivityTimeline } from '@/components/admin/member-activity-timeline';
+import RoleBadge from '@/components/ui/role-badge';
+import { MEMBERSHIP_ROLES } from '@/lib/constants';
+
+type MembershipRole = keyof typeof MEMBERSHIP_ROLES;
 
 interface MemberDetailPageProps {
   params: Promise<{
@@ -35,10 +40,10 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
     redirect('/dashboard');
   }
 
-  // Get member data
+  // Get member data with KATOTTG location
   const { data: member, error } = await supabase
     .from('users')
-    .select('*, oblast:oblasts(name)')
+    .select('*, oblast:oblasts(name), katottg_code, settlement_name, hromada_name, raion_name, oblast_name_katottg')
     .eq('id', id)
     .single();
 
@@ -142,9 +147,20 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
                 {member.first_name} {member.last_name}
               </h1>
               <div className="flex flex-wrap gap-2 mb-3">
-                <span className="px-3 py-1 bg-canvas text-timber-dark text-xs font-bold">
-                  {roleLabels[member.role] || member.role}
-                </span>
+                {/* New Membership Role Badge */}
+                {member.membership_role && (
+                  <RoleBadge
+                    membershipRole={member.membership_role as MembershipRole}
+                    staffRole={member.staff_role || 'none'}
+                    size="sm"
+                  />
+                )}
+                {/* Legacy role badge (if no new membership_role) */}
+                {!member.membership_role && (
+                  <span className="px-3 py-1 bg-canvas text-timber-dark text-xs font-bold">
+                    {roleLabels[member.role] || member.role}
+                  </span>
+                )}
                 <span
                   className={`px-3 py-1 text-xs font-bold ${
                     member.status === 'active'
@@ -242,15 +258,38 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
                 <p className="text-sm font-mono">{member.phone || '—'}</p>
               </div>
 
-              <div>
+              <div className="md:col-span-2">
                 <div className="flex items-center gap-2 text-timber-beam text-sm mb-1">
                   <MapPin size={14} />
                   <span className="font-bold">Місцезнаходження</span>
                 </div>
-                <p className="text-sm">
-                  {member.oblast?.name || '—'}
-                  {member.city && `, ${member.city}`}
-                </p>
+                {member.settlement_name ? (
+                  <div>
+                    <p className="text-sm font-medium">{member.settlement_name}</p>
+                    <div className="flex flex-wrap items-center gap-1 text-xs text-timber-beam mt-1">
+                      {member.oblast_name_katottg && (
+                        <span>{member.oblast_name_katottg}</span>
+                      )}
+                      {member.raion_name && (
+                        <>
+                          <ChevronRight size={12} />
+                          <span>{member.raion_name}</span>
+                        </>
+                      )}
+                      {member.hromada_name && (
+                        <>
+                          <ChevronRight size={12} />
+                          <span>{member.hromada_name}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm">
+                    {member.oblast?.name || '—'}
+                    {member.city && `, ${member.city}`}
+                  </p>
+                )}
               </div>
 
               <div>
