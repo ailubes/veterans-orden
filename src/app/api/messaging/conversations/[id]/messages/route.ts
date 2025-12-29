@@ -52,7 +52,8 @@ export async function GET(
     const cursor = searchParams.get('cursor'); // message ID for pagination
     const before = searchParams.get('before'); // ISO date string
 
-    // Build query
+    // Build query - fetch messages without nested user joins
+    // User data is fetched separately using service client to bypass RLS
     let query = supabase
       .from('messages')
       .select(`
@@ -76,23 +77,11 @@ export async function GET(
         forwarded_from_message_id,
         forwarded_from_conversation_id,
         forwarded_from_sender_name,
-        sender:users!sender_id (
-          id,
-          first_name,
-          last_name,
-          avatar_url,
-          membership_role
-        ),
         reply_to:messages!reply_to_id (
           id,
           content,
           sender_id,
-          type,
-          sender:users!sender_id (
-            id,
-            first_name,
-            last_name
-          )
+          type
         )
       `, { count: 'exact' })
       .eq('conversation_id', conversationId)
@@ -124,10 +113,41 @@ export async function GET(
     const hasMore = (messagesData?.length || 0) > limit;
     const messagesSlice = messagesData?.slice(0, limit) || [];
 
+    // Create service client for user lookups (bypasses RLS on users table)
+    const serviceClient = createServiceClient();
+
+    // Collect all unique sender IDs for batch lookup
+    const senderIds = new Set<string>();
+    for (const m of messagesSlice) {
+      if (m.sender_id) senderIds.add(m.sender_id as string);
+      // reply_to is returned as an array from the nested query, take first element
+      const replyToArr = m.reply_to as Array<Record<string, unknown>> | null;
+      const replyTo = replyToArr?.[0] || null;
+      if (replyTo?.sender_id) senderIds.add(replyTo.sender_id as string);
+    }
+
+    // Fetch all senders in one query
+    const senderMap = new Map<string, Record<string, unknown>>();
+    if (senderIds.size > 0) {
+      const { data: users } = await serviceClient
+        .from('users')
+        .select('id, first_name, last_name, avatar_url, membership_role')
+        .in('id', Array.from(senderIds));
+
+      if (users) {
+        for (const u of users) {
+          senderMap.set(u.id, u);
+        }
+      }
+    }
+
     // Transform to Message type
     const messages: Message[] = messagesSlice.map((m: Record<string, unknown>) => {
-      const sender = m.sender as Record<string, unknown> | null;
-      const replyTo = m.reply_to as Record<string, unknown> | null;
+      const senderData = m.sender_id ? senderMap.get(m.sender_id as string) : null;
+      // reply_to is returned as an array from the nested query, take first element
+      const replyToArr = m.reply_to as Array<Record<string, unknown>> | null;
+      const replyTo = replyToArr?.[0] || null;
+      const replyToSenderData = replyTo?.sender_id ? senderMap.get(replyTo.sender_id as string) : null;
       const attachments = (m.attachments || []) as MessageAttachment[];
       const metadata = (m.metadata || {}) as Record<string, unknown>;
 
@@ -149,12 +169,12 @@ export async function GET(
         id: m.id as string,
         conversationId: m.conversation_id as string,
         senderId: m.sender_id as string | null,
-        sender: sender ? {
-          id: sender.id as string,
-          firstName: sender.first_name as string,
-          lastName: sender.last_name as string,
-          avatarUrl: sender.avatar_url as string | null,
-          membershipRole: sender.membership_role as string,
+        sender: senderData ? {
+          id: senderData.id as string,
+          firstName: senderData.first_name as string,
+          lastName: senderData.last_name as string,
+          avatarUrl: senderData.avatar_url as string | null,
+          membershipRole: senderData.membership_role as string,
         } : null,
         type: m.type as 'text' | 'image' | 'file' | 'system',
         content: m.content as string | null,
@@ -164,10 +184,10 @@ export async function GET(
           id: replyTo.id as string,
           conversationId: conversationId,
           senderId: replyTo.sender_id as string | null,
-          sender: replyTo.sender ? {
-            id: (replyTo.sender as Record<string, unknown>).id as string,
-            firstName: (replyTo.sender as Record<string, unknown>).first_name as string,
-            lastName: (replyTo.sender as Record<string, unknown>).last_name as string,
+          sender: replyToSenderData ? {
+            id: replyToSenderData.id as string,
+            firstName: replyToSenderData.first_name as string,
+            lastName: replyToSenderData.last_name as string,
             avatarUrl: null,
             membershipRole: '',
           } : null,

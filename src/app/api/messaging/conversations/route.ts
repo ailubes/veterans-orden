@@ -74,6 +74,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
+    // Create service client for user lookups (bypasses RLS on users table)
+    const serviceClient = createServiceClient();
+
     // For each conversation, get the other participant (for DMs)
     const conversations: Conversation[] = await Promise.all(
       (participantRecords || []).map(async (pr: Record<string, unknown>) => {
@@ -82,31 +85,32 @@ export async function GET(request: Request) {
 
         // For DMs, get the other participant
         if (conv.type === 'direct') {
+          // First get the other participant's user_id
           const { data: otherPart } = await supabase
             .from('conversation_participants')
-            .select(`
-              user:users (
-                id,
-                first_name,
-                last_name,
-                avatar_url,
-                membership_role
-              )
-            `)
+            .select('user_id')
             .eq('conversation_id', conv.id)
             .neq('user_id', profile.id)
             .eq('is_active', true)
             .single();
 
-          if (otherPart?.user) {
-            const u = otherPart.user as unknown as Record<string, unknown>;
-            otherParticipant = {
-              id: u.id as string,
-              firstName: u.first_name as string,
-              lastName: u.last_name as string,
-              avatarUrl: u.avatar_url as string | null,
-              membershipRole: u.membership_role as string,
-            };
+          // Then get user details using service client (bypasses RLS)
+          if (otherPart?.user_id) {
+            const { data: userData } = await serviceClient
+              .from('users')
+              .select('id, first_name, last_name, avatar_url, membership_role')
+              .eq('id', otherPart.user_id)
+              .single();
+
+            if (userData) {
+              otherParticipant = {
+                id: userData.id as string,
+                firstName: userData.first_name as string,
+                lastName: userData.last_name as string,
+                avatarUrl: userData.avatar_url as string | null,
+                membershipRole: userData.membership_role as string,
+              };
+            }
           }
         }
 
