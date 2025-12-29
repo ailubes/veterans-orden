@@ -7,7 +7,11 @@ import { Plus, Search, Loader2, MessageCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { filterConversations } from '@/lib/messaging/utils';
 
-export function ConversationList() {
+interface ConversationListProps {
+  compact?: boolean;
+}
+
+export function ConversationList({ compact = false }: ConversationListProps) {
   const {
     conversations,
     loading,
@@ -30,25 +34,27 @@ export function ConversationList() {
   return (
     <div className="flex flex-col h-full">
       {/* Search and New */}
-      <div className="p-3 border-b border-timber-dark/20">
+      <div className={compact ? "p-2 border-b border-timber-dark/20" : "p-3 border-b border-timber-dark/20"}>
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
             <Input
               type="text"
-              placeholder="Пошук розмов..."
+              placeholder="Пошук..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9 text-sm"
+              className={compact ? "pl-9 h-8 text-xs" : "pl-9 h-9 text-sm"}
             />
           </div>
-          <button
-            onClick={openNewConversation}
-            className="flex items-center justify-center w-9 h-9 bg-timber-dark text-canvas hover:bg-timber-dark/90 transition-colors"
-            aria-label="Нова розмова"
-          >
-            <Plus className="w-5 h-5" />
-          </button>
+          {!compact && (
+            <button
+              onClick={openNewConversation}
+              className="flex items-center justify-center w-9 h-9 bg-timber-dark text-canvas hover:bg-timber-dark/90 transition-colors"
+              aria-label="Нова розмова"
+            >
+              <Plus className="w-5 h-5" />
+            </button>
+          )}
         </div>
       </div>
 

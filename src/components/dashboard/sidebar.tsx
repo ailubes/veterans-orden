@@ -34,6 +34,7 @@ const navItems = [
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/dashboard/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
+  { href: '/dashboard/marketplace/checkout', icon: ShoppingCart, label: 'КОШИК' },
   { href: '/dashboard/points', icon: Coins, label: 'МОЇ БАЛИ' },
   { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
   { href: '/help', icon: HelpCircle, label: 'ДОПОМОГА' },
@@ -45,7 +46,6 @@ export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(0);
   const { totalUnread, toggleMessenger } = useMessenger();
 
   useEffect(() => {
@@ -68,29 +68,6 @@ export function Sidebar() {
     checkAdminStatus();
   }, []);
 
-  // Track cart count
-  useEffect(() => {
-    const updateCartCount = () => {
-      const cart = JSON.parse(localStorage.getItem('marketplace_cart') || '[]');
-      const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-      setCartItemCount(count);
-    };
-
-    // Initial count
-    updateCartCount();
-
-    // Listen for storage changes (when cart is updated in another tab/component)
-    window.addEventListener('storage', updateCartCount);
-
-    // Also check periodically in case cart was updated in same tab
-    const interval = setInterval(updateCartCount, 1000);
-
-    return () => {
-      window.removeEventListener('storage', updateCartCount);
-      clearInterval(interval);
-    };
-  }, []);
-
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -109,7 +86,7 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -119,7 +96,7 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors ${
                     isActive
                       ? 'bg-accent text-canvas'
                       : 'hover:bg-canvas/10'
@@ -136,7 +113,7 @@ export function Sidebar() {
           <li>
             <button
               onClick={toggleMessenger}
-              className="flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors hover:bg-canvas/10 w-full relative"
+              className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors hover:bg-canvas/10 w-full relative"
             >
               <MessageCircle size={18} />
               ЧАТИ
@@ -148,43 +125,21 @@ export function Sidebar() {
             </button>
           </li>
 
-          {/* Cart Link with Badge */}
-          <li>
-            <Link
-              href="/dashboard/marketplace/checkout"
-              className={`flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors relative ${
-                pathname === '/dashboard/marketplace/checkout'
-                  ? 'bg-accent text-canvas'
-                  : 'hover:bg-canvas/10'
-              }`}
-            >
-              <ShoppingCart size={18} />
-              КОШИК
-              {cartItemCount > 0 && (
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
-            </Link>
-          </li>
-
           {/* Admin Link - only visible to admins */}
           {isAdmin && (
-            <>
-              <li className="pt-4 mt-4 border-t border-canvas/10">
-                <Link
-                  href="/admin"
-                  className={`flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors ${
-                    pathname.startsWith('/admin')
-                      ? 'bg-accent text-canvas'
-                      : 'hover:bg-canvas/10'
-                  }`}
-                >
-                  <Shield size={18} />
-                  АДМІН-ПАНЕЛЬ
-                </Link>
-              </li>
-            </>
+            <li className="pt-4 mt-4 border-t border-canvas/10">
+              <Link
+                href="/admin"
+                className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors ${
+                  pathname.startsWith('/admin')
+                    ? 'bg-accent text-canvas'
+                    : 'hover:bg-canvas/10'
+                }`}
+              >
+                <Shield size={18} />
+                АДМІН-ПАНЕЛЬ
+              </Link>
+            </li>
           )}
         </ul>
       </nav>
@@ -193,7 +148,7 @@ export function Sidebar() {
       <div className="p-4 border-t border-canvas/10">
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider hover:bg-canvas/10 w-full transition-colors"
+          className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider hover:bg-canvas/10 w-full transition-colors"
         >
           <LogOut size={18} />
           ВИЙТИ
