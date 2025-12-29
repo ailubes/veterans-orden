@@ -18,11 +18,13 @@ import {
   Coins,
   HelpCircle,
   Target,
+  MessageCircle,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/ui/logo';
 import { useEffect, useState } from 'react';
+import { useMessenger } from '@/components/messaging/messenger-provider';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -44,6 +46,7 @@ export function Sidebar() {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
+  const { totalUnread, toggleMessenger } = useMessenger();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -128,6 +131,22 @@ export function Sidebar() {
               </li>
             );
           })}
+
+          {/* Messaging Button */}
+          <li>
+            <button
+              onClick={toggleMessenger}
+              className="flex items-center gap-3 px-4 py-3 text-xs font-bold tracking-wider transition-colors hover:bg-canvas/10 w-full relative"
+            >
+              <MessageCircle size={18} />
+              ЧАТИ
+              {totalUnread > 0 && (
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                  {totalUnread > 99 ? '99+' : totalUnread}
+                </span>
+              )}
+            </button>
+          </li>
 
           {/* Cart Link with Badge */}
           <li>

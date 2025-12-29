@@ -21,10 +21,12 @@ import {
   Coins,
   HelpCircle,
   Target,
+  MessageCircle,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
 import { NotificationBell } from './notification-bell';
+import { useMessenger } from '@/components/messaging/messenger-provider';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -47,6 +49,7 @@ export function MobileNav() {
   const [cartItemCount, setCartItemCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
+  const { totalUnread, toggleMessenger } = useMessenger();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -104,6 +107,21 @@ export function MobileNav() {
 
         <div className="flex items-center gap-2">
           <NotificationBell variant="dark" />
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              toggleMessenger();
+            }}
+            className="relative p-2"
+            aria-label="Чати"
+          >
+            <MessageCircle size={20} />
+            {totalUnread > 0 && (
+              <span className="absolute -top-1 -right-1 bg-accent text-canvas text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5">
+                {totalUnread > 99 ? '99+' : totalUnread}
+              </span>
+            )}
+          </button>
           <Link href="/dashboard/marketplace/checkout" className="relative p-2">
             <ShoppingCart size={20} />
             {cartItemCount > 0 && (
@@ -147,6 +165,25 @@ export function MobileNav() {
                 </li>
               );
             })}
+
+            {/* Messaging Button */}
+            <li>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  toggleMessenger();
+                }}
+                className="flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider transition-colors hover:bg-canvas/10 w-full relative"
+              >
+                <MessageCircle size={20} />
+                ЧАТИ
+                {totalUnread > 0 && (
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full min-w-[24px] h-6 flex items-center justify-center px-1">
+                    {totalUnread > 99 ? '99+' : totalUnread}
+                  </span>
+                )}
+              </button>
+            </li>
 
             {/* Cart Link with Badge */}
             <li>
