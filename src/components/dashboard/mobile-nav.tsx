@@ -160,7 +160,7 @@ export function MobileNav() {
           >
             <MessagesSquare size={20} />
             {totalUnread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center text-[9px] font-bold text-canvas bg-accent rounded-full px-0.5">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center text-[9px] font-bold text-white bg-orange-500 rounded-full px-0.5">
                 {totalUnread > 99 ? '99+' : totalUnread}
               </span>
             )}

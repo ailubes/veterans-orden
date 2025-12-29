@@ -436,9 +436,16 @@ export function useMessaging(): UseMessagingReturn {
     setMessages((prev) => prev.filter((m) => m.id !== messageId));
   }, []);
 
-  // Fetch unread count on mount
+  // Fetch unread count on mount and poll every 30 seconds
   useEffect(() => {
     fetchUnreadCount();
+
+    // Poll for unread count updates every 30 seconds
+    const intervalId = setInterval(() => {
+      fetchUnreadCount();
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, [fetchUnreadCount]);
 
   return {

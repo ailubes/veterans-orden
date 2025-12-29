@@ -124,7 +124,7 @@ export function Sidebar() {
               <MessageCircle size={18} />
               ЧАТИ
               {totalUnread > 0 && (
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-accent text-canvas text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                   {totalUnread > 99 ? '99+' : totalUnread}
                 </span>
               )}
