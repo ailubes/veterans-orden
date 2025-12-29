@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { createServiceClient } from '@/lib/supabase/server';
 import { canInitiateDMs, canMessageUser, isRegionalLeaderMembership } from '@/lib/messaging/permissions';
 import type { Conversation, MessagingSettings } from '@/types/messaging';
 import type { StaffRole } from '@/lib/permissions-utils';
@@ -230,8 +231,11 @@ export async function GET(
       );
     }
 
-    // Create new DM conversation
-    const { data: conversation, error: convError } = await supabase
+    // Create new DM conversation using service client to bypass RLS
+    // (we've already validated permissions above)
+    const serviceClient = createServiceClient();
+
+    const { data: conversation, error: convError } = await serviceClient
       .from('conversations')
       .insert({
         type: 'direct',
@@ -247,7 +251,7 @@ export async function GET(
     }
 
     // Add participants
-    const { error: partError } = await supabase
+    const { error: partError } = await serviceClient
       .from('conversation_participants')
       .insert([
         {
@@ -264,7 +268,7 @@ export async function GET(
 
     if (partError) {
       console.error('[Messaging] Error adding participants:', partError);
-      await supabase.from('conversations').delete().eq('id', conversation.id);
+      await serviceClient.from('conversations').delete().eq('id', conversation.id);
       return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
     }
 

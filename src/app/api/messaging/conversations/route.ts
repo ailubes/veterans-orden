@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { createServiceClient } from '@/lib/supabase/server';
 import { canInitiateDMs, canCreateGroupChats, canMessageUser, isRegionalLeaderMembership } from '@/lib/messaging/permissions';
 import type { Conversation, ConversationsResponse, CreateConversationRequest, MessagingSettings } from '@/types/messaging';
 import type { StaffRole } from '@/lib/permissions-utils';
@@ -331,8 +332,11 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create conversation
-    const { data: conversation, error: convError } = await supabase
+    // Create conversation using service client to bypass RLS
+    // (we've already validated permissions above)
+    const serviceClient = createServiceClient();
+
+    const { data: conversation, error: convError } = await serviceClient
       .from('conversations')
       .insert({
         type,
@@ -363,20 +367,20 @@ export async function POST(request: Request) {
       })),
     ];
 
-    const { error: partError } = await supabase
+    const { error: partError } = await serviceClient
       .from('conversation_participants')
       .insert(participants);
 
     if (partError) {
       console.error('[Messaging] Error adding participants:', partError);
       // Rollback conversation creation
-      await supabase.from('conversations').delete().eq('id', conversation.id);
+      await serviceClient.from('conversations').delete().eq('id', conversation.id);
       return NextResponse.json({ error: 'Failed to add participants' }, { status: 500 });
     }
 
     // Add system message for group creation
     if (type === 'group') {
-      await supabase.from('messages').insert({
+      await serviceClient.from('messages').insert({
         conversation_id: conversation.id,
         sender_id: null,
         type: 'system',
