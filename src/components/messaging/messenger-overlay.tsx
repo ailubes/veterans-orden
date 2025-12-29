@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useMessenger } from './messenger-provider';
 import { ConversationList } from './conversation-list';
 import { ConversationView } from './conversation-view';
@@ -13,7 +12,6 @@ import {
   Maximize2,
   Minimize2,
   Edit,
-  ExternalLink,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -95,17 +93,6 @@ export function MessengerOverlay() {
                 <Edit className="w-4 h-4" />
               </button>
             )}
-
-            {/* Open Full Page */}
-            <Link
-              href="/dashboard/messages"
-              onClick={closeMessenger}
-              className="p-1.5 hover:bg-canvas/10 rounded transition-colors hidden sm:block"
-              aria-label="Відкрити у новому вікні"
-              title="Відкрити повністю"
-            >
-              <ExternalLink className="w-4 h-4" />
-            </Link>
 
             {/* Expand/Collapse (desktop only) */}
             <button
