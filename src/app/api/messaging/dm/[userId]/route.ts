@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { canInitiateDMs, canMessageUser } from '@/lib/messaging/permissions';
+import { canInitiateDMs, canMessageUser, isRegionalLeaderMembership } from '@/lib/messaging/permissions';
 import type { Conversation, MessagingSettings } from '@/types/messaging';
+import type { StaffRole } from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,10 +23,10 @@ export async function GET(
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user profile
+    // Get user profile with staff_role
     const { data: profile } = await supabase
       .from('users')
-      .select('id, membership_role, referred_by_id, group_id')
+      .select('id, membership_role, staff_role, referred_by_id, group_id')
       .eq('clerk_id', user.id)
       .single();
 
@@ -35,6 +37,9 @@ export async function GET(
     if (profile.id === otherUserId) {
       return NextResponse.json({ error: 'Cannot message yourself' }, { status: 400 });
     }
+
+    const membershipRole = (profile.membership_role || 'supporter') as MembershipRole;
+    const staffRole = (profile.staff_role || 'none') as StaffRole;
 
     // Get messaging settings
     const { data: settingsRows } = await supabase
@@ -161,7 +166,7 @@ export async function GET(
     }
 
     // Need to create new DM - check permissions
-    if (!canInitiateDMs(profile.membership_role, settings)) {
+    if (!canInitiateDMs(membershipRole, staffRole, settings)) {
       return NextResponse.json(
         { error: 'You do not have permission to start direct messages' },
         { status: 403 }
@@ -179,13 +184,24 @@ export async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Check if recipient is in sender's referral tree
-    const { data: referralCheck } = await supabase.rpc('is_in_referral_tree', {
-      p_referrer_id: profile.id,
-      p_user_id: otherUserId,
-    });
+    // Check if recipient is a direct referral of sender
+    const isDirectReferral = recipient.referred_by_id === profile.id;
 
-    const isDirectReferral = referralCheck === true;
+    // Check if recipient is in sender's referral tree (for regional leaders)
+    let isInReferralTree = isDirectReferral; // Direct referrals are always in tree
+    if (!isInReferralTree && isRegionalLeaderMembership(membershipRole)) {
+      const { data: treeCheck } = await supabase.rpc('is_in_referral_tree', {
+        p_referrer_id: profile.id,
+        p_user_id: otherUserId,
+      });
+      isInReferralTree = treeCheck === true;
+    }
+
+    // Get sender's direct referral count (for members with 2+ referrals rule)
+    const { count: referralCount } = await supabase
+      .from('users')
+      .select('id', { count: 'exact', head: true })
+      .eq('referred_by_id', profile.id);
 
     // Check if user is in a group led by sender
     const { data: leaderGroups } = await supabase
@@ -196,9 +212,12 @@ export async function GET(
     const isInLeaderGroup = leaderGroups?.some((g) => g.id === recipient.group_id) || false;
 
     const canMessage = canMessageUser({
-      senderRole: profile.membership_role,
-      recipientRole: recipient.membership_role,
+      senderMembershipRole: membershipRole,
+      senderStaffRole: staffRole,
+      senderReferralCount: referralCount || 0,
+      recipientMembershipRole: recipient.membership_role as MembershipRole,
       isDirectReferral,
+      isInReferralTree,
       isInLeaderGroup,
       isSameGroup: profile.group_id === recipient.group_id,
       settings,

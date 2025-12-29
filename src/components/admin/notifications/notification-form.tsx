@@ -3,11 +3,14 @@
 import { useState } from 'react';
 import { toast } from '@/hooks/use-toast';
 import { Send } from 'lucide-react';
+import type { StaffRole } from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 interface NotificationFormProps {
-  adminRole: string;
+  adminStaffRole: StaffRole;
+  adminMembershipRole: MembershipRole;
   adminId: string;
-  isRegionalLeader: boolean;
+  isRegionalLeaderOnly: boolean;
 }
 
 const NOTIFICATION_TYPES = [
@@ -18,8 +21,8 @@ const NOTIFICATION_TYPES = [
 ];
 
 export function NotificationForm({
-  adminRole,
-  isRegionalLeader,
+  adminStaffRole,
+  isRegionalLeaderOnly,
 }: NotificationFormProps) {
   const [title, setTitle] = useState('');
   const [message, setMessage] = useState('');
@@ -30,7 +33,8 @@ export function NotificationForm({
 
   // Determine available scopes based on role
   const getAvailableScopes = () => {
-    if (adminRole === 'super_admin' || adminRole === 'admin') {
+    // Staff admins can send to anyone
+    if (adminStaffRole === 'admin' || adminStaffRole === 'super_admin') {
       return [
         { value: 'all', label: 'Всі активні користувачі' },
         { value: 'role', label: 'За роллю' },
@@ -42,7 +46,8 @@ export function NotificationForm({
       ];
     }
 
-    if (isRegionalLeader) {
+    // Regional leaders (by membership only) can send to their tree
+    if (isRegionalLeaderOnly) {
       return [
         { value: 'referral_tree', label: 'Моє реферальне дерево' },
         { value: 'user', label: 'Конкретний користувач' },

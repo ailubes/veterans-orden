@@ -34,7 +34,7 @@ export default function RoleManagementTab({
   const [showDialog, setShowDialog] = useState(false);
   const [updating, setUpdating] = useState(false);
 
-  const assignableRoles = getAssignableRoles(adminProfile.role);
+  const assignableRoles = getAssignableRoles(adminProfile.staff_role || 'none');
 
   useEffect(() => {
     fetchElevatedUsers();

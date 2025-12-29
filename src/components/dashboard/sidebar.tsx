@@ -56,12 +56,18 @@ export function Sidebar() {
       if (user) {
         const { data: profile } = await supabase
           .from('users')
-          .select('role')
+          .select('staff_role, membership_role')
           .eq('clerk_id', user.id)
           .single();
 
-        const adminRoles = ['admin', 'super_admin', 'regional_leader'];
-        setIsAdmin(Boolean(profile && adminRoles.includes(profile.role)));
+        if (profile) {
+          // Check if user has admin access through either staff role or membership role
+          const staffRole = profile.staff_role || 'none';
+          const membershipRole = profile.membership_role || 'supporter';
+          const isStaffAdmin = staffRole === 'admin' || staffRole === 'super_admin';
+          const isLeaderByMembership = ['regional_leader', 'national_leader', 'network_guide'].includes(membershipRole);
+          setIsAdmin(isStaffAdmin || isLeaderByMembership);
+        }
       }
     };
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin, isNewsEditor, hasAdminAccess } from '@/lib/permissions';
 import {
   generatePresignedUploadUrl,
   isValidFileType,
@@ -34,8 +34,11 @@ export async function POST(request: NextRequest) {
     // 1. Check authentication and authorization
     const { profile: adminProfile } = await getAdminProfileFromRequest(request);
 
-    const allowedRoles = ['super_admin', 'admin', 'regional_leader', 'news_editor'];
-    if (!allowedRoles.includes(adminProfile.role)) {
+    // Allow: staff admins, news editors, or regional leaders (by membership)
+    const canUpload = isStaffAdmin(adminProfile.staff_role) ||
+      isNewsEditor(adminProfile.staff_role) ||
+      hasAdminAccess(adminProfile.staff_role, adminProfile.membership_role);
+    if (!canUpload) {
       return NextResponse.json({ error: 'Недостатньо прав доступу' }, { status: 403 });
     }
 

@@ -1,4 +1,4 @@
-import { getAdminProfileFromRequest, canChangeRole, UserRole } from '@/lib/permissions';
+import { getAdminProfileFromRequest, canChangeRole, UserRole, isRegionalLeaderOnly } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 import { NextResponse } from 'next/server';
 
@@ -8,8 +8,8 @@ export async function POST(request: Request) {
     const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
     const supabase = auth.supabase;
 
-    // Regional leaders cannot change roles
-    if (adminProfile.role === 'regional_leader') {
+    // Regional leaders (by membership only) cannot change roles
+    if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     }
 
     // Check if admin can change this role
-    const canChange = canChangeRole(adminProfile.role, targetUser.role as UserRole, newRole);
+    const canChange = canChangeRole(adminProfile.staff_role, targetUser.role as UserRole, newRole);
     if (!canChange) {
       return NextResponse.json(
         { error: 'You do not have permission to change this role' },

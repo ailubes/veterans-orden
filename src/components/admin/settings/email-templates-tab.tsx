@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AdminProfile } from '@/lib/permissions';
+import { isStaffAdmin } from '@/lib/permissions-utils';
 import { Loader2, Mail, Edit, Send, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Link from 'next/link';
@@ -32,7 +33,7 @@ export default function EmailTemplatesTab({
   const [testingTemplate, setTestingTemplate] = useState<string | null>(null);
   const [testEmail, setTestEmail] = useState('');
 
-  const canEdit = ['admin', 'super_admin'].includes(adminProfile.role);
+  const canEdit = isStaffAdmin(adminProfile.staff_role);
 
   useEffect(() => {
     fetchTemplates();

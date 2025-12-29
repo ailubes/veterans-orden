@@ -2,46 +2,63 @@
  * Permission System for Admin Panel
  *
  * Handles role-based access control and regional leader scoping.
- * Regional leaders can only see/manage members in their referral tree.
  *
- * Role hierarchy:
- * free_viewer < prospect < silent_member < full_member <
- * group_leader < regional_leader < admin < super_admin
+ * Two-tier role system:
+ * 1. StaffRole (staff_role) - Administrative access (none, news_editor, admin, super_admin)
+ * 2. MembershipRole (membership_role) - Network progression (supporter → network_guide)
+ *
+ * Admin panel access:
+ * - Staff admins (admin/super_admin): Full system access
+ * - Regional leaders (membership): Limited to their referral tree
  */
 
 import { createClient } from '@/lib/supabase/server';
 import { getAuthenticatedUser, type AuthResult } from '@/lib/auth/get-user';
+import type { MembershipRole } from '@/lib/constants';
 import {
+  type StaffRole,
   type UserRole,
+  isStaffAdmin,
+  isStaffSuperAdmin,
+  hasAdminAccess,
+  isRegionalLeaderOnly,
+  // Legacy re-exports for backwards compatibility
   isAdmin,
   isSuperAdmin,
   isRegionalLeader,
 } from '@/lib/permissions-utils';
 
 // Re-export types and utility functions from permissions-utils
-// This allows server components to import from this file
-// while client components can import from permissions-utils
-export type { UserRole } from '@/lib/permissions-utils';
+export type { UserRole, StaffRole } from '@/lib/permissions-utils';
 
 export {
   isAdmin,
   isSuperAdmin,
   isRegionalLeader,
+  isStaffAdmin,
+  isStaffSuperAdmin,
+  isNewsEditor,
+  hasAdminAccess,
+  isRegionalLeaderOnly,
   canChangeRole,
   canSuspendMembers,
   canImpersonate,
   canAccessSystemSettings,
   canSendNotificationTo,
   getAssignableRoles,
+  getAssignableStaffRoles,
 } from '@/lib/permissions-utils';
 
 export interface AdminProfile {
   id: string;
   clerk_id: string;
-  role: UserRole;
+  staff_role: StaffRole;
+  membership_role: MembershipRole;
   email: string;
   first_name: string;
   last_name: string;
+  // Legacy field - kept for backwards compatibility during migration
+  role?: UserRole;
 }
 
 
@@ -90,15 +107,32 @@ export async function getAdminProfile(): Promise<AdminProfile | null> {
 
   const { data: profile } = await supabase
     .from('users')
-    .select('id, clerk_id, role, email, first_name, last_name')
+    .select('id, clerk_id, staff_role, membership_role, role, email, first_name, last_name')
     .eq('clerk_id', user.id)
     .single();
 
-  if (!profile || !isAdmin(profile.role as UserRole)) {
+  if (!profile) {
     return null;
   }
 
-  return profile as AdminProfile;
+  // Check if user has admin access (either staff admin or regional leader by membership)
+  const staffRole = (profile.staff_role || 'none') as StaffRole;
+  const membershipRole = (profile.membership_role || 'supporter') as MembershipRole;
+
+  if (!hasAdminAccess(staffRole, membershipRole)) {
+    return null;
+  }
+
+  return {
+    id: profile.id,
+    clerk_id: profile.clerk_id,
+    staff_role: staffRole,
+    membership_role: membershipRole,
+    email: profile.email,
+    first_name: profile.first_name,
+    last_name: profile.last_name,
+    role: profile.role as UserRole, // Legacy field
+  };
 }
 
 /**
@@ -120,27 +154,47 @@ export async function getAdminProfileFromRequest(
 
   const { data: profile } = await auth.supabase
     .from('users')
-    .select('id, clerk_id, role, email, first_name, last_name')
+    .select('id, clerk_id, staff_role, membership_role, role, email, first_name, last_name')
     .eq('clerk_id', auth.user.id)
     .single();
 
-  if (!profile || !isAdmin(profile.role as UserRole)) {
+  if (!profile) {
     throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  return { profile: profile as AdminProfile, auth };
+  const staffRole = (profile.staff_role || 'none') as StaffRole;
+  const membershipRole = (profile.membership_role || 'supporter') as MembershipRole;
+
+  if (!hasAdminAccess(staffRole, membershipRole)) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const adminProfile: AdminProfile = {
+    id: profile.id,
+    clerk_id: profile.clerk_id,
+    staff_role: staffRole,
+    membership_role: membershipRole,
+    email: profile.email,
+    first_name: profile.first_name,
+    last_name: profile.last_name,
+    role: profile.role as UserRole, // Legacy field
+  };
+
+  return { profile: adminProfile, auth };
 }
 
 /**
  * Check if admin can manage (edit/delete) a specific entity
  *
  * Rules:
- * - Super Admin: Can manage anything
- * - Admin: Can manage anything except cannot assign super_admin role
- * - Regional Leader: Can only manage entities they created or members in their tree
+ * - Staff Admin (admin/super_admin): Can manage anything
+ * - Regional Leader (by membership): Can only manage entities they created or members in their tree
  */
 export async function canManageEntity(
   adminProfile: AdminProfile,
@@ -151,13 +205,13 @@ export async function canManageEntity(
     organizer_id?: string;
   }
 ): Promise<boolean> {
-  // Super admin and admin can manage everything
-  if (isSuperAdmin(adminProfile.role) || adminProfile.role === 'admin') {
+  // Staff admins can manage everything
+  if (isStaffAdmin(adminProfile.staff_role)) {
     return true;
   }
 
-  // Regional leader checks
-  if (isRegionalLeader(adminProfile.role)) {
+  // Regional leaders (by membership only) - limited to their region
+  if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
     // For members, check if in referral tree
     if (entityType === 'member') {
       return await checkReferralTreeAccess(adminProfile.id, entity.id);
@@ -179,11 +233,13 @@ export async function canManageEntity(
 export async function getRegionalLeaderFilter(
   adminProfile: AdminProfile
 ): Promise<{ filterType: 'all' | 'referral_tree'; userIds?: string[] }> {
-  if (isSuperAdmin(adminProfile.role) || adminProfile.role === 'admin') {
+  // Staff admins see everything
+  if (isStaffAdmin(adminProfile.staff_role)) {
     return { filterType: 'all' };
   }
 
-  if (isRegionalLeader(adminProfile.role)) {
+  // Regional leaders (by membership) only see their referral tree
+  if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
     const supabase = await createClient();
     const { data } = await supabase.rpc('get_referral_tree', {
       root_user_id: adminProfile.id,

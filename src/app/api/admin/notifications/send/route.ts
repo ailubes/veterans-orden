@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest, canSendNotificationTo } from '@/lib/permissions';
+import { getAdminProfileFromRequest, canSendNotificationTo, isRegionalLeaderOnly } from '@/lib/permissions';
 import { createServiceClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     try {
       const result = await getAdminProfileFromRequest(request);
       adminProfile = result.profile;
-      console.log('[Send Notification] Admin authenticated:', adminProfile.id, adminProfile.role);
+      console.log('[Send Notification] Admin authenticated:', adminProfile.id, adminProfile.staff_role, adminProfile.membership_role);
     } catch (authError) {
       console.error('[Send Notification] Auth error:', authError);
       return NextResponse.json(
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check permission for this scope
-    if (!canSendNotificationTo(adminProfile.role, scope)) {
+    if (!canSendNotificationTo(adminProfile.staff_role, adminProfile.membership_role, scope)) {
       return NextResponse.json(
         { error: `You do not have permission to send notifications to ${scope}` },
         { status: 403 }
@@ -144,8 +144,8 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'referral_tree':
-        // For regional leaders, get their referral tree
-        if (adminProfile.role === 'regional_leader') {
+        // For regional leaders (by membership), get their referral tree
+        if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
           const { data: referrals } = await supabase.rpc(
             'get_referral_tree_members',
             { leader_id: adminProfile.id }
@@ -208,7 +208,8 @@ export async function POST(request: NextRequest) {
       message_type: 'admin_to_member',
       metadata: {
         sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
-        sent_by_role: adminProfile.role,
+        sent_by_staff_role: adminProfile.staff_role,
+        sent_by_membership_role: adminProfile.membership_role,
       },
     };
 

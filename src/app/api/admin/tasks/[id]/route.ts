@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 export async function PATCH(
@@ -19,8 +19,8 @@ export async function PATCH(
       );
     }
 
-    // Only super_admin and admin can edit tasks
-    if (!['super_admin', 'admin'].includes(adminProfile.role)) {
+    // Only staff admins can edit tasks
+    if (!isStaffAdmin(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'Forbidden - insufficient permissions' },
         { status: 403 }

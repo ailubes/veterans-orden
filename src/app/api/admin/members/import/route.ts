@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin } from '@/lib/permissions';
 
 interface ImportRow {
   first_name: string;
@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
     const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
     const supabase = auth.supabase;
 
-    // Only super_admin and admin can import members
-    if (!['super_admin', 'admin'].includes(adminProfile.role)) {
+    // Only staff admins can import members
+    if (!isStaffAdmin(adminProfile.staff_role)) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 

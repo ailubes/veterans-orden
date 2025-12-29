@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check permission for suspend
-    if (status === 'suspended' && !canSuspendMembers(adminProfile.role)) {
+    if (status === 'suspended' && !canSuspendMembers(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'You do not have permission to suspend members' },
         { status: 403 }

@@ -1,10 +1,18 @@
 /**
  * Messaging permission utilities
- * Determines who can message whom based on membership roles and settings
+ * Determines who can message whom based on roles and relationships
+ *
+ * DM Rules:
+ * 1. Staff admins (staff_role = admin/super_admin) → Can DM ANYONE
+ * 2. Regional leaders (membership_role = regional_leader+) → Can DM anyone in their referral tree
+ * 3. Members with 2+ referrals → Can DM their direct referrals
+ * 4. Leaders (network_leader+) → Can DM other leaders + their referrals
+ * 5. Anyone can reply to received messages
  */
 
 import { MEMBERSHIP_ROLES, MembershipRole } from '@/lib/constants';
 import { MessagingSettings } from '@/types/messaging';
+import type { StaffRole } from '@/lib/permissions-utils';
 
 // Role hierarchy levels for comparison
 const ROLE_LEVELS: Record<MembershipRole, number> = {
@@ -17,6 +25,13 @@ const ROLE_LEVELS: Record<MembershipRole, number> = {
   national_leader: 6,
   network_guide: 7,
 };
+
+// Membership roles that grant referral tree DM access
+const REGIONAL_LEADER_ROLES: MembershipRole[] = [
+  'regional_leader',
+  'national_leader',
+  'network_guide',
+];
 
 /**
  * Get the numeric level of a membership role
@@ -37,6 +52,20 @@ export function hasMinRole(role: MembershipRole, minRole: MembershipRole): boole
  */
 export function isLeaderRole(role: MembershipRole): boolean {
   return getRoleLevel(role) >= 4; // network_leader = level 4
+}
+
+/**
+ * Check if membership role is regional leader or higher
+ */
+export function isRegionalLeaderMembership(role: MembershipRole | null | undefined): boolean {
+  return !!role && REGIONAL_LEADER_ROLES.includes(role);
+}
+
+/**
+ * Check if staff role is admin (can DM anyone)
+ */
+export function isStaffAdminForMessaging(staffRole: StaffRole | null | undefined): boolean {
+  return staffRole === 'admin' || staffRole === 'super_admin';
 }
 
 /**
@@ -62,49 +91,72 @@ export function getMinDMInitiatorRole(settings: MessagingSettings): MembershipRo
 }
 
 /**
- * Check if a user can initiate DMs based on their role
+ * Check if a user can initiate DMs based on their roles
  */
 export function canInitiateDMs(
-  senderRole: MembershipRole,
+  senderMembershipRole: MembershipRole,
+  senderStaffRole: StaffRole | null | undefined,
   settings: MessagingSettings
 ): boolean {
   if (!settings.messaging_enabled || !settings.messaging_dm_enabled) {
     return false;
   }
 
+  // Staff admins can ALWAYS initiate DMs
+  if (isStaffAdminForMessaging(senderStaffRole)) {
+    return true;
+  }
+
+  // Regional leaders (by membership) can initiate DMs to their tree
+  if (isRegionalLeaderMembership(senderMembershipRole)) {
+    return true;
+  }
+
+  // Check against allowed roles in settings
   const allowedRoles = settings.messaging_dm_initiator_roles || [];
-  return allowedRoles.includes(senderRole);
+  return allowedRoles.includes(senderMembershipRole);
 }
 
 /**
  * Check if a user can create group chats based on their role
  */
 export function canCreateGroupChats(
-  senderRole: MembershipRole,
+  senderMembershipRole: MembershipRole,
+  senderStaffRole: StaffRole | null | undefined,
   settings: MessagingSettings
 ): boolean {
   if (!settings.messaging_enabled || !settings.messaging_group_chat_enabled) {
     return false;
   }
 
+  // Staff admins can always create groups
+  if (isStaffAdminForMessaging(senderStaffRole)) {
+    return true;
+  }
+
   const allowedRoles = settings.messaging_group_creator_roles || [];
-  return allowedRoles.includes(senderRole);
+  return allowedRoles.includes(senderMembershipRole);
 }
 
 /**
  * Check if sender can message a specific recipient
  *
  * Rules:
- * 1. Leaders (network_leader+) can message their direct referrals
- * 2. Leaders can message other leaders at same or higher level
- * 3. Leaders can message users in groups they lead
- * 4. Anyone can reply to received messages (checked separately)
- * 5. Future: Same group members can message each other (when enabled)
+ * 1. Staff admins can message ANYONE
+ * 2. Regional leaders (membership) can message anyone in their referral tree
+ * 3. Members with 2+ referrals can message their direct referrals
+ * 4. Leaders (network_leader+) can message other leaders
+ * 5. Leaders can message users in groups they lead
+ * 6. Anyone can reply to received messages (checked separately)
+ * 7. Same group members can message each other (when enabled)
  */
 export interface CanMessageParams {
-  senderRole: MembershipRole;
-  recipientRole: MembershipRole;
-  isDirectReferral: boolean;
+  senderMembershipRole: MembershipRole;
+  senderStaffRole?: StaffRole | null;
+  senderReferralCount?: number; // Number of direct referrals sender has
+  recipientMembershipRole: MembershipRole;
+  isDirectReferral: boolean; // Is recipient a direct referral of sender?
+  isInReferralTree: boolean; // Is recipient in sender's referral tree? (for regional leaders)
   isInLeaderGroup: boolean;
   isSameGroup: boolean;
   settings: MessagingSettings;
@@ -112,9 +164,12 @@ export interface CanMessageParams {
 
 export function canMessageUser(params: CanMessageParams): boolean {
   const {
-    senderRole,
-    recipientRole,
+    senderMembershipRole,
+    senderStaffRole,
+    senderReferralCount = 0,
+    recipientMembershipRole,
     isDirectReferral,
+    isInReferralTree,
     isInLeaderGroup,
     isSameGroup,
     settings,
@@ -125,29 +180,42 @@ export function canMessageUser(params: CanMessageParams): boolean {
     return false;
   }
 
-  // Check if sender can initiate DMs
-  if (!canInitiateDMs(senderRole, settings)) {
-    return false;
-  }
-
-  // Leaders can message their direct referrals
-  if (isDirectReferral) {
+  // 1. Staff admins can message ANYONE
+  if (isStaffAdminForMessaging(senderStaffRole)) {
     return true;
   }
 
-  // Leaders can message other leaders (level 4+)
-  if (isLeaderRole(senderRole) && isLeaderRole(recipientRole)) {
+  // 2. Regional leaders (membership) can message anyone in their referral tree
+  if (isRegionalLeaderMembership(senderMembershipRole) && isInReferralTree) {
     return true;
   }
 
-  // Leaders can message users in groups they lead
-  if (isLeaderRole(senderRole) && isInLeaderGroup) {
+  // 3. Members with 2+ referrals can message their direct referrals
+  if (senderReferralCount >= 2 && isDirectReferral) {
     return true;
   }
 
-  // Future: Same group messaging
+  // 4. Leaders can message other leaders (level 4+)
+  if (isLeaderRole(senderMembershipRole) && isLeaderRole(recipientMembershipRole)) {
+    return true;
+  }
+
+  // 5. Leaders can message users in groups they lead
+  if (isLeaderRole(senderMembershipRole) && isInLeaderGroup) {
+    return true;
+  }
+
+  // 6. Same group messaging (when enabled)
   if (settings.messaging_same_group_enabled && isSameGroup) {
     return true;
+  }
+
+  // Check general DM initiator permission as fallback
+  if (canInitiateDMs(senderMembershipRole, senderStaffRole, settings)) {
+    // Leaders can message their direct referrals
+    if (isLeaderRole(senderMembershipRole) && isDirectReferral) {
+      return true;
+    }
   }
 
   return false;
@@ -158,7 +226,7 @@ export function canMessageUser(params: CanMessageParams): boolean {
  */
 export function canAddToGroup(
   adderRole: 'owner' | 'admin' | 'member',
-  membershipRole: MembershipRole,
+  _membershipRole: MembershipRole,
   settings: MessagingSettings
 ): boolean {
   if (!settings.messaging_enabled || !settings.messaging_group_chat_enabled) {
@@ -274,7 +342,7 @@ export interface RateLimitCheck {
 }
 
 export async function checkMessageRateLimit(
-  userId: string,
+  _userId: string,
   recentMessageCount: number,
   settings: MessagingSettings
 ): Promise<RateLimitCheck> {

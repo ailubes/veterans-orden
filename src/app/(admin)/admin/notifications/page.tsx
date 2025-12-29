@@ -1,4 +1,4 @@
-import { getAdminProfile, isRegionalLeader } from '@/lib/permissions';
+import { getAdminProfile, isRegionalLeaderOnly } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -39,9 +39,10 @@ export default async function AdminNotificationsPage() {
             Надіслати сповіщення
           </h2>
           <NotificationForm
-            adminRole={adminProfile.role}
+            adminStaffRole={adminProfile.staff_role}
+            adminMembershipRole={adminProfile.membership_role}
             adminId={adminProfile.id}
-            isRegionalLeader={isRegionalLeader(adminProfile.role)}
+            isRegionalLeaderOnly={isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)}
           />
         </div>
 

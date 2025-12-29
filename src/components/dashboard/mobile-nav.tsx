@@ -58,7 +58,8 @@ interface UserProfile {
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
-  role: string;
+  staff_role: string | null;
+  membership_role: string | null;
 }
 
 export function MobileNav() {
@@ -77,14 +78,18 @@ export function MobileNav() {
       if (user) {
         const { data } = await supabase
           .from('users')
-          .select('first_name, last_name, email, avatar_url, role')
+          .select('first_name, last_name, email, avatar_url, staff_role, membership_role')
           .eq('clerk_id', user.id)
           .single();
 
         if (data) {
           setProfile(data);
-          const adminRoles = ['admin', 'super_admin', 'regional_leader'];
-          setIsAdmin(adminRoles.includes(data.role));
+          // Check if user has admin access through either staff role or membership role
+          const staffRole = data.staff_role || 'none';
+          const membershipRole = data.membership_role || 'supporter';
+          const isStaffAdmin = staffRole === 'admin' || staffRole === 'super_admin';
+          const isLeaderByMembership = ['regional_leader', 'national_leader', 'network_guide'].includes(membershipRole);
+          setIsAdmin(isStaffAdmin || isLeaderByMembership);
         }
       }
     };

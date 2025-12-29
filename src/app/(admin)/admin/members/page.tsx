@@ -3,7 +3,8 @@ import {
   getAdminProfile,
   getRegionalLeaderFilter,
   canSuspendMembers,
-  isSuperAdmin,
+  isStaffAdmin,
+  isStaffSuperAdmin,
 } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -115,7 +116,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             <Download size={18} />
             ЕКСПОРТ
           </Link>
-          {['super_admin', 'admin'].includes(adminProfile.role) && (
+          {isStaffAdmin(adminProfile.staff_role) && (
             <Link
               href="/admin/members/import"
               className="btn btn-outline flex items-center gap-2"
@@ -226,8 +227,8 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
       {/* Members Table */}
       <MembersTable
         members={members || []}
-        canSuspend={canSuspendMembers(adminProfile.role)}
-        canDelete={isSuperAdmin(adminProfile.role)}
+        canSuspend={canSuspendMembers(adminProfile.staff_role)}
+        canDelete={isStaffSuperAdmin(adminProfile.staff_role)}
       />
 
       {/* Pagination */}

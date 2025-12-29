@@ -1,4 +1,4 @@
-import { getAdminProfile } from '@/lib/permissions';
+import { getAdminProfile, isStaffAdmin } from '@/lib/permissions';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -11,8 +11,8 @@ export default async function MembersImportPage() {
     redirect('/dashboard');
   }
 
-  // Only super_admin and admin can import members
-  if (!['super_admin', 'admin'].includes(adminProfile.role)) {
+  // Only staff admins can import members
+  if (!isStaffAdmin(adminProfile.staff_role)) {
     redirect('/admin/members');
   }
 
