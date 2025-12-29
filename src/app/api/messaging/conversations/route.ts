@@ -125,6 +125,7 @@ export async function GET(request: Request) {
           lastMessageSenderId: conv.last_message_sender_id as string | null,
           createdAt: conv.created_at as string,
           updatedAt: conv.updated_at as string,
+          pinnedMessageIds: (conv.pinned_message_ids as string[]) || [],
           otherParticipant,
           unreadCount: pr.unread_count as number,
           isMuted: pr.is_muted as boolean,

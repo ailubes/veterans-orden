@@ -128,6 +128,7 @@ export async function GET(
       lastMessageSenderId: conv.last_message_sender_id,
       createdAt: conv.created_at,
       updatedAt: conv.updated_at,
+      pinnedMessageIds: conv.pinned_message_ids || [],
       participants,
       otherParticipant,
       unreadCount: participantRecord.unread_count,

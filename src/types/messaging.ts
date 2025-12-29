@@ -71,6 +71,15 @@ export interface Message {
   status: MessageStatus;
   createdAt: string;
   updatedAt: string;
+  // Pin fields
+  pinnedAt: string | null;
+  pinnedBy: string | null;
+  // Forward fields
+  forwardedFromMessageId: string | null;
+  forwardedFromConversationId: string | null;
+  forwardedFromSenderName: string | null;
+  // Client-side enriched
+  isStarred?: boolean;
 }
 
 // =============================================
@@ -112,11 +121,25 @@ export interface Conversation {
   lastMessageSender?: MessagingUser | null;
   createdAt: string;
   updatedAt: string;
+  // Pinned messages
+  pinnedMessageIds: string[];
+  pinnedMessages?: PinnedMessage[];
   // Client-side enriched fields
   participants?: ConversationParticipant[];
   otherParticipant?: MessagingUser | null; // For DMs
   unreadCount?: number;
   isMuted?: boolean;
+}
+
+// =============================================
+// PINNED MESSAGE (simplified for display)
+// =============================================
+
+export interface PinnedMessage {
+  id: string;
+  content: string | null;
+  senderName: string;
+  pinnedAt: string;
 }
 
 // =============================================
@@ -242,4 +265,53 @@ export interface RealtimeReadEvent {
   userId: string;
   messageId: string;
   readAt: string;
+}
+
+// =============================================
+// FORWARD MESSAGE
+// =============================================
+
+export interface ForwardMessageRequest {
+  conversationIds: string[];
+  comment?: string;
+}
+
+export interface ForwardMessageResponse {
+  success: boolean;
+  forwardedMessages: Message[];
+  error?: string;
+}
+
+// =============================================
+// PIN MESSAGE
+// =============================================
+
+export interface PinMessageResponse {
+  success: boolean;
+  message?: Message;
+  error?: string;
+}
+
+// =============================================
+// STAR MESSAGE
+// =============================================
+
+export interface StarMessageResponse {
+  success: boolean;
+  isStarred: boolean;
+  error?: string;
+}
+
+// =============================================
+// BULK ACTIONS
+// =============================================
+
+export interface BulkDeleteRequest {
+  messageIds: string[];
+}
+
+export interface BulkDeleteResponse {
+  success: boolean;
+  deletedCount: number;
+  error?: string;
 }

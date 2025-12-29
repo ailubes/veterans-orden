@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 import { useMessenger } from './messenger-provider';
-import { Send, Paperclip, Smile, X, Loader2 } from 'lucide-react';
+import { Send, Paperclip, Smile, X, Loader2, Reply } from 'lucide-react';
 import { AVAILABLE_REACTIONS } from '@/lib/messaging/utils';
 import {
   Popover,
@@ -10,13 +10,21 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import type { Message } from '@/types/messaging';
 
 interface MessageComposerProps {
   onTyping?: () => void;
   onStopTyping?: () => void;
+  replyToMessage?: Message | null;
+  onCancelReply?: () => void;
 }
 
-export function MessageComposer({ onTyping, onStopTyping }: MessageComposerProps) {
+export function MessageComposer({
+  onTyping,
+  onStopTyping,
+  replyToMessage,
+  onCancelReply,
+}: MessageComposerProps) {
   const { sendMessage, currentConversation } = useMessenger();
   const [content, setContent] = useState('');
   const [sending, setSending] = useState(false);
@@ -56,13 +64,21 @@ export function MessageComposer({ onTyping, onStopTyping }: MessageComposerProps
 
     setSending(true);
     try {
-      await sendMessage(content.trim());
+      await sendMessage(content.trim(), undefined, replyToMessage?.id);
       setContent('');
       if (onStopTyping) onStopTyping();
+      if (onCancelReply) onCancelReply();
     } finally {
       setSending(false);
     }
   };
+
+  // Focus textarea when replying
+  useEffect(() => {
+    if (replyToMessage && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [replyToMessage]);
 
   // Handle keyboard shortcuts
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -88,9 +104,32 @@ export function MessageComposer({ onTyping, onStopTyping }: MessageComposerProps
   }
 
   return (
-    <div className="flex items-end gap-2">
-      {/* Emoji picker */}
-      <Popover open={showEmoji} onOpenChange={setShowEmoji}>
+    <div className="space-y-2">
+      {/* Reply preview */}
+      {replyToMessage && (
+        <div className="flex items-center gap-2 px-2 py-1.5 bg-timber-light/50 rounded border-l-2 border-accent">
+          <Reply className="w-4 h-4 text-accent flex-shrink-0" />
+          <div className="flex-1 min-w-0">
+            <span className="text-xs font-medium text-accent">
+              {replyToMessage.sender?.firstName || 'Хтось'}
+            </span>
+            <p className="text-xs text-timber-beam truncate">
+              {replyToMessage.content?.substring(0, 100) || 'Вкладення'}
+              {(replyToMessage.content?.length || 0) > 100 && '...'}
+            </p>
+          </div>
+          <button
+            onClick={onCancelReply}
+            className="p-1 hover:bg-timber-light rounded transition-colors flex-shrink-0"
+          >
+            <X className="w-4 h-4 text-timber-beam" />
+          </button>
+        </div>
+      )}
+
+      <div className="flex items-end gap-2">
+        {/* Emoji picker */}
+        <Popover open={showEmoji} onOpenChange={setShowEmoji}>
         <PopoverTrigger asChild>
           <button
             type="button"
@@ -116,46 +155,47 @@ export function MessageComposer({ onTyping, onStopTyping }: MessageComposerProps
         </PopoverContent>
       </Popover>
 
-      {/* Text input */}
-      <div className="flex-1 relative">
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={(e) => {
-            setContent(e.target.value);
-            handleTyping();
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="Напишіть повідомлення..."
-          className={cn(
-            'w-full resize-none rounded-lg border-2 border-timber-dark/30 px-3 py-2',
-            'text-sm placeholder:text-timber-beam/50',
-            'focus:border-timber-dark focus:outline-none',
-            'min-h-[40px] max-h-[120px]'
-          )}
-          rows={1}
-          disabled={sending}
-        />
-      </div>
+        {/* Text input */}
+        <div className="flex-1 relative">
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+              handleTyping();
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="Напишіть повідомлення..."
+            className={cn(
+              'w-full resize-none rounded-lg border-2 border-timber-dark/30 px-3 py-2',
+              'text-sm placeholder:text-timber-beam/50',
+              'focus:border-timber-dark focus:outline-none',
+              'min-h-[40px] max-h-[120px]'
+            )}
+            rows={1}
+            disabled={sending}
+          />
+        </div>
 
-      {/* Send button */}
-      <button
-        onClick={handleSend}
-        disabled={!content.trim() || sending}
-        className={cn(
-          'p-2 rounded transition-colors',
-          content.trim() && !sending
-            ? 'bg-timber-dark text-canvas hover:bg-timber-dark/90'
-            : 'bg-timber-light text-timber-beam cursor-not-allowed'
-        )}
-        aria-label="Надіслати"
-      >
-        {sending ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Send className="w-5 h-5" />
-        )}
-      </button>
+        {/* Send button */}
+        <button
+          onClick={handleSend}
+          disabled={!content.trim() || sending}
+          className={cn(
+            'p-2 rounded transition-colors',
+            content.trim() && !sending
+              ? 'bg-timber-dark text-canvas hover:bg-timber-dark/90'
+              : 'bg-timber-light text-timber-beam cursor-not-allowed'
+          )}
+          aria-label="Надіслати"
+        >
+          {sending ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Send className="w-5 h-5" />
+          )}
+        </button>
+      </div>
     </div>
   );
 }

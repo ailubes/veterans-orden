@@ -65,6 +65,11 @@ export function useMessagingRealtime({
       status: msg.status as Message['status'],
       createdAt: msg.created_at as string,
       updatedAt: msg.updated_at as string,
+      pinnedAt: msg.pinned_at as string | null,
+      pinnedBy: msg.pinned_by as string | null,
+      forwardedFromMessageId: msg.forwarded_from_message_id as string | null,
+      forwardedFromConversationId: msg.forwarded_from_conversation_id as string | null,
+      forwardedFromSenderName: msg.forwarded_from_sender_name as string | null,
     };
 
     onNewMessage(message);
@@ -98,6 +103,11 @@ export function useMessagingRealtime({
       status: msg.status as Message['status'],
       createdAt: msg.created_at as string,
       updatedAt: msg.updated_at as string,
+      pinnedAt: msg.pinned_at as string | null,
+      pinnedBy: msg.pinned_by as string | null,
+      forwardedFromMessageId: msg.forwarded_from_message_id as string | null,
+      forwardedFromConversationId: msg.forwarded_from_conversation_id as string | null,
+      forwardedFromSenderName: msg.forwarded_from_sender_name as string | null,
     };
 
     onMessageUpdate(message);

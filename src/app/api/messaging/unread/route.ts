@@ -28,9 +28,13 @@ export async function GET(request: Request) {
     }
 
     // Get unread counts using stored function
-    const { data: totalUnread } = await supabase.rpc('get_total_unread_count', {
+    const { data: totalUnread, error: rpcError } = await supabase.rpc('get_total_unread_count', {
       p_user_id: profile.id,
     });
+
+    if (rpcError) {
+      console.error('[Messaging] Error fetching total unread count:', rpcError);
+    }
 
     // Get per-conversation unread counts
     const { data: participants, error } = await supabase

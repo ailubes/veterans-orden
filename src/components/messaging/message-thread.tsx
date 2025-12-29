@@ -1,14 +1,37 @@
 'use client';
 
-import { Message } from '@/types/messaging';
+import { RefObject } from 'react';
+import { Message, ParticipantRole } from '@/types/messaging';
 import { MessageItem } from './message-item';
 import { groupMessagesByDate, shouldGroupMessages } from '@/lib/messaging/utils';
 
 interface MessageThreadProps {
   messages: Message[];
+  currentUserId?: string;
+  userRole?: ParticipantRole;
+  isSelectionMode?: boolean;
+  selectedMessageIds?: Set<string>;
+  onToggleSelect?: (messageId: string) => void;
+  onReply?: (message: Message) => void;
+  onForward?: (message: Message) => void;
+  onStar?: (messageId: string, isStarred: boolean) => void;
+  onPin?: (messageId: string, isPinned: boolean) => void;
+  messageRefs?: RefObject<Map<string, HTMLDivElement>>;
 }
 
-export function MessageThread({ messages }: MessageThreadProps) {
+export function MessageThread({
+  messages,
+  currentUserId,
+  userRole = 'member',
+  isSelectionMode = false,
+  selectedMessageIds = new Set(),
+  onToggleSelect,
+  onReply,
+  onForward,
+  onStar,
+  onPin,
+  messageRefs,
+}: MessageThreadProps) {
   const messageGroups = groupMessagesByDate(messages);
 
   if (messages.length === 0) {
@@ -41,11 +64,29 @@ export function MessageThread({ messages }: MessageThreadProps) {
               const isGrouped = shouldGroupMessages(prevMessage, message);
 
               return (
-                <MessageItem
+                <div
                   key={message.id}
-                  message={message}
-                  isGrouped={isGrouped}
-                />
+                  ref={(el) => {
+                    if (el && messageRefs?.current) {
+                      messageRefs.current.set(message.id, el);
+                    }
+                  }}
+                  className="transition-colors duration-500"
+                >
+                  <MessageItem
+                    message={message}
+                    isGrouped={isGrouped}
+                    currentUserId={currentUserId}
+                    userRole={userRole}
+                    isSelectionMode={isSelectionMode}
+                    isSelected={selectedMessageIds.has(message.id)}
+                    onToggleSelect={onToggleSelect}
+                    onReply={onReply}
+                    onForward={onForward}
+                    onStar={onStar}
+                    onPin={onPin}
+                  />
+                </div>
               );
             })}
           </div>

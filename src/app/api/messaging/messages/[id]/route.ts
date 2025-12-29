@@ -152,6 +152,11 @@ export async function PATCH(
       status: updatedMessage.status,
       createdAt: updatedMessage.created_at,
       updatedAt: updatedMessage.updated_at,
+      pinnedAt: updatedMessage.pinned_at || null,
+      pinnedBy: updatedMessage.pinned_by || null,
+      forwardedFromMessageId: updatedMessage.forwarded_from_message_id || null,
+      forwardedFromConversationId: updatedMessage.forwarded_from_conversation_id || null,
+      forwardedFromSenderName: updatedMessage.forwarded_from_sender_name || null,
     };
 
     return NextResponse.json({ message: responseMessage });

@@ -5,6 +5,7 @@ import { useMessenger } from './messenger-provider';
 import { ConversationList } from './conversation-list';
 import { ConversationView } from './conversation-view';
 import { NewConversation } from './new-conversation';
+import { GroupSettings } from './group-settings';
 import {
   X,
   MessageCircle,
@@ -12,11 +13,14 @@ import {
   Maximize2,
   Minimize2,
   Edit,
+  Settings,
+  Users,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function MessengerOverlay() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isGroupSettingsOpen, setIsGroupSettingsOpen] = useState(false);
   const {
     isOpen,
     activeView,
@@ -28,6 +32,8 @@ export function MessengerOverlay() {
   } = useMessenger();
 
   if (!isOpen) return null;
+
+  const isGroupConversation = currentConversation?.type === 'group';
 
   // Facebook-style layout: compact panel or expanded view
   return (
@@ -94,6 +100,18 @@ export function MessengerOverlay() {
               </button>
             )}
 
+            {/* Group Settings (for group conversations) */}
+            {activeView === 'conversation' && isGroupConversation && (
+              <button
+                onClick={() => setIsGroupSettingsOpen(true)}
+                className="p-1.5 hover:bg-canvas/10 rounded transition-colors"
+                aria-label="Налаштування групи"
+                title="Налаштування групи"
+              >
+                <Users className="w-4 h-4" />
+              </button>
+            )}
+
             {/* Expand/Collapse (desktop only) */}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
@@ -153,6 +171,13 @@ export function MessengerOverlay() {
           )}
         </div>
       </div>
+
+      {/* Group Settings Modal */}
+      <GroupSettings
+        isOpen={isGroupSettingsOpen}
+        onClose={() => setIsGroupSettingsOpen(false)}
+        conversation={currentConversation}
+      />
     </div>
   );
 }

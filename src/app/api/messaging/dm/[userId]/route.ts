@@ -152,6 +152,7 @@ export async function GET(
         lastMessageSenderId: conv.last_message_sender_id,
         createdAt: conv.created_at,
         updatedAt: conv.updated_at,
+        pinnedMessageIds: conv.pinned_message_ids || [],
         otherParticipant: otherUser ? {
           id: otherUser.id,
           firstName: otherUser.first_name,
@@ -287,6 +288,7 @@ export async function GET(
       lastMessageSenderId: conversation.last_message_sender_id,
       createdAt: conversation.created_at,
       updatedAt: conversation.updated_at,
+      pinnedMessageIds: [],
       otherParticipant: {
         id: recipient.id,
         firstName: recipient.first_name,

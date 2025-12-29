@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useMessenger } from './messenger-provider';
 import { MessageThread } from './message-thread';
 import { MessageComposer } from './message-composer';
 import { TypingIndicator } from './typing-indicator';
+import { PinnedMessagesBar } from './pinned-messages-bar';
+import { SelectionActionBar } from './selection-action-bar';
+import { ForwardModal } from './forward-modal';
 import { Loader2 } from 'lucide-react';
 import { useMessagingRealtime } from '@/hooks/use-messaging-realtime';
 import { createClient } from '@/lib/supabase/client';
@@ -17,7 +20,28 @@ export function ConversationView() {
     messages,
     messagesLoading,
     loadMoreMessages,
+    replyToMessage,
+    setReplyToMessage,
+    forwardMessage,
+    setForwardMessage,
+    isSelectionMode,
+    selectedMessageIds,
+    toggleMessageSelection,
+    clearSelection,
+    pinnedMessages,
+    userRole,
+    unpinMessage,
+    starMessage,
+    pinMessage,
+    forwardMessages,
+    bulkDeleteMessages,
   } = useMessenger();
+
+  // Message refs for scrolling to pinned messages
+  const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // Forward modal state
+  const [isForwardModalOpen, setIsForwardModalOpen] = useState(false);
 
   const [typingUsers, setTypingUsers] = useState<Set<string>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -92,12 +116,77 @@ export function ConversationView() {
     }
   };
 
+  // Navigate to a specific message (for pinned messages)
+  const navigateToMessage = useCallback((messageId: string) => {
+    const messageElement = messageRefs.current.get(messageId);
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Add highlight effect
+      messageElement.classList.add('bg-accent/20');
+      setTimeout(() => {
+        messageElement.classList.remove('bg-accent/20');
+      }, 2000);
+    }
+  }, []);
+
+  // Handle reply
+  const handleReply = useCallback((message: Message) => {
+    setReplyToMessage(message);
+  }, [setReplyToMessage]);
+
+  // Handle forward
+  const handleForward = useCallback((message: Message) => {
+    setForwardMessage(message);
+  }, [setForwardMessage]);
+
+  // Handle star toggle
+  const handleStar = useCallback(async (messageId: string, isCurrentlyStarred: boolean) => {
+    if (isCurrentlyStarred) {
+      await starMessage(messageId); // Toggle off
+    } else {
+      await starMessage(messageId); // Toggle on
+    }
+  }, [starMessage]);
+
+  // Handle pin toggle
+  const handlePin = useCallback(async (messageId: string, isCurrentlyPinned: boolean) => {
+    if (isCurrentlyPinned) {
+      await unpinMessage(messageId);
+    } else {
+      await pinMessage(messageId);
+    }
+  }, [pinMessage, unpinMessage]);
+
+  // Check if user can pin (admin/owner)
+  const canPin = userRole === 'owner' || userRole === 'admin';
+
   if (!currentConversation) {
     return null;
   }
 
   return (
     <div className="flex flex-col h-full">
+      {/* Forward Modal */}
+      <ForwardModal
+        isOpen={isForwardModalOpen || !!forwardMessage}
+        onClose={() => {
+          setIsForwardModalOpen(false);
+          setForwardMessage(null);
+        }}
+        message={forwardMessage}
+        selectedMessageIds={isSelectionMode ? selectedMessageIds : undefined}
+      />
+
+      {/* Pinned Messages Bar */}
+      {pinnedMessages.length > 0 && (
+        <PinnedMessagesBar
+          pinnedMessages={pinnedMessages}
+          onNavigateToMessage={navigateToMessage}
+          onUnpin={unpinMessage}
+          canUnpin={canPin}
+        />
+      )}
+
       {/* Messages */}
       <div
         ref={scrollRef}
@@ -115,7 +204,19 @@ export function ConversationView() {
                 <Loader2 className="w-5 h-5 animate-spin text-timber-beam" />
               </div>
             )}
-            <MessageThread messages={messages} />
+            <MessageThread
+              messages={messages}
+              currentUserId={userId || undefined}
+              userRole={userRole}
+              isSelectionMode={isSelectionMode}
+              selectedMessageIds={selectedMessageIds}
+              onToggleSelect={toggleMessageSelection}
+              onReply={handleReply}
+              onForward={handleForward}
+              onStar={handleStar}
+              onPin={handlePin}
+              messageRefs={messageRefs}
+            />
           </>
         )}
       </div>
@@ -127,11 +228,29 @@ export function ConversationView() {
         </div>
       )}
 
+      {/* Selection Action Bar */}
+      {isSelectionMode && selectedMessageIds.size > 0 && (
+        <SelectionActionBar
+          selectedCount={selectedMessageIds.size}
+          onForward={() => {
+            setIsForwardModalOpen(true);
+          }}
+          onDelete={async () => {
+            if (window.confirm(`Видалити ${selectedMessageIds.size} повідомлень?`)) {
+              await bulkDeleteMessages(Array.from(selectedMessageIds));
+            }
+          }}
+          onCancel={clearSelection}
+        />
+      )}
+
       {/* Composer */}
       <div className="border-t border-timber-dark/20 p-3">
         <MessageComposer
           onTyping={() => sendTypingIndicator(true)}
           onStopTyping={() => sendTypingIndicator(false)}
+          replyToMessage={replyToMessage}
+          onCancelReply={() => setReplyToMessage(null)}
         />
       </div>
     </div>

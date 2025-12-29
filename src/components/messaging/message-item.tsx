@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Message } from '@/types/messaging';
+import { Message, ParticipantRole } from '@/types/messaging';
 import { createClient } from '@/lib/supabase/client';
 import { useMessaging } from '@/hooks/use-messaging';
 import {
@@ -10,19 +10,13 @@ import {
   AVAILABLE_REACTIONS,
 } from '@/lib/messaging/utils';
 import {
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-  Reply,
   Check,
   CheckCheck,
+  Star,
+  Pin,
+  Forward,
 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { MessageActionsBar } from './message-context-menu';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
@@ -30,9 +24,29 @@ interface MessageItemProps {
   message: Message;
   isGrouped: boolean;
   currentUserId?: string;
+  userRole?: ParticipantRole;
+  isSelectionMode?: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: (messageId: string) => void;
+  onReply?: (message: Message) => void;
+  onForward?: (message: Message) => void;
+  onStar?: (messageId: string, isStarred: boolean) => void;
+  onPin?: (messageId: string, isPinned: boolean) => void;
 }
 
-export function MessageItem({ message, isGrouped, currentUserId }: MessageItemProps) {
+export function MessageItem({
+  message,
+  isGrouped,
+  currentUserId,
+  userRole = 'member',
+  isSelectionMode = false,
+  isSelected = false,
+  onToggleSelect,
+  onReply,
+  onForward,
+  onStar,
+  onPin,
+}: MessageItemProps) {
   const { editMessage, deleteMessage, reactToMessage } = useMessaging();
   const [showActions, setShowActions] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -61,6 +75,11 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
 
   const isOwnMessage = message.sender?.id === userId;
   const isSystemMessage = message.type === 'system';
+  const isPinned = !!message.pinnedAt;
+  const isStarred = !!message.isStarred;
+  const canPin = userRole === 'owner' || userRole === 'admin';
+  const canEdit = isOwnMessage; // Edit window check should be done in the hook
+  const canDelete = isOwnMessage || canPin;
 
   // Handle edit
   const handleEdit = async () => {
@@ -81,6 +100,50 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
   // Handle reaction
   const handleReaction = async (emoji: string) => {
     await reactToMessage(message.id, emoji);
+  };
+
+  // Handle copy
+  const handleCopy = async () => {
+    if (message.content) {
+      try {
+        await navigator.clipboard.writeText(message.content);
+        // Could add toast notification here
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  };
+
+  // Handle reply
+  const handleReply = () => {
+    onReply?.(message);
+  };
+
+  // Handle forward
+  const handleForward = () => {
+    onForward?.(message);
+  };
+
+  // Handle star
+  const handleStar = () => {
+    onStar?.(message.id, isStarred);
+  };
+
+  // Handle pin
+  const handlePin = () => {
+    onPin?.(message.id, isPinned);
+  };
+
+  // Handle select
+  const handleSelect = () => {
+    onToggleSelect?.(message.id);
+  };
+
+  // Handle click in selection mode
+  const handleClick = () => {
+    if (isSelectionMode) {
+      handleSelect();
+    }
   };
 
   // Render system message
@@ -112,13 +175,28 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
       className={cn(
         'flex gap-2',
         isOwnMessage ? 'flex-row-reverse' : 'flex-row',
-        !isGrouped && 'mt-3'
+        !isGrouped && 'mt-3',
+        isSelectionMode && 'cursor-pointer',
+        isSelected && 'bg-accent/10'
       )}
-      onMouseEnter={() => setShowActions(true)}
+      onMouseEnter={() => !isSelectionMode && setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
+      onClick={handleClick}
     >
+      {/* Selection checkbox */}
+      {isSelectionMode && (
+        <div className="flex-shrink-0 flex items-center">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-5 h-5 rounded border-timber-dark accent-accent"
+          />
+        </div>
+      )}
+
       {/* Avatar */}
-      {!isGrouped && !isOwnMessage && (
+      {!isGrouped && !isOwnMessage && !isSelectionMode && (
         <div className="flex-shrink-0">
           {message.sender?.avatarUrl ? (
             <Image
@@ -137,7 +215,7 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
           )}
         </div>
       )}
-      {isGrouped && !isOwnMessage && <div className="w-8" />}
+      {isGrouped && !isOwnMessage && !isSelectionMode && <div className="w-8" />}
 
       {/* Message Bubble */}
       <div
@@ -151,6 +229,16 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
           <p className="text-xs font-medium text-timber-dark mb-1 ml-1">
             {message.sender.firstName} {message.sender.lastName}
           </p>
+        )}
+
+        {/* Forwarded indicator */}
+        {message.forwardedFromMessageId && (
+          <div className="text-xs text-timber-beam bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-blue-500 flex items-center gap-1">
+            <Forward size={10} />
+            <span className="font-medium">
+              Переслано від {message.forwardedFromSenderName || 'Хтось'}
+            </span>
+          </div>
         )}
 
         {/* Reply preview */}
@@ -250,6 +338,14 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
             isOwnMessage ? 'justify-end' : 'justify-start'
           )}
         >
+          {/* Star indicator */}
+          {isStarred && (
+            <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+          )}
+          {/* Pin indicator */}
+          {isPinned && (
+            <Pin className="w-3 h-3 text-accent" />
+          )}
           <span className="text-[10px] text-timber-beam">
             {formatFullMessageTime(message.createdAt)}
           </span>
@@ -268,49 +364,27 @@ export function MessageItem({ message, isGrouped, currentUserId }: MessageItemPr
         </div>
 
         {/* Actions menu */}
-        {showActions && !isEditing && (
-          <div
-            className={cn(
-              'absolute top-0 flex items-center gap-1 bg-canvas border border-timber-dark/20 rounded shadow-sm px-1 py-0.5',
-              isOwnMessage ? '-left-20' : '-right-20'
-            )}
-          >
-            {/* Quick reactions */}
-            {AVAILABLE_REACTIONS.slice(0, 3).map((r) => (
-              <button
-                key={r.emoji}
-                onClick={() => handleReaction(r.emoji)}
-                className="p-1 hover:bg-timber-light rounded text-sm"
-                title={r.label}
-              >
-                {r.emoji}
-              </button>
-            ))}
-
-            {/* More actions */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="p-1 hover:bg-timber-light rounded">
-                  <MoreHorizontal className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align={isOwnMessage ? 'end' : 'start'}>
-                {isOwnMessage && (
-                  <DropdownMenuItem onClick={() => setIsEditing(true)}>
-                    <Pencil className="w-4 h-4 mr-2" />
-                    Редагувати
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem
-                  onClick={handleDelete}
-                  className="text-red-600"
-                >
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  Видалити
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+        {showActions && !isEditing && !isSelectionMode && (
+          <MessageActionsBar
+            message={message}
+            isOwnMessage={isOwnMessage}
+            userRole={userRole}
+            isStarred={isStarred}
+            isPinned={isPinned}
+            canEdit={canEdit}
+            canDelete={canDelete}
+            canPin={canPin}
+            quickReactions={AVAILABLE_REACTIONS}
+            onReaction={handleReaction}
+            onReply={handleReply}
+            onForward={handleForward}
+            onCopy={handleCopy}
+            onPin={handlePin}
+            onStar={handleStar}
+            onEdit={() => setIsEditing(true)}
+            onDelete={handleDelete}
+            onSelect={handleSelect}
+          />
         )}
       </div>
     </div>

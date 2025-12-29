@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { createServiceClient } from '@/lib/supabase/server';
 import type { Message, MessagesResponse, MessagingSettings, MessageAttachment } from '@/types/messaging';
 import { checkMessageRateLimit } from '@/lib/messaging/permissions';
 
@@ -70,6 +71,11 @@ export async function GET(
         deleted_at,
         created_at,
         updated_at,
+        pinned_at,
+        pinned_by,
+        forwarded_from_message_id,
+        forwarded_from_conversation_id,
+        forwarded_from_sender_name,
         sender:users!sender_id (
           id,
           first_name,
@@ -177,6 +183,11 @@ export async function GET(
           status: 'sent',
           createdAt: '',
           updatedAt: '',
+          pinnedAt: null,
+          pinnedBy: null,
+          forwardedFromMessageId: null,
+          forwardedFromConversationId: null,
+          forwardedFromSenderName: null,
         } : null,
         reactions,
         isEdited: m.is_edited as boolean,
@@ -186,6 +197,13 @@ export async function GET(
         status: m.status as 'sending' | 'sent' | 'delivered' | 'read' | 'failed',
         createdAt: m.created_at as string,
         updatedAt: m.updated_at as string,
+        // Pin fields
+        pinnedAt: m.pinned_at as string | null,
+        pinnedBy: m.pinned_by as string | null,
+        // Forward fields
+        forwardedFromMessageId: m.forwarded_from_message_id as string | null,
+        forwardedFromConversationId: m.forwarded_from_conversation_id as string | null,
+        forwardedFromSenderName: m.forwarded_from_sender_name as string | null,
       };
     });
 
@@ -376,11 +394,27 @@ export async function POST(
       return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
     }
 
-    // Mark sender's messages as read
-    await supabase.rpc('mark_messages_read', {
+    // Mark sender's messages as read (reset sender's unread count for this conversation)
+    const { error: markReadError } = await supabase.rpc('mark_messages_read', {
       p_conversation_id: conversationId,
       p_user_id: profile.id,
     });
+
+    if (markReadError) {
+      console.error('[Messaging] Error marking messages read:', markReadError);
+    }
+
+    // Increment unread counts for other participants
+    // Using service client to bypass RLS (updates other users' participant records)
+    const serviceClient = createServiceClient();
+    const { error: incrementError } = await serviceClient.rpc('increment_unread_counts', {
+      p_conversation_id: conversationId,
+      p_sender_id: profile.id,
+    });
+
+    if (incrementError) {
+      console.error('[Messaging] Error incrementing unread counts:', incrementError);
+    }
 
     // Build response message with sender info
     const responseMessage: Message = {
@@ -407,6 +441,11 @@ export async function POST(
       status: message.status,
       createdAt: message.created_at,
       updatedAt: message.updated_at,
+      pinnedAt: null,
+      pinnedBy: null,
+      forwardedFromMessageId: null,
+      forwardedFromConversationId: null,
+      forwardedFromSenderName: null,
     };
 
     return NextResponse.json({ message: responseMessage });

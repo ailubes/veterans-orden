@@ -3,9 +3,10 @@
  */
 
 import { Conversation, Message, MessagingUser, MessageReaction } from '@/types/messaging';
+import { KYIV_TIMEZONE } from '@/lib/utils';
 
 /**
- * Format a timestamp for display in conversation list
+ * Format a timestamp for display in conversation list (in Kyiv timezone)
  */
 export function formatMessageTime(dateString: string | null): string {
   if (!dateString) return '';
@@ -25,23 +26,39 @@ export function formatMessageTime(dateString: string | null): string {
   return date.toLocaleDateString('uk-UA', {
     day: 'numeric',
     month: 'short',
+    timeZone: KYIV_TIMEZONE,
   });
 }
 
 /**
- * Format a full timestamp for message display
+ * Format a full timestamp for message display (in Kyiv timezone)
  */
 export function formatFullMessageTime(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
-  const isToday = date.toDateString() === now.toDateString();
+
+  // Get date strings in Kyiv timezone for comparison
+  const kyivDateFormatter = new Intl.DateTimeFormat('uk-UA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: KYIV_TIMEZONE,
+  });
+
+  const dateInKyiv = kyivDateFormatter.format(date);
+  const nowInKyiv = kyivDateFormatter.format(now);
+
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  const isYesterday = date.toDateString() === yesterday.toDateString();
+  const yesterdayInKyiv = kyivDateFormatter.format(yesterday);
+
+  const isToday = dateInKyiv === nowInKyiv;
+  const isYesterday = dateInKyiv === yesterdayInKyiv;
 
   const time = date.toLocaleTimeString('uk-UA', {
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: KYIV_TIMEZONE,
   });
 
   if (isToday) {
@@ -57,6 +74,7 @@ export function formatFullMessageTime(dateString: string): string {
     month: 'short',
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: KYIV_TIMEZONE,
   });
 }
 
@@ -134,9 +152,18 @@ export interface MessageGroup {
 export function groupMessagesByDate(messages: Message[]): MessageGroup[] {
   const groups: Map<string, Message[]> = new Map();
 
+  // Format for getting date key in Kyiv timezone
+  const dateKeyFormatter = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: KYIV_TIMEZONE,
+  });
+
   for (const message of messages) {
     const date = new Date(message.createdAt);
-    const dateKey = date.toISOString().split('T')[0];
+    // Get date key in Kyiv timezone (YYYY-MM-DD format)
+    const dateKey = dateKeyFormatter.format(date);
 
     if (!groups.has(dateKey)) {
       groups.set(dateKey, []);
@@ -145,10 +172,10 @@ export function groupMessagesByDate(messages: Message[]): MessageGroup[] {
   }
 
   const now = new Date();
-  const today = now.toISOString().split('T')[0];
+  const today = dateKeyFormatter.format(now);
   const yesterday = new Date(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayKey = yesterday.toISOString().split('T')[0];
+  const yesterdayKey = dateKeyFormatter.format(yesterday);
 
   return Array.from(groups.entries()).map(([dateKey, msgs]) => {
     let dateLabel: string;
@@ -162,6 +189,7 @@ export function groupMessagesByDate(messages: Message[]): MessageGroup[] {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
+        timeZone: KYIV_TIMEZONE,
       });
     }
 
