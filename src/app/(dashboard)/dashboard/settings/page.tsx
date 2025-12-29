@@ -22,7 +22,6 @@ import {
   Award,
   Home,
   Package,
-  ChevronRight,
 } from 'lucide-react';
 
 interface UserProfile {
@@ -700,32 +699,6 @@ export default function SettingsPage() {
                   Ви зможете змінити локацію через {canChangeLocation(user.locationLastChangedAt).daysRemaining} днів.
                   Останнє оновлення: {formatDate(user.locationLastChangedAt)}
                 </p>
-              </div>
-            )}
-
-            {/* Current location display */}
-            {katottgDetails && (
-              <div className="mb-4 p-3 bg-timber-dark/5 rounded">
-                <div className="text-sm">
-                  <span className="font-medium">{katottgDetails.name}</span>
-                </div>
-                <div className="text-xs text-timber-beam flex flex-wrap items-center gap-1 mt-1">
-                  {katottgDetails.oblastName && (
-                    <span>{katottgDetails.oblastName}</span>
-                  )}
-                  {katottgDetails.raionName && (
-                    <>
-                      <ChevronRight className="w-3 h-3" />
-                      <span>{katottgDetails.raionName}</span>
-                    </>
-                  )}
-                  {katottgDetails.hromadaName && (
-                    <>
-                      <ChevronRight className="w-3 h-3" />
-                      <span>{katottgDetails.hromadaName}</span>
-                    </>
-                  )}
-                </div>
               </div>
             )}
 
