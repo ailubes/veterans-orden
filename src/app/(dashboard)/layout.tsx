@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   // Check if user profile is complete
   const { data: profile } = await supabase
     .from('users')
-    .select('first_name, last_name, phone, date_of_birth, oblast_id, city')
+    .select('first_name, last_name, phone, date_of_birth, katottg_code')
     .eq('clerk_id', user.id)
     .single();
 
