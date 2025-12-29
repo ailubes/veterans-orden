@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.clerk.dev',
       },
+      {
+        protocol: 'https',
+        hostname: 's3-storage.spiceup.online',
+      },
     ],
   },
   serverExternalPackages: ['postgres'],
