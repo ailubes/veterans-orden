@@ -190,7 +190,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                   ЗАКРИТИ ДОСТРОКОВО
                 </button>
               )}
-              <button className="btn btn-outline btn-sm flex items-center gap-2">
+              <button className="btn btn-outline-light btn-sm flex items-center gap-2">
                 <Download size={16} />
                 ЕКСПОРТ
               </button>

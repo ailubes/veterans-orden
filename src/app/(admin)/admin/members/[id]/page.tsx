@@ -208,19 +208,19 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
               </Link>
             )}
             {canSuspend && member.status !== 'suspended' && (
-              <button className="btn btn-outline btn-sm flex items-center gap-2">
+              <button className="btn btn-danger-outline btn-sm flex items-center gap-2">
                 <UserX size={16} />
                 ПРИЗУПИНИТИ
               </button>
             )}
             {canSuspend && member.status === 'suspended' && (
-              <button className="btn btn-outline btn-sm flex items-center gap-2">
+              <button className="btn btn-success-outline btn-sm flex items-center gap-2">
                 <UserCheck size={16} />
                 ВІДНОВИТИ
               </button>
             )}
             {canImpersonate && (
-              <button className="btn btn-outline btn-sm flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-canvas">
+              <button className="btn btn-accent-outline btn-sm flex items-center gap-2">
                 <Shield size={16} />
                 ІМІТУВАТИ
               </button>

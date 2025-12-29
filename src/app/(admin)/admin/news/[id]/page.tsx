@@ -133,7 +133,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
               <Link
                 href={`/news/${article.slug}`}
                 target="_blank"
-                className="btn btn-outline btn-sm flex items-center gap-2"
+                className="btn btn-outline-light btn-sm flex items-center gap-2"
               >
                 <ExternalLink size={16} />
                 ПЕРЕГЛЯНУТИ
