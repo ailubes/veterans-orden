@@ -132,7 +132,20 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
   }
 
   if (!progress) {
-    return null;
+    return (
+      <div className={`border-2 border-timber-dark p-6 bg-canvas card-with-joints ${className}`}>
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
+        <div className="text-center py-4">
+          <p className="text-amber-600 font-medium mb-2">Дані про прогрес недоступні</p>
+          <p className="text-sm text-timber-beam">
+            Система прогресу ролей налаштовується. Спробуйте пізніше.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const newPrivileges = progress.privileges.next.filter(

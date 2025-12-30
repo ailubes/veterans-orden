@@ -35,6 +35,10 @@ export async function GET() {
       const { data: progressData, error: progressError } = await supabase
         .rpc('get_user_role_progress', { p_user_id: dbUser.id });
 
+      if (progressError) {
+        console.error('Error from get_user_role_progress RPC:', progressError);
+      }
+
       if (!progressError && progressData && progressData.length > 0) {
         const row = progressData[0];
         const currentRoleInfo = MEMBERSHIP_ROLES[row.current_role as MembershipRole];
