@@ -3,6 +3,17 @@
 -- Date: 2025-12-29
 
 -- =====================================================
+-- DROP EXISTING FUNCTIONS (to handle parameter name changes)
+-- =====================================================
+DROP FUNCTION IF EXISTS calculate_total_referrals(UUID);
+DROP FUNCTION IF EXISTS count_direct_referrals_at_role(UUID, membership_role);
+DROP FUNCTION IF EXISTS count_helped_advance(UUID, membership_role, membership_role);
+DROP FUNCTION IF EXISTS recalculate_user_referral_stats(UUID);
+DROP FUNCTION IF EXISTS check_role_eligibility(UUID);
+DROP FUNCTION IF EXISTS advance_user_role(UUID, UUID);
+DROP FUNCTION IF EXISTS get_user_role_progress(UUID);
+
+-- =====================================================
 -- FUNCTION 1: Calculate Total Referral Tree Count
 -- Returns the total number of users in someone's referral tree (all depths)
 -- =====================================================
