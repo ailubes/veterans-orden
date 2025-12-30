@@ -12,6 +12,8 @@ import type { MessagingUser } from '@/types/messaging';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { getInitials } from '@/lib/messaging/utils';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
+import type { UserSex } from '@/types/messaging';
 
 interface AddParticipantsModalProps {
   isOpen: boolean;
@@ -26,6 +28,7 @@ interface SearchUser {
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
+  sex?: UserSex;
   membershipRole: string;
 }
 
@@ -176,9 +179,11 @@ export function AddParticipantsModal({
                     className="w-5 h-5 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-5 h-5 rounded-full bg-timber-light flex items-center justify-center text-[10px] font-bold">
-                    {getInitials(user.firstName, user.lastName)}
-                  </div>
+                  <DefaultAvatar
+                    sex={user.sex}
+                    size="xs"
+                    fallbackInitials={getInitials(user.firstName, user.lastName)}
+                  />
                 )}
                 <span>
                   {user.firstName} {user.lastName}
@@ -238,9 +243,11 @@ export function AddParticipantsModal({
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-timber-light flex items-center justify-center text-sm font-bold">
-                      {getInitials(user.firstName, user.lastName)}
-                    </div>
+                    <DefaultAvatar
+                      sex={user.sex}
+                      size="md"
+                      fallbackInitials={getInitials(user.firstName, user.lastName)}
+                    />
                   )}
 
                   {/* Name */}

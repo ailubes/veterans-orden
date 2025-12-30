@@ -19,6 +19,7 @@ import {
 import { MessageActionsBar } from './message-context-menu';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
 
 interface MessageItemProps {
   message: Message;
@@ -207,11 +208,13 @@ export function MessageItem({
               className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-timber-light flex items-center justify-center text-xs font-bold">
-              {message.sender
+            <DefaultAvatar
+              sex={message.sender?.sex}
+              size="sm"
+              fallbackInitials={message.sender
                 ? getInitials(message.sender.firstName, message.sender.lastName)
                 : '?'}
-            </div>
+            />
           )}
         </div>
       )}

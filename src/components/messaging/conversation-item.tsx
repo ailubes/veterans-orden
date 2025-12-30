@@ -11,6 +11,7 @@ import {
 import { Users, BellOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -49,21 +50,17 @@ export function ConversationItem({ conversation, onClick }: ConversationItemProp
             height={48}
             className="w-12 h-12 rounded-full object-cover border-2 border-timber-dark"
           />
-        ) : (
-          <div
-            className={cn(
-              'w-12 h-12 rounded-full flex items-center justify-center border-2 border-timber-dark font-bold text-sm',
-              conversation.type === 'group'
-                ? 'bg-timber-dark text-canvas'
-                : 'bg-timber-light text-timber-dark'
-            )}
-          >
-            {conversation.type === 'group' ? (
-              <Users className="w-5 h-5" />
-            ) : (
-              initials
-            )}
+        ) : conversation.type === 'group' ? (
+          <div className="w-12 h-12 rounded-full flex items-center justify-center border-2 border-timber-dark bg-timber-dark text-canvas font-bold text-sm">
+            <Users className="w-5 h-5" />
           </div>
+        ) : (
+          <DefaultAvatar
+            sex={conversation.otherParticipant?.sex}
+            size="md"
+            fallbackInitials={initials}
+            className="border-2 border-timber-dark"
+          />
         )}
         {/* Online indicator for DMs */}
         {conversation.type === 'direct' && conversation.otherParticipant?.isOnline && (

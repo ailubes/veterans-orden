@@ -98,7 +98,7 @@ export async function GET(request: Request) {
           if (otherPart?.user_id) {
             const { data: userData } = await serviceClient
               .from('users')
-              .select('id, first_name, last_name, avatar_url, membership_role')
+              .select('id, first_name, last_name, avatar_url, sex, membership_role')
               .eq('id', otherPart.user_id)
               .single();
 
@@ -108,6 +108,7 @@ export async function GET(request: Request) {
                 firstName: userData.first_name as string,
                 lastName: userData.last_name as string,
                 avatarUrl: userData.avatar_url as string | null,
+                sex: userData.sex as 'male' | 'female' | 'not_specified' | null | undefined,
                 membershipRole: userData.membership_role as string,
               };
             }

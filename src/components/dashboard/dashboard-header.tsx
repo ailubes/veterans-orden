@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { NotificationBell } from './notification-bell';
 import { useMessenger } from '@/components/messaging/messenger-provider';
+import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
@@ -58,6 +59,7 @@ interface UserProfile {
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  sex: UserSex;
   role: string;
 }
 
@@ -77,7 +79,7 @@ export function DashboardHeader() {
       if (user) {
         const { data } = await supabase
           .from('users')
-          .select('first_name, last_name, email, avatar_url, role')
+          .select('first_name, last_name, email, avatar_url, sex, role')
           .eq('clerk_id', user.id)
           .single();
 
@@ -201,17 +203,21 @@ export function DashboardHeader() {
             aria-label="Профіль"
           >
             {/* Avatar */}
-            <div className="w-8 h-8 rounded-full bg-timber-dark text-canvas flex items-center justify-center text-sm font-bold overflow-hidden">
-              {profile?.avatar_url ? (
+            {profile?.avatar_url ? (
+              <div className="w-8 h-8 rounded-full overflow-hidden">
                 <img
                   src={profile.avatar_url}
                   alt="Аватар"
                   className="w-full h-full object-cover"
                 />
-              ) : (
-                getInitials()
-              )}
-            </div>
+              </div>
+            ) : (
+              <DefaultAvatar
+                sex={profile?.sex}
+                size="sm"
+                fallbackInitials={getInitials()}
+              />
+            )}
             <ChevronDown className="w-4 h-4 text-timber-beam" />
           </button>
         </DropdownMenuTrigger>

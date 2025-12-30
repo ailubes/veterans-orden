@@ -33,6 +33,15 @@ You have a **200k context window**. Use it to:
 - **Payments:** LiqPay
 - **Testing:** Playwright
 
+## 🗄️ Supabase Configuration
+
+**Project:** FreePeople
+**Project ID:** `ckcucfofooarisquhmxm`
+**Region:** eu-north-1
+
+### CRITICAL: Before any Supabase MCP operation
+**ALWAYS** call `mcp__supabase__list_projects` first to verify the correct project ID. Never use hardcoded or assumed project IDs - they may be hallucinated or outdated.
+
 ## 📋 Todo Management
 
 Use TodoWrite to create and track tasks. Always maintain a clear todo list:

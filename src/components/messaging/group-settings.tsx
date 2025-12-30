@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { getInitials, formatParticipantCount } from '@/lib/messaging/utils';
 import { AddParticipantsModal } from './add-participants-modal';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
 
 interface GroupSettingsProps {
   isOpen: boolean;
@@ -373,9 +374,11 @@ export function GroupSettings({
                             className="w-10 h-10 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-timber-light flex items-center justify-center text-sm font-bold">
-                            {getInitials(user.firstName, user.lastName)}
-                          </div>
+                          <DefaultAvatar
+                            sex={user.sex}
+                            size="md"
+                            fallbackInitials={getInitials(user.firstName, user.lastName)}
+                          />
                         )}
 
                         {/* Name & Role */}

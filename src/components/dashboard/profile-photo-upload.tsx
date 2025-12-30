@@ -1,16 +1,19 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { User, Upload, X } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
+import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
 
 interface ProfilePhotoUploadProps {
   currentAvatarUrl?: string | null;
+  sex?: UserSex;
   onUploadComplete: (avatarUrl: string) => void;
 }
 
 export function ProfilePhotoUpload({
   currentAvatarUrl,
+  sex,
   onUploadComplete,
 }: ProfilePhotoUploadProps) {
   const [uploading, setUploading] = useState(false);
@@ -141,7 +144,7 @@ export function ProfilePhotoUpload({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <User size={48} className="text-timber-beam" />
+              <DefaultAvatar sex={sex} size="xl" showAnimation />
             )}
           </div>
 

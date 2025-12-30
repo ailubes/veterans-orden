@@ -294,6 +294,13 @@ export const advancementRequestStatusEnum = pgEnum('advancement_request_status',
   'rejected',
 ]);
 
+// User sex enum (for avatar defaults)
+export const userSexEnum = pgEnum('user_sex', [
+  'male',
+  'female',
+  'not_specified',
+]);
+
 // ===========================================
 // TABLES
 // ===========================================
@@ -370,6 +377,7 @@ export const users = pgTable('users', {
   patronymic: varchar('patronymic', { length: 100 }),
   dateOfBirth: timestamp('date_of_birth'),
   avatarUrl: text('avatar_url'),
+  sex: userSexEnum('sex').default('not_specified'),
 
   // Role & Status (Legacy - kept for backwards compatibility)
   role: userRoleEnum('role').default('prospect').notNull(),

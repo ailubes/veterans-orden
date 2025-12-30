@@ -13,6 +13,7 @@ import type { Conversation, Message } from '@/types/messaging';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { getInitials } from '@/lib/messaging/utils';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
 
 interface ForwardModalProps {
   isOpen: boolean;
@@ -162,9 +163,11 @@ export function ForwardModal({
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-timber-light flex items-center justify-center text-sm font-bold">
-                        {display.initials}
-                      </div>
+                      <DefaultAvatar
+                        sex={conv.type === 'direct' ? conv.otherParticipant?.sex : null}
+                        size="md"
+                        fallbackInitials={display.initials}
+                      />
                     )}
                     {conv.type === 'group' && (
                       <span className="absolute -bottom-0.5 -right-0.5 bg-accent text-canvas text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center">

@@ -24,6 +24,8 @@ import {
   Package,
 } from 'lucide-react';
 
+type UserSex = 'male' | 'female' | 'not_specified' | null;
+
 interface UserProfile {
   id: string;
   email: string;
@@ -32,6 +34,7 @@ interface UserProfile {
   patronymic: string | null;
   phone: string | null;
   dateOfBirth: string | null;
+  sex: UserSex;
   membershipTier: string;
   avatarUrl: string | null;
   referralCode: string;
@@ -91,6 +94,7 @@ export default function SettingsPage() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [patronymic, setPatronymic] = useState('');
+  const [sex, setSex] = useState<UserSex>(null);
 
   // KATOTTG location
   const [katottgCode, setKatottgCode] = useState<string | null>(null);
@@ -133,6 +137,7 @@ export default function SettingsPage() {
             email,
             phone,
             date_of_birth,
+            sex,
             membership_tier,
             avatar_url,
             referral_code,
@@ -208,6 +213,7 @@ export default function SettingsPage() {
             patronymic: profile.patronymic,
             phone: profile.phone,
             dateOfBirth: profile.date_of_birth,
+            sex: profile.sex as UserSex,
             membershipTier: profile.membership_tier || 'free',
             avatarUrl: profile.avatar_url,
             referralCode: profile.referral_code,
@@ -245,6 +251,7 @@ export default function SettingsPage() {
           setFirstName(profile.first_name || '');
           setLastName(profile.last_name || '');
           setPatronymic(profile.patronymic || '');
+          setSex(profile.sex as UserSex);
           setKatottgCode(profile.katottg_code || null);
           setOriginalKatottgCode(profile.katottg_code || null); // Track original for change detection
           // Load KATOTTG details if code exists
@@ -368,6 +375,7 @@ export default function SettingsPage() {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         patronymic: patronymic.trim() || null,
+        sex: sex || 'not_specified',
         // Address
         street_address: streetAddress.trim() || null,
         postal_code: postalCode.trim() || null,
@@ -633,15 +641,29 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div>
-            <label className="label block mb-2">ПО БАТЬКОВІ</label>
-            <input
-              type="text"
-              value={patronymic}
-              onChange={(e) => setPatronymic(e.target.value)}
-              placeholder="Необов'язково"
-              className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="label block mb-2">ПО БАТЬКОВІ</label>
+              <input
+                type="text"
+                value={patronymic}
+                onChange={(e) => setPatronymic(e.target.value)}
+                placeholder="Необов'язково"
+                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="label block mb-2">СТАТЬ</label>
+              <select
+                value={sex || 'not_specified'}
+                onChange={(e) => setSex(e.target.value as UserSex)}
+                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              >
+                <option value="not_specified">Не вказано</option>
+                <option value="male">Чоловік</option>
+                <option value="female">Жінка</option>
+              </select>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

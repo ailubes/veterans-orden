@@ -131,7 +131,7 @@ export async function GET(
     if (senderIds.size > 0) {
       const { data: users } = await serviceClient
         .from('users')
-        .select('id, first_name, last_name, avatar_url, membership_role')
+        .select('id, first_name, last_name, avatar_url, sex, membership_role')
         .in('id', Array.from(senderIds));
 
       if (users) {
@@ -174,6 +174,7 @@ export async function GET(
           firstName: senderData.first_name as string,
           lastName: senderData.last_name as string,
           avatarUrl: senderData.avatar_url as string | null,
+          sex: senderData.sex as 'male' | 'female' | 'not_specified' | null | undefined,
           membershipRole: senderData.membership_role as string,
         } : null,
         type: m.type as 'text' | 'image' | 'file' | 'system',
@@ -267,7 +268,7 @@ export async function POST(
     // Get user profile
     const { data: profile } = await supabase
       .from('users')
-      .select('id, first_name, last_name, avatar_url, membership_role')
+      .select('id, first_name, last_name, avatar_url, sex, membership_role')
       .eq('clerk_id', user.id)
       .single();
 
@@ -446,6 +447,7 @@ export async function POST(
         firstName: profile.first_name,
         lastName: profile.last_name,
         avatarUrl: profile.avatar_url,
+        sex: profile.sex,
         membershipRole: profile.membership_role,
       },
       type: message.type,

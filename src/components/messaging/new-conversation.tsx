@@ -9,12 +9,15 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { getInitials } from '@/lib/messaging/utils';
+import { DefaultAvatar } from '@/components/ui/default-avatar';
+import type { UserSex } from '@/types/messaging';
 
 interface SearchResult {
   id: string;
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
+  sex?: UserSex;
   membershipRole: string;
 }
 
@@ -246,9 +249,11 @@ export function NewConversation() {
                         className="w-9 h-9 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-9 h-9 rounded-full bg-timber-light flex items-center justify-center text-sm font-bold">
-                        {getInitials(user.firstName, user.lastName)}
-                      </div>
+                      <DefaultAvatar
+                        sex={user.sex}
+                        size="sm"
+                        fallbackInitials={getInitials(user.firstName, user.lastName)}
+                      />
                     )}
                     <div className="flex-1 text-left">
                       <p className="font-medium">

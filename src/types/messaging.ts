@@ -39,11 +39,14 @@ export interface MessageReaction {
 // USER (simplified for messaging)
 // =============================================
 
+export type UserSex = 'male' | 'female' | 'not_specified' | null;
+
 export interface MessagingUser {
   id: string;
   firstName: string;
   lastName: string;
   avatarUrl: string | null;
+  sex?: UserSex;
   membershipRole: string;
   isOnline?: boolean;
   lastSeenAt?: string;

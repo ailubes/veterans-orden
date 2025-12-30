@@ -62,6 +62,7 @@ export async function GET(
           first_name,
           last_name,
           avatar_url,
+          sex,
           membership_role
         )
       `)
@@ -89,6 +90,7 @@ export async function GET(
           firstName: u.first_name,
           lastName: u.last_name,
           avatarUrl: u.avatar_url,
+          sex: u.sex,
           membershipRole: u.membership_role,
         },
       };

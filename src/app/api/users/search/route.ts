@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     // Using ilike for case-insensitive partial matching
     const { data: users, error } = await auth.supabase
       .from('users')
-      .select('id, first_name, last_name, avatar_url, membership_role')
+      .select('id, first_name, last_name, avatar_url, sex, membership_role')
       .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%`)
       .neq('id', currentUser.id)
       .eq('status', 'active')
@@ -54,6 +54,7 @@ export async function GET(request: NextRequest) {
       firstName: user.first_name,
       lastName: user.last_name,
       avatarUrl: user.avatar_url,
+      sex: user.sex,
       membershipRole: user.membership_role,
     }));
 

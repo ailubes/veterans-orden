@@ -14,10 +14,13 @@ export default function CompleteProfilePage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  type UserSex = 'male' | 'female' | 'not_specified';
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     patronymic: '',
+    sex: 'not_specified' as UserSex,
     phone: '',
     dateOfBirth: '',
     katottgCode: '' as string | null,
@@ -66,6 +69,7 @@ export default function CompleteProfilePage() {
           firstName: profile.first_name || '',
           lastName: profile.last_name || '',
           patronymic: profile.patronymic || '',
+          sex: (profile.sex as UserSex) || 'not_specified',
           phone: profile.phone || '',
           dateOfBirth: profile.date_of_birth
             ? new Date(profile.date_of_birth).toISOString().split('T')[0]
@@ -156,6 +160,7 @@ export default function CompleteProfilePage() {
         first_name: formData.firstName.trim(),
         last_name: formData.lastName.trim(),
         patronymic: formData.patronymic.trim() || null,
+        sex: formData.sex,
         phone: formData.phone.trim(),
         date_of_birth: formData.dateOfBirth,
         updated_at: new Date().toISOString(),
@@ -293,15 +298,29 @@ export default function CompleteProfilePage() {
               />
             </div>
 
-            {/* Patronymic */}
-            <div>
-              <label className="label block mb-2">ПО БАТЬКОВІ</label>
-              <input
-                type="text"
-                value={formData.patronymic}
-                onChange={(e) => setFormData({ ...formData, patronymic: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              />
+            {/* Patronymic & Sex */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="label block mb-2">ПО БАТЬКОВІ</label>
+                <input
+                  type="text"
+                  value={formData.patronymic}
+                  onChange={(e) => setFormData({ ...formData, patronymic: e.target.value })}
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="label block mb-2">СТАТЬ</label>
+                <select
+                  value={formData.sex}
+                  onChange={(e) => setFormData({ ...formData, sex: e.target.value as UserSex })}
+                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                >
+                  <option value="not_specified">Не вказано</option>
+                  <option value="male">Чоловік</option>
+                  <option value="female">Жінка</option>
+                </select>
+              </div>
             </div>
 
             {/* Phone */}

@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     // Use OR conditions for first_name, last_name, and concatenated name
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, first_name, last_name, avatar_url, membership_role')
+      .select('id, first_name, last_name, avatar_url, sex, membership_role')
       .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%`)
       .neq('id', currentProfile?.id || '')
       .limit(limit);
@@ -51,6 +51,7 @@ export async function GET(request: Request) {
       firstName: u.first_name,
       lastName: u.last_name,
       avatarUrl: u.avatar_url,
+      sex: u.sex,
       membershipRole: u.membership_role,
     }));
 
