@@ -13,7 +13,10 @@ export async function GET() {
     const supabase = await createClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();
 
+    console.log('[RoleProgress] Auth user ID:', authUser?.id);
+
     if (!authUser) {
+      console.error('[RoleProgress] No authenticated user');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -24,8 +27,10 @@ export async function GET() {
       .eq('clerk_id', authUser.id)
       .single();
 
+    console.log('[RoleProgress] DB user lookup result:', { dbUser, userError });
+
     if (userError || !dbUser) {
-      console.error('Error fetching user:', userError);
+      console.error('[RoleProgress] Error fetching user:', userError);
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -35,8 +40,10 @@ export async function GET() {
       const { data: progressData, error: progressError } = await supabase
         .rpc('get_user_role_progress', { p_user_id: dbUser.id });
 
+      console.log('[RoleProgress] RPC result:', { progressData, progressError });
+
       if (progressError) {
-        console.error('Error from get_user_role_progress RPC:', progressError);
+        console.error('[RoleProgress] Error from get_user_role_progress RPC:', progressError);
       }
 
       if (!progressError && progressData && progressData.length > 0) {
