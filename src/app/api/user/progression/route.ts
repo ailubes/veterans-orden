@@ -127,7 +127,7 @@ export async function GET() {
     }));
 
     // Get uncelebrated milestones
-    const { data: milestones: milestonesData, error: milestonesError } = await supabase
+    const { data: milestonesData, error: milestonesError } = await supabase
       .from('progression_milestones')
       .select('*')
       .eq('user_id', dbUser.id)
@@ -174,11 +174,11 @@ export async function GET() {
     const newPrivileges: string[] = [];
     if (roleProgress?.nextRole) {
       const nextRoleInfo = MEMBERSHIP_ROLES[roleProgress.nextRole as MembershipRole];
-      const currentPrivileges = currentRoleInfo.privileges || [];
-      const nextPrivileges = nextRoleInfo.privileges || [];
+      const currentPrivileges = (currentRoleInfo.privileges || []) as readonly string[];
+      const nextPrivileges = (nextRoleInfo.privileges || []) as readonly string[];
 
       nextPrivileges.forEach(priv => {
-        if (!currentPrivileges.includes(priv)) {
+        if (!currentPrivileges.includes(priv as any)) {
           newPrivileges.push(priv);
         }
       });
