@@ -41,7 +41,7 @@ export async function GET() {
 
       if (!progressError && progressData && progressData.length > 0) {
         const row = progressData[0];
-        const currentRoleInfo = MEMBERSHIP_ROLES[row.current_role as MembershipRole];
+        const currentRoleInfo = MEMBERSHIP_ROLES[row.curr_role as MembershipRole];
         const nextRoleInfo = row.next_role ? MEMBERSHIP_ROLES[row.next_role as MembershipRole] : null;
 
         // Build requirements array
@@ -107,7 +107,7 @@ export async function GET() {
         }
 
         progress = {
-          currentRole: row.current_role as MembershipRole,
+          currentRole: row.curr_role as MembershipRole,
           currentRoleLevel: row.current_role_level,
           currentRoleLabel: row.current_role_name_uk || currentRoleInfo?.label || '',
           nextRole: row.next_role as MembershipRole | null,

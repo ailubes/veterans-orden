@@ -344,7 +344,7 @@ BEGIN
 
       RETURN QUERY SELECT
         user_record.id,
-        eligibility.current_role,
+        eligibility.curr_role,
         eligibility.next_role,
         TRUE;
     END IF;

@@ -193,7 +193,7 @@ COMMENT ON FUNCTION recalculate_user_referral_stats(UUID) IS
 
 CREATE OR REPLACE FUNCTION check_role_eligibility(target_user_id UUID)
 RETURNS TABLE (
-  current_role membership_role,
+  curr_role membership_role,
   next_role membership_role,
   is_eligible BOOLEAN,
   progress_percent INTEGER,
@@ -351,7 +351,7 @@ CREATE OR REPLACE FUNCTION advance_user_role(
 RETURNS membership_role AS $$
 DECLARE
   eligibility RECORD;
-  current_role membership_role;
+  old_role membership_role;
   new_role membership_role;
 BEGIN
   -- Check eligibility
@@ -363,7 +363,7 @@ BEGIN
     RETURN NULL;
   END IF;
 
-  current_role := eligibility.current_role;
+  old_role := eligibility.curr_role;
   new_role := eligibility.next_role;
 
   -- Update user's role
@@ -392,7 +392,7 @@ COMMENT ON FUNCTION advance_user_role(UUID, UUID) IS
 CREATE OR REPLACE FUNCTION get_user_role_progress(target_user_id UUID)
 RETURNS TABLE (
   user_id UUID,
-  current_role membership_role,
+  curr_role membership_role,
   current_role_level INTEGER,
   current_role_name_uk VARCHAR,
   next_role membership_role,
@@ -410,7 +410,7 @@ BEGIN
   ),
   current_req AS (
     SELECT * FROM role_requirements rr
-    WHERE rr.role = (SELECT e.current_role FROM eligibility e)
+    WHERE rr.role = (SELECT e.curr_role FROM eligibility e)
   ),
   next_req AS (
     SELECT * FROM role_requirements rr
@@ -421,7 +421,7 @@ BEGIN
   )
   SELECT
     target_user_id,
-    e.current_role,
+    e.curr_role,
     cr.role_level,
     cr.display_name_uk,
     e.next_role,
