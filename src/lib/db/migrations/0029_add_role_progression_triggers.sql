@@ -178,7 +178,7 @@ BEGIN
           INSERT INTO advancement_requests (
             user_id,
             requested_role,
-            current_role,
+            "current_role",
             status
           ) VALUES (
             NEW.user_id,
