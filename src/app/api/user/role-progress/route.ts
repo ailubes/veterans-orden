@@ -38,7 +38,7 @@ export async function GET() {
     let progress: RoleProgress | null = null;
     try {
       const { data: progressData, error: progressError } = await supabase
-        .rpc('get_user_role_progress', { p_user_id: dbUser.id });
+        .rpc('get_user_role_progress', { target_user_id: dbUser.id });
 
       console.log('[RoleProgress] RPC result:', { progressData, progressError });
 
