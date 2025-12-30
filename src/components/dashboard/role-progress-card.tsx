@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { MEMBERSHIP_ROLES, PRIVILEGE_LABELS } from '@/lib/constants';
 import RoleBadge from '@/components/ui/role-badge';
 import {
@@ -275,31 +276,16 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
 
       {/* Action Button */}
       {progress.nextRole && (
-        <button
-          onClick={handleCheckAdvancement}
-          disabled={checking || !progress.isEligible}
-          className={`
+        <Link
+          href="/dashboard/progression"
+          className="
             w-full btn flex items-center justify-center gap-2
-            ${progress.isEligible ? 'btn-primary' : 'btn-outline opacity-60'}
-          `}
+            btn-primary
+          "
         >
-          {checking ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Перевірка...
-            </>
-          ) : progress.isEligible ? (
-            <>
-              <ArrowRight className="w-4 h-4" />
-              Підвищити рівень
-            </>
-          ) : (
-            <>
-              <Users className="w-4 h-4" />
-              Виконайте вимоги
-            </>
-          )}
-        </button>
+          <TrendingUp className="w-4 h-4" />
+          {progress.isEligible ? 'Підвищити рівень' : 'Переглянути завдання'}
+        </Link>
       )}
     </div>
   );

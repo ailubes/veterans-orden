@@ -39,18 +39,19 @@ interface KatottgSelectorProps {
   required?: boolean;
   error?: string;
   label?: string;
+  oblastFilter?: string | null; // Filter results by oblast code
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
   'O': 'Область',
-  'K': 'Місто',
+  'K': 'Населений пункт',
   'P': 'Район',
   'B': 'Район',
   'H': 'Громада',
-  'M': 'Місто',
-  'T': 'СМТ',
-  'C': 'Село',
-  'X': 'Селище',
+  'M': 'Населений пункт',
+  'T': 'Населений пункт',
+  'C': 'Населений пункт',
+  'X': 'Населений пункт',
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -72,6 +73,7 @@ export function KatottgSelector({
   required = false,
   error,
   label = 'НАСЕЛЕНИЙ ПУНКТ',
+  oblastFilter = null,
 }: KatottgSelectorProps) {
   const [searchInput, setSearchInput] = useState('');
   const [results, setResults] = useState<KatottgSearchResult[]>([]);
@@ -112,9 +114,17 @@ export function KatottgSelector({
 
     setLoading(true);
     try {
-      const response = await fetch(
-        `/api/katottg/search?q=${encodeURIComponent(query)}&limit=30`
-      );
+      const params = new URLSearchParams({
+        q: query,
+        limit: '30',
+      });
+
+      // Add oblast filter if provided
+      if (oblastFilter) {
+        params.append('oblastCode', oblastFilter);
+      }
+
+      const response = await fetch(`/api/katottg/search?${params}`);
       const data = await response.json();
       setResults(data.results || []);
     } catch (error) {
@@ -123,7 +133,7 @@ export function KatottgSelector({
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [oblastFilter]);
 
   useEffect(() => {
     if (debouncedSearch && debouncedSearch !== selectedDetails?.name) {

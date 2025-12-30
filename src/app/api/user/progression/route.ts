@@ -52,7 +52,7 @@ export async function GET() {
       }));
 
     // Get progression tasks
-    const { data: tasks, error: tasksError } = await supabase
+    let { data: tasks, error: tasksError } = await supabase
       .from('progression_tasks')
       .select('*')
       .eq('user_id', dbUser.id)
@@ -60,6 +60,28 @@ export async function GET() {
 
     if (tasksError) {
       console.error('[Progression] Error fetching tasks:', tasksError);
+    }
+
+    // Fallback: If no tasks exist, generate them now
+    if (!tasks || tasks.length === 0) {
+      console.log('[Progression] No tasks found, generating for user:', dbUser.id);
+
+      const { error: generateError } = await supabase.rpc('generate_progression_tasks', {
+        p_user_id: dbUser.id
+      });
+
+      if (generateError) {
+        console.error('[Progression] Failed to generate tasks:', generateError);
+      } else {
+        // Fetch the newly generated tasks
+        const { data: newTasks } = await supabase
+          .from('progression_tasks')
+          .select('*')
+          .eq('user_id', dbUser.id)
+          .order('display_order', { ascending: true });
+
+        tasks = newTasks || [];
+      }
     }
 
     // Transform tasks for frontend

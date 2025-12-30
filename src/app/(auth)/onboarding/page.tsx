@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { UKRAINIAN_OBLASTS } from '@/lib/constants';
 import { Check, ChevronRight, ChevronLeft, User, MapPin } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
+import { KatottgSelector, KatottgDetails } from '@/components/ui/katottg-selector';
 import {
   trackOnboardingStarted,
   trackOnboardingStepCompleted,
@@ -27,9 +28,10 @@ export default function OnboardingPage() {
   const [phone, setPhone] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
 
-  // Location
-  const [selectedOblast, setSelectedOblast] = useState('');
-  const [city, setCity] = useState('');
+  // Location (two-step: oblast first, then settlement)
+  const [selectedOblastCode, setSelectedOblastCode] = useState('');
+  const [katottgCode, setKatottgCode] = useState<string | null>(null);
+  const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
 
   // Membership tier
   const [selectedTier, setSelectedTier] = useState<'free' | 'basic_49' | 'supporter_100' | 'supporter_200' | 'patron_500'>('free');
@@ -37,7 +39,7 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [user, setUser] = useState<{ firstName: string; lastName: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ email: string; id: string } | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -45,15 +47,10 @@ export default function OnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (user) {
-        const fName = user.user_metadata?.first_name || '';
-        const lName = user.user_metadata?.last_name || '';
         setUser({
-          firstName: fName,
-          lastName: lName,
           email: user.email || '',
+          id: user.id,
         });
-        setFirstName(fName);
-        setLastName(lName);
 
         // Track onboarding started
         trackOnboardingStarted(user.id);
@@ -115,13 +112,15 @@ export default function OnboardingPage() {
         referralCode += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      // Find oblast UUID
+      // Find oblast UUID from KATOTTG data or selected oblast code
       let oblastId = null;
-      if (selectedOblast) {
+      const oblastCodeToUse = katottgDetails?.oblastCode || selectedOblastCode;
+
+      if (oblastCodeToUse) {
         const { data: oblastData } = await supabase
           .from('oblasts')
           .select('id')
-          .eq('code', selectedOblast)
+          .eq('code', oblastCodeToUse)
           .single();
         oblastId = oblastData?.id || null;
       }
@@ -143,7 +142,7 @@ export default function OnboardingPage() {
       }
 
       // Create user profile in database
-      const { error: insertError } = await supabase.from('users').insert({
+      const { error: insertError, data: newUser } = await supabase.from('users').insert({
         clerk_id: user.id,
         email: user.email,
         first_name: firstName.trim(),
@@ -152,14 +151,15 @@ export default function OnboardingPage() {
         phone: phone.trim() || null,
         date_of_birth: dateOfBirth ? new Date(dateOfBirth).toISOString() : null,
         oblast_id: oblastId,
-        city: city.trim() || null,
+        katottg_code: katottgCode,
+        city: katottgDetails?.name || null, // Store settlement name for backward compatibility
         referral_code: referralCode,
         referred_by_id: referrerId,
         membership_tier: selectedTier,
         role: selectedTier === 'free' ? 'prospect' : 'full_member',
         status: 'active',
         member_since: new Date().toISOString(),
-      });
+      }).select('id').single();
 
       if (insertError) {
         if (insertError.code === '23505') {
@@ -167,6 +167,18 @@ export default function OnboardingPage() {
           return;
         }
         throw insertError;
+      }
+
+      // Generate progression tasks for new user
+      if (newUser?.id) {
+        const { error: tasksError } = await supabase.rpc('generate_progression_tasks', {
+          p_user_id: newUser.id
+        });
+
+        if (tasksError) {
+          console.error('Failed to generate progression tasks:', tasksError);
+          // Don't block registration, just log the error
+        }
       }
 
       // If user was referred, increment the referrer's count and add points
@@ -193,8 +205,8 @@ export default function OnboardingPage() {
       identifyUser(user.id, user.email || '', {
         first_name: firstName,
         last_name: lastName,
-        oblast: selectedOblast,
-        city: city,
+        oblast: oblastCodeToUse || '',
+        city: katottgDetails?.name || '',
         tier: selectedTier,
       });
 
@@ -298,7 +310,7 @@ export default function OnboardingPage() {
           </div>
 
           <h1 className="font-syne text-2xl font-bold mb-4">
-            Вітаємо{user?.firstName ? `, ${user.firstName}` : ''}!
+            Вітаємо!
           </h1>
 
           <p className="text-timber-beam mb-8">
@@ -309,8 +321,8 @@ export default function OnboardingPage() {
           <button
             onClick={() => {
               setStep('personal');
-              if (user?.email) {
-                trackOnboardingStepCompleted(user.email, 'welcome');
+              if (user?.id) {
+                trackOnboardingStepCompleted(user.id, 'welcome');
               }
             }}
             className="btn w-full justify-center"
@@ -408,8 +420,8 @@ export default function OnboardingPage() {
                 onClick={() => {
                   if (validatePersonalInfo()) {
                     setStep('region');
-                    if (user?.email) {
-                      trackOnboardingStepCompleted(user.email, 'personal');
+                    if (user?.id) {
+                      trackOnboardingStepCompleted(user.id, 'personal');
                     }
                   }
                 }}
@@ -432,15 +444,24 @@ export default function OnboardingPage() {
             </h1>
           </div>
           <p className="text-center text-sm text-timber-beam mb-6">
-            Оберіть область для участі в регіональних подіях та голосуваннях
+            Оберіть область, потім знайдіть ваш населений пункт
           </p>
 
           <div className="space-y-4">
+            {/* Step 1: Select Oblast */}
             <div>
-              <label className="label block mb-2">ОБЛАСТЬ</label>
+              <label className="label block mb-2">
+                <MapPin className="w-3 h-3 inline mr-1" />
+                ОБЛАСТЬ *
+              </label>
               <select
-                value={selectedOblast}
-                onChange={(e) => setSelectedOblast(e.target.value)}
+                value={selectedOblastCode}
+                onChange={(e) => {
+                  setSelectedOblastCode(e.target.value);
+                  // Reset settlement when oblast changes
+                  setKatottgCode(null);
+                  setKatottgDetails(null);
+                }}
                 className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
               >
                 <option value="">Оберіть область...</option>
@@ -452,16 +473,24 @@ export default function OnboardingPage() {
               </select>
             </div>
 
-            <div>
-              <label className="label block mb-2">МІСТО</label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Наприклад: Київ"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              />
-            </div>
+            {/* Step 2: Select Settlement (only show after oblast selected) */}
+            {selectedOblastCode && (
+              <div>
+                <KatottgSelector
+                  value={katottgCode}
+                  onChange={(code, details) => {
+                    setKatottgCode(code);
+                    setKatottgDetails(details);
+                  }}
+                  oblastFilter={selectedOblastCode}
+                  label="НАСЕЛЕНИЙ ПУНКТ"
+                  required={false}
+                />
+                <p className="text-xs text-timber-beam mt-2">
+                  Почніть вводити назву вашого міста, селища або села
+                </p>
+              </div>
+            )}
 
             {error && (
               <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
@@ -479,8 +508,8 @@ export default function OnboardingPage() {
               <button
                 onClick={() => {
                   setStep('tier');
-                  if (user?.email) {
-                    trackOnboardingStepCompleted(user.email, 'region');
+                  if (user?.id) {
+                    trackOnboardingStepCompleted(user.id, 'region');
                   }
                 }}
                 className="btn flex-1 justify-center"

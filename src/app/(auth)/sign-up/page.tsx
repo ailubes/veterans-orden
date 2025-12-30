@@ -12,8 +12,6 @@ function SignUpForm() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -30,8 +28,6 @@ function SignUpForm() {
         password,
         options: {
           data: {
-            first_name: firstName,
-            last_name: lastName,
             referral_code: referralCode,
           },
           emailRedirectTo: `${window.location.origin}/callback`,
@@ -64,29 +60,6 @@ function SignUpForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="label block mb-2">ІМ&apos;Я</label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              required
-            />
-          </div>
-          <div>
-            <label className="label block mb-2">ПРІЗВИЩЕ</label>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              required
-            />
-          </div>
-        </div>
-
         <div>
           <label className="label block mb-2">ЕЛЕКТРОННА ПОШТА</label>
           <input
