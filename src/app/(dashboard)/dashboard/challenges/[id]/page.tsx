@@ -24,6 +24,7 @@ import {
   CHALLENGE_GOAL_TYPE_LABELS,
 } from '@/lib/challenges';
 import type { ChallengeWithProgress, ChallengeLeaderboardEntry } from '@/lib/challenges';
+import { formatDateTimeWithLocal } from '@/lib/utils';
 
 const goalIcons = {
   referrals: Users,
@@ -132,11 +133,8 @@ export default function ChallengeDetailPage({ params }: PageProps) {
   }
 
   function formatDate(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('uk-UA', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
+    // Use formatDateTimeWithLocal to show both Kyiv and local time
+    return formatDateTimeWithLocal(dateStr, { showDate: true, showYear: true });
   }
 
   const getMedalIcon = (rank: number) => {

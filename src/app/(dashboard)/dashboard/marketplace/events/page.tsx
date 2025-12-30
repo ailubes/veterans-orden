@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Calendar, MapPin, Users, Ticket, Clock, ArrowRight } from 'lucide-react';
 import { pointsToUAH } from '@/lib/points/constants';
+import { formatDateTimeWithLocal } from '@/lib/utils';
 
 interface PaidEvent {
   id: string;
@@ -138,16 +139,11 @@ export default function MarketplaceEventsPage() {
                     {event.title}
                   </h3>
 
-                  {/* Date & Time */}
+                  {/* Date & Time - shows both Kyiv and local time */}
                   <div className="flex items-center gap-2 text-sm text-timber-beam mb-3">
                     <Clock size={16} />
                     <span>
-                      {new Date(event.startDate).toLocaleDateString('uk-UA', {
-                        day: 'numeric',
-                        month: 'long',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
+                      {formatDateTimeWithLocal(event.startDate)}
                     </span>
                   </div>
 

@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, MapPin, Users, Clock, ArrowLeft, User } from 'lucide-react';
-import { formatDateShort, formatTime } from '@/lib/utils';
+import { formatDateTimeWithLocal, formatDate, KYIV_TIMEZONE } from '@/lib/utils';
 import { RSVPButton } from '@/components/events/rsvp-button';
 import { PaidEventTicketButton } from '@/components/events/paid-event-ticket-button';
 
@@ -94,16 +94,7 @@ export default async function EventDetailPage({ params }: PageProps) {
             <div className="flex flex-wrap gap-4 text-sm opacity-80">
               <span className="flex items-center gap-1">
                 <Clock size={16} />
-                {new Date(event.start_date).toLocaleDateString('uk-UA', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-                {' в '}
-                {new Date(event.start_date).toLocaleTimeString('uk-UA', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {formatDateTimeWithLocal(event.start_date, { showYear: true })}
               </span>
               <span className="flex items-center gap-1">
                 <MapPin size={16} />
@@ -247,7 +238,7 @@ export default async function EventDetailPage({ params }: PageProps) {
                 <div>
                   <p className="text-timber-beam mb-1">Дедлайн реєстрації</p>
                   <p className="font-bold">
-                    {new Date(event.rsvp_deadline).toLocaleDateString('uk-UA')}
+                    {formatDateTimeWithLocal(event.rsvp_deadline)}
                   </p>
                 </div>
               )}

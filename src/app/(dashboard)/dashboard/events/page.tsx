@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
 import Link from 'next/link';
-import { formatDateShort, formatTime } from '@/lib/utils';
+import { formatDateShort, formatTimeWithLocal, KYIV_TIMEZONE } from '@/lib/utils';
 import { RSVPButton } from '@/components/events/rsvp-button';
 import { EventFilters } from '@/components/events/event-filters';
 
@@ -106,13 +106,13 @@ export default async function EventsPage({ searchParams }: PageProps) {
               <div className="joint joint-tr" />
 
               <div className="flex flex-col md:flex-row md:items-start gap-4">
-                {/* Date Block */}
+                {/* Date Block - shows date in Kyiv timezone */}
                 <div className="flex-shrink-0 w-16 h-16 bg-timber-dark text-canvas flex flex-col items-center justify-center">
                   <span className="text-2xl font-syne font-bold">
-                    {new Date(event.start_date).getDate()}
+                    {new Intl.DateTimeFormat('uk-UA', { day: 'numeric', timeZone: KYIV_TIMEZONE }).format(new Date(event.start_date))}
                   </span>
                   <span className="text-xs uppercase">
-                    {formatDateShort(event.start_date).split(' ')[1]}
+                    {new Intl.DateTimeFormat('uk-UA', { month: 'short', timeZone: KYIV_TIMEZONE }).format(new Date(event.start_date))}
                   </span>
                 </div>
 
@@ -130,7 +130,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
                   <div className="flex flex-wrap gap-4 text-xs text-timber-beam">
                     <span className="flex items-center gap-1">
                       <Clock size={14} />
-                      {formatTime(event.start_date)}
+                      {formatTimeWithLocal(event.start_date)}
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin size={14} />
