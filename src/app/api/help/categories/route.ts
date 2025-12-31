@@ -1,14 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import type { CategoriesTreeResponse, HelpCategory } from '@/lib/help/types';
+import { hasAdminAccess } from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 /**
  * GET /api/help/categories
  * Get all visible help categories in hierarchical structure
+ *
+ * NOTE: Admin category filtering is SERVER-ENFORCED based on user's roles
  */
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
+
+    // SERVER-SIDE PERMISSION CHECK: Determine if user has admin access
+    let hasAdminAccessFlag = false;
+
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (authUser) {
+      // Get user's roles from database
+      const { data: dbUser } = await supabase
+        .from('users')
+        .select('staff_role, membership_role')
+        .eq('clerk_id', authUser.id)
+        .single();
+
+      if (dbUser) {
+        const membershipRole = (dbUser.membership_role || 'supporter') as MembershipRole;
+        hasAdminAccessFlag = hasAdminAccess(dbUser.staff_role, membershipRole);
+      }
+    }
 
     // Get all visible categories with article counts
     const { data: categories, error } = await supabase
@@ -25,12 +48,21 @@ export async function GET(request: NextRequest) {
       throw error;
     }
 
+    // SERVER-SIDE: Filter out admin category if user doesn't have admin access
+    const filteredCategories = categories?.filter((cat: any) => {
+      // Hide "Для адміністраторів" category from non-admins
+      if (cat.slug === 'dlia-administratoriv') {
+        return hasAdminAccessFlag;
+      }
+      return true;
+    }) || [];
+
     // Build hierarchical tree structure
     const categoriesMap = new Map<string, HelpCategory>();
     const rootCategories: HelpCategory[] = [];
 
     // First pass: create all category objects
-    categories?.forEach((cat: any) => {
+    filteredCategories.forEach((cat: any) => {
       const category: HelpCategory = {
         id: cat.id,
         nameUk: cat.name_uk,

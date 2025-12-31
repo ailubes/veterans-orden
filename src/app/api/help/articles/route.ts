@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import type { ArticlesListResponse } from '@/lib/help/types';
+import { MEMBERSHIP_ROLES, type MembershipRole } from '@/lib/constants';
+import { hasAdminAccess } from '@/lib/permissions-utils';
 
 /**
  * GET /api/help/articles
- * Get list of published help articles with filters
+ * Get list of published help articles with server-side permission filtering
  * Query params:
  *  - categoryId: UUID filter by category
- *  - audience: 'all' | 'members' | 'leaders' | 'admins'
  *  - limit: number (default: 20, max: 100)
  *  - offset: number (default: 0)
  *  - search: text search in title/content
- *  - featured: boolean
+ *
+ * NOTE: audience filtering is now SERVER-ENFORCED based on user's roles
  */
 export async function GET(request: NextRequest) {
   try {
@@ -20,13 +22,44 @@ export async function GET(request: NextRequest) {
 
     // Parse filters
     const categoryId = searchParams.get('categoryId');
-    const audience = searchParams.get('audience');
-    const featured = searchParams.get('featured') === 'true';
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
     const offset = parseInt(searchParams.get('offset') || '0');
     const search = searchParams.get('search');
 
-    // Build query - only published articles
+    // SERVER-SIDE PERMISSION CHECK: Determine allowed audiences based on user's roles
+    let allowedAudiences: string[] = ['all'];
+
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (authUser) {
+      // Get user's roles from database
+      const { data: dbUser } = await supabase
+        .from('users')
+        .select('staff_role, membership_role')
+        .eq('clerk_id', authUser.id)
+        .single();
+
+      if (dbUser) {
+        // All authenticated users can see 'members' content
+        allowedAudiences.push('members');
+
+        // Check membership level for leaders content
+        const membershipRole = (dbUser.membership_role || 'supporter') as MembershipRole;
+        const roleLevel = MEMBERSHIP_ROLES[membershipRole]?.level || 0;
+
+        if (roleLevel >= 4) {
+          // Network leader+ (level 4+) can see leader content
+          allowedAudiences.push('leaders');
+        }
+
+        // Check admin access (staff admin OR regional leader+)
+        if (hasAdminAccess(dbUser.staff_role, membershipRole)) {
+          allowedAudiences.push('admins');
+        }
+      }
+    }
+
+    // Build query with SERVER-ENFORCED audience filtering
     let query = supabase
       .from('help_articles')
       .select(`
@@ -46,17 +79,14 @@ export async function GET(request: NextRequest) {
         )
       `, { count: 'exact' })
       .eq('status', 'published')
+      .in('audience', allowedAudiences)  // SERVER-SIDE: Only show articles user has permission to see
       .order('view_count', { ascending: false })
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
 
-    // Apply filters
+    // Apply optional filters
     if (categoryId) {
       query = query.eq('category_id', categoryId);
-    }
-
-    if (audience && audience !== 'all') {
-      query = query.in('audience', ['all', audience]);
     }
 
     if (search) {
