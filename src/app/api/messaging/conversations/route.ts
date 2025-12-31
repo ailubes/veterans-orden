@@ -77,66 +77,91 @@ export async function GET(request: Request) {
     // Create service client for user lookups (bypasses RLS on users table)
     const serviceClient = createServiceClient();
 
-    // For each conversation, get the other participant (for DMs)
-    const conversations: Conversation[] = await Promise.all(
-      (participantRecords || []).map(async (pr: Record<string, unknown>) => {
-        const conv = pr.conversations as Record<string, unknown>;
-        let otherParticipant = null;
+    // OPTIMIZATION: Batch fetch all other participants for DMs to avoid N+1 queries
+    // Collect all conversation IDs for DMs
+    const conversationMap = new Map();
+    const dmConversationIds: string[] = [];
 
-        // For DMs, get the other participant
-        if (conv.type === 'direct') {
-          // First get the other participant's user_id
-          const { data: otherPart } = await supabase
-            .from('conversation_participants')
-            .select('user_id')
-            .eq('conversation_id', conv.id)
-            .neq('user_id', profile.id)
-            .eq('is_active', true)
-            .single();
+    for (const pr of (participantRecords || [])) {
+      const conv = pr.conversations as Record<string, unknown>;
+      conversationMap.set(conv.id, { pr, conv });
 
-          // Then get user details using service client (bypasses RLS)
-          if (otherPart?.user_id) {
-            const { data: userData } = await serviceClient
-              .from('users')
-              .select('id, first_name, last_name, avatar_url, sex, membership_role')
-              .eq('id', otherPart.user_id)
-              .single();
+      if (conv.type === 'direct') {
+        dmConversationIds.push(conv.id as string);
+      }
+    }
 
-            if (userData) {
-              otherParticipant = {
-                id: userData.id as string,
-                firstName: userData.first_name as string,
-                lastName: userData.last_name as string,
-                avatarUrl: userData.avatar_url as string | null,
-                sex: userData.sex as 'male' | 'female' | 'not_specified' | null | undefined,
-                membershipRole: userData.membership_role as string,
-              };
-            }
+    // Build otherParticipants map for O(1) lookup
+    const otherParticipantsMap = new Map();
+
+    if (dmConversationIds.length > 0) {
+      // SINGLE batch query for all other participants
+      const { data: otherParts } = await supabase
+        .from('conversation_participants')
+        .select('conversation_id, user_id')
+        .in('conversation_id', dmConversationIds)
+        .neq('user_id', profile.id)
+        .eq('is_active', true);
+
+      const userIds = (otherParts || []).map(p => p.user_id);
+
+      if (userIds.length > 0) {
+        // SINGLE batch query for all user details
+        const { data: usersData } = await serviceClient
+          .from('users')
+          .select('id, first_name, last_name, avatar_url, sex, membership_role')
+          .in('id', userIds);
+
+        // Map users by ID for O(1) lookup
+        const usersById = new Map((usersData || []).map(u => [u.id, u]));
+
+        // Map other participants by conversation_id
+        for (const part of (otherParts || [])) {
+          const userData = usersById.get(part.user_id);
+          if (userData) {
+            otherParticipantsMap.set(part.conversation_id, {
+              id: userData.id as string,
+              firstName: userData.first_name as string,
+              lastName: userData.last_name as string,
+              avatarUrl: userData.avatar_url as string | null,
+              sex: userData.sex as 'male' | 'female' | 'not_specified' | null | undefined,
+              membershipRole: userData.membership_role as string,
+            });
           }
         }
+      }
+    }
 
-        return {
-          id: conv.id as string,
-          type: conv.type as 'direct' | 'group',
-          name: conv.name as string | null,
-          description: conv.description as string | null,
-          avatarUrl: conv.avatar_url as string | null,
-          createdById: conv.created_by_id as string,
-          isActive: conv.is_active as boolean,
-          allowReplies: conv.allow_replies as boolean,
-          participantCount: conv.participant_count as number,
-          lastMessageAt: conv.last_message_at as string | null,
-          lastMessagePreview: conv.last_message_preview as string | null,
-          lastMessageSenderId: conv.last_message_sender_id as string | null,
-          createdAt: conv.created_at as string,
-          updatedAt: conv.updated_at as string,
-          pinnedMessageIds: (conv.pinned_message_ids as string[]) || [],
-          otherParticipant,
-          unreadCount: pr.unread_count as number,
-          isMuted: pr.is_muted as boolean,
-        };
-      })
-    );
+    // Build conversations with pre-fetched data (no more queries!)
+    const conversations: Conversation[] = Array.from(conversationMap.values()).map(({ pr, conv }) => {
+      let otherParticipant = null;
+
+      // For DMs, get the other participant from pre-fetched map
+      if (conv.type === 'direct') {
+        otherParticipant = otherParticipantsMap.get(conv.id as string) || null;
+      }
+
+      return {
+        id: conv.id as string,
+        type: conv.type as 'direct' | 'group',
+        name: conv.name as string | null,
+        description: conv.description as string | null,
+        avatarUrl: conv.avatar_url as string | null,
+        createdById: conv.created_by_id as string,
+        isActive: conv.is_active as boolean,
+        allowReplies: conv.allow_replies as boolean,
+        participantCount: conv.participant_count as number,
+        lastMessageAt: conv.last_message_at as string | null,
+        lastMessagePreview: conv.last_message_preview as string | null,
+        lastMessageSenderId: conv.last_message_sender_id as string | null,
+        createdAt: conv.created_at as string,
+        updatedAt: conv.updated_at as string,
+        pinnedMessageIds: (conv.pinned_message_ids as string[]) || [],
+        otherParticipant,
+        unreadCount: pr.unread_count as number,
+        isMuted: pr.is_muted as boolean,
+      };
+    });
 
     const total = count || 0;
     const totalPages = Math.ceil(total / limit);
