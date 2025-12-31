@@ -90,6 +90,23 @@ export const enable2FASchema = z.object({
   code: z.string().regex(/^\d{6}$/),
 });
 
+export const uploadAvatarSchema = z.object({
+  fileName: z.string().min(1, 'File name is required'),
+  fileType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'image/gif'], {
+    errorMap: () => ({ message: 'Only images (JPG, PNG, WebP, GIF) are allowed' }),
+  }),
+  fileSize: z.number().int().min(1).max(5 * 1024 * 1024, 'Maximum file size is 5MB'),
+});
+
+export const updateAvatarUrlSchema = z.object({
+  avatarUrl: z.string().url('Invalid avatar URL'),
+});
+
+export const searchUsersSchema = z.object({
+  q: z.string().min(2, 'Search query must be at least 2 characters').optional().default(''),
+  limit: z.coerce.number().int().min(1).max(50).optional().default(20),
+});
+
 // ===================================================================
 // EVENT SCHEMAS
 // ===================================================================

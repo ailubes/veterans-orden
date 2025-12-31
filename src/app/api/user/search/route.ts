@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { validateQuery } from '@/lib/validation/validate';
+import { searchUsersSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,10 +17,17 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Parse query parameters
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q') || '';
-    const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '20')));
+    // Validate query parameters
+    const { data: validatedData, error: validationError } = validateQuery(
+      request,
+      searchUsersSchema
+    );
+
+    if (validationError) {
+      return validationError;
+    }
+
+    const { q: query, limit } = validatedData;
 
     if (query.trim().length < 2) {
       return NextResponse.json({ users: [] });

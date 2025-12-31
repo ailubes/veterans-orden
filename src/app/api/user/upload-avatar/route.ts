@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { generatePresignedUploadUrl } from '@/lib/storage/s3-storage';
+import { validateBody } from '@/lib/validation/validate';
+import { uploadAvatarSchema, updateAvatarUrlSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,35 +31,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Профіль не знайдено' }, { status: 404 });
     }
 
-    // Parse request body
-    const body = await request.json();
-    const { fileName, fileType, fileSize } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      uploadAvatarSchema
+    );
 
-    // Validate required fields
-    if (!fileName || !fileType || !fileSize) {
-      return NextResponse.json(
-        { error: 'fileName, fileType та fileSize є обов\'язковими' },
-        { status: 400 }
-      );
+    if (validationError) {
+      return validationError;
     }
 
-    // Validate file type (images only)
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    if (!allowedTypes.includes(fileType)) {
-      return NextResponse.json(
-        { error: 'Дозволені лише зображення (JPG, PNG, WebP, GIF)' },
-        { status: 400 }
-      );
-    }
-
-    // Validate file size (max 5MB for avatars)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (fileSize > maxSize) {
-      return NextResponse.json(
-        { error: 'Максимальний розмір файлу: 5MB' },
-        { status: 400 }
-      );
-    }
+    const { fileName, fileType, fileSize } = validatedData;
 
     // Generate unique filename with user ID
     const timestamp = Date.now();
@@ -106,13 +90,17 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: authError || 'Не авторизовано' }, { status: 401 });
     }
 
-    // Parse request body
-    const body = await request.json();
-    const { avatarUrl } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      updateAvatarUrlSchema
+    );
 
-    if (!avatarUrl) {
-      return NextResponse.json({ error: 'avatarUrl є обов\'язковим' }, { status: 400 });
+    if (validationError) {
+      return validationError;
     }
+
+    const { avatarUrl } = validatedData;
 
     // Update user's avatar_url in database
     const { error: updateError } = await supabase
