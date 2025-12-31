@@ -141,8 +141,8 @@ export async function GET(request: NextRequest) {
 
           if (userCount !== null && userRank !== null) {
             currentUserRank = {
-              rank: userRank,
-              value: parseInt(userCount as any) || 0,
+              rank: typeof userRank === 'number' ? userRank : parseInt(String(userRank)),
+              value: typeof userCount === 'number' ? userCount : parseInt(String(userCount)),
             };
           }
         }

@@ -317,7 +317,7 @@ export default function CategoriesPage() {
   // Render icon
   const renderIcon = (iconName: string | null) => {
     if (!iconName) return <Folder size={20} className="text-timber-beam" />;
-    const IconComponent = (LucideIcons as any)[iconName];
+    const IconComponent = (LucideIcons as Record<string, React.ComponentType<any>>)[iconName];
     if (!IconComponent) return <Folder size={20} className="text-timber-beam" />;
     return <IconComponent size={20} className="text-accent" />;
   };
@@ -592,7 +592,7 @@ export default function CategoriesPage() {
 
                         <div className="grid grid-cols-6 gap-2">
                           {filteredIcons.map((iconName) => {
-                            const IconComponent = (LucideIcons as any)[iconName];
+                            const IconComponent = (LucideIcons as Record<string, React.ComponentType<any>>)[iconName];
                             return (
                               <button
                                 key={iconName}

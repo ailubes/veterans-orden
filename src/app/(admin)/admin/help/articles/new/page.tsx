@@ -153,10 +153,11 @@ export default function NewArticlePage() {
   };
 
   // Get flat category list for dropdown
-  const flatCategories: HelpCategory[] = [];
+  type FlatCategory = HelpCategory & { depth: number };
+  const flatCategories: FlatCategory[] = [];
   const flattenCategories = (cats: HelpCategory[], depth = 0) => {
     cats.forEach((cat) => {
-      flatCategories.push({ ...cat, depth } as any);
+      flatCategories.push({ ...cat, depth });
       if (cat.subcategories && cat.subcategories.length > 0) {
         flattenCategories(cat.subcategories, depth + 1);
       }
@@ -389,7 +390,7 @@ export default function NewArticlePage() {
 
               <select
                 value={audience}
-                onChange={(e) => setAudience(e.target.value as any)}
+                onChange={(e) => setAudience(e.target.value as 'all' | 'members' | 'leaders' | 'admins')}
                 className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
               >
                 <option value="all">Всі користувачі</option>

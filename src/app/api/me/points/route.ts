@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100);
     const offset = parseInt(searchParams.get('offset') || '0');
-    const type = searchParams.get('type') || undefined;
+    const type = searchParams.get('type');
 
     // Get balance
     const balance = await getUserBalance(profile.id);
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     const history = await getPointsHistory(profile.id, {
       limit,
       offset,
-      type: type as any,
+      ...(type && { type }),
     });
 
     return NextResponse.json({

@@ -196,11 +196,11 @@ export async function GET() {
     const newPrivileges: string[] = [];
     if (roleProgress?.nextRole) {
       const nextRoleInfo = MEMBERSHIP_ROLES[roleProgress.nextRole as MembershipRole];
-      const currentPrivileges = (currentRoleInfo.privileges || []) as readonly string[];
-      const nextPrivileges = (nextRoleInfo.privileges || []) as readonly string[];
+      const currentPrivileges = Array.from(currentRoleInfo.privileges || []);
+      const nextPrivileges = Array.from(nextRoleInfo.privileges || []);
 
       nextPrivileges.forEach(priv => {
-        if (!currentPrivileges.includes(priv as any)) {
+        if (!currentPrivileges.includes(priv)) {
           newPrivileges.push(priv);
         }
       });

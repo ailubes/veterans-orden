@@ -137,7 +137,7 @@ export default function AdminProductsPage() {
         <div className="flex flex-wrap gap-3">
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) => setFilterStatus(e.target.value as ProductStatus | 'all')}
             className="border-2 border-timber-dark px-3 py-2 font-bold"
           >
             <option value="all">Всі статуси</option>
@@ -149,7 +149,7 @@ export default function AdminProductsPage() {
 
           <select
             value={filterType}
-            onChange={(e) => setFilterType(e.target.value as any)}
+            onChange={(e) => setFilterType(e.target.value as ProductType | 'all')}
             className="border-2 border-timber-dark px-3 py-2 font-bold"
           >
             <option value="all">Всі типи</option>

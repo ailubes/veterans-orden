@@ -538,7 +538,7 @@ export default function TooltipsPage() {
                 <label className="block font-bold mb-2">Аудиторія</label>
                 <select
                   value={formAudience}
-                  onChange={(e) => setFormAudience(e.target.value as any)}
+                  onChange={(e) => setFormAudience(e.target.value as 'all' | 'members' | 'leaders' | 'admins')}
                   className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
                 >
                   <option value="all">Всі користувачі</option>
