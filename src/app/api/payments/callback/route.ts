@@ -14,8 +14,30 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing data or signature' }, { status: 400 });
     }
 
+    const supabase = await createClient();
+
+    // Fetch payment settings to verify signature
+    const { data: settings, error: settingsError } = await supabase
+      .from('organization_settings')
+      .select('key, value')
+      .in('key', ['payment_liqpay_private_key', 'payment_success_bonus_points']);
+
+    if (settingsError) {
+      console.error('Error fetching payment settings:', settingsError);
+      return NextResponse.json({ error: 'Configuration error' }, { status: 500 });
+    }
+
+    const settingsMap = new Map(settings?.map((s) => [s.key, s.value]) || []);
+    const privateKey = (settingsMap.get('payment_liqpay_private_key') as string) || '';
+    const bonusPoints = parseInt((settingsMap.get('payment_success_bonus_points') as string) || '50', 10);
+
+    if (!privateKey) {
+      console.error('LiqPay private key not configured');
+      return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 });
+    }
+
     // Verify signature
-    if (!verifyLiqPayCallback(data, signature)) {
+    if (!verifyLiqPayCallback(data, signature, privateKey)) {
       console.error('Invalid LiqPay signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
@@ -24,8 +46,6 @@ export async function POST(request: Request) {
     const { status, order_id, amount, payment_id } = callbackData;
 
     console.log('LiqPay callback:', { status, order_id, amount, payment_id });
-
-    const supabase = await createClient();
 
     // Update payment record
     const { data: payment, error: paymentError } = await supabase
@@ -68,7 +88,7 @@ export async function POST(request: Request) {
         // Award points for becoming a paid member
         await supabase.rpc('increment_user_points', {
           user_id: payment.user_id,
-          points_to_add: 50, // Bonus for becoming paid member
+          points_to_add: bonusPoints, // Bonus from settings
         });
 
         // Log payment success for analytics

@@ -26,6 +26,13 @@ interface SystemConfig {
   points_task_completion: number;
   points_referral: number;
   points_challenge_win: number;
+  // Payment settings
+  payment_liqpay_enabled: boolean;
+  payment_liqpay_public_key: string;
+  payment_liqpay_private_key: string;
+  payment_liqpay_sandbox_mode: boolean;
+  payment_currency: string;
+  payment_success_bonus_points: number;
 }
 
 export default function SystemConfigTab({
@@ -46,6 +53,13 @@ export default function SystemConfigTab({
     points_task_completion: 20,
     points_referral: 50,
     points_challenge_win: 100,
+    // Payment settings
+    payment_liqpay_enabled: true,
+    payment_liqpay_public_key: '',
+    payment_liqpay_private_key: '',
+    payment_liqpay_sandbox_mode: true,
+    payment_currency: 'UAH',
+    payment_success_bonus_points: 50,
   });
 
   const canEdit = adminProfile.role === 'super_admin';
@@ -337,6 +351,134 @@ export default function SystemConfigTab({
                 className="mt-1"
               />
             </div>
+          </div>
+        </div>
+
+        {/* Payment Settings */}
+        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+          <h3 className="font-syne font-bold text-lg">Налаштування платежів (LiqPay)</h3>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="payment_enabled"
+              checked={config.payment_liqpay_enabled}
+              onCheckedChange={(checked) =>
+                setConfig({ ...config, payment_liqpay_enabled: checked as boolean })
+              }
+            />
+            <Label htmlFor="payment_enabled" className="cursor-pointer">
+              Прийом платежів увімкнено
+            </Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="payment_sandbox"
+              checked={config.payment_liqpay_sandbox_mode}
+              onCheckedChange={(checked) =>
+                setConfig({ ...config, payment_liqpay_sandbox_mode: checked as boolean })
+              }
+            />
+            <Label htmlFor="payment_sandbox" className="cursor-pointer">
+              Тестовий режим (sandbox) - вимкніть для продакшн платежів
+            </Label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="liqpay_public_key">
+                LiqPay Public Key <span className="text-red-600">*</span>
+              </Label>
+              <Input
+                id="liqpay_public_key"
+                type="text"
+                value={config.payment_liqpay_public_key}
+                onChange={(e) =>
+                  setConfig({ ...config, payment_liqpay_public_key: e.target.value })
+                }
+                placeholder="sandbox_i12345678"
+                className="mt-1 font-mono text-xs"
+              />
+              <p className="text-xs text-timber-beam mt-1">
+                Отримайте на{' '}
+                <a
+                  href="https://www.liqpay.ua/uk/adminbusiness"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  liqpay.ua
+                </a>
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="liqpay_private_key">
+                LiqPay Private Key <span className="text-red-600">*</span>
+              </Label>
+              <Input
+                id="liqpay_private_key"
+                type="password"
+                value={config.payment_liqpay_private_key}
+                onChange={(e) =>
+                  setConfig({ ...config, payment_liqpay_private_key: e.target.value })
+                }
+                placeholder="••••••••••••••••"
+                className="mt-1 font-mono text-xs"
+              />
+              <p className="text-xs text-red-600 mt-1">
+                ⚠️ Тримайте в секреті! Не діліться ніким.
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="payment_currency">Валюта платежів</Label>
+              <Select
+                value={config.payment_currency}
+                onValueChange={(value) =>
+                  setConfig({ ...config, payment_currency: value })
+                }
+              >
+                <SelectTrigger id="payment_currency" className="mt-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="UAH">UAH (Гривня)</SelectItem>
+                  <SelectItem value="USD">USD (Долар)</SelectItem>
+                  <SelectItem value="EUR">EUR (Євро)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="payment_bonus">Бонусні бали за перший платіж</Label>
+              <Input
+                id="payment_bonus"
+                type="number"
+                value={config.payment_success_bonus_points}
+                onChange={(e) =>
+                  setConfig({
+                    ...config,
+                    payment_success_bonus_points: parseInt(e.target.value, 10),
+                  })
+                }
+                className="mt-1"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 border-2 border-blue-300 bg-blue-50">
+            <p className="text-sm text-blue-800">
+              💡 <strong>Як налаштувати LiqPay:</strong>
+            </p>
+            <ol className="text-sm text-blue-700 mt-2 ml-4 list-decimal space-y-1">
+              <li>Зареєструйтесь на <a href="https://www.liqpay.ua/" target="_blank" rel="noopener" className="underline">liqpay.ua</a></li>
+              <li>Увійдіть в кабінет → Налаштування → API</li>
+              <li>Скопіюйте Public Key та Private Key</li>
+              <li>Вставте ключі в поля вище</li>
+              <li>Для тестування використовуйте sandbox режим</li>
+              <li>Після перевірки вимкніть sandbox для прийому реальних платежів</li>
+            </ol>
           </div>
         </div>
 

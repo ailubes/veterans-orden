@@ -13,11 +13,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Fetch all system settings
+    // Fetch all system settings (including payment settings)
     const { data: settings, error } = await supabase
       .from('organization_settings')
       .select('key, value')
-      .or('key.like.system_%,key.like.points_%');
+      .or('key.like.system_%,key.like.points_%,key.like.payment_%');
 
     if (error) throw error;
 
@@ -62,7 +62,7 @@ export async function PATCH(request: Request) {
     const { data: oldSettings } = await supabase
       .from('organization_settings')
       .select('key, value')
-      .or('key.like.system_%,key.like.points_%');
+      .or('key.like.system_%,key.like.points_%,key.like.payment_%');
 
     const oldData: Record<string, unknown> = {};
     oldSettings?.forEach((s) => {

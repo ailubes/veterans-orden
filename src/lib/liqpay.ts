@@ -1,8 +1,5 @@
 import crypto from 'crypto';
 
-const LIQPAY_PUBLIC_KEY = process.env.LIQPAY_PUBLIC_KEY!;
-const LIQPAY_PRIVATE_KEY = process.env.LIQPAY_PRIVATE_KEY!;
-
 export interface LiqPayParams {
   version: number;
   public_key: string;
@@ -35,14 +32,24 @@ export interface LiqPayCallback {
   err_description?: string;
 }
 
-export function createLiqPayData(params: Partial<LiqPayParams>): string {
+export interface LiqPayConfig {
+  publicKey: string;
+  privateKey: string;
+  currency: string;
+  sandboxMode: boolean;
+}
+
+export function createLiqPayData(
+  params: Partial<LiqPayParams>,
+  config: LiqPayConfig
+): string {
   const data: LiqPayParams = {
     version: 3,
-    public_key: LIQPAY_PUBLIC_KEY,
+    public_key: config.publicKey,
     action: 'pay',
-    currency: 'UAH',
+    currency: config.currency,
     language: 'uk',
-    sandbox: process.env.NODE_ENV === 'development' ? 1 : 0,
+    sandbox: config.sandboxMode ? 1 : 0,
     ...params,
   } as LiqPayParams;
 
@@ -50,13 +57,17 @@ export function createLiqPayData(params: Partial<LiqPayParams>): string {
   return Buffer.from(jsonString).toString('base64');
 }
 
-export function createLiqPaySignature(data: string): string {
-  const signString = LIQPAY_PRIVATE_KEY + data + LIQPAY_PRIVATE_KEY;
+export function createLiqPaySignature(data: string, privateKey: string): string {
+  const signString = privateKey + data + privateKey;
   return crypto.createHash('sha1').update(signString).digest('base64');
 }
 
-export function verifyLiqPayCallback(data: string, signature: string): boolean {
-  const expectedSignature = createLiqPaySignature(data);
+export function verifyLiqPayCallback(
+  data: string,
+  signature: string,
+  privateKey: string
+): boolean {
+  const expectedSignature = createLiqPaySignature(data, privateKey);
   return expectedSignature === signature;
 }
 

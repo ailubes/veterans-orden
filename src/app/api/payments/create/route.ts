@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { createLiqPayData, createLiqPaySignature, generateOrderId } from '@/lib/liqpay';
+import { createLiqPayData, createLiqPaySignature, generateOrderId, type LiqPayConfig } from '@/lib/liqpay';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
@@ -24,6 +24,50 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
+    // Fetch payment settings from organization_settings
+    const { data: settings, error: settingsError } = await supabase
+      .from('organization_settings')
+      .select('key, value')
+      .in('key', [
+        'payment_liqpay_enabled',
+        'payment_liqpay_public_key',
+        'payment_liqpay_private_key',
+        'payment_liqpay_sandbox_mode',
+        'payment_currency',
+      ]);
+
+    if (settingsError) {
+      console.error('Error fetching payment settings:', settingsError);
+      return NextResponse.json(
+        { error: 'Payment system configuration error' },
+        { status: 500 }
+      );
+    }
+
+    // Build settings object
+    const settingsMap = new Map(settings?.map((s) => [s.key, s.value]) || []);
+    const paymentEnabled = settingsMap.get('payment_liqpay_enabled') === 'true';
+    const publicKey = settingsMap.get('payment_liqpay_public_key') || '';
+    const privateKey = settingsMap.get('payment_liqpay_private_key') || '';
+    const sandboxMode = settingsMap.get('payment_liqpay_sandbox_mode') === 'true';
+    const currency = settingsMap.get('payment_currency') || 'UAH';
+
+    // Validate payment system is configured
+    if (!paymentEnabled) {
+      return NextResponse.json(
+        { error: 'Payment system is currently disabled' },
+        { status: 503 }
+      );
+    }
+
+    if (!publicKey || !privateKey) {
+      console.error('LiqPay keys not configured');
+      return NextResponse.json(
+        { error: 'Payment system is not properly configured. Please contact administrator.' },
+        { status: 503 }
+      );
+    }
+
     const { tierId } = await request.json();
 
     // Validate tier
@@ -40,7 +84,7 @@ export async function POST(request: Request) {
       user_id: profile.id,
       order_id: orderId,
       amount: tier.price,
-      currency: 'UAH',
+      currency,
       status: 'pending',
       payment_type: 'membership',
       metadata: {
@@ -54,6 +98,14 @@ export async function POST(request: Request) {
       throw paymentError;
     }
 
+    // Build LiqPay config from database settings
+    const liqpayConfig: LiqPayConfig = {
+      publicKey,
+      privateKey,
+      currency,
+      sandboxMode,
+    };
+
     // Create LiqPay data
     const data = createLiqPayData({
       action: 'pay',
@@ -62,9 +114,9 @@ export async function POST(request: Request) {
       order_id: orderId,
       result_url: `${baseUrl}/dashboard/settings?payment=success`,
       server_url: `${baseUrl}/api/payments/callback`,
-    });
+    }, liqpayConfig);
 
-    const signature = createLiqPaySignature(data);
+    const signature = createLiqPaySignature(data, privateKey);
 
     return NextResponse.json({
       data,
