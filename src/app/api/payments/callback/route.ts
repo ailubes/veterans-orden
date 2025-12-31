@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { verifyLiqPayCallback, decodeLiqPayData, parseOrderId } from '@/lib/liqpay';
+import { parsePaymentSettings } from '@/lib/settings/parser';
 
 export const dynamic = 'force-dynamic'; // Mark as dynamic because we use cookies
 
@@ -27,20 +28,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Configuration error' }, { status: 500 });
     }
 
+    // Parse payment settings with type safety
     const settingsMap = new Map(settings?.map((s) => [s.key, s.value]) || []);
-    const privateKey = (settingsMap.get('payment_liqpay_private_key') as string) || '';
-    const bonusPoints = parseInt((settingsMap.get('payment_success_bonus_points') as string) || '50', 10);
+    const paymentSettings = parsePaymentSettings(settingsMap);
 
-    if (!privateKey) {
+    if (!paymentSettings.payment_liqpay_private_key) {
       console.error('LiqPay private key not configured');
       return NextResponse.json({ error: 'Payment system not configured' }, { status: 500 });
     }
 
     // Verify signature
-    if (!verifyLiqPayCallback(data, signature, privateKey)) {
+    if (!verifyLiqPayCallback(data, signature, paymentSettings.payment_liqpay_private_key)) {
       console.error('Invalid LiqPay signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
+
+    const bonusPoints = paymentSettings.payment_success_bonus_points;
 
     const callbackData = decodeLiqPayData(data);
     const { status, order_id, amount, payment_id } = callbackData;
@@ -71,33 +74,80 @@ export async function POST(request: Request) {
       const tierId = parsedOrder?.tierId || payment.metadata?.tier_id;
 
       if (tierId && payment.user_id) {
-        const { error: userError } = await supabase
-          .from('users')
-          .update({
-            membership_tier: tierId,
-            role: 'full_member', // Upgrade to full member on payment
-            membership_started_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', payment.user_id);
+        try {
+          // Update user membership - CRITICAL OPERATION
+          const { error: userError } = await supabase
+            .from('users')
+            .update({
+              membership_tier: tierId,
+              role: 'full_member', // Upgrade to full member on payment
+              membership_started_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', payment.user_id);
 
-        if (userError) {
-          console.error('User update error:', userError);
+          if (userError) {
+            console.error('[CRITICAL] User update failed after payment:', userError);
+
+            // Mark payment for manual review
+            await supabase
+              .from('payments')
+              .update({
+                status: 'pending_review',
+                metadata: {
+                  ...payment.metadata,
+                  error: 'User update failed',
+                  error_details: userError.message,
+                  requires_manual_processing: true,
+                },
+                updated_at: new Date().toISOString(),
+              })
+              .eq('order_id', order_id);
+
+            return NextResponse.json(
+              { error: 'Payment processed but user update failed. Contact support.' },
+              { status: 500 }
+            );
+          }
+
+          // Award points for becoming a paid member
+          const { error: pointsError } = await supabase.rpc('increment_user_points', {
+            user_id: payment.user_id,
+            points_to_add: bonusPoints,
+          });
+
+          if (pointsError) {
+            console.error('[WARNING] Points increment failed after payment:', pointsError);
+
+            // Log to audit log for admin review but don't fail the payment
+            await supabase.from('audit_log').insert({
+              action: 'payment_points_failed',
+              user_id: payment.user_id,
+              metadata: {
+                order_id,
+                points: bonusPoints,
+                error: pointsError.message,
+                payment_id,
+              },
+              created_at: new Date().toISOString(),
+            });
+          }
+
+          // Log payment success for analytics
+          console.log('[Analytics] Payment completed:', {
+            user_id: payment.user_id,
+            tier: tierId,
+            amount,
+            order_id,
+            points_awarded: pointsError ? 0 : bonusPoints,
+          });
+        } catch (error) {
+          console.error('[CRITICAL] Payment callback exception:', error);
+          return NextResponse.json(
+            { error: 'Payment processing failed' },
+            { status: 500 }
+          );
         }
-
-        // Award points for becoming a paid member
-        await supabase.rpc('increment_user_points', {
-          user_id: payment.user_id,
-          points_to_add: bonusPoints, // Bonus from settings
-        });
-
-        // Log payment success for analytics
-        console.log('[Analytics] Payment completed:', {
-          user_id: payment.user_id,
-          tier: tierId,
-          amount,
-          order_id,
-        });
       }
     } else {
       // Log payment failure

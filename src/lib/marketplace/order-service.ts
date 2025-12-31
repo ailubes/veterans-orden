@@ -142,6 +142,48 @@ export async function createOrder(params: CreateOrderParams): Promise<CheckoutRe
     throw new Error('Failed to create order items: ' + itemsError?.message);
   }
 
+  // Update product stock BEFORE spending points (so we can rollback if needed)
+  const stockUpdates: Array<{ productId: string; originalStock: number; newStock: number }> = [];
+  for (const item of items) {
+    const product = products.find((p) => p.id === item.productId);
+    if (product && product.stock_quantity !== null) {
+      const newStock = product.stock_quantity - item.quantity;
+
+      const { error: stockError } = await supabase
+        .from('products')
+        .update({
+          stock_quantity: newStock,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', product.id);
+
+      if (stockError) {
+        // Rollback previous stock updates
+        for (const update of stockUpdates) {
+          await supabase
+            .from('products')
+            .update({
+              stock_quantity: update.originalStock,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', update.productId);
+        }
+
+        // Rollback order and items
+        await supabase.from('order_items').delete().eq('order_id', order.id);
+        await supabase.from('orders').delete().eq('id', order.id);
+
+        throw new Error(`Failed to update stock for product: ${stockError.message}`);
+      }
+
+      stockUpdates.push({
+        productId: product.id,
+        originalStock: product.stock_quantity,
+        newStock,
+      });
+    }
+  }
+
   // Spend points
   let pointsTransaction;
   try {
@@ -158,24 +200,26 @@ export async function createOrder(params: CreateOrderParams): Promise<CheckoutRe
       },
     });
   } catch (pointsError) {
-    // Rollback order and items
-    await supabase.from('order_items').delete().eq('order_id', order.id);
-    await supabase.from('orders').delete().eq('id', order.id);
-    throw pointsError;
-  }
+    console.error('[Order] Points transaction failed, rolling back:', pointsError);
 
-  // Update product stock
-  for (const item of items) {
-    const product = products.find((p) => p.id === item.productId);
-    if (product && product.stock_quantity !== null) {
+    // Comprehensive rollback: restore product stock
+    for (const update of stockUpdates) {
       await supabase
         .from('products')
         .update({
-          stock_quantity: product.stock_quantity - item.quantity,
+          stock_quantity: update.originalStock,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', product.id);
+        .eq('id', update.productId);
     }
+
+    // Delete order items
+    await supabase.from('order_items').delete().eq('order_id', order.id);
+
+    // Delete order
+    await supabase.from('orders').delete().eq('id', order.id);
+
+    throw new Error(`Недостатньо балів або помилка транзакції: ${(pointsError as Error).message}`);
   }
 
   // Send order confirmation email

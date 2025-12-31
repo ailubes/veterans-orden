@@ -148,21 +148,27 @@ function getStreakMessage(streakDays: number, points: number): string {
 }
 
 /**
- * Check if two dates are the same day
+ * Check if two dates are the same day (Kyiv timezone)
  */
 function isSameDay(date1: Date, date2: Date): boolean {
+  // Convert to Kyiv timezone for accurate day comparison
+  const kyivDate1 = new Date(date1.toLocaleString('en-US', { timeZone: 'Europe/Kiev' }));
+  const kyivDate2 = new Date(date2.toLocaleString('en-US', { timeZone: 'Europe/Kiev' }));
+
   return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
+    kyivDate1.getFullYear() === kyivDate2.getFullYear() &&
+    kyivDate1.getMonth() === kyivDate2.getMonth() &&
+    kyivDate1.getDate() === kyivDate2.getDate()
   );
 }
 
 /**
- * Check if date1 is yesterday relative to date2
+ * Check if date1 is yesterday relative to date2 (Kyiv timezone)
  */
 function isYesterday(date1: Date, date2: Date): boolean {
-  const yesterday = new Date(date2);
+  // Convert to Kyiv timezone before calculating yesterday
+  const kyivDate2 = new Date(date2.toLocaleString('en-US', { timeZone: 'Europe/Kiev' }));
+  const yesterday = new Date(kyivDate2);
   yesterday.setDate(yesterday.getDate() - 1);
 
   return isSameDay(date1, yesterday);

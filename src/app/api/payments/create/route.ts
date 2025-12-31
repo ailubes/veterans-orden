@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { createLiqPayData, createLiqPaySignature, generateOrderId, type LiqPayConfig } from '@/lib/liqpay';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
+import { parsePaymentSettings } from '@/lib/settings/parser';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,23 +45,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // Build settings object
+    // Parse payment settings with type safety
     const settingsMap = new Map(settings?.map((s) => [s.key, s.value]) || []);
-    const paymentEnabled = settingsMap.get('payment_liqpay_enabled') === 'true';
-    const publicKey = settingsMap.get('payment_liqpay_public_key') || '';
-    const privateKey = settingsMap.get('payment_liqpay_private_key') || '';
-    const sandboxMode = settingsMap.get('payment_liqpay_sandbox_mode') === 'true';
-    const currency = settingsMap.get('payment_currency') || 'UAH';
+    const paymentSettings = parsePaymentSettings(settingsMap);
 
     // Validate payment system is configured
-    if (!paymentEnabled) {
+    if (!paymentSettings.payment_liqpay_enabled) {
       return NextResponse.json(
         { error: 'Payment system is currently disabled' },
         { status: 503 }
       );
     }
 
-    if (!publicKey || !privateKey) {
+    if (!paymentSettings.payment_liqpay_public_key || !paymentSettings.payment_liqpay_private_key) {
       console.error('LiqPay keys not configured');
       return NextResponse.json(
         { error: 'Payment system is not properly configured. Please contact administrator.' },
@@ -84,7 +81,7 @@ export async function POST(request: Request) {
       user_id: profile.id,
       order_id: orderId,
       amount: tier.price,
-      currency,
+      currency: paymentSettings.payment_currency,
       status: 'pending',
       payment_type: 'membership',
       metadata: {
@@ -100,10 +97,10 @@ export async function POST(request: Request) {
 
     // Build LiqPay config from database settings
     const liqpayConfig: LiqPayConfig = {
-      publicKey,
-      privateKey,
-      currency,
-      sandboxMode,
+      publicKey: paymentSettings.payment_liqpay_public_key,
+      privateKey: paymentSettings.payment_liqpay_private_key,
+      currency: paymentSettings.payment_currency,
+      sandboxMode: paymentSettings.payment_liqpay_sandbox_mode,
     };
 
     // Create LiqPay data
@@ -116,7 +113,7 @@ export async function POST(request: Request) {
       server_url: `${baseUrl}/api/payments/callback`,
     }, liqpayConfig);
 
-    const signature = createLiqPaySignature(data, privateKey);
+    const signature = createLiqPaySignature(data, paymentSettings.payment_liqpay_private_key);
 
     return NextResponse.json({
       data,
