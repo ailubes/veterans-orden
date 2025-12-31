@@ -31,178 +31,132 @@ export async function GET(request: NextRequest) {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-    // Run all queries in parallel
+    // OPTIMIZED: Run all queries in parallel using database aggregation functions
     const [
-      tasksResult,
-      submissionsResult,
+      overviewResult,
+      statusCountsResult,
+      typeCountsResult,
+      priorityCountsResult,
+      submissionCountsResult,
+      pointsStatsResult,
       dailyCompletionsResult,
       topPerformersResult,
-      pointsStatsResult,
     ] = await Promise.all([
-      // 1. All tasks with status counts
-      supabase
-        .from('tasks')
-        .select('id, status, type, priority, points, created_at, completed_at'),
+      // 1. Overview stats (aggregated in DB)
+      supabase.rpc('get_task_overview_stats'),
 
-      // 2. Submission stats
-      supabase
-        .from('task_submissions')
-        .select('id, status, points_awarded, created_at, reviewed_at'),
+      // 2. Status counts (aggregated in DB)
+      supabase.rpc('get_task_status_counts'),
 
-      // 3. Daily completions (last 30 days)
-      supabase
-        .from('tasks')
-        .select('completed_at')
-        .eq('status', 'completed')
-        .gte('completed_at', thirtyDaysAgo.toISOString())
-        .not('completed_at', 'is', null),
+      // 3. Type counts (aggregated in DB)
+      supabase.rpc('get_task_type_counts'),
 
-      // 4. Top performers (users with most completed tasks)
-      supabase
-        .from('tasks')
-        .select('assignee_id, users!tasks_assignee_id_users_id_fk(first_name, last_name, avatar_url)')
-        .eq('status', 'completed')
-        .not('assignee_id', 'is', null),
+      // 4. Priority counts (aggregated in DB)
+      supabase.rpc('get_task_priority_counts'),
 
-      // 5. Total points awarded
-      supabase
-        .from('task_submissions')
-        .select('points_awarded')
-        .eq('status', 'approved'),
+      // 5. Submission status counts (aggregated in DB)
+      supabase.rpc('get_submission_status_counts'),
+
+      // 6. Points stats (aggregated in DB)
+      supabase.rpc('get_task_points_stats'),
+
+      // 7. Daily completions (last 30 days, aggregated in DB)
+      supabase.rpc('get_daily_task_completions', { p_days: 30 }),
+
+      // 8. Top performers (from existing task leaderboard function)
+      supabase.rpc('get_task_leaderboard', { p_limit: 10, p_date_filter: null }),
     ]);
 
-    const tasks = tasksResult.data || [];
-    const submissions = submissionsResult.data || [];
-    const dailyCompletions = dailyCompletionsResult.data || [];
-    const completedTasks = topPerformersResult.data || [];
-    const approvedSubmissions = pointsStatsResult.data || [];
-
-    // Calculate overall stats
-    const statusCounts = {
-      open: tasks.filter(t => t.status === 'open').length,
-      in_progress: tasks.filter(t => t.status === 'in_progress').length,
-      pending_review: tasks.filter(t => t.status === 'pending_review').length,
-      completed: tasks.filter(t => t.status === 'completed').length,
-      cancelled: tasks.filter(t => t.status === 'cancelled').length,
+    // Extract overview stats
+    const overview = overviewResult.data?.[0] || {
+      total_tasks: 0,
+      completed_tasks: 0,
+      completion_rate: 0,
+      avg_completion_hours: 0,
     };
 
-    // Tasks by type
+    // Convert status counts array to object
+    const statusCounts: Record<string, number> = {};
+    (statusCountsResult.data || []).forEach((row: any) => {
+      statusCounts[row.status] = parseInt(row.count);
+    });
+
+    // Convert type counts array to object
     const typeCounts: Record<string, number> = {};
-    tasks.forEach(t => {
-      typeCounts[t.type] = (typeCounts[t.type] || 0) + 1;
+    (typeCountsResult.data || []).forEach((row: any) => {
+      typeCounts[row.type] = parseInt(row.count);
     });
 
-    // Tasks by priority
+    // Convert priority counts array to object
     const priorityCounts: Record<string, number> = {};
-    tasks.forEach(t => {
-      priorityCounts[t.priority] = (priorityCounts[t.priority] || 0) + 1;
+    (priorityCountsResult.data || []).forEach((row: any) => {
+      priorityCounts[row.priority] = parseInt(row.count);
     });
 
-    // Completion rate
-    const totalTasks = tasks.length;
-    const completedTasksCount = statusCounts.completed;
-    const completionRate = totalTasks > 0
-      ? Math.round((completedTasksCount / totalTasks) * 100)
-      : 0;
+    // Convert submission counts to stats object
+    const submissionCounts: Record<string, number> = {};
+    let totalSubmissions = 0;
+    (submissionCountsResult.data || []).forEach((row: any) => {
+      const count = parseInt(row.count);
+      submissionCounts[row.status] = count;
+      totalSubmissions += count;
+    });
 
-    // Submission stats
     const submissionStats = {
-      pending: submissions.filter(s => s.status === 'pending').length,
-      approved: submissions.filter(s => s.status === 'approved').length,
-      rejected: submissions.filter(s => s.status === 'rejected').length,
-      total: submissions.length,
+      pending: submissionCounts.pending || 0,
+      approved: submissionCounts.approved || 0,
+      rejected: submissionCounts.rejected || 0,
+      total: totalSubmissions,
     };
 
-    // Points stats
-    const totalPointsAwarded = approvedSubmissions.reduce(
-      (sum, s) => sum + (s.points_awarded || 0),
-      0
-    );
-    const totalPossiblePoints = tasks.reduce(
-      (sum, t) => sum + (t.points || 0),
-      0
-    );
+    // Extract points stats
+    const pointsStats = pointsStatsResult.data?.[0] || {
+      total_possible_points: 0,
+      total_awarded_points: 0,
+      award_rate: 0,
+    };
 
-    // Daily completions trend (last 30 days)
+    // Build daily trend with all 30 days (fill missing days with 0)
+    const dailyCompletionsMap = new Map();
+    (dailyCompletionsResult.data || []).forEach((row: any) => {
+      dailyCompletionsMap.set(row.date, parseInt(row.count));
+    });
+
     const dailyTrend: { date: string; count: number }[] = [];
     for (let i = 29; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
-
-      const count = dailyCompletions.filter(t => {
-        if (!t.completed_at) return false;
-        return t.completed_at.split('T')[0] === dateStr;
-      }).length;
-
-      dailyTrend.push({ date: dateStr, count });
+      dailyTrend.push({
+        date: dateStr,
+        count: dailyCompletionsMap.get(dateStr) || 0,
+      });
     }
 
-    // Top performers (group by assignee)
-    const performerMap = new Map<string, {
-      id: string;
-      firstName: string;
-      lastName: string;
-      avatarUrl: string | null;
-      completedCount: number;
-    }>();
-
-    completedTasks.forEach(task => {
-      if (!task.assignee_id || !task.users) return;
-
-      // Handle both array and single object returns from Supabase
-      const userData = Array.isArray(task.users) ? task.users[0] : task.users;
-      if (!userData) return;
-
-      const existing = performerMap.get(task.assignee_id);
-      if (existing) {
-        existing.completedCount++;
-      } else {
-        performerMap.set(task.assignee_id, {
-          id: task.assignee_id,
-          firstName: userData.first_name || '',
-          lastName: userData.last_name || '',
-          avatarUrl: userData.avatar_url,
-          completedCount: 1,
-        });
-      }
-    });
-
-    const topPerformers = Array.from(performerMap.values())
-      .sort((a, b) => b.completedCount - a.completedCount)
-      .slice(0, 10);
-
-    // Average completion time (in hours)
-    const completedWithDates = tasks.filter(
-      t => t.status === 'completed' && t.created_at && t.completed_at
-    );
-    let avgCompletionTimeHours = 0;
-    if (completedWithDates.length > 0) {
-      const totalHours = completedWithDates.reduce((sum, t) => {
-        const created = new Date(t.created_at).getTime();
-        const completed = new Date(t.completed_at).getTime();
-        return sum + (completed - created) / (1000 * 60 * 60);
-      }, 0);
-      avgCompletionTimeHours = Math.round(totalHours / completedWithDates.length);
-    }
+    // Convert top performers
+    const topPerformers = (topPerformersResult.data || []).map((row: any) => ({
+      id: row.user_id,
+      firstName: row.first_name || '',
+      lastName: row.last_name || '',
+      avatarUrl: row.avatar_url || null,
+      completedCount: parseInt(row.task_count),
+    }));
 
     return NextResponse.json({
       overview: {
-        totalTasks,
-        completedTasks: completedTasksCount,
-        completionRate,
-        avgCompletionTimeHours,
+        totalTasks: parseInt(overview.total_tasks) || 0,
+        completedTasks: parseInt(overview.completed_tasks) || 0,
+        completionRate: parseFloat(overview.completion_rate) || 0,
+        avgCompletionTimeHours: parseFloat(overview.avg_completion_hours) || 0,
       },
       statusCounts,
       typeCounts,
       priorityCounts,
       submissionStats,
       pointsStats: {
-        totalAwarded: totalPointsAwarded,
-        totalPossible: totalPossiblePoints,
-        awardRate: totalPossiblePoints > 0
-          ? Math.round((totalPointsAwarded / totalPossiblePoints) * 100)
-          : 0,
+        totalAwarded: parseInt(pointsStats.total_awarded_points) || 0,
+        totalPossible: parseInt(pointsStats.total_possible_points) || 0,
+        awardRate: parseFloat(pointsStats.award_rate) || 0,
       },
       dailyTrend,
       topPerformers,

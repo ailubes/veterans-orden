@@ -103,67 +103,48 @@ export async function GET(request: NextRequest) {
         }
       }
     } else if (type === 'tasks') {
-      // Leaderboard by completed tasks
-      let tasksQuery = supabase
-        .from('tasks')
-        .select('assignee_id')
-        .eq('status', 'completed')
-        .not('assignee_id', 'is', null);
-
-      if (dateFilter) {
-        tasksQuery = tasksQuery.gte('completed_at', dateFilter);
-      }
-
-      const { data: completedTasks } = await tasksQuery;
-
-      if (completedTasks) {
-        // Count tasks per user
-        const taskCounts = new Map<string, number>();
-        completedTasks.forEach(t => {
-          if (t.assignee_id) {
-            taskCounts.set(t.assignee_id, (taskCounts.get(t.assignee_id) || 0) + 1);
-          }
+      // Leaderboard by completed tasks - OPTIMIZED with database aggregation
+      const { data: taskLeaderboard, error: taskError } = await supabase
+        .rpc('get_task_leaderboard', {
+          p_limit: limit,
+          p_date_filter: dateFilter,
         });
 
-        // Get user IDs sorted by count
-        const sortedUserIds = Array.from(taskCounts.entries())
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, limit);
+      if (taskError) {
+        console.error('[Leaderboard] Error fetching task leaderboard:', taskError);
+      }
 
-        if (sortedUserIds.length > 0) {
-          // Fetch user details
-          const { data: users } = await supabase
-            .from('users')
-            .select('id, first_name, last_name, avatar_url')
-            .in('id', sortedUserIds.map(([id]) => id));
-
-          if (users) {
-            const userMap = new Map(users.map(u => [u.id, u]));
-
-            leaderboard = sortedUserIds.map(([userId, count], index) => {
-              const user = userMap.get(userId);
-              return {
-                rank: index + 1,
-                userId,
-                firstName: user?.first_name || '',
-                lastName: user?.last_name || '',
-                avatarUrl: user?.avatar_url || null,
-                value: count,
-                isCurrentUser: currentUserProfile?.id === userId,
-              };
-            });
-          }
-        }
+      if (taskLeaderboard) {
+        leaderboard = taskLeaderboard.map((row: any, index: number) => ({
+          rank: index + 1,
+          userId: row.user_id,
+          firstName: row.first_name || '',
+          lastName: row.last_name || '',
+          avatarUrl: row.avatar_url || null,
+          value: parseInt(row.task_count) || 0,
+          isCurrentUser: currentUserProfile?.id === row.user_id,
+        }));
 
         // Get current user's rank if not in top list
         if (currentUserProfile && !leaderboard.some(l => l.isCurrentUser)) {
-          const userTaskCount = taskCounts.get(currentUserProfile.id) || 0;
-          const higherCount = Array.from(taskCounts.values()).filter(c => c > userTaskCount).length;
+          const { data: userCount } = await supabase
+            .rpc('get_user_task_count', {
+              p_user_id: currentUserProfile.id,
+              p_date_filter: dateFilter,
+            });
 
-          currentUserRank = {
-            rank: higherCount + 1,
-            value: userTaskCount,
-          };
+          const { data: userRank } = await supabase
+            .rpc('get_user_task_rank', {
+              p_user_id: currentUserProfile.id,
+              p_date_filter: dateFilter,
+            });
+
+          if (userCount !== null && userRank !== null) {
+            currentUserRank = {
+              rank: userRank,
+              value: parseInt(userCount as any) || 0,
+            };
+          }
         }
       }
     }
