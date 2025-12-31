@@ -128,6 +128,12 @@ export const createEventSchema = z.object({
 
 export const updateEventSchema = createEventSchema.partial();
 
+export const rsvpEventSchema = z.object({
+  status: z.enum(['going', 'maybe', 'not_going'], {
+    errorMap: () => ({ message: 'Status must be going, maybe, or not_going' }),
+  }),
+});
+
 export const eventRSVPSchema = z.object({
   notes: z.string().max(500).optional(),
 });

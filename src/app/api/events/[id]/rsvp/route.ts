@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { validateBody } from '@/lib/validation/validate';
+import { rsvpEventSchema } from '@/lib/validation/schemas';
 
 export async function POST(
   request: Request,
@@ -25,12 +27,17 @@ export async function POST(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    const body = await request.json();
-    const { status } = body; // 'going', 'maybe', 'not_going'
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      rsvpEventSchema
+    );
 
-    if (!['going', 'maybe', 'not_going'].includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+    if (validationError) {
+      return validationError;
     }
+
+    const { status } = validatedData;
 
     // Check if event requires ticket purchase
     const { data: event } = await supabase

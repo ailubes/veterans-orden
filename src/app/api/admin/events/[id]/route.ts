@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
+import { validateBody } from '@/lib/validation/validate';
+import { updateEventSchema } from '@/lib/validation/schemas';
 
 interface RouteContext {
   params: Promise<{
@@ -80,11 +82,19 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       }
     }
 
-    // Parse request body
-    const body = await request.json();
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      updateEventSchema
+    );
 
-    // Prepare update data
+    if (validationError) {
+      return validationError;
+    }
+
+    // Prepare update data from validated fields
     const updateData: Record<string, unknown> = {};
+    const body = validatedData;
 
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;
