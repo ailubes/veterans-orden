@@ -1,27 +1,23 @@
 import { NextResponse } from 'next/server';
 import { verifyMobile2FA } from '@/lib/supabase/mobile-auth';
+import { validateBody } from '@/lib/validation/validate';
+import { verify2FASchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { factor_id, code, challenge_id } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      verify2FASchema
+    );
 
-    if (!factor_id || !code || !challenge_id) {
-      return NextResponse.json(
-        { error: 'factor_id, code, and challenge_id are required' },
-        { status: 400 }
-      );
+    if (validationError) {
+      return validationError;
     }
 
-    // Validate code format (6 digits)
-    if (!/^\d{6}$/.test(code)) {
-      return NextResponse.json(
-        { error: 'Code must be 6 digits' },
-        { status: 400 }
-      );
-    }
+    const { factor_id, code, challenge_id } = validatedData;
 
     const { data, error } = await verifyMobile2FA(factor_id, code, challenge_id);
 

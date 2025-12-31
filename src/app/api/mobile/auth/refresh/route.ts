@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
 import { refreshMobileToken } from '@/lib/supabase/mobile-auth';
+import { validateBody } from '@/lib/validation/validate';
+import { refreshTokenSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { refresh_token } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      refreshTokenSchema
+    );
 
-    if (!refresh_token) {
-      return NextResponse.json(
-        { error: 'Refresh token is required' },
-        { status: 400 }
-      );
+    if (validationError) {
+      return validationError;
     }
+
+    const { refresh_token } = validatedData;
 
     const { data, error } = await refreshMobileToken(refresh_token);
 

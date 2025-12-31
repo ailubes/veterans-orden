@@ -1,27 +1,23 @@
 import { NextResponse } from 'next/server';
 import { createMobileAccount } from '@/lib/supabase/mobile-auth';
+import { validateBody } from '@/lib/validation/validate';
+import { signUpSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, password, first_name, last_name } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      signUpSchema
+    );
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      );
+    if (validationError) {
+      return validationError;
     }
 
-    // Validate password strength
-    if (password.length < 8) {
-      return NextResponse.json(
-        { error: 'Password must be at least 8 characters' },
-        { status: 400 }
-      );
-    }
+    const { email, password, first_name, last_name } = validatedData;
 
     const { data, error, needsConfirmation } = await createMobileAccount(
       email,
