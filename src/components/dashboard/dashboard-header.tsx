@@ -109,7 +109,7 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="flex items-center justify-end gap-1 sm:gap-2 px-4 lg:px-8 py-3 lg:py-4 border-b border-timber-dark/10">
+    <header className="hidden lg:flex items-center justify-end gap-1 sm:gap-2 px-4 lg:px-8 py-3 lg:py-4 border-b border-timber-dark/10">
       {/* Extended Menu (Grip) */}
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>

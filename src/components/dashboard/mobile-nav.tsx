@@ -131,22 +131,26 @@ export function MobileNav() {
   return (
     <div className="lg:hidden">
       {/* Header */}
-      <header className="flex items-center justify-between p-3 bg-timber-dark text-canvas">
+      <header className="sticky top-0 z-40 flex items-center justify-between px-4 py-3.5 bg-timber-dark text-canvas shadow-lg border-b border-canvas/10">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Logo size={28} className="text-canvas" />
-          <span className="font-syne font-bold text-sm tracking-tight">МЕРЕЖА</span>
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <Logo size={32} className="text-canvas" />
+          <span className="font-syne font-bold text-base tracking-tight">МЕРЕЖА</span>
         </Link>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           {/* Grip Menu */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 rounded-lg transition-colors hover:bg-canvas/10"
+            className="p-2.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
             aria-label="Меню"
           >
-            {isMenuOpen ? <X size={20} /> : <Grip size={20} />}
+            {isMenuOpen ? (
+              <X size={22} className="transition-transform rotate-90" />
+            ) : (
+              <Grip size={22} />
+            )}
           </button>
 
           {/* Messenger */}
@@ -155,12 +159,12 @@ export function MobileNav() {
               setIsMenuOpen(false);
               toggleMessenger();
             }}
-            className="relative p-2 rounded-lg transition-colors hover:bg-canvas/10"
+            className="relative p-2.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
             aria-label="Повідомлення"
           >
-            <MessagesSquare size={20} />
+            <MessagesSquare size={22} />
             {totalUnread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] flex items-center justify-center text-[9px] font-bold text-white bg-orange-500 rounded-full px-0.5">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-white bg-orange-500 rounded-full px-1 shadow-md">
                 {totalUnread > 99 ? '99+' : totalUnread}
               </span>
             )}
@@ -173,10 +177,10 @@ export function MobileNav() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="flex items-center gap-1 p-1 rounded-lg transition-colors hover:bg-canvas/10"
+                className="flex items-center gap-1.5 p-1.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
                 aria-label="Профіль"
               >
-                <div className="w-7 h-7 rounded-full bg-canvas text-timber-dark flex items-center justify-center text-xs font-bold overflow-hidden">
+                <div className="w-8 h-8 rounded-full bg-canvas text-timber-dark flex items-center justify-center text-sm font-bold overflow-hidden ring-2 ring-canvas/20">
                   {profile?.avatar_url ? (
                     <img
                       src={profile.avatar_url}
@@ -187,54 +191,54 @@ export function MobileNav() {
                     getInitials()
                   )}
                 </div>
-                <ChevronDown size={14} className="text-canvas/70" />
+                <ChevronDown size={16} className="text-canvas/80" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-52 p-0 bg-canvas border-2 border-timber-dark"
-              sideOffset={8}
+              className="w-56 p-0 bg-canvas border-2 border-timber-dark shadow-xl"
+              sideOffset={10}
             >
               {/* User Info */}
-              <div className="px-3 py-2.5 border-b border-timber-dark/10">
+              <div className="px-4 py-3 border-b border-timber-dark/10 bg-timber-dark/5">
                 <p className="font-syne font-bold text-sm truncate">
                   {profile?.first_name} {profile?.last_name}
                 </p>
-                <p className="text-xs text-timber-beam truncate">
+                <p className="text-xs text-timber-beam truncate mt-0.5">
                   {profile?.email}
                 </p>
               </div>
 
-              <div className="py-1">
+              <div className="py-2">
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-timber-dark/5"
+                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-timber-dark/5 transition-colors"
                   >
-                    <User size={15} />
-                    <span className="text-sm">Мій профіль</span>
+                    <User size={18} />
+                    <span className="text-sm font-medium">Мій профіль</span>
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-timber-dark/5"
+                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-timber-dark/5 transition-colors"
                   >
-                    <Settings size={15} />
-                    <span className="text-sm">Налаштування</span>
+                    <Settings size={18} />
+                    <span className="text-sm font-medium">Налаштування</span>
                   </Link>
                 </DropdownMenuItem>
               </div>
 
               <DropdownMenuSeparator className="bg-timber-dark/10" />
 
-              <div className="py-1">
+              <div className="py-2">
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="flex items-center gap-2.5 px-3 py-2 cursor-pointer text-red-600 hover:bg-red-50"
+                  className="flex items-center gap-3 px-4 py-2.5 cursor-pointer text-red-600 hover:bg-red-50 transition-colors font-medium"
                 >
-                  <LogOut size={15} />
+                  <LogOut size={18} />
                   <span className="text-sm">Вийти</span>
                 </DropdownMenuItem>
               </div>
@@ -245,26 +249,33 @@ export function MobileNav() {
 
       {/* Full Screen Mobile Menu */}
       {isMenuOpen && (
-        <nav className="fixed inset-0 top-[52px] bg-timber-dark text-canvas z-50 overflow-y-auto">
+        <nav className="fixed inset-0 top-[60px] bg-timber-dark text-canvas z-50 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="min-h-full pb-20">
             {/* Navigation Items */}
-            <ul className="py-2">
-              {navItems.map((item) => {
+            <ul className="py-3">
+              {navItems.map((item, index) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;
 
                 return (
-                  <li key={item.href}>
+                  <li
+                    key={item.href}
+                    style={{ animationDelay: `${index * 30}ms` }}
+                    className="animate-in fade-in slide-in-from-left-2 duration-200"
+                  >
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-3 px-5 py-3 text-sm font-medium tracking-wide transition-colors ${
+                      className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
                         isActive
-                          ? 'bg-accent text-canvas'
-                          : 'hover:bg-canvas/10'
+                          ? 'bg-accent text-canvas shadow-md'
+                          : 'hover:bg-canvas/10 hover:translate-x-1'
                       }`}
                     >
-                      <Icon size={18} />
-                      {item.label}
+                      <Icon size={20} strokeWidth={2.5} />
+                      <span className="flex-1">{item.label}</span>
+                      {isActive && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-canvas animate-pulse" />
+                      )}
                     </Link>
                   </li>
                 );
@@ -273,29 +284,32 @@ export function MobileNav() {
 
             {/* Admin Link - only visible to admins */}
             {isAdmin && (
-              <div className="border-t border-canvas/10 py-2">
+              <div className="border-t-2 border-canvas/10 py-3 mt-2">
                 <Link
                   href="/admin"
-                  className={`flex items-center gap-3 px-5 py-3 text-sm font-medium tracking-wide transition-colors ${
+                  className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
                     pathname.startsWith('/admin')
-                      ? 'bg-accent text-canvas'
-                      : 'hover:bg-canvas/10'
+                      ? 'bg-accent text-canvas shadow-md'
+                      : 'hover:bg-canvas/10 hover:translate-x-1'
                   }`}
                 >
-                  <Shield size={18} />
-                  АДМІН-ПАНЕЛЬ
+                  <Shield size={20} strokeWidth={2.5} />
+                  <span className="flex-1">АДМІН-ПАНЕЛЬ</span>
+                  {pathname.startsWith('/admin') && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-canvas animate-pulse" />
+                  )}
                 </Link>
               </div>
             )}
 
             {/* Sign Out */}
-            <div className="border-t border-canvas/10 py-2">
+            <div className="border-t-2 border-canvas/10 py-3 mt-2">
               <button
                 onClick={handleSignOut}
-                className="flex items-center gap-3 px-5 py-3 text-sm font-medium tracking-wide hover:bg-canvas/10 w-full transition-colors"
+                className="flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide hover:bg-red-600/20 hover:translate-x-1 w-full transition-all text-red-400"
               >
-                <LogOut size={18} />
-                ВИЙТИ
+                <LogOut size={20} strokeWidth={2.5} />
+                <span className="flex-1 text-left">ВИЙТИ</span>
               </button>
             </div>
           </div>
