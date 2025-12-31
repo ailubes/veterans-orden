@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createMobileSession } from '@/lib/supabase/mobile-auth';
 import { createClient } from '@supabase/supabase-js';
+import { validateBody } from '@/lib/validation/validate';
+import { signInSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,15 +11,17 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      signInSchema
+    );
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      );
+    if (validationError) {
+      return validationError;
     }
+
+    const { email, password } = validatedData;
 
     const { data, error } = await createMobileSession(email, password);
 
