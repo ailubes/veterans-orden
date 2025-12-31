@@ -69,9 +69,8 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
     }, 300);
   };
 
-  // Handle form submit
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Navigate to search results
+  const navigateToSearchResults = () => {
     if (query.trim()) {
       if (onSearch) {
         onSearch(query.trim());
@@ -81,6 +80,12 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
       setIsOpen(false);
       inputRef.current?.blur();
     }
+  };
+
+  // Handle form submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigateToSearchResults();
   };
 
   // Handle result click
@@ -108,11 +113,9 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
         e.preventDefault();
         if (selectedIndex >= 0 && selectedIndex < results.length) {
           handleResultClick(results[selectedIndex]);
-        } else if (selectedIndex === results.length) {
-          // "View all results" option
-          handleSubmit(e as any);
         } else {
-          handleSubmit(e as any);
+          // Navigate to search results page
+          navigateToSearchResults();
         }
         break;
       case 'Escape':
