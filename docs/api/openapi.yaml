@@ -1,0 +1,1160 @@
+openapi: 3.1.0
+
+info:
+  title: Мережа Вільних Людей API
+  version: 1.0.0
+  description: |
+    REST API for Мережа Вільних Людей (Network of Free People) platform.
+
+    This API provides comprehensive endpoints for:
+    - User authentication and profile management
+    - Membership tiers and payments
+    - Voting and decision-making
+    - Events and RSVP management
+    - Task management and gamification
+    - Messaging and conversations
+    - Points and rewards system
+    - Admin and analytics
+
+    **Base URL:** `https://freepeople.org.ua/api`
+
+    **Authentication:** All authenticated endpoints require Bearer token in Authorization header.
+
+    **Language:** All user-facing content is in Ukrainian (uk-UA).
+  contact:
+    name: Мережа Вільних Людей
+    url: https://freepeople.org.ua
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://freepeople.org.ua/api
+    description: Production
+  - url: http://localhost:3000/api
+    description: Local Development
+
+tags:
+  - name: Mobile Auth
+    description: Mobile-specific authentication endpoints
+  - name: Authentication
+    description: Web authentication via Clerk
+  - name: User
+    description: User profile and settings
+  - name: Events
+    description: Event management and RSVP
+  - name: Voting
+    description: Voting and decision-making
+  - name: Tasks
+    description: Task management and completion
+  - name: Messaging
+    description: Direct messages and group conversations
+  - name: Marketplace
+    description: Points marketplace and orders
+  - name: Points
+    description: Points system and transactions
+  - name: Referrals
+    description: Referral system and rewards
+  - name: Notifications
+    description: User notifications
+  - name: Payments
+    description: Membership payments via LiqPay
+  - name: Admin
+    description: Administrative endpoints
+  - name: Public
+    description: Public endpoints (no auth required)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from sign-in or refresh
+
+  schemas:
+    # ===================================================================
+    # COMMON SCHEMAS
+    # ===================================================================
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Unauthorized"
+        code:
+          type: string
+          description: Error code for client handling
+          example: "AUTH_INVALID_TOKEN"
+        details:
+          type: object
+          description: Additional error details
+          additionalProperties: true
+
+    PaginatedResponse:
+      type: object
+      required:
+        - total
+        - page
+        - totalPages
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+          example: 150
+        page:
+          type: integer
+          description: Current page number (1-indexed)
+          example: 1
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 15
+
+    # ===================================================================
+    # USER SCHEMAS
+    # ===================================================================
+
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - first_name
+        - last_name
+        - role
+        - status
+        - points
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User UUID
+        clerk_id:
+          type: string
+          description: Clerk authentication ID
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+          example: "Тарас"
+        last_name:
+          type: string
+          example: "Шевченко"
+        patronymic:
+          type: string
+          nullable: true
+          example: "Григорович"
+        phone:
+          type: string
+          nullable: true
+          example: "+380501234567"
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        sex:
+          type: string
+          enum: [male, female, not_specified]
+          nullable: true
+
+        # Location
+        oblast_id:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        katottg_code:
+          type: string
+          nullable: true
+          description: KATOTTG location code
+
+        # Role & Status
+        role:
+          $ref: '#/components/schemas/UserRole'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        staff_role:
+          $ref: '#/components/schemas/StaffRole'
+        membership_role:
+          $ref: '#/components/schemas/MembershipRole'
+
+        # Membership
+        membership_tier:
+          type: string
+          enum: [free, basic_49, supporter_100, supporter_200, patron_500]
+        membership_started_at:
+          type: string
+          format: date-time
+          nullable: true
+
+        # Gamification
+        points:
+          type: integer
+          minimum: 0
+          example: 1250
+        level:
+          type: integer
+          minimum: 1
+          example: 5
+        login_streak:
+          type: integer
+          minimum: 0
+          example: 7
+        last_login_at:
+          type: string
+          format: date-time
+          nullable: true
+
+        # Referral
+        referral_code:
+          type: string
+          example: "TARAS2024"
+        referred_by_id:
+          type: string
+          format: uuid
+          nullable: true
+        group_id:
+          type: string
+          format: uuid
+          nullable: true
+
+        # Profile
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+
+        # Verification
+        email_verified:
+          type: boolean
+        phone_verified:
+          type: boolean
+        identity_verified:
+          type: boolean
+        two_factor_enabled:
+          type: boolean
+
+        # Onboarding
+        onboarding_completed:
+          type: boolean
+        onboarding_step:
+          type: integer
+          nullable: true
+
+        # Timestamps
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserRole:
+      type: string
+      enum:
+        - free_viewer
+        - prospect
+        - silent_member
+        - full_member
+        - group_leader
+        - regional_leader
+        - admin
+        - super_admin
+      description: |
+        User role in the system:
+        - free_viewer: Can view public content only
+        - prospect: Registered but not yet a member
+        - silent_member: Basic membership
+        - full_member: Full membership with voting rights
+        - group_leader: Leads a local group
+        - regional_leader: Leads a region
+        - admin: Platform administrator
+        - super_admin: Super administrator
+
+    UserStatus:
+      type: string
+      enum: [pending, active, suspended, churned]
+      description: |
+        User account status:
+        - pending: Awaiting verification
+        - active: Active user
+        - suspended: Temporarily suspended
+        - churned: Inactive/left
+
+    StaffRole:
+      type: string
+      enum: [none, moderator, admin, super_admin]
+
+    MembershipRole:
+      type: string
+      enum:
+        - supporter
+        - candidate
+        - network_member
+        - honored_member
+        - network_leader
+        - regional_leader
+        - national_leader
+        - network_guide
+
+    # ===================================================================
+    # AUTHENTICATION SCHEMAS
+    # ===================================================================
+
+    SignInRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: "SecurePass123!"
+        two_factor_code:
+          type: string
+          pattern: '^\d{6}$'
+          description: 6-digit 2FA code (if enabled)
+
+    SignUpRequest:
+      type: object
+      required:
+        - email
+        - password
+        - first_name
+        - last_name
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 8
+        first_name:
+          type: string
+          minLength: 2
+        last_name:
+          type: string
+          minLength: 2
+        patronymic:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          pattern: '^\+380\d{9}$'
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        referral_code:
+          type: string
+          nullable: true
+          description: Referral code from existing member
+
+    AuthResponse:
+      type: object
+      required:
+        - user
+        - session
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session:
+          type: object
+          required:
+            - accessToken
+            - refreshToken
+            - expiresAt
+          properties:
+            accessToken:
+              type: string
+              description: JWT access token (expires in 1 hour)
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            refreshToken:
+              type: string
+              description: JWT refresh token (expires in 30 days)
+            expiresAt:
+              type: string
+              format: date-time
+              description: Access token expiration timestamp
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          description: Valid refresh token
+
+    # ===================================================================
+    # EVENT SCHEMAS
+    # ===================================================================
+
+    Event:
+      type: object
+      required:
+        - id
+        - title
+        - start_date
+        - status
+        - event_type
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Щомісячна зустріч київської групи"
+        description:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+          example: "Київ, вул. Хрещатик 1"
+        online_link:
+          type: string
+          format: uri
+          nullable: true
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          enum: [draft, published, cancelled]
+        event_type:
+          type: string
+          enum: [meeting, workshop, conference, social, other]
+        max_attendees:
+          type: integer
+          nullable: true
+        attendee_count:
+          type: integer
+          minimum: 0
+        points_reward:
+          type: integer
+          minimum: 0
+          description: Points awarded for attendance
+        price_uah:
+          type: number
+          nullable: true
+          description: Price in UAH (if paid event)
+        price_points:
+          type: integer
+          nullable: true
+          description: Price in points
+        requires_approval:
+          type: boolean
+        created_by_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    EventRSVP:
+      type: object
+      required:
+        - event_id
+        - user_id
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled, attended]
+        payment_status:
+          type: string
+          enum: [not_required, pending, completed]
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+
+    # ===================================================================
+    # VOTING SCHEMAS
+    # ===================================================================
+
+    Vote:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - status
+        - vote_type
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Затвердження бюджету на 2024 рік"
+        description:
+          type: string
+        status:
+          type: string
+          enum: [draft, active, closed]
+        vote_type:
+          type: string
+          enum: [simple_majority, two_thirds, consensus]
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        minimum_participation:
+          type: integer
+          description: Minimum number of voters required
+        is_anonymous:
+          type: boolean
+        eligible_roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRole'
+        created_by_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+
+    VoteOption:
+      type: object
+      required:
+        - id
+        - vote_id
+        - text
+      properties:
+        id:
+          type: string
+          format: uuid
+        vote_id:
+          type: string
+          format: uuid
+        text:
+          type: string
+          example: "За затвердження"
+        order:
+          type: integer
+          minimum: 0
+
+    CastVoteRequest:
+      type: object
+      required:
+        - option_id
+      properties:
+        option_id:
+          type: string
+          format: uuid
+          description: Selected vote option ID
+
+    VoteResults:
+      type: object
+      required:
+        - vote_id
+        - total_votes
+        - options
+      properties:
+        vote_id:
+          type: string
+          format: uuid
+        total_votes:
+          type: integer
+        total_eligible:
+          type: integer
+        participation_rate:
+          type: number
+          format: float
+          description: Percentage (0-100)
+        options:
+          type: array
+          items:
+            type: object
+            required:
+              - option_id
+              - text
+              - votes
+              - percentage
+            properties:
+              option_id:
+                type: string
+                format: uuid
+              text:
+                type: string
+              votes:
+                type: integer
+              percentage:
+                type: number
+                format: float
+
+paths:
+  # ===================================================================
+  # MOBILE AUTHENTICATION
+  # ===================================================================
+
+  /mobile/auth/sign-in:
+    post:
+      tags: [Mobile Auth]
+      summary: Mobile Sign In
+      description: Authenticate user and return access tokens
+      operationId: mobileSignIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Invalid email or password"
+        '429':
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mobile/auth/sign-up:
+    post:
+      tags: [Mobile Auth]
+      summary: Mobile Sign Up
+      description: Register new user account
+      operationId: mobileSignUp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mobile/auth/refresh:
+    post:
+      tags: [Mobile Auth]
+      summary: Refresh Access Token
+      description: Get new access token using refresh token
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Tokens refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessToken
+                  - refreshToken
+                  - expiresAt
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  expiresAt:
+                    type: string
+                    format: date-time
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /mobile/auth/sign-out:
+    post:
+      tags: [Mobile Auth]
+      summary: Sign Out
+      description: Invalidate user session
+      operationId: signOut
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successfully signed out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  # ===================================================================
+  # USER PROFILE
+  # ===================================================================
+
+  /members/me:
+    get:
+      tags: [User]
+      summary: Get Current User Profile
+      description: Retrieve authenticated user's profile
+      operationId: getCurrentUser
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags: [User]
+      summary: Update Current User Profile
+      description: Update authenticated user's profile fields
+      operationId: updateCurrentUser
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                patronymic:
+                  type: string
+                  nullable: true
+                phone:
+                  type: string
+                bio:
+                  type: string
+                  nullable: true
+                date_of_birth:
+                  type: string
+                  format: date
+                  nullable: true
+                city:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # ===================================================================
+  # EVENTS
+  # ===================================================================
+
+  /events:
+    get:
+      tags: [Events]
+      summary: List Events
+      description: Get paginated list of events
+      operationId: listEvents
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, cancelled]
+        - name: type
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Events retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    required:
+                      - events
+                    properties:
+                      events:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Event'
+
+  /events/{id}:
+    get:
+      tags: [Events]
+      summary: Get Event Details
+      description: Retrieve full details of a specific event
+      operationId: getEvent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Event details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/{id}/rsvp:
+    post:
+      tags: [Events]
+      summary: RSVP to Event
+      description: Register attendance for an event
+      operationId: rsvpEvent
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: RSVP successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  status:
+                    type: string
+                    enum: [pending, confirmed]
+        '400':
+          description: Event full or requirements not met
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags: [Events]
+      summary: Cancel RSVP
+      description: Cancel attendance registration
+      operationId: cancelRSVP
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: RSVP cancelled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
+  # ===================================================================
+  # VOTING
+  # ===================================================================
+
+  /votes:
+    get:
+      tags: [Voting]
+      summary: List Votes
+      description: Get list of active and past votes
+      operationId: listVotes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, active, closed]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        '200':
+          description: Votes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  votes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vote'
+
+  /votes/{id}:
+    get:
+      tags: [Voting]
+      summary: Get Vote Details
+      description: Get vote details with options
+      operationId: getVote
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Vote details retrieved
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Vote'
+                  - type: object
+                    required:
+                      - options
+                    properties:
+                      options:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/VoteOption'
+                      has_voted:
+                        type: boolean
+                        description: Whether current user has voted
+
+  /votes/{id}/cast:
+    post:
+      tags: [Voting]
+      summary: Cast Vote
+      description: Submit vote for an option
+      operationId: castVote
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastVoteRequest'
+      responses:
+        '200':
+          description: Vote cast successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '400':
+          description: Already voted or vote closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /votes/{id}/results:
+    get:
+      tags: [Voting]
+      summary: Get Vote Results
+      description: Retrieve current or final vote results
+      operationId: getVoteResults
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Results retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResults'
+        '403':
+          description: Results not yet available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+# ===================================================================
+# ADDITIONAL ENDPOINT SUMMARIES (Not fully documented)
+# ===================================================================
+#
+# The following endpoints exist but are summarized here.
+# Full OpenAPI schemas can be added as needed.
+#
+# TASKS:
+#   GET    /api/tasks - List available tasks
+#   GET    /api/tasks/{id} - Get task details
+#   POST   /api/tasks/{id}/claim - Claim a task
+#   POST   /api/tasks/{id}/submit - Submit task completion
+#   POST   /api/tasks/{id}/submissions - Create submission
+#
+# MESSAGING:
+#   GET    /api/messaging/conversations - List conversations
+#   POST   /api/messaging/conversations - Create conversation
+#   GET    /api/messaging/conversations/{id}/messages - Get messages
+#   POST   /api/messaging/conversations/{id}/messages - Send message
+#   PATCH  /api/messaging/messages/{id} - Edit message
+#   DELETE /api/messaging/messages/{id} - Delete message
+#   POST   /api/messaging/conversations/{id}/read - Mark as read
+#
+# MARKETPLACE:
+#   GET    /api/marketplace/products - List products
+#   GET    /api/marketplace/products/{id} - Get product details
+#   POST   /api/marketplace/checkout - Create order
+#   GET    /api/marketplace/orders - Get user orders
+#   GET    /api/marketplace/orders/{id} - Get order details
+#
+# POINTS:
+#   GET    /api/me/points - Get points balance
+#   GET    /api/me/points/transactions - Get transaction history
+#   GET    /api/leaderboard - Get leaderboard
+#
+# NOTIFICATIONS:
+#   GET    /api/members/notifications - Get notifications
+#   PATCH  /api/members/notifications/{id}/read - Mark as read
+#   PATCH  /api/members/notifications/read-all - Mark all as read
+#
+# PAYMENTS:
+#   POST   /api/payments/create - Create payment
+#   POST   /api/payments/callback - Payment callback (webhook)
+#
+# REFERRALS:
+#   GET    /api/referrals/stats - Get referral statistics
+#   GET    /api/referrals/tree - Get referral tree
+#
+# ADMIN ENDPOINTS (100+ endpoints):
+#   See /admin/* routes for full administrative API
+# ===================================================================
