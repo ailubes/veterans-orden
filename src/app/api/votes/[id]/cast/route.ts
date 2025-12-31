@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { awardPoints } from '@/lib/points';
 import { DEFAULT_POINTS } from '@/lib/points/constants';
+import { validateBody } from '@/lib/validation/validate';
+import { castVoteSchema } from '@/lib/validation/schemas';
 
 export async function POST(
   request: Request,
@@ -70,8 +72,17 @@ export async function POST(
       );
     }
 
-    const body = await request.json();
-    const { optionId, rankedChoices } = body;
+    // Validate request body
+    const { data: validatedData, error: validationError } = await validateBody(
+      request,
+      castVoteSchema
+    );
+
+    if (validationError) {
+      return validationError;
+    }
+
+    const { optionId, rankedChoices } = validatedData;
 
     // Validate option exists
     const option = vote.options.find((o: { id: string }) => o.id === optionId);
