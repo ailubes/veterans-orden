@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss';
-import { themeConfig } from '@config/theme.config';
 
 const config: Config = {
     darkMode: ['class'],
@@ -12,21 +11,21 @@ const config: Config = {
   	extend: {
   		colors: {
   			// Theme colors from config
-  			canvas: themeConfig.colors.canvas,
-  			'timber-dark': themeConfig.colors.primary,
-  			'timber-beam': themeConfig.colors['concrete-mid'] || '#4a4238',
+  			canvas: '#e8e6e1',
+  			'timber-dark': '#1a1a1a',
+  			'timber-beam': '#3a3a3a',
   			accent: {
-  				DEFAULT: themeConfig.colors.accent,
-  				foreground: themeConfig.colors['primary-light'] || themeConfig.colors.canvas
+  				DEFAULT: '#8b6f47',
+  				foreground: '#e8e6e1'
   			},
-  			grain: themeConfig.colors.canvas,
-  			joint: themeConfig.colors.joint,
-  			'grid-line': themeConfig.colors['grid-line'],
+  			grain: '#e8e6e1',
+  			joint: '#1a1816',
+  			'grid-line': 'rgba(125, 125, 125, 0.2)',
   			// Brutalist theme colors
-  			'concrete-dark': themeConfig.colors['concrete-dark'] || '#2a2a2a',
-  			'concrete-mid': themeConfig.colors['concrete-mid'] || '#3a3a3a',
-  			rust: themeConfig.colors.rust || '#cc4e2c',
-  			steel: themeConfig.colors.steel || '#7d7d7d',
+  			'concrete-dark': '#2a2a2a',
+  			'concrete-mid': '#3a3a3a',
+  			rust: '#cc4e2c',
+  			steel: '#7d7d7d',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -65,8 +64,8 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-  			syne: [themeConfig.fonts.heading.family.split(',')[0].trim(), 'sans-serif'],
-  			mono: [themeConfig.fonts.body.family.split(',')[0].trim(), 'monospace'],
+  			syne: ['Inter', 'sans-serif'],
+  			mono: ['IBM Plex Mono', 'monospace'],
   		},
   		fontSize: {
   			hero: [
