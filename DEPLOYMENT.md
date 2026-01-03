@@ -186,21 +186,46 @@ npx tsx scripts/seed-commanderies.ts
 
 **Note:** Make sure your local environment has the production `DATABASE_URL`.
 
-## 📝 TinaCMS Setup (Optional)
+## 📝 TinaCMS Setup - Local Mode (No Cloud Required)
 
-If using TinaCMS for content editing:
+**TinaCMS works WITHOUT Tina Cloud!** The site uses MDX files stored in Git.
+
+### Current Setup (Local Mode):
+- ✅ Content stored in `content/pages/*.mdx`
+- ✅ All 19 pages committed to Git
+- ✅ No Tina Cloud credentials needed
+- ✅ Build command: `next build` (no TinaCMS build step)
+
+### How to Edit Content:
+
+**Option 1: Edit MDX files directly**
+```bash
+# Edit files in content/pages/ folder
+vim content/pages/about.mdx
+git commit -m "Update about page"
+git push
+```
+
+**Option 2: Use TinaCMS Local Editor (Optional)**
+1. Run `npm run dev` locally
+2. Visit `/admin/tina` in browser
+3. TinaCMS will use local filesystem (no cloud)
+4. Commit changes to Git manually
+
+### Tina Cloud (Optional - Not Required):
+
+If you want cloud-based editing features:
 
 1. Sign up at [TinaCMS Cloud](https://app.tina.io)
 2. Create new project
-3. Copy Client ID and Token
-4. Add to Netlify environment variables:
+3. Add to Netlify environment variables:
    ```bash
    NEXT_PUBLIC_TINA_CLIENT_ID=your_client_id
    TINA_TOKEN=your_token
    ```
-5. Redeploy site
+4. Change build command to: `npm run build:tina`
 
-**Note:** Without TinaCMS credentials, the build will skip TinaCMS generation and use static MDX files directly.
+**Recommendation:** Use local mode (current setup) - it's simpler and free!
 
 ## 🔍 Monitoring & Analytics
 
@@ -226,6 +251,11 @@ Enable in **Site settings → Analytics**:
 ## 🐛 Troubleshooting
 
 ### Build Fails
+
+**Error:** "tinacms: not found" or "tinacms build failed"
+- **Solution:** Build command is now `next build` (no TinaCMS Cloud needed)
+- TinaCMS works locally with MDX files from Git
+- If you added TinaCMS credentials, use `npm run build:tina`
 
 **Error:** "Module not found"
 - Check all imports use correct paths
