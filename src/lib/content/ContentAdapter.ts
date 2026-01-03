@@ -5,7 +5,7 @@
  * branding, and configuration throughout the application.
  */
 
-import { organizationConfig } from '@/../../config/organization.config';
+import { organizationConfig } from '@config/organization.config';
 
 export class ContentAdapter {
   /**

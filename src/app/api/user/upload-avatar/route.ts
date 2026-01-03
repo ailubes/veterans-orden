@@ -41,6 +41,13 @@ export async function POST(request: NextRequest) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { fileName, fileType, fileSize } = validatedData;
 
     // Generate unique filename with user ID
@@ -98,6 +105,13 @@ export async function PATCH(request: NextRequest) {
 
     if (validationError) {
       return validationError;
+    }
+
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
     }
 
     const { avatarUrl } = validatedData;

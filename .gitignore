@@ -42,3 +42,4 @@ npm-debug.log*
 
 # Sensitive documentation (credentials, passwords)
 docs/SMTP.md
+docs/SUPABASE.md

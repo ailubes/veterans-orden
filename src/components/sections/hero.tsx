@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { ContentAdapter } from '@/lib/content/ContentAdapter';
 
 const AnimatedCounter = ({
   end,
@@ -65,6 +66,8 @@ export function Hero() {
 
   const currentMembers = stats.totalMembers;
   const weeklyGrowth = stats.weeklyGrowth;
+  const memberGoal = ContentAdapter.getMemberGoal();
+  const milestones = ContentAdapter.getMilestones();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -106,7 +109,7 @@ export function Hero() {
       {/* Left Column - Title */}
       <div style={{ maxWidth: 'calc(50% - 40px)' }}>
         <p className="label" style={{ marginBottom: '20px' }}>
-          Громадянська мережа політичного впливу
+          БРАТЕРСТВО ЧЕСТІ ТА ДІЇ
         </p>
 
         <h1
@@ -120,16 +123,13 @@ export function Hero() {
           }}
         >
           <span className="outline-text" style={{ display: 'block' }}>
-            ГУРТУЄМО
+            МІЦНІСТЬ
           </span>
           <span className="solid-text" style={{ display: 'block', color: '#d45d3a' }}>
-            1,000,000
+            ЯКА НЕ
           </span>
           <span className="outline-text" style={{ display: 'block' }}>
-            ВІЛЬНИХ
-          </span>
-          <span className="solid-text" style={{ display: 'block' }}>
-            ЛЮДЕЙ
+            ТРІСКАЄ
           </span>
         </h1>
 
@@ -141,16 +141,18 @@ export function Hero() {
             lineHeight: 1.6,
           }}
         >
-          Щоб змусити політиків ухвалити закон про зброю самозахисту та виконувати наші вимоги. Велика війна навчила
-          нас: замало бути правим — потрібно бути сильним.
+          {ContentAdapter.getOrgName('short')} — це спільнота підтримки та дисципліноване ядро дії. Ми існуємо для того, щоб ветеран не залишався один: у питаннях адаптації, захисту прав, психологічної підтримки, розвитку, працевлаштування та повернення до нормального життя.
         </p>
 
         <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-          <Link href="/sign-up" className="btn">
-            ВСТУПИТИ ДО МЕРЕЖІ →
+          <Link href="/join" className="btn">
+            ПРИЄДНАТИСЯ →
           </Link>
-          <Link href="/sign-in" className="btn" style={{ backgroundColor: 'var(--accent)', color: 'var(--timber-dark)' }}>
-            УВІЙТИ
+          <Link href="/support" className="btn" style={{ backgroundColor: 'var(--accent)', color: 'var(--timber-dark)' }}>
+            ПІДТРИМАТИ
+          </Link>
+          <Link href="/help-request" className="btn" style={{ backgroundColor: 'transparent', border: '2px solid var(--timber-dark)', color: 'var(--timber-dark)' }}>
+            ПОТРІБНА ДОПОМОГА
           </Link>
         </div>
       </div>
@@ -178,7 +180,7 @@ export function Hero() {
         <div className="joint joint-br" />
 
         <p className="label" style={{ color: '#d45d3a', marginBottom: '10px' }}>
-          ЧЛЕНІВ У МЕРЕЖІ
+          ЧЛЕНІВ ОРДЕНУ
         </p>
 
         <div
@@ -215,9 +217,9 @@ export function Hero() {
             }}
           >
             <span>0</span>
-            <span>100K</span>
-            <span>500K</span>
-            <span>1M</span>
+            <span>{(memberGoal * 0.25).toLocaleString('uk-UA', { maximumFractionDigits: 0 })}</span>
+            <span>{(memberGoal * 0.5).toLocaleString('uk-UA', { maximumFractionDigits: 0 })}</span>
+            <span>{memberGoal.toLocaleString('uk-UA')}</span>
           </div>
           <div
             style={{
@@ -232,37 +234,30 @@ export function Hero() {
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: `${(currentMembers / 1000000) * 100}%`,
+                width: `${(currentMembers / memberGoal) * 100}%`,
                 background: '#d45d3a',
                 minWidth: '4px',
               }}
             />
             {/* Milestone markers */}
-            <div
-              style={{
-                position: 'absolute',
-                left: '10%',
-                top: 0,
-                bottom: 0,
-                width: '1px',
-                background: 'rgba(255,255,255,0.2)',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: 0,
-                bottom: 0,
-                width: '1px',
-                background: 'rgba(255,255,255,0.2)',
-              }}
-            />
+            {milestones.map((milestone) => (
+              <div
+                key={milestone.target}
+                style={{
+                  position: 'absolute',
+                  left: `${(milestone.target / memberGoal) * 100}%`,
+                  top: 0,
+                  bottom: 0,
+                  width: '1px',
+                  background: 'rgba(255,255,255,0.2)',
+                }}
+              />
+            ))}
           </div>
         </div>
 
         <p style={{ fontSize: '11px', opacity: 0.7 }}>
-          {((currentMembers / 1000000) * 100).toFixed(2)}% ДО МЕТИ
+          {((currentMembers / memberGoal) * 100).toFixed(2)}% ДО МЕТИ
         </p>
 
         <div
@@ -271,24 +266,21 @@ export function Hero() {
             paddingTop: '20px',
             borderTop: '1px solid rgba(255,255,255,0.1)',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: milestones.length <= 2 ? '1fr 1fr' : '1fr 1fr 1fr',
             gap: '20px',
           }}
         >
-          <div>
-            <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>МЕТА 1</p>
-            <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
-              100K
-            </p>
-            <p style={{ fontSize: '10px', opacity: 0.7 }}>Порядок денний</p>
-          </div>
-          <div>
-            <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>МЕТА 2</p>
-            <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
-              1M
-            </p>
-            <p style={{ fontSize: '10px', opacity: 0.7 }}>Ухвалити закон</p>
-          </div>
+          {milestones.map((milestone, index) => (
+            <div key={milestone.target}>
+              <p style={{ fontSize: '10px', opacity: 0.5, marginBottom: '5px' }}>
+                МЕТА {index + 1}
+              </p>
+              <p className="syne" style={{ fontSize: '18px', fontWeight: 700 }}>
+                {milestone.target.toLocaleString('uk-UA')}
+              </p>
+              <p style={{ fontSize: '10px', opacity: 0.7 }}>{milestone.label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </header>

@@ -37,6 +37,13 @@ export async function POST(
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { status } = validatedData;
 
     // Check if event requires ticket purchase

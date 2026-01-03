@@ -8,7 +8,7 @@
  */
 
 import React, { createContext, useContext } from 'react';
-import { themeConfig, type ThemeConfig } from '@/../../config/theme.config';
+import { themeConfig, type ThemeConfig } from '@config/theme.config';
 
 const ThemeContext = createContext<ThemeConfig>(themeConfig);
 

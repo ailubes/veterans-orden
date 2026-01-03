@@ -5,7 +5,7 @@
  * Supports LiqPay, Stripe, WayForPay, and VST Bank.
  */
 
-import { paymentConfig } from '@/../../config/payment.config';
+import { paymentConfig } from '@config/payment.config';
 
 // Payment provider interface
 export interface PaymentParams {

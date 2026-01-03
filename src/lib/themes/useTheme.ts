@@ -4,7 +4,7 @@
  * Provides easy access to theme configuration throughout the application.
  */
 
-import { themeConfig } from '@/../../config/theme.config';
+import { themeConfig } from '@config/theme.config';
 
 export function useTheme() {
   return {

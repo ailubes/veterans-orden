@@ -92,9 +92,16 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     // Prepare update data from validated fields
     const updateData: Record<string, unknown> = {};
-    const body = validatedData;
+    const body = validatedData as any;
 
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;

@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@700;900&display=swap');
 
+@import '../styles/themes/_brutalist.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Import theme styles */
-@import '../styles/themes/_brutalist.css';
 
 :root {
   /* Brutalist theme variables */

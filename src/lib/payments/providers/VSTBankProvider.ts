@@ -11,7 +11,7 @@ import {
   type PaymentResponse,
   type PaymentResult,
 } from '../PaymentAdapter';
-import { paymentConfig } from '@/../../config/payment.config';
+import { paymentConfig } from '@config/payment.config';
 
 export class VSTBankProvider implements PaymentProvider {
   private config;

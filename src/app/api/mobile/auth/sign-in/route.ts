@@ -21,6 +21,13 @@ export async function POST(request: Request) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { email, password } = validatedData;
 
     const { data, error } = await createMobileSession(email, password);

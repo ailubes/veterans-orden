@@ -351,11 +351,31 @@ export const oblasts = pgTable('oblasts', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// ----- COMMANDERIES (Order of Veterans Regional Structure) -----
+export const commanderies = pgTable('commanderies', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  code: varchar('code', { length: 20 }).notNull().unique(),
+  name: varchar('name', { length: 100 }).notNull(),
+  type: varchar('type', { length: 20 }).notNull(), // 'commandery' | 'city'
+  parentCode: varchar('parent_code', { length: 20 }), // Parent commandery code (for city commanderies)
+  leaderId: uuid('leader_id'), // Reference to users.id (Komendant)
+  memberCount: integer('member_count').default(0),
+  groupCount: integer('group_count').default(0),
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  codeIdx: uniqueIndex('commanderies_code_idx').on(table.code),
+  typeIdx: index('commanderies_type_idx').on(table.type),
+  parentCodeIdx: index('commanderies_parent_code_idx').on(table.parentCode),
+}));
+
 // ----- GROUPS (Local Cells) -----
 export const groups = pgTable('groups', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: varchar('name', { length: 255 }).notNull(),
   oblastId: uuid('oblast_id').references(() => oblasts.id).notNull(),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id),
   cityId: varchar('city_id', { length: 50 }),
   leaderId: uuid('leader_id'),
   memberCount: integer('member_count').default(0),
@@ -364,6 +384,7 @@ export const groups = pgTable('groups', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   oblastIdx: index('groups_oblast_idx').on(table.oblastId),
+  commanderyIdx: index('groups_commandery_idx').on(table.commanderyId),
 }));
 
 // ----- USERS (Members) -----
@@ -397,6 +418,7 @@ export const users = pgTable('users', {
 
   // Location (Legacy)
   oblastId: uuid('oblast_id').references(() => oblasts.id),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id),
   groupId: uuid('group_id').references(() => groups.id),
   city: varchar('city', { length: 100 }),
 

@@ -17,6 +17,13 @@ export async function POST(request: Request) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { refresh_token } = validatedData;
 
     const { data, error } = await refreshMobileToken(refresh_token);

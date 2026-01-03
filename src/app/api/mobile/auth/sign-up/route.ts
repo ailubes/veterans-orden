@@ -17,6 +17,13 @@ export async function POST(request: Request) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
     const { email, password, first_name, last_name } = validatedData;
 
     const { data, error, needsConfirmation } = await createMobileAccount(

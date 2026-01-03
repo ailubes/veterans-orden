@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     const history = await getPointsHistory(profile.id, {
       limit,
       offset,
-      ...(type && { type }),
+      ...(type && { type: type as any }),
     });
 
     return NextResponse.json({

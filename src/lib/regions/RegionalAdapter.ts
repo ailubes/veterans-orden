@@ -5,7 +5,7 @@
  * whether it's oblasts or commanderies.
  */
 
-import { regionalConfig } from '@/../../config/regional.config';
+import { regionalConfig } from '@config/regional.config';
 
 export class RegionalAdapter {
   /**

@@ -1,20 +1,22 @@
 import type { Metadata } from 'next';
 import { Providers } from './providers';
+import { ContentAdapter } from '@/lib/content/ContentAdapter';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Мережа Вільних Людей',
-  description:
-    'Громадянська мережа політичного впливу. 1 000 000 вільних людей, щоб ухвалити закон про зброю самозахисту та контролювати порядок денний.',
+  title: ContentAdapter.getOrgName('full'),
+  description: ContentAdapter.getMission('description'),
   keywords: [
-    'Мережа Вільних Людей',
-    'зброя самозахисту',
-    'громадянський вплив',
-    'праймеріз',
-    'політична участь',
+    'ветерани',
+    'україна',
+    'орден',
+    'підтримка',
+    'братерство',
+    'адаптація',
+    'захист прав',
   ],
-  authors: [{ name: 'Мережа Вільних Людей' }],
-  applicationName: 'Мережа Вільних Людей',
+  authors: [{ name: ContentAdapter.getOrgName('short') }],
+  applicationName: ContentAdapter.getOrgName('short'),
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -27,19 +29,17 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: 'Мережа Вільних Людей',
-    description:
-      'Громадянська мережа політичного впливу. 1 000 000 вільних людей, щоб ухвалити закон про зброю самозахисту.',
-    url: 'https://freepeople.org.ua',
-    siteName: 'Мережа Вільних Людей',
+    title: ContentAdapter.getOrgName('short'),
+    description: ContentAdapter.getMission('statement'),
+    url: ContentAdapter.getUrls().main,
+    siteName: ContentAdapter.getOrgName('short'),
     locale: 'uk_UA',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Мережа Вільних Людей',
-    description:
-      'Громадянська мережа політичного впливу. 1 000 000 вільних людей, щоб ухвалити закон про зброю самозахисту.',
+    title: ContentAdapter.getOrgName('short'),
+    description: ContentAdapter.getMission('statement'),
   },
   robots: {
     index: true,

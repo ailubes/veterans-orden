@@ -1,15 +1,49 @@
+# ==============================================================================
+# NETLIFY CONFIGURATION - Орден Ветеранів (Order of Veterans)
+# ==============================================================================
+
 [build]
   command = "npm run build"
   publish = ".next"
 
+# ==============================================================================
+# BUILD ENVIRONMENT
+# ==============================================================================
 [build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
   # Disable secrets scanning for NEXT_PUBLIC_ variables
   # These are intentionally exposed to the client-side bundle
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
 
-# Cache Next.js build for faster rebuilds
+# ==============================================================================
+# NEXT.JS PLUGIN - Cache Next.js build for faster rebuilds
+# ==============================================================================
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# ==============================================================================
+# PRODUCTION ENVIRONMENT
+# ==============================================================================
+[context.production.environment]
+  NEXT_PUBLIC_APP_URL = "https://veterans-orden.org"
+  NODE_ENV = "production"
+
+# ==============================================================================
+# DEPLOY PREVIEW ENVIRONMENT
+# ==============================================================================
+[context.deploy-preview.environment]
+  NEXT_PUBLIC_APP_URL = "https://deploy-preview--veterans-orden.netlify.app"
+
+# ==============================================================================
+# BRANCH DEPLOY ENVIRONMENT
+# ==============================================================================
+[context.branch-deploy.environment]
+  NEXT_PUBLIC_APP_URL = "https://veterans-orden.netlify.app"
+
+# ==============================================================================
+# REDIRECTS & REWRITES
+# ==============================================================================
 
 # Image optimization
 [[redirects]]
@@ -17,6 +51,26 @@
   to = "/.netlify/images?url=:url&w=:width&q=:quality"
   status = 200
   query = {url = ":url", w = ":width", q = ":quality"}
+
+# SPA fallback for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ==============================================================================
+# HEADERS
+# ==============================================================================
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
 # Static assets cache
 [[headers]]
@@ -28,3 +82,31 @@
   for = "/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+# Cache fonts
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ==============================================================================
+# FUNCTIONS (Optional - for serverless functions)
+# ==============================================================================
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# ==============================================================================
+# DEV SERVER
+# ==============================================================================
+[dev]
+  command = "npm run dev"
+  port = 3030
+  publish = ".next"
+  autoLaunch = false

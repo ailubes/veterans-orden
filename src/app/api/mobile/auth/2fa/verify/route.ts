@@ -17,7 +17,14 @@ export async function POST(request: Request) {
       return validationError;
     }
 
-    const { factor_id, code, challenge_id } = validatedData;
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
+    const { factor_id, code, challenge_id } = validatedData as any;
 
     const { data, error } = await verifyMobile2FA(factor_id, code, challenge_id);
 

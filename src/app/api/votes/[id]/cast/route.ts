@@ -82,7 +82,14 @@ export async function POST(
       return validationError;
     }
 
-    const { optionId, rankedChoices } = validatedData;
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
+    const { optionId, rankedChoices } = validatedData as any;
 
     // Validate option exists
     const option = vote.options.find((o: { id: string }) => o.id === optionId);

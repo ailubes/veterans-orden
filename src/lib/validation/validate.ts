@@ -263,21 +263,21 @@ export async function validateRequest<
   if (schemas.body) {
     const { data, error } = await validateBody(request, schemas.body);
     if (error) return { data: null, error };
-    result.body = data;
+    result.body = data ?? undefined;
   }
 
   // Validate query
   if (schemas.query) {
     const { data, error } = validateQuery(request, schemas.query);
     if (error) return { data: null, error };
-    result.query = data;
+    result.query = data ?? undefined;
   }
 
   // Validate params
   if (schemas.params && params) {
     const { data, error } = validateParams(params, schemas.params);
     if (error) return { data: null, error };
-    result.params = data;
+    result.params = data ?? undefined;
   }
 
   return { data: result, error: null };

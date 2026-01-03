@@ -27,9 +27,16 @@ export async function GET(request: Request) {
       return validationError;
     }
 
+    if (!validatedData) {
+      return NextResponse.json(
+        { error: 'Invalid query parameters' },
+        { status: 400 }
+      );
+    }
+
     const { q: query, limit } = validatedData;
 
-    if (query.trim().length < 2) {
+    if (!query || query.trim().length < 2) {
       return NextResponse.json({ users: [] });
     }
 
@@ -47,7 +54,7 @@ export async function GET(request: Request) {
       .select('id, first_name, last_name, avatar_url, sex, membership_role')
       .or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%`)
       .neq('id', currentProfile?.id || '')
-      .limit(limit);
+      .limit(limit || 10);
 
     if (error) {
       console.error('[User Search] Error:', error);
