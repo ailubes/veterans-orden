@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { themeConfig } from './config/theme.config';
 
 const config: Config = {
     darkMode: ['class'],
@@ -10,16 +11,22 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-  			canvas: '#f4f1eb',
-  			'timber-dark': '#2c2824',
-  			'timber-beam': '#4a4238',
+  			// Theme colors from config
+  			canvas: themeConfig.colors.canvas,
+  			'timber-dark': themeConfig.colors.primary,
+  			'timber-beam': themeConfig.colors['concrete-mid'] || '#4a4238',
   			accent: {
-  				DEFAULT: '#d45d3a',
-  				foreground: '#f4f1eb'
+  				DEFAULT: themeConfig.colors.accent,
+  				foreground: themeConfig.colors['primary-light'] || themeConfig.colors.canvas
   			},
-  			grain: '#e8e2d6',
-  			joint: '#1a1816',
-  			'grid-line': 'rgba(74, 66, 56, 0.15)',
+  			grain: themeConfig.colors.canvas,
+  			joint: themeConfig.colors.joint,
+  			'grid-line': themeConfig.colors['grid-line'],
+  			// Brutalist theme colors
+  			'concrete-dark': themeConfig.colors['concrete-dark'] || '#2a2a2a',
+  			'concrete-mid': themeConfig.colors['concrete-mid'] || '#3a3a3a',
+  			rust: themeConfig.colors.rust || '#cc4e2c',
+  			steel: themeConfig.colors.steel || '#7d7d7d',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -58,14 +65,8 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-  			syne: [
-  				'Syne',
-  				'sans-serif'
-  			],
-  			mono: [
-  				'Space Mono',
-  				'monospace'
-  			]
+  			syne: [themeConfig.fonts.heading.family.split(',')[0].trim(), 'sans-serif'],
+  			mono: [themeConfig.fonts.body.family.split(',')[0].trim(), 'monospace'],
   		},
   		fontSize: {
   			hero: [

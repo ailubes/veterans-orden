@@ -1,0 +1,289 @@
+/**
+ * Brutalist/Industrial Theme
+ *
+ * Design system for Order of Veterans
+ * Concrete, steel, and bronze aesthetic
+ */
+
+.theme-brutalist {
+  /* Color Variables */
+  --canvas: #e8e6e1;
+  --concrete-dark: #2a2a2a;
+  --concrete-mid: #3a3a3a;
+  --primary: #1a1a1a;
+  --primary-light: #e8e6e1;
+  --accent: #8b6f47;
+  --accent-hover: #a5855a;
+  --rust: #cc4e2c;
+  --steel: #7d7d7d;
+  --joint: #1a1816;
+  --grid-line: rgba(125, 125, 125, 0.2);
+  --rebar: rgba(205, 78, 44, 0.15);
+
+  /* Background */
+  background-color: var(--concrete-dark);
+  color: var(--primary-light);
+}
+
+/* Body and Main Background */
+.theme-brutalist body {
+  background-color: var(--concrete-dark);
+  color: var(--primary-light);
+}
+
+/* Concrete Texture Overlay */
+.theme-brutalist body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Typography */
+.theme-brutalist h1,
+.theme-brutalist h2,
+.theme-brutalist h3,
+.theme-brutalist h4,
+.theme-brutalist h5,
+.theme-brutalist h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  color: var(--primary-light);
+  letter-spacing: -0.02em;
+}
+
+.theme-brutalist body,
+.theme-brutalist p,
+.theme-brutalist span,
+.theme-brutalist div {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Cards and Containers */
+.theme-brutalist .card,
+.theme-brutalist [class*="card"] {
+  background: var(--concrete-mid);
+  border: 1px solid #333;
+  border-top: 4px solid var(--steel);
+  transition: all 0.3s ease;
+}
+
+.theme-brutalist .card:hover,
+.theme-brutalist [class*="card"]:hover {
+  border-top-color: var(--accent);
+  background: #3d3d3d;
+}
+
+/* Buttons */
+.theme-brutalist button,
+.theme-brutalist .btn {
+  background: transparent;
+  border: 2px solid var(--primary-light);
+  color: var(--primary-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-brutalist button:hover,
+.theme-brutalist .btn:hover {
+  background: var(--primary-light);
+  color: var(--concrete-dark);
+  border-color: var(--accent);
+}
+
+.theme-brutalist button.primary,
+.theme-brutalist .btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--primary-light);
+}
+
+.theme-brutalist button.primary:hover,
+.theme-brutalist .btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* Links */
+.theme-brutalist a {
+  color: var(--accent);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.theme-brutalist a:hover {
+  color: var(--accent-hover);
+}
+
+.theme-brutalist a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--rust);
+  transition: width 0.3s ease;
+}
+
+.theme-brutalist a:hover::after {
+  width: 100%;
+}
+
+/* Navigation */
+.theme-brutalist nav {
+  background: var(--concrete-dark);
+  border-bottom: 1px solid var(--grid-line);
+}
+
+/* Hero Section */
+.theme-brutalist .hero {
+  background: linear-gradient(180deg, var(--concrete-dark) 0%, var(--concrete-mid) 100%);
+}
+
+/* Stats and Metrics */
+.theme-brutalist .stat-card {
+  background: var(--concrete-mid);
+  border: 1px solid #333;
+  border-top: 4px solid var(--steel);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.theme-brutalist .stat-card:hover {
+  border-top-color: var(--rust);
+  background: #3d3d3d;
+}
+
+.theme-brutalist .stat-value {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--accent);
+  display: block;
+}
+
+/* Structural Elements */
+.theme-brutalist .rebar-vertical {
+  width: 8px;
+  height: 100%;
+  background: var(--steel);
+  position: relative;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.theme-brutalist .rebar-vertical::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 2px,
+    transparent 2px,
+    transparent 10px
+  );
+}
+
+/* Monolith/Featured Sections */
+.theme-brutalist .monolith {
+  background: var(--concrete-mid);
+  padding: 4rem;
+  position: relative;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 50px 50px 100px rgba(0, 0, 0, 0.5);
+  transform: skewY(-1deg);
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.theme-brutalist .monolith:hover {
+  transform: skewY(0deg) translateY(-10px);
+}
+
+/* Input Fields */
+.theme-brutalist input,
+.theme-brutalist textarea,
+.theme-brutalist select {
+  background: var(--concrete-mid);
+  border: 1px solid var(--grid-line);
+  color: var(--primary-light);
+  padding: 0.75rem 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.theme-brutalist input:focus,
+.theme-brutalist textarea:focus,
+.theme-brutalist select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--rebar);
+}
+
+/* Footer */
+.theme-brutalist footer {
+  background: var(--concrete-dark);
+  border-top: 1px solid var(--grid-line);
+  color: var(--steel);
+}
+
+/* Scrollbar */
+.theme-brutalist ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.theme-brutalist ::-webkit-scrollbar-track {
+  background: var(--concrete-dark);
+}
+
+.theme-brutalist ::-webkit-scrollbar-thumb {
+  background: var(--steel);
+  border: 2px solid var(--concrete-dark);
+}
+
+.theme-brutalist ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Utility Classes */
+.theme-brutalist .mono {
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--steel);
+}
+
+.theme-brutalist .accent-text {
+  color: var(--accent);
+}
+
+.theme-brutalist .rust-text {
+  color: var(--rust);
+}
+
+.theme-brutalist .steel-text {
+  color: var(--steel);
+}
+
+/* Animation */
+@keyframes tension {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.theme-brutalist .tension {
+  animation: tension 3s ease-in-out infinite;
+}

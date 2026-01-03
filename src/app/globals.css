@@ -1,17 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Import theme styles */
+@import '../styles/themes/_brutalist.css';
+
 :root {
-  --canvas: #f4f1eb;
-  --timber-dark: #2c2824;
-  --timber-beam: #4a4238;
-  --accent: #d45d3a;
-  --grain: #e8e2d6;
+  /* Brutalist theme variables */
+  --canvas: #e8e6e1;
+  --concrete-dark: #2a2a2a;
+  --concrete-mid: #3a3a3a;
+  --timber-dark: #1a1a1a;
+  --timber-beam: #3a3a3a;
+  --accent: #8b6f47;
+  --grain: #e8e6e1;
   --joint: #1a1816;
-  --grid-line: rgba(74, 66, 56, 0.15);
+  --grid-line: rgba(125, 125, 125, 0.2);
+  --rust: #cc4e2c;
+  --steel: #7d7d7d;
 }
 
 * {

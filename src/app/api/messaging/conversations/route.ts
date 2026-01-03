@@ -83,7 +83,12 @@ export async function GET(request: Request) {
     const dmConversationIds: string[] = [];
 
     for (const pr of (participantRecords || [])) {
-      const conv = pr.conversations as Record<string, unknown>;
+      // Handle conversations - it may be an array or object depending on Supabase typing
+      const convData = pr.conversations;
+      const conv = (Array.isArray(convData) ? convData[0] : convData) as Record<string, unknown>;
+
+      if (!conv) continue;
+
       conversationMap.set(conv.id, { pr, conv });
 
       if (conv.type === 'direct') {
