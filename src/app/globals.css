@@ -1393,12 +1393,14 @@ nav {
     display: none;
   }
 
-  .nav-mobile-toggle {
-    display: block;
+  .nav-logo.col-span-3 {
+    grid-column: 1 / 11;
   }
 
-  .nav-logo.col-span-3 {
-    grid-column: span 10;
+  .nav-mobile-toggle {
+    display: block;
+    grid-column: 11 / 13;
+    justify-self: end;
   }
 
   .cta-group {
