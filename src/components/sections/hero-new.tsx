@@ -112,30 +112,56 @@ export function HeroNew() {
         </Scaffold>
       </section>
 
-      {/* Stats Counter Bar - Below Hero */}
-      <section className="hero-stats-bar">
+      {/* Live Stats Dashboard - Below Hero */}
+      <section className="live-stats-section">
         <Scaffold>
           <div className="col-span-full">
-            <div className="hero-stats-inline" ref={counterRef}>
-              <span className="hero-stats-label">
-                {ContentAdapter.getOrgName('short')}
-              </span>
-              <span className="hero-stats-value">
-                {animatedCount.toLocaleString('uk-UA')}
-              </span>
-              <span className="hero-stats-growth">
-                +{stats.weeklyGrowth} ↑
-              </span>
-              <div className="hero-stats-progress">
-                <div className="hero-stats-progress-track">
-                  <div
-                    className="hero-stats-progress-fill"
-                    style={{ width: `${Math.min(progress, 100)}%` }}
-                  />
+            <div className="live-stats-dashboard" ref={counterRef}>
+              {/* LIVE Indicator */}
+              <div className="live-stats-cell live-stats-cell--status">
+                <div className="live-indicator">
+                  <span className="live-indicator-dot" />
+                  <span className="live-indicator-text">LIVE</span>
                 </div>
-                <span className="hero-stats-progress-text">
-                  {stats.totalMembers.toLocaleString('uk-UA')} / {memberGoal.toLocaleString('uk-UA')}
+              </div>
+
+              <div className="live-stats-divider" />
+
+              {/* Member Count */}
+              <div className="live-stats-cell live-stats-cell--count">
+                <span className="live-stats-label">ЧЛЕНІВ ОРДЕНУ</span>
+                <span className="live-stats-number">
+                  {animatedCount.toLocaleString('uk-UA')}
                 </span>
+              </div>
+
+              <div className="live-stats-divider" />
+
+              {/* Weekly Growth */}
+              <div className="live-stats-cell live-stats-cell--growth">
+                <span className="live-stats-label">ЗА ТИЖДЕНЬ</span>
+                <span className="live-stats-growth-value">
+                  <span className="live-stats-growth-icon">↑</span>
+                  +{stats.weeklyGrowth}
+                </span>
+              </div>
+
+              <div className="live-stats-divider" />
+
+              {/* Progress to Goal */}
+              <div className="live-stats-cell live-stats-cell--goal">
+                <span className="live-stats-label">ЦІЛЬ: {memberGoal.toLocaleString('uk-UA')}</span>
+                <div className="live-stats-progress-wrapper">
+                  <div className="live-stats-progress-bar">
+                    <div
+                      className="live-stats-progress-fill"
+                      style={{ width: `${Math.min(progress, 100)}%` }}
+                    />
+                  </div>
+                  <span className="live-stats-progress-percent">
+                    {progress.toFixed(1)}%
+                  </span>
+                </div>
               </div>
             </div>
           </div>
