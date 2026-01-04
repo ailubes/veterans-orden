@@ -1,11 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { GrainOverlay } from '@/components/layout/grain-overlay';
-import { SkeletonGrid } from '@/components/layout/skeleton-grid';
-import { Navigation } from '@/components/layout/navigation';
-import { Footer } from '@/components/layout/footer';
-import { PageHeader } from '@/components/layout/page-header';
+import { PageLayout, PageHeader, PageContent } from '@/components/layout/page-layout';
+import { Scaffold } from '@/components/layout/skeleton-grid';
+import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
+import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 
 const values = [
   { title: 'Честь', description: 'Не принижувати, не зраджувати, не руйнувати довіру.' },
@@ -18,71 +16,63 @@ const values = [
 
 export default function MissionPage() {
   return (
-    <div style={{ backgroundColor: 'var(--canvas)', minHeight: '100vh' }}>
-      <GrainOverlay />
-      <SkeletonGrid>
-        <Navigation />
-        <PageHeader
-          label="НАША МЕТА"
-          title="МІСІЯ ТА ЦІННОСТІ"
-          description="Об'єднувати ветеранів і союзників у братерство честі та дії, яке забезпечує підтримку, захист і можливість будувати нове життя після служби."
-        />
+    <PageLayout>
+      <PageHeader
+        subtitle="// НАША МЕТА"
+        title="МІСІЯ ТА ЦІННОСТІ"
+        description="Об'єднувати ветеранів і союзників у братерство честі та дії, яке забезпечує підтримку, захист і можливість будувати нове життя після служби."
+      />
 
-        {/* Main Content */}
-        <section style={{ gridColumn: '2 / 5', marginBottom: '4rem' }}>
-          <div style={{ maxWidth: '800px', fontSize: '18px', lineHeight: 1.8, marginBottom: '4rem' }}>
-            <p style={{ marginBottom: '2rem' }}>
-              Наша місія — <strong>об'єднувати ветеранів і союзників у братерство честі та дії</strong>, яке забезпечує підтримку, захист і можливість будувати нове життя після служби.
-            </p>
-            <p style={{ marginBottom: '2rem' }}>
-              Цінності Ордену — це не слова на банері. Це правила поведінки, які працюють щодня:
-            </p>
-          </div>
+      <PageContent narrow>
+        <p>
+          Наша місія — <strong>об'єднувати ветеранів і союзників у братерство честі та дії</strong>, яке забезпечує підтримку, захист і можливість будувати нове життя після служби.
+        </p>
+        <p>
+          Цінності Ордену — це не слова на банері. Це правила поведінки, які працюють щодня:
+        </p>
+      </PageContent>
 
-          {/* Values Grid */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '2rem',
-            marginBottom: '4rem'
-          }}>
-            {values.map((value, index) => (
-              <div 
-                key={index}
-                style={{
-                  padding: '2rem',
-                  border: '2px solid var(--timber-dark)',
-                  background: index % 2 === 0 ? 'var(--canvas)' : 'transparent'
-                }}
-              >
-                <h3 className="syne" style={{ fontSize: '24px', fontWeight: 700, marginBottom: '1rem' }}>
-                  {value.title}
-                </h3>
-                <p style={{ fontSize: '14px', lineHeight: 1.6, opacity: 0.8 }}>
+      {/* Values Grid */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <SectionCardGrid columns={3}>
+              {values.map((value, index) => (
+                <SectionCard
+                  key={index}
+                  title={value.title}
+                  subtitle={`// ${index + 1}`}
+                  variant={index % 2 === 1 ? 'dark' : 'default'}
+                >
                   {value.description}
-                </p>
-              </div>
-            ))}
+                </SectionCard>
+              ))}
+            </SectionCardGrid>
           </div>
+        </Scaffold>
+      </section>
 
-          <div style={{ maxWidth: '800px', fontSize: '18px', lineHeight: 1.8 }}>
-            <p style={{ marginBottom: '2rem' }}>
-              Наш принцип простий: <strong>спочатку — діалог, потім — рішення</strong>. І якщо потрібна арбітражна точка — для цього існує Суд Честі.
-            </p>
+      <PageContent narrow>
+        <p>
+          Наш принцип простий: <strong>спочатку — діалог, потім — рішення</strong>. І якщо потрібна арбітражна точка — для цього існує Суд Честі.
+        </p>
+      </PageContent>
 
-            <div style={{ marginTop: '4rem', textAlign: 'center' }}>
-              <Link href="/join" className="btn" style={{ padding: '20px 40px', marginRight: '1rem' }}>
-                ПРИЄДНАТИСЯ →
-              </Link>
-              <Link href="/code-of-honor" className="btn" style={{ padding: '20px 40px', backgroundColor: 'transparent', border: '2px solid var(--timber-dark)' }}>
+      {/* CTAs */}
+      <section className="section-lg cta-section-join">
+        <Scaffold>
+          <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
+            <CtaGroup align="center">
+              <HeavyCta href="/join" variant="primary" size="lg">
+                ПРИЄДНАТИСЯ
+              </HeavyCta>
+              <HeavyCta href="/code-of-honor" variant="outline" size="lg">
                 КОДЕКС ЧЕСТІ
-              </Link>
-            </div>
+              </HeavyCta>
+            </CtaGroup>
           </div>
-        </section>
-
-        <Footer />
-      </SkeletonGrid>
-    </div>
+        </Scaffold>
+      </section>
+    </PageLayout>
   );
 }

@@ -1,9 +1,10 @@
+'use client';
+
 import Link from 'next/link';
-import { Navigation } from '@/components/layout/navigation';
-import { Footer } from '@/components/layout/footer';
-import { SkeletonGrid } from '@/components/layout/skeleton-grid';
-import { GrainOverlay } from '@/components/layout/grain-overlay';
-import { PageHeader } from '@/components/layout/page-header';
+import { PageLayout, PageHeader, PageContent } from '@/components/layout/page-layout';
+import { Scaffold } from '@/components/layout/skeleton-grid';
+import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
+import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 
 const contacts = [
   {
@@ -49,199 +50,125 @@ const socials = [
 
 export default function ContactsPage() {
   return (
-    <div
-      style={{
-        backgroundColor: 'var(--canvas)',
-        color: 'var(--timber-dark)',
-        fontFamily: "'Space Mono', monospace",
-        minHeight: '100vh',
-      }}
-    >
-      <GrainOverlay />
-      <SkeletonGrid>
-        <Navigation />
-        <PageHeader
-          label="ЗВ'ЯЗОК"
-          title="КОНТАКТИ"
-          description="Маєте питання або пропозиції? Зв'яжіться з нами зручним для вас способом."
-        />
+    <PageLayout>
+      <PageHeader
+        subtitle="// ЗВ'ЯЗОК"
+        title="КОНТАКТИ"
+        description="Маєте питання або пропозиції? Зв'яжіться з нами зручним для вас способом."
+      />
 
-        {/* Contact Cards */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1px',
-            background: 'var(--grid-line)',
-            border: '1px solid var(--grid-line)',
-            marginBottom: '80px',
-          }}
-        >
-          {contacts.map((contact) => (
-            <a
-              key={contact.type}
-              href={contact.href}
-              style={{
-                background: 'var(--canvas)',
-                padding: '50px 40px',
-                textDecoration: 'none',
-                color: 'inherit',
-                display: 'block',
-                transition: 'background 0.3s ease',
-              }}
+      {/* Contact Cards */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <SectionCardGrid columns={3}>
+              {contacts.map((contact) => (
+                <a
+                  key={contact.type}
+                  href={contact.href}
+                  className="section-card"
+                >
+                  <span className="mono pill">{contact.type}</span>
+                  <h3 className="section-card__title" style={{ color: 'var(--bronze)' }}>
+                    {contact.value}
+                  </h3>
+                  <p className="section-card__desc">{contact.description}</p>
+                </a>
+              ))}
+            </SectionCardGrid>
+          </div>
+        </Scaffold>
+      </section>
+
+      {/* Address Section */}
+      <section className="section" style={{ background: 'var(--bg-elevated)' }}>
+        <Scaffold>
+          <div className="col-span-6">
+            <SectionCard
+              title="Київська обл., Бучанський р-н, с. Петропавлівська Борщагівка"
+              subtitle="// ЮРИДИЧНА АДРЕСА"
+              variant="dark"
             >
-              <p className="label" style={{ marginBottom: '20px' }}>{contact.type}</p>
-              <p
-                className="syne"
-                style={{
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  marginBottom: '15px',
-                  color: 'var(--accent)',
-                }}
-              >
-                {contact.value}
+              {null}
+            </SectionCard>
+          </div>
+          <div className="col-span-6">
+            <SectionCard
+              title="Примітка"
+              subtitle="// ОНЛАЙН-СПІЛЬНОТА"
+            >
+              <p>
+                Мережа Вільних Людей — це передусім онлайн-спільнота. Ми працюємо
+                дистанційно та проводимо регулярні офлайн-зустрічі у різних містах України.
               </p>
-              <p style={{ fontSize: '13px', opacity: 0.6 }}>{contact.description}</p>
-            </a>
-          ))}
-        </div>
-
-        {/* Address */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '1px',
-            background: 'var(--grid-line)',
-            border: '1px solid var(--grid-line)',
-            marginBottom: '80px',
-          }}
-        >
-          <div
-            style={{
-              background: 'var(--timber-dark)',
-              color: 'var(--grain)',
-              padding: '60px',
-              position: 'relative',
-            }}
-          >
-            <div className="joint joint-tl" />
-            <div className="joint joint-bl" />
-            <p className="label" style={{ color: 'var(--accent)', marginBottom: '30px' }}>
-              ЮРИДИЧНА АДРЕСА
-            </p>
-            <p className="syne" style={{ fontSize: '24px', fontWeight: 700, lineHeight: 1.3 }}>
-              Київська обл.,<br />
-              Бучанський р-н,<br />
-              с. Петропавлівська Борщагівка
-            </p>
+              <p style={{ opacity: 0.7, marginTop: '1rem', fontSize: '14px' }}>
+                Для участі в офлайн-заходах слідкуйте за анонсами в наших соціальних мережах.
+              </p>
+            </SectionCard>
           </div>
-          <div style={{ background: 'var(--canvas)', padding: '60px' }}>
-            <p className="label" style={{ marginBottom: '30px' }}>ПРИМІТКА</p>
-            <p style={{ fontSize: '16px', lineHeight: 1.8, marginBottom: '20px' }}>
-              Мережа Вільних Людей — це передусім онлайн-спільнота. Ми працюємо
-              дистанційно та проводимо регулярні офлайн-зустрічі у різних містах України.
-            </p>
-            <p style={{ fontSize: '14px', opacity: 0.7 }}>
-              Для участі в офлайн-заходах слідкуйте за анонсами в наших соціальних мережах.
-            </p>
-          </div>
-        </div>
+        </Scaffold>
+      </section>
 
-        {/* Social Media */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            marginBottom: '80px',
-          }}
-        >
-          <p className="label" style={{ marginBottom: '40px' }}>СОЦІАЛЬНІ МЕРЕЖІ</p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '30px',
-            }}
-          >
-            {socials.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  padding: '30px',
-                  border: '1px solid var(--grid-line)',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  display: 'block',
-                }}
-              >
-                <p className="syne" style={{ fontSize: '20px', fontWeight: 700, marginBottom: '10px' }}>
-                  {social.name}
-                </p>
-                <p style={{ fontSize: '14px', color: 'var(--accent)', marginBottom: '10px' }}>
-                  {social.handle}
-                </p>
-                <p style={{ fontSize: '13px', opacity: 0.6 }}>{social.description}</p>
-              </a>
-            ))}
+      {/* Social Media */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <h2 className="section-title">СОЦІАЛЬНІ МЕРЕЖІ</h2>
           </div>
-        </div>
+          <div className="col-span-full">
+            <SectionCardGrid columns={3}>
+              {socials.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="section-card"
+                >
+                  <h3 className="section-card__title">{social.name}</h3>
+                  <p style={{ color: 'var(--bronze)', marginBottom: '0.5rem' }}>
+                    {social.handle}
+                  </p>
+                  <p className="section-card__desc">{social.description}</p>
+                </a>
+              ))}
+            </SectionCardGrid>
+          </div>
+        </Scaffold>
+      </section>
 
-        {/* FAQ Teaser */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            padding: '60px',
-            background: 'rgba(212, 93, 58, 0.1)',
-            border: '1px solid var(--grid-line)',
-            marginBottom: '80px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            <p className="label" style={{ marginBottom: '15px' }}>ЧАСТІ ЗАПИТАННЯ</p>
-            <h3 className="syne" style={{ fontSize: '28px', fontWeight: 700 }}>
-              Маєте питання про Мережу?
-            </h3>
-            <p style={{ fontSize: '14px', opacity: 0.7, marginTop: '10px' }}>
+      {/* FAQ Teaser */}
+      <section className="section cta-section-support">
+        <Scaffold>
+          <div className="col-span-8">
+            <span className="mono pill pill--bronze">ЧАСТІ ЗАПИТАННЯ</span>
+            <h2 className="cta-title">Маєте питання про Мережу?</h2>
+            <p className="cta-desc">
               Перегляньте відповіді на найпоширеніші запитання
             </p>
+            <HeavyCta href="/faq" variant="outline">
+              ПЕРЕГЛЯНУТИ FAQ
+            </HeavyCta>
           </div>
-          <Link href="/faq" className="btn btn-outline" style={{ padding: '15px 30px' }}>
-            ПЕРЕГЛЯНУТИ FAQ
-          </Link>
-        </div>
+        </Scaffold>
+      </section>
 
-        {/* Join CTA */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            textAlign: 'center',
-            padding: '60px 0',
-            borderTop: '1px solid var(--grid-line)',
-            marginBottom: '80px',
-          }}
-        >
-          <h2 className="syne" style={{ fontSize: '36px', fontWeight: 700, marginBottom: '20px' }}>
-            ГОТОВІ ПРИЄДНАТИСЬ?
-          </h2>
-          <p style={{ fontSize: '16px', opacity: 0.7, marginBottom: '30px' }}>
-            Станьте частиною руху за права громадян
-          </p>
-          <Link href="/sign-up" className="btn" style={{ padding: '20px 50px' }}>
-            ВСТУПИТИ ДО МЕРЕЖІ →
-          </Link>
-        </div>
-
-        <Footer />
-      </SkeletonGrid>
-    </div>
+      {/* Join CTA */}
+      <section className="section-lg cta-section-join">
+        <Scaffold>
+          <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
+            <h2 className="cta-title">ГОТОВІ ПРИЄДНАТИСЬ?</h2>
+            <p className="cta-desc" style={{ margin: '0 auto 2rem' }}>
+              Станьте частиною руху за права громадян
+            </p>
+            <CtaGroup align="center">
+              <HeavyCta href="/sign-up" variant="primary" size="lg">
+                ВСТУПИТИ ДО МЕРЕЖІ
+              </HeavyCta>
+            </CtaGroup>
+          </div>
+        </Scaffold>
+      </section>
+    </PageLayout>
   );
 }

@@ -1,11 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { Navigation } from '@/components/layout/navigation';
-import { Footer } from '@/components/layout/footer';
-import { SkeletonGrid } from '@/components/layout/skeleton-grid';
-import { GrainOverlay } from '@/components/layout/grain-overlay';
-import { PageHeader } from '@/components/layout/page-header';
+import { PageLayout, PageHeader } from '@/components/layout/page-layout';
+import { Scaffold } from '@/components/layout/skeleton-grid';
+import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 
 const faqs = [
   {
@@ -62,84 +59,54 @@ const faqs = [
 
 export default function FAQPage() {
   return (
-    <div
-      style={{
-        backgroundColor: 'var(--canvas)',
-        color: 'var(--timber-dark)',
-        fontFamily: "'Space Mono', monospace",
-        minHeight: '100vh',
-      }}
-    >
-      <GrainOverlay />
-      <SkeletonGrid>
-        <Navigation />
-        <PageHeader
-          label="ВІДПОВІДІ НА ЗАПИТАННЯ"
-          title="FAQ"
-          description="Відповіді на найпоширеніші запитання про Орден Ветеранів."
-        />
+    <PageLayout>
+      <PageHeader
+        subtitle="// ВІДПОВІДІ НА ЗАПИТАННЯ"
+        title="FAQ"
+        description="Відповіді на найпоширеніші запитання про Орден Ветеранів."
+      />
 
-        {/* FAQ List */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            marginBottom: '80px',
-          }}
-        >
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              style={{
-                borderBottom: '1px solid var(--grid-line)',
-                padding: '30px 0',
-              }}
-            >
-              <h3
-                className="syne"
+      {/* FAQ List */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-8">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="faq-item"
                 style={{
-                  fontSize: '20px',
-                  fontWeight: 700,
-                  marginBottom: '15px',
+                  borderBottom: '1px solid var(--border-color)',
+                  padding: '2rem 0',
                 }}
               >
-                {faq.question}
-              </h3>
-              <p
-                style={{
-                  fontSize: '16px',
-                  lineHeight: 1.8,
-                  opacity: 0.8,
-                }}
-              >
-                {faq.answer}
-              </p>
-            </div>
-          ))}
-        </div>
+                <h3 className="section-card__title" style={{ marginBottom: '1rem' }}>
+                  {faq.question}
+                </h3>
+                <p style={{ opacity: 0.8, lineHeight: 1.8 }}>
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Scaffold>
+      </section>
 
-        {/* CTA */}
-        <div
-          style={{
-            gridColumn: '2 / 5',
-            textAlign: 'center',
-            padding: '60px 0',
-            borderTop: '1px solid var(--grid-line)',
-            marginBottom: '80px',
-          }}
-        >
-          <h2 className="syne" style={{ fontSize: '36px', fontWeight: 700, marginBottom: '20px' }}>
-            НЕ ЗНАЙШЛИ ВІДПОВІДІ?
-          </h2>
-          <p style={{ fontSize: '16px', opacity: 0.7, marginBottom: '30px' }}>
-            Зв'яжіться з нами для отримання додаткової інформації
-          </p>
-          <Link href="/contacts" className="btn" style={{ padding: '20px 50px' }}>
-            КОНТАКТИ →
-          </Link>
-        </div>
-
-        <Footer />
-      </SkeletonGrid>
-    </div>
+      {/* CTA */}
+      <section className="section-lg cta-section-join">
+        <Scaffold>
+          <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
+            <h2 className="cta-title">НЕ ЗНАЙШЛИ ВІДПОВІДІ?</h2>
+            <p className="cta-desc" style={{ margin: '0 auto 2rem' }}>
+              Зв'яжіться з нами для отримання додаткової інформації
+            </p>
+            <CtaGroup align="center">
+              <HeavyCta href="/contacts" variant="primary" size="lg">
+                КОНТАКТИ
+              </HeavyCta>
+            </CtaGroup>
+          </div>
+        </Scaffold>
+      </section>
+    </PageLayout>
   );
 }
