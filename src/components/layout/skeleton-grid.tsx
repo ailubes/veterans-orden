@@ -47,12 +47,12 @@ interface PageWrapperProps {
 }
 
 /**
- * PageWrapper - Wraps entire page with theme-aware background and optional rebar decoration
+ * PageWrapper - Wraps entire page with theme-aware background
+ * Note: Rebar should be rendered inside each page's Scaffold at grid-column 2/3
  */
-export function PageWrapper({ children, showRebar = true, className = '' }: PageWrapperProps) {
+export function PageWrapper({ children, className = '' }: Omit<PageWrapperProps, 'showRebar'>) {
   return (
     <div className={`page-wrapper ${className}`}>
-      {showRebar && <div className="rebar-vertical" aria-hidden="true" />}
       {children}
     </div>
   );

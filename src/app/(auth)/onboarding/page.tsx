@@ -7,13 +7,6 @@ import { UKRAINIAN_OBLASTS } from '@/lib/constants';
 import { Check, ChevronRight, ChevronLeft, User, MapPin } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import { KatottgSelector, KatottgDetails } from '@/components/ui/katottg-selector';
-import {
-  trackOnboardingStarted,
-  trackOnboardingStepCompleted,
-  trackOnboardingCompleted,
-  trackPaymentInitiated,
-  identifyUser,
-} from '@/lib/analytics/events';
 
 type Step = 'welcome' | 'personal' | 'region' | 'tier' | 'complete';
 
@@ -51,9 +44,6 @@ export default function OnboardingPage() {
           email: user.email || '',
           id: user.id,
         });
-
-        // Track onboarding started
-        trackOnboardingStarted(user.id);
       }
     };
 
@@ -201,29 +191,8 @@ export default function OnboardingPage() {
         }
       }
 
-      // Identify user in PostHog
-      identifyUser(user.id, user.email || '', {
-        first_name: firstName,
-        last_name: lastName,
-        oblast: oblastCodeToUse || '',
-        city: katottgDetails?.name || '',
-        tier: selectedTier,
-      });
-
       // If paid tier selected, redirect to payment
       if (selectedTier !== 'free') {
-        // Track tier selection
-        trackOnboardingStepCompleted(user.id, 'tier');
-
-        // Track payment initiation
-        const tierPrices: Record<string, number> = {
-          basic_49: 49,
-          supporter_100: 100,
-          supporter_200: 200,
-          patron_500: 500,
-        };
-        trackPaymentInitiated(user.id, selectedTier, tierPrices[selectedTier] || 0);
-
         // Create payment order
         const paymentResponse = await fetch('/api/payments/create', {
           method: 'POST',
@@ -259,8 +228,6 @@ export default function OnboardingPage() {
       }
 
       // Free tier - complete immediately
-      trackOnboardingStepCompleted(user.id, 'tier');
-      trackOnboardingCompleted(user.id, selectedTier, false);
       setStep('complete');
     } catch (err) {
       console.error('Onboarding error:', err);
@@ -319,12 +286,7 @@ export default function OnboardingPage() {
           </p>
 
           <button
-            onClick={() => {
-              setStep('personal');
-              if (user?.id) {
-                trackOnboardingStepCompleted(user.id, 'welcome');
-              }
-            }}
+            onClick={() => setStep('personal')}
             className="btn w-full justify-center"
           >
             ПОЧАТИ <ChevronRight size={18} />
@@ -420,9 +382,6 @@ export default function OnboardingPage() {
                 onClick={() => {
                   if (validatePersonalInfo()) {
                     setStep('region');
-                    if (user?.id) {
-                      trackOnboardingStepCompleted(user.id, 'personal');
-                    }
                   }
                 }}
                 className="btn flex-1 justify-center"
@@ -506,12 +465,7 @@ export default function OnboardingPage() {
                 <ChevronLeft size={18} /> НАЗАД
               </button>
               <button
-                onClick={() => {
-                  setStep('tier');
-                  if (user?.id) {
-                    trackOnboardingStepCompleted(user.id, 'region');
-                  }
-                }}
+                onClick={() => setStep('tier')}
                 className="btn flex-1 justify-center"
               >
                 ДАЛІ <ChevronRight size={18} />

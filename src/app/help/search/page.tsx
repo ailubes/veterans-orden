@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Search, FileText, Sparkles, AlertCircle } from 'lucide-react';
 import type { SearchResult } from '@/lib/help/types';
 
-export default function SearchResultsPage() {
+function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
 
@@ -224,5 +224,22 @@ export default function SearchResultsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function SearchLoading() {
+  return (
+    <div className="text-center py-12">
+      <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
+      <p className="mt-4 text-timber-beam">Завантаження...</p>
+    </div>
+  );
+}
+
+export default function SearchResultsPage() {
+  return (
+    <Suspense fallback={<SearchLoading />}>
+      <SearchResults />
+    </Suspense>
   );
 }

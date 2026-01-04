@@ -7,7 +7,6 @@ import { FooterNew } from '@/components/layout/footer-new';
 
 interface PageLayoutProps {
   children: ReactNode;
-  showRebar?: boolean;
 }
 
 /**
@@ -17,11 +16,10 @@ interface PageLayoutProps {
  * - Navigation with theme/language controls
  * - Footer
  * - Theme-aware background
- * - Optional rebar decoration
  */
-export function PageLayout({ children, showRebar = true }: PageLayoutProps) {
+export function PageLayout({ children }: PageLayoutProps) {
   return (
-    <PageWrapper showRebar={showRebar}>
+    <PageWrapper>
       <NavigationNew />
       <main>{children}</main>
       <FooterNew />
