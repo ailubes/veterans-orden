@@ -79,11 +79,12 @@ interface CtaGroupProps {
 
 /**
  * CtaGroup - Container for multiple CTA buttons
+ * Default alignment is center for better visual harmony with section headings
  */
 export function CtaGroup({
   children,
   direction = 'row',
-  align = 'start',
+  align = 'center',
   className = '',
 }: CtaGroupProps) {
   return (
