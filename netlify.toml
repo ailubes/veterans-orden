@@ -39,19 +39,10 @@
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
 
 # ==============================================================================
-# NEXT.JS PLUGIN - Cache Next.js build for faster rebuilds
+# NEXT.JS PLUGIN - Handles caching and optimization automatically
 # ==============================================================================
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Cache node_modules and .next/cache for faster builds
-[[plugins]]
-  package = "netlify-plugin-cache"
-  [plugins.inputs]
-    paths = [
-      "node_modules",
-      ".next/cache"
-    ]
 
 # ==============================================================================
 # PRODUCTION ENVIRONMENT
