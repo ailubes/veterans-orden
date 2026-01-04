@@ -9,7 +9,6 @@ import { Scaffold } from './skeleton-grid';
  */
 export function FooterNew() {
   const t = useTranslations('footer');
-  const tNav = useTranslations('nav');
   const tBrand = useTranslations('brand');
 
   const currentYear = new Date().getFullYear();
@@ -23,36 +22,48 @@ export function FooterNew() {
             <div className="footer-brand">
               <span className="footer-brand-name">{tBrand('name')}</span>
               <span className="footer-brand-tag">{tBrand('tag')}</span>
+
+              {/* Contact Info */}
+              <div className="footer-contact">
+                <a href="mailto:info@veterans-orden.org" className="footer-contact-link">
+                  info@veterans-orden.org
+                </a>
+                <a href="tel:+380971234567" className="footer-contact-link">
+                  +38 097 123 45 67
+                </a>
+              </div>
             </div>
 
-            {/* Navigation Column */}
-            <div>
-              <span className="footer-col-title">// {tNav('about')}</span>
+            {/* About Column */}
+            <div className="footer-col">
+              <span className="footer-col-title">// ПРО НАС</span>
               <nav className="footer-links">
-                <Link href="/about" className="footer-link">{tNav('about')}</Link>
-                <Link href="/mission" className="footer-link">Mission</Link>
-                <Link href="/governance" className="footer-link">Governance</Link>
-                <Link href="/code-of-honor" className="footer-link">Code of Honor</Link>
+                <Link href="/about" className="footer-link">Про Орден</Link>
+                <Link href="/mission" className="footer-link">Місія</Link>
+                <Link href="/governance" className="footer-link">Управління</Link>
+                <Link href="/code-of-honor" className="footer-link">Кодекс Честі</Link>
               </nav>
             </div>
 
             {/* Programs Column */}
-            <div>
-              <span className="footer-col-title">// {tNav('directions')}</span>
+            <div className="footer-col">
+              <span className="footer-col-title">// НАПРЯМИ</span>
               <nav className="footer-links">
-                <Link href="/directions" className="footer-link">{tNav('directions')}</Link>
-                <Link href="/news" className="footer-link">{tNav('events')}</Link>
-                <Link href="/help" className="footer-link">{tNav('help')}</Link>
+                <Link href="/directions" className="footer-link">Напрями роботи</Link>
+                <Link href="/news" className="footer-link">Новини</Link>
+                <Link href="/join" className="footer-link">Приєднатися</Link>
+                <Link href="/help" className="footer-link">Допомога</Link>
               </nav>
             </div>
 
-            {/* Contact Column */}
-            <div>
-              <span className="footer-col-title">// {tNav('contact')}</span>
+            {/* Resources Column */}
+            <div className="footer-col">
+              <span className="footer-col-title">// РЕСУРСИ</span>
               <nav className="footer-links">
-                <Link href="/contacts" className="footer-link">{tNav('contact')}</Link>
-                <Link href="/documents" className="footer-link">{tNav('documents')}</Link>
-                <Link href="/transparency" className="footer-link">Transparency</Link>
+                <Link href="/contacts" className="footer-link">Контакти</Link>
+                <Link href="/documents" className="footer-link">Документи</Link>
+                <Link href="/faq" className="footer-link">FAQ</Link>
+                <Link href="/transparency" className="footer-link">Прозорість</Link>
               </nav>
             </div>
           </div>
@@ -64,37 +75,37 @@ export function FooterNew() {
             </span>
             <div className="footer-socials">
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/veteransorden"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"
                 aria-label="Facebook"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/veteransorden"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"
                 aria-label="Instagram"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="2" y="2" width="20" height="20" rx="5"/>
                   <circle cx="12" cy="12" r="4"/>
                   <circle cx="18" cy="6" r="1"/>
                 </svg>
               </a>
               <a
-                href="https://t.me"
+                href="https://t.me/veteransorden"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"
                 aria-label="Telegram"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
                 </svg>
               </a>

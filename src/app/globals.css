@@ -898,6 +898,28 @@ nav {
   color: var(--muted-500);
 }
 
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.footer-contact-link {
+  color: var(--text-200);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.15s ease;
+}
+
+.footer-contact-link:hover {
+  color: var(--bronze);
+}
+
+.footer-col {
+  text-align: left;
+}
+
 .footer-col-title {
   display: block;
   font-family: 'IBM Plex Mono', monospace;
