@@ -1175,6 +1175,8 @@ nav {
   background: transparent;
   border: none;
   cursor: pointer;
+  grid-column: 12;
+  justify-self: end;
 }
 
 .nav-hamburger {
