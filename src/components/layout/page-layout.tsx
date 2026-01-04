@@ -42,7 +42,7 @@ export function PageHeader({ title, subtitle, description, className = '' }: Pag
     <header className={`page-header-new ${className}`}>
       <Scaffold>
         <div className="col-span-8">
-          {subtitle && <span className="page-header-subtitle">{subtitle}</span>}
+          {subtitle && <span className="section-card__subtitle">{subtitle}</span>}
           <h1 className="page-header-title">{title}</h1>
           {description && <p className="page-header-desc">{description}</p>}
         </div>
