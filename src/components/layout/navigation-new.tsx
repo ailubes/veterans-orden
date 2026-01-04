@@ -24,46 +24,47 @@ export function NavigationNew() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+  // Simplified navigation - 4 main items with dropdowns
   const navLinks: NavItem[] = [
     {
       href: '/about',
-      label: 'ПРО НАС',
+      label: '// ПРО ОРДЕН',
       children: [
-        { href: '/about', label: 'Про Орден' },
+        { href: '/about', label: 'Про нас' },
         { href: '/mission', label: 'Місія та цінності' },
-        { href: '/governance', label: 'Управління (Тріада)' },
+        { href: '/governance', label: 'Управління' },
         { href: '/honor-court', label: 'Суд Честі' },
         { href: '/code-of-honor', label: 'Кодекс Честі' },
       ],
     },
     {
       href: '/directions',
-      label: 'НАПРЯМИ',
+      label: '// ДІЯЛЬНІСТЬ',
       children: [
-        { href: '/directions', label: 'Усі напрями' },
-        { href: '/commanderies', label: 'Командерії (Осередки)' },
+        { href: '/directions', label: 'Напрями роботи' },
+        { href: '/commanderies', label: 'Командерії' },
+        { href: '/news', label: 'Новини' },
       ],
     },
-    { href: '/news', label: 'НОВИНИ' },
     {
       href: '/support',
-      label: 'ПІДТРИМАТИ',
+      label: '// ПІДТРИМКА',
       children: [
         { href: '/support', label: 'Підтримати' },
         { href: '/support/partnership', label: 'Партнерство' },
         { href: '/transparency', label: 'Прозорість' },
+        { href: '/documents', label: 'Документи' },
       ],
     },
     {
       href: '/help-request',
-      label: 'ДОПОМОГА',
+      label: '// ДОПОМОГА',
       children: [
         { href: '/help-request', label: 'Потрібна допомога' },
         { href: '/faq', label: 'FAQ' },
         { href: '/contacts', label: 'Контакти' },
       ],
     },
-    { href: '/documents', label: 'ДОКУМЕНТИ' },
   ];
 
   return (

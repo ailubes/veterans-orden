@@ -1,11 +1,13 @@
 'use client';
 
+import Link from 'next/link';
 import { PageWrapper, Scaffold } from '@/components/layout/skeleton-grid';
 import { NavigationNew } from '@/components/layout/navigation-new';
 import { FooterNew } from '@/components/layout/footer-new';
 import { HeroNew } from '@/components/sections/hero-new';
 import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
 import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
+import { getFeaturedArticles } from '@/data/news';
 
 /**
  * Homepage - Order of Veterans
@@ -146,8 +148,44 @@ export default function HomePage() {
         </Scaffold>
       </section>
 
-      {/* Join CTA Section */}
+      {/* News Section */}
       <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <div className="news-section-header">
+              <div>
+                <span className="mono section-kicker">// НОВИНИ</span>
+                <h2 className="section-title">Останні оновлення</h2>
+              </div>
+              <Link href="/news" className="news-all-link">
+                ВСІ НОВИНИ →
+              </Link>
+            </div>
+          </div>
+          <div className="col-span-full">
+            <div className="news-grid">
+              {getFeaturedArticles(3).map((article, index) => (
+                <Link
+                  key={article.slug}
+                  href={`/news/${article.slug}`}
+                  className={`news-card ${index === 0 ? 'news-card--featured' : ''}`}
+                >
+                  <span className="news-card-category">{article.category}</span>
+                  <h3 className="news-card-title">{article.title}</h3>
+                  <p className="news-card-excerpt">{article.excerpt}</p>
+                  <div className="news-card-footer">
+                    <span className="news-card-date">{article.date}</span>
+                    <span className="news-card-read">ЧИТАТИ →</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </Scaffold>
+      </section>
+
+      {/* Join CTA Section */}
+      <section className="section" style={{ background: 'var(--bg-elevated)' }}>
         <Scaffold>
           <div className="col-span-full">
             <span className="mono section-kicker">// CTA</span>
