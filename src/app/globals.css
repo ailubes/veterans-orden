@@ -683,24 +683,107 @@ nav {
    CTA SECTIONS
    ============================================================================ */
 
-.cta-section-join,
+/* Main Join CTA - Full width centered */
+.cta-section-join {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, var(--panel-900) 0%, var(--bg-950) 100%);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Support and Help CTAs - Side by side cards */
 .cta-section-support,
 .cta-section-help {
-  padding: 4rem 0;
+  padding: 3rem 0;
+}
+
+.cta-section-support {
+  background: var(--panel-850);
+  border-bottom: 1px solid var(--line);
+}
+
+.cta-section-help {
+  background: var(--panel-900);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Combined row for support + help */
+.cta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.cta-row .cta-section-support,
+.cta-row .cta-section-help {
+  padding: 3rem 2rem;
 }
 
 .cta-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
+  line-height: 1.1;
 }
 
 .cta-desc {
   color: var(--text-200);
   margin-bottom: 1.5rem;
   max-width: 50ch;
+  line-height: 1.6;
+}
+
+/* Center the join CTA content */
+.cta-section-join .col-span-8 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-section-join .cta-title {
+  font-size: 2.5rem;
+}
+
+.cta-section-join .cta-desc {
+  text-align: center;
+}
+
+/* CTA Row - Two cards side by side */
+.cta-row-section {
+  border-top: 1px solid var(--line);
+}
+
+.cta-row-section .scaffold {
+  gap: 0;
+}
+
+.cta-card {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cta-card--support {
+  background: var(--panel-850);
+  border-right: 1px solid var(--line);
+}
+
+.cta-card--help {
+  background: var(--panel-900);
+}
+
+@media (max-width: 980px) {
+  .cta-row-section .col-span-6 {
+    grid-column: 1 / -1;
+  }
+
+  .cta-card--support {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
 }
 
 .cta-group--row {

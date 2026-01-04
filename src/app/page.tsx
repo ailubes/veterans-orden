@@ -146,23 +146,17 @@ export default function HomePage() {
         </Scaffold>
       </section>
 
-      {/* Support CTA Section */}
-      <section className="section cta-section-support">
+      {/* Support & Help CTA Row */}
+      <section className="cta-row-section">
         <Scaffold>
-          <div className="col-span-6">
+          <div className="col-span-6 cta-card cta-card--support">
             <h2 className="cta-title">{tSupport('sectionTitle')}</h2>
             <p className="cta-desc">{tSupport('desc')}</p>
             <HeavyCta href="/support" variant="secondary" size="lg">
               {tSupport('cta')}
             </HeavyCta>
           </div>
-        </Scaffold>
-      </section>
-
-      {/* Help CTA Section */}
-      <section className="section cta-section-help">
-        <Scaffold>
-          <div className="col-span-6 col-start-7">
+          <div className="col-span-6 cta-card cta-card--help">
             <h2 className="cta-title">{tHelp('sectionTitle')}</h2>
             <p className="cta-desc">{tHelp('desc')}</p>
             <HeavyCta href="/help" variant="outline" size="lg">
