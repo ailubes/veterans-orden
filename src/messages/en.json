@@ -1,0 +1,124 @@
+{
+  "brand": {
+    "name": "ORDER OF VETERANS",
+    "tag": "// BROTHERHOOD OF HONOR AND ACTION"
+  },
+  "nav": {
+    "about": "ABOUT US",
+    "directions": "PROGRAMS",
+    "events": "EVENTS",
+    "documents": "DOCUMENTS",
+    "contact": "CONTACT",
+    "support": "SUPPORT",
+    "join": "JOIN",
+    "help": "HELP"
+  },
+  "hero": {
+    "h1a": "STRENGTH",
+    "h1b": "BEYOND",
+    "h1c": "TENSION",
+    "kicker": "// OPERATIONAL PHILOSOPHY",
+    "lead": "We maintain form — during service and after. The Order is a brotherhood of those who never stop.",
+    "ctaJoin": "Become a member",
+    "ctaSupport": "Support us",
+    "ctaHelp": "I need help",
+    "governance": "Triad governance"
+  },
+  "stats": {
+    "veterans": "Veterans",
+    "regions": "Regions",
+    "programs": "Programs"
+  },
+  "about": {
+    "sectionTitle": "Who we are",
+    "community": {
+      "title": "COMMUNITY",
+      "desc": "A united network of veterans across Ukraine"
+    },
+    "order": {
+      "title": "ORDER",
+      "desc": "Code of honor, mutual support and responsibility"
+    },
+    "honorCourt": {
+      "title": "HONOR COURT",
+      "desc": "Self-governance through the triad: Community, Council, Court"
+    }
+  },
+  "directions": {
+    "sectionTitle": "Our programs",
+    "advocacy": {
+      "title": "ADVOCACY",
+      "desc": "Legal support and representation of veterans' interests"
+    },
+    "adaptation": {
+      "title": "ADAPTATION",
+      "desc": "Programs for reintegration into civilian life"
+    },
+    "brotherhood": {
+      "title": "BROTHERHOOD",
+      "desc": "Local chapters and joint events"
+    },
+    "development": {
+      "title": "DEVELOPMENT",
+      "desc": "Training, courses, professional growth"
+    },
+    "health": {
+      "title": "HEALTH",
+      "desc": "Physical and mental support"
+    },
+    "families": {
+      "title": "FAMILIES",
+      "desc": "Support for veterans' families and fallen heroes"
+    }
+  },
+  "events": {
+    "sectionTitle": "Upcoming events",
+    "noEvents": "No scheduled events at this time",
+    "viewAll": "All events"
+  },
+  "join": {
+    "sectionTitle": "Join the Order",
+    "desc": "Fill out the application and become part of the brotherhood",
+    "cta": "Submit application"
+  },
+  "support": {
+    "sectionTitle": "Support us",
+    "desc": "Your help is the strength of our community",
+    "cta": "Make a contribution"
+  },
+  "help": {
+    "sectionTitle": "Need help?",
+    "desc": "We're here. Legal, psychological, social support",
+    "cta": "Get help"
+  },
+  "documents": {
+    "sectionTitle": "Documents",
+    "statute": "Order Statute",
+    "codeOfHonor": "Code of Honor",
+    "reports": "Financial reports"
+  },
+  "contact": {
+    "sectionTitle": "Contact",
+    "address": "Address",
+    "email": "Email",
+    "phone": "Phone",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "submit": "Send"
+    }
+  },
+  "footer": {
+    "copyright": "Order of Veterans of Ukraine",
+    "allRights": "All rights reserved"
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "readMore": "Read more",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

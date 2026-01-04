@@ -1,0 +1,10 @@
+fragment PagesParts on Pages {
+  __typename
+  title
+  titleEn
+  label
+  description
+  descriptionEn
+  body
+  bodyEn
+}

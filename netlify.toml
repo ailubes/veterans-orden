@@ -7,11 +7,33 @@
   publish = ".next"
 
 # ==============================================================================
+# BUILD CACHING - Speeds up rebuilds significantly
+# ==============================================================================
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# ==============================================================================
 # BUILD ENVIRONMENT
 # ==============================================================================
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
+  # Enable Next.js build caching
+  NEXT_PRIVATE_STANDALONE = "true"
   # Disable secrets scanning for NEXT_PUBLIC_ variables
   # These are intentionally exposed to the client-side bundle
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
@@ -21,6 +43,15 @@
 # ==============================================================================
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Cache node_modules and .next/cache for faster builds
+[[plugins]]
+  package = "netlify-plugin-cache"
+  [plugins.inputs]
+    paths = [
+      "node_modules",
+      ".next/cache"
+    ]
 
 # ==============================================================================
 # PRODUCTION ENVIRONMENT
