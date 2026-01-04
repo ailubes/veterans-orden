@@ -34,6 +34,8 @@
   NPM_VERSION = "10"
   # Enable Next.js build caching
   NEXT_PRIVATE_STANDALONE = "true"
+  # Install devDependencies (needed for TypeScript types during build)
+  NPM_FLAGS = "--include=dev"
   # Disable secrets scanning for NEXT_PUBLIC_ variables
   # These are intentionally exposed to the client-side bundle
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
