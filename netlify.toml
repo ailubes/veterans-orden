@@ -76,11 +76,7 @@
   status = 200
   query = {url = ":url", w = ":width", q = ":quality"}
 
-# SPA fallback for client-side routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# NOTE: No SPA fallback needed - @netlify/plugin-nextjs handles all routing
 
 # ==============================================================================
 # HEADERS
