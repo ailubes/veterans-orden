@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Scaffold } from './skeleton-grid';
 
 /**
- * FooterNew - Redesigned footer with theme-aware styling
+ * FooterNew - Comprehensive footer with all site links
  */
 export function FooterNew() {
   const t = useTranslations('footer');
@@ -28,19 +28,20 @@ export function FooterNew() {
                 <a href="mailto:info@veterans-orden.org" className="footer-contact-link">
                   info@veterans-orden.org
                 </a>
-                <a href="tel:+380971234567" className="footer-contact-link">
-                  +38 097 123 45 67
+                <a href="https://t.me/orden_veteraniv" className="footer-contact-link" target="_blank" rel="noopener noreferrer">
+                  @orden_veteraniv
                 </a>
               </div>
             </div>
 
             {/* About Column */}
             <div className="footer-col">
-              <span className="footer-col-title">// ПРО НАС</span>
+              <span className="footer-col-title">// ПРО ОРДЕН</span>
               <nav className="footer-links">
-                <Link href="/about" className="footer-link">Про Орден</Link>
-                <Link href="/mission" className="footer-link">Місія</Link>
-                <Link href="/governance" className="footer-link">Управління</Link>
+                <Link href="/about" className="footer-link">Про нас</Link>
+                <Link href="/mission" className="footer-link">Місія та цінності</Link>
+                <Link href="/governance" className="footer-link">Управління (Тріада)</Link>
+                <Link href="/honor-court" className="footer-link">Суд Честі</Link>
                 <Link href="/code-of-honor" className="footer-link">Кодекс Честі</Link>
               </nav>
             </div>
@@ -49,10 +50,22 @@ export function FooterNew() {
             <div className="footer-col">
               <span className="footer-col-title">// НАПРЯМИ</span>
               <nav className="footer-links">
-                <Link href="/directions" className="footer-link">Напрями роботи</Link>
+                <Link href="/directions" className="footer-link">Усі напрями</Link>
+                <Link href="/commanderies" className="footer-link">Командерії (Осередки)</Link>
                 <Link href="/news" className="footer-link">Новини</Link>
                 <Link href="/join" className="footer-link">Приєднатися</Link>
-                <Link href="/help" className="footer-link">Допомога</Link>
+                <Link href="/join/procedure" className="footer-link">Процедура вступу</Link>
+              </nav>
+            </div>
+
+            {/* Support Column */}
+            <div className="footer-col">
+              <span className="footer-col-title">// ПІДТРИМКА</span>
+              <nav className="footer-links">
+                <Link href="/support" className="footer-link">Підтримати</Link>
+                <Link href="/support/partnership" className="footer-link">Партнерство</Link>
+                <Link href="/help-request" className="footer-link">Потрібна допомога</Link>
+                <Link href="/transparency" className="footer-link">Прозорість</Link>
               </nav>
             </div>
 
@@ -63,7 +76,8 @@ export function FooterNew() {
                 <Link href="/contacts" className="footer-link">Контакти</Link>
                 <Link href="/documents" className="footer-link">Документи</Link>
                 <Link href="/faq" className="footer-link">FAQ</Link>
-                <Link href="/transparency" className="footer-link">Прозорість</Link>
+                <Link href="/media" className="footer-link">Медіа / Прес-кіт</Link>
+                <Link href="/privacy" className="footer-link">Конфіденційність</Link>
               </nav>
             </div>
           </div>
@@ -72,6 +86,9 @@ export function FooterNew() {
           <div className="footer-bottom-new">
             <span className="footer-copyright">
               {currentYear} {t('copyright')}. {t('allRights')}.
+            </span>
+            <span className="footer-legal">
+              УКРАЇНА · ДІЯЛЬНІСТЬ У МЕЖАХ ЗАКОНУ
             </span>
             <div className="footer-socials">
               <a
@@ -86,20 +103,7 @@ export function FooterNew() {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/veteransorden"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-social-link"
-                aria-label="Instagram"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="2" y="2" width="20" height="20" rx="5"/>
-                  <circle cx="12" cy="12" r="4"/>
-                  <circle cx="18" cy="6" r="1"/>
-                </svg>
-              </a>
-              <a
-                href="https://t.me/veteransorden"
+                href="https://t.me/orden_veteraniv"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"

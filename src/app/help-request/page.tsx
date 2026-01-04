@@ -1,55 +1,52 @@
 'use client';
 
-import Link from 'next/link';
-import { GrainOverlay } from '@/components/layout/grain-overlay';
-import { SkeletonGrid } from '@/components/layout/skeleton-grid';
-import { Navigation } from '@/components/layout/navigation';
-import { Footer } from '@/components/layout/footer';
-import { PageHeader } from '@/components/layout/page-header';
+import { PageLayout, PageHeader, PageContent } from '@/components/layout/page-layout';
+import { Scaffold } from '@/components/layout/skeleton-grid';
+import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 
 export default function HelpRequestPage() {
   return (
-    <div style={{ backgroundColor: 'var(--canvas)', minHeight: '100vh' }}>
-      <GrainOverlay />
-      <SkeletonGrid>
-        <Navigation />
-        <PageHeader
-          label="ЗАПИТ НА ДОПОМОГУ"
-          title="ПОТРІБНА ДОПОМОГА"
-          description="Ми забезпечуємо контакт, маршрут і підтримку."
-        />
+    <PageLayout>
+      <PageHeader
+        subtitle="// ЗАПИТ НА ДОПОМОГУ"
+        title="ПОТРІБНА ДОПОМОГА"
+        description="Контакт, маршрут і підтримка — те, що насправді цінне."
+      />
 
-        <section style={{ gridColumn: '2 / 5', marginBottom: '4rem' }}>
-          <div style={{ maxWidth: '800px', fontSize: '18px', lineHeight: 1.8 }}>
-            <p style={{ marginBottom: '2rem' }}>
-              Якщо вам потрібна допомога — залиште заявку. Ми не обіцяємо "магії", але ми забезпечуємо те, що насправді цінне: <strong>контакт, маршрут і підтримку</strong>.
+      <PageContent narrow>
+        <p>
+          Якщо вам потрібна допомога — залиште заявку. Ми не обіцяємо "магії", але ми забезпечуємо те, що насправді цінне: <strong>контакт, маршрут і підтримку</strong>.
+        </p>
+
+        <p>Залежно від ситуації ми:</p>
+
+        <ul>
+          <li>зорієнтуємо щодо наступного кроку;</li>
+          <li>порадимо юридичну траєкторію;</li>
+          <li>допоможемо знайти фахівця або групу підтримки;</li>
+          <li>підключимо партнерів або ресурси спільноти.</li>
+        </ul>
+
+        <p style={{ padding: '1.5rem', background: 'var(--bg-elevated)', border: '2px solid var(--border-color)' }}>
+          <strong>Важливо:</strong> ваша заявка — конфіденційна. Ми використовуємо дані лише для зворотного зв'язку.
+        </p>
+      </PageContent>
+
+      <section className="section-lg cta-section-join">
+        <Scaffold>
+          <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
+            <h2 className="cta-title">ГОТОВІ ЗВЕРНУТИСЯ?</h2>
+            <p className="cta-desc" style={{ margin: '0 auto 2rem' }}>
+              Опишіть вашу ситуацію — ми відповімо
             </p>
-
-            <p style={{ marginBottom: '2rem' }}>
-              Залежно від ситуації ми:
-            </p>
-
-            <ul style={{ marginBottom: '2rem', marginLeft: '2rem', listStyle: 'disc' }}>
-              <li style={{ marginBottom: '1rem' }}>зорієнтуємо щодо наступного кроку;</li>
-              <li style={{ marginBottom: '1rem' }}>порадимо юридичну траєкторію;</li>
-              <li style={{ marginBottom: '1rem' }}>допоможемо знайти фахівця або групу підтримки;</li>
-              <li style={{ marginBottom: '1rem' }}>підключимо партнерів або ресурси спільноти.</li>
-            </ul>
-
-            <p style={{ marginBottom: '4rem', fontSize: '16px', padding: '1rem', background: 'rgba(0,0,0,0.03)', border: '1px solid var(--timber-dark)' }}>
-              <strong>Важливо:</strong> ваша заявка — конфіденційна. Ми використовуємо дані лише для зворотного зв'язку.
-            </p>
-
-            <div style={{ textAlign: 'center' }}>
-              <Link href="/contacts" className="btn" style={{ padding: '20px 40px' }}>
-                ЗВ'ЯЗАТИСЯ →
-              </Link>
-            </div>
+            <CtaGroup align="center">
+              <HeavyCta href="/contacts" variant="primary" size="lg">
+                ЗВ'ЯЗАТИСЯ
+              </HeavyCta>
+            </CtaGroup>
           </div>
-        </section>
-
-        <Footer />
-      </SkeletonGrid>
-    </div>
+        </Scaffold>
+      </section>
+    </PageLayout>
   );
 }

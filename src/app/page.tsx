@@ -1,31 +1,18 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { PageWrapper, Scaffold } from '@/components/layout/skeleton-grid';
 import { NavigationNew } from '@/components/layout/navigation-new';
 import { FooterNew } from '@/components/layout/footer-new';
 import { HeroNew } from '@/components/sections/hero-new';
-import { StatsSection } from '@/components/sections/stats-section';
 import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
 import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 
 /**
- * Homepage - Redesigned with new component system
+ * Homepage - Order of Veterans
  *
- * Features:
- * - Dual theme support (light/dark)
- * - Full i18n (UA/EN)
- * - New 12-column scaffold grid
- * - Monolith card hero
- * - Theme-aware styling
+ * Matching docs/index.html reference design with all sections
  */
 export default function HomePage() {
-  const tAbout = useTranslations('about');
-  const tDirections = useTranslations('directions');
-  const tJoin = useTranslations('join');
-  const tSupport = useTranslations('support');
-  const tHelp = useTranslations('help');
-
   return (
     <PageWrapper>
       <NavigationNew />
@@ -33,98 +20,126 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroNew />
 
-      {/* Stats Section */}
-      <StatsSection veterans={1247} regions={25} programs={12} />
+      {/* Stats Section - Matching docs/index.html */}
+      <section className="stats-section">
+        <Scaffold>
+          <div className="col-span-4 stat-card">
+            <span className="mono">НАПРЯМИ_ПІДТРИМКИ</span>
+            <span className="stat-value">06</span>
+            <p className="stat-desc">адаптація, право, психологія, наставництво, спільнота, адвокація</p>
+          </div>
+          <div className="col-span-4 stat-card stat-card--accent">
+            <span className="mono">ПОРЯДОК_ВСЕРЕДИНІ</span>
+            <span className="stat-value">СУД</span>
+            <p className="stat-desc">Суд Честі — механізм вирішення спорів і захисту репутації</p>
+          </div>
+          <div className="col-span-4 stat-card">
+            <span className="mono">ПРИНЦИП</span>
+            <span className="stat-value">ЧЕСТЬ</span>
+            <p className="stat-desc">законність, дисципліна, братерство, відповідальність</p>
+          </div>
+        </Scaffold>
+      </section>
 
-      {/* About Section */}
+      {/* About Section - 3 Cards */}
       <section className="section">
         <Scaffold>
           <div className="col-span-full">
-            <h2 className="section-title">{tAbout('sectionTitle')}</h2>
+            <span className="mono section-kicker">// ХТО МИ</span>
+            <h2 className="section-title">Орден Ветеранів — структура, яка живе довго</h2>
+            <p className="section-desc">
+              Ми будуємо спільноту підтримки та елітне ядро Ордену. В основі — честь, дисципліна і взаємодопомога.
+              Управління здійснюється через Тріаду, а внутрішні спори вирішуються Судом Честі.
+            </p>
           </div>
           <div className="col-span-full">
             <SectionCardGrid columns={3}>
               <SectionCard
-                title={tAbout('community.title')}
-                subtitle="// 01"
-                href="/about"
+                title="СПІЛЬНОТА"
+                subtitle="// ВІДКРИТИЙ ФОРМАТ"
+                href="/join"
               >
-                {tAbout('community.desc')}
+                Відкрите громадське крило: участь у подіях, підтримка ініціатив, волонтерство, навчання, взаємодопомога.
+                <div className="pill" style={{ marginTop: '1rem' }}>Вступ: заява + символ організації</div>
               </SectionCard>
               <SectionCard
-                title={tAbout('order.title')}
-                subtitle="// 02"
-                href="/code-of-honor"
+                title="ОРДЕН"
+                subtitle="// ЯДРО"
+                href="/join/procedure"
+                variant="dark"
               >
-                {tAbout('order.desc')}
+                Дисципліноване ядро: операційна дія, координація, безпека, підтримка спільноти, виконання місій.
+                <div className="pill" style={{ marginTop: '1rem' }}>Вступ: запрошення + випробування + посвята</div>
               </SectionCard>
               <SectionCard
-                title={tAbout('honorCourt.title')}
-                subtitle="// 03"
-                href="/governance"
+                title="СУД ЧЕСТІ"
+                subtitle="// АРБІТРАЖ"
+                href="/honor-court"
               >
-                {tAbout('honorCourt.desc')}
+                Внутрішній арбітраж: примирення, дисциплінарні рішення, захист честі та репутації, порядок замість хаосу.
+                <div className="pill" style={{ marginTop: '1rem' }}>Принцип: "спочатку діалог"</div>
               </SectionCard>
             </SectionCardGrid>
           </div>
         </Scaffold>
       </section>
 
-      {/* Directions Section */}
+      {/* Directions Section - 6 Programs */}
       <section className="section" style={{ background: 'var(--bg-elevated)' }}>
         <Scaffold>
           <div className="col-span-full">
-            <h2 className="section-title">{tDirections('sectionTitle')}</h2>
+            <span className="mono section-kicker">// НАПРЯМИ РОБОТИ</span>
+            <h2 className="section-title">Що ми робимо</h2>
           </div>
           <div className="col-span-full">
             <SectionCardGrid columns={3}>
               <SectionCard
-                title={tDirections('advocacy.title')}
+                title="АДАПТАЦІЯ"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('advocacy.desc')}
+                Підтримка переходу до цивільного життя, наставництво, спільнота контактів, супровід.
               </SectionCard>
               <SectionCard
-                title={tDirections('adaptation.title')}
+                title="ПРАВОВИЙ ЗАХИСТ"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('adaptation.desc')}
+                Консультації, звернення, супровід кейсів, захист прав ветеранів і родин.
               </SectionCard>
               <SectionCard
-                title={tDirections('brotherhood.title')}
+                title="ПСИХОЛОГІЧНА ПІДТРИМКА"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('brotherhood.desc')}
+                Скринінг, перенаправлення до фахівців, групи підтримки, кризові контакти.
               </SectionCard>
               <SectionCard
-                title={tDirections('development.title')}
+                title="ОСВІТА & НАСТАВНИЦТВО"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('development.desc')}
+                Навчальні події, тренінги, розвиток лідерів, робота "мислителів".
               </SectionCard>
               <SectionCard
-                title={tDirections('health.title')}
+                title="ГРОМАДЯНСЬКІ КАМПАНІЇ"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('health.desc')}
+                Адвокація, публічні звернення, комунікаційні кампанії, контроль виконання рішень.
               </SectionCard>
               <SectionCard
-                title={tDirections('families.title')}
+                title="ВЗАЄМОДОПОМОГА"
                 subtitle="// НАПРЯМ"
                 href="/directions"
                 variant="dark"
               >
-                {tDirections('families.desc')}
+                Підтримка побратимів, волонтерські місії, координація ресурсів, партнерства.
               </SectionCard>
             </SectionCardGrid>
           </div>
@@ -132,36 +147,134 @@ export default function HomePage() {
       </section>
 
       {/* Join CTA Section */}
-      <section className="section-lg cta-section-join">
+      <section className="section">
         <Scaffold>
-          <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
-            <h2 className="cta-title">{tJoin('sectionTitle')}</h2>
-            <p className="cta-desc" style={{ margin: '0 auto 2rem' }}>{tJoin('desc')}</p>
-            <CtaGroup align="center">
+          <div className="col-span-full">
+            <span className="mono section-kicker">// CTA</span>
+            <h2 className="section-title">Долучайся до Ордену Ветеранів</h2>
+            <p className="section-desc">
+              Є два шляхи: Спільнота (відкрита) та Орден (за запрошенням). Обери формат участі — і ми зв'яжемось з тобою.
+            </p>
+          </div>
+          <div className="col-span-full" style={{ marginTop: '1rem' }}>
+            <CtaGroup>
               <HeavyCta href="/join" variant="primary" size="lg">
-                {tJoin('cta')}
+                ПОДАТИ ЗАЯВУ (СПІЛЬНОТА)
+              </HeavyCta>
+              <HeavyCta href="/join/procedure" variant="outline" size="lg">
+                ЗАПИТ НА ЗАПРОШЕННЯ (ОРДЕН)
               </HeavyCta>
             </CtaGroup>
           </div>
         </Scaffold>
       </section>
 
-      {/* Support & Help CTA Row */}
-      <section className="cta-row-section">
+      {/* Support CTA Section */}
+      <section className="section" style={{ background: 'var(--bg-elevated)' }}>
         <Scaffold>
-          <div className="col-span-6 cta-card cta-card--support">
-            <h2 className="cta-title">{tSupport('sectionTitle')}</h2>
-            <p className="cta-desc">{tSupport('desc')}</p>
-            <HeavyCta href="/support" variant="secondary" size="lg">
-              {tSupport('cta')}
-            </HeavyCta>
+          <div className="col-span-full">
+            <span className="mono section-kicker">// ПІДТРИМКА</span>
+            <h2 className="section-title">Підтримати діяльність</h2>
+            <p className="section-desc">
+              Підтримка Ордену Ветеранів — це внесок у конкретну систему: підтримку ветеранів, адаптацію, захист прав, психологічні маршрути та громадянські ініціативи.
+            </p>
           </div>
-          <div className="col-span-6 cta-card cta-card--help">
-            <h2 className="cta-title">{tHelp('sectionTitle')}</h2>
-            <p className="cta-desc">{tHelp('desc')}</p>
-            <HeavyCta href="/help" variant="outline" size="lg">
-              {tHelp('cta')}
-            </HeavyCta>
+          <div className="col-span-full" style={{ marginTop: '1rem' }}>
+            <CtaGroup>
+              <HeavyCta href="/support" variant="primary" size="lg">
+                ЗРОБИТИ ВНЕСОК
+              </HeavyCta>
+              <HeavyCta href="/documents" variant="outline" size="lg">
+                ПЕРЕГЛЯНУТИ ДОКУМЕНТИ
+              </HeavyCta>
+            </CtaGroup>
+          </div>
+        </Scaffold>
+      </section>
+
+      {/* Help CTA Section */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <span className="mono section-kicker">// ДОПОМОГА</span>
+            <h2 className="section-title">Потрібна допомога?</h2>
+            <p className="section-desc">
+              Залиш заявку — ми відповімо та зорієнтуємо: адаптація, правовий захист, психологічна підтримка або перенаправлення до партнерів.
+            </p>
+          </div>
+          <div className="col-span-full" style={{ marginTop: '1rem' }}>
+            <CtaGroup>
+              <HeavyCta href="/help-request" variant="primary" size="lg">
+                ЗАЛИШИТИ ЗАЯВКУ
+              </HeavyCta>
+              <HeavyCta href="/contacts" variant="outline" size="lg">
+                КОНТАКТИ
+              </HeavyCta>
+            </CtaGroup>
+          </div>
+        </Scaffold>
+      </section>
+
+      {/* Documents Section */}
+      <section className="section" style={{ background: 'var(--bg-elevated)' }}>
+        <Scaffold>
+          <div className="col-span-full">
+            <span className="mono section-kicker">// ДОКУМЕНТИ</span>
+            <h2 className="section-title">Статут, неприбутковість, звіти</h2>
+            <p className="section-desc">
+              Тут розміщуються офіційні документи: статут, рішення про неприбутковість, політики, звіти та реквізити.
+            </p>
+          </div>
+          <div className="col-span-full">
+            <SectionCardGrid columns={3}>
+              <SectionCard
+                title="СТАТУТ"
+                subtitle="// ДОКУМЕНТ"
+                href="/documents"
+                variant="dark"
+              >
+                Офіційний установчий документ організації (PDF).
+              </SectionCard>
+              <SectionCard
+                title="НЕПРИБУТКОВІСТЬ"
+                subtitle="// ДОКУМЕНТ"
+                href="/documents"
+                variant="dark"
+              >
+                Підтвердження включення до Реєстру неприбуткових установ та організацій (PDF).
+              </SectionCard>
+              <SectionCard
+                title="ЗВІТНІСТЬ"
+                subtitle="// ДОКУМЕНТ"
+                href="/transparency"
+                variant="dark"
+              >
+                Публічні звіти, прозорість, цілі зборів (за наявності).
+              </SectionCard>
+            </SectionCardGrid>
+          </div>
+        </Scaffold>
+      </section>
+
+      {/* Contact Section */}
+      <section className="section">
+        <Scaffold>
+          <div className="col-span-full">
+            <span className="mono section-kicker">// КОНТАКТИ</span>
+            <h2 className="section-title">Зв'язатися з нами</h2>
+            <p className="section-desc">
+              Напишіть нам для участі, запиту допомоги, партнерства, медіа-запитів або пропозицій проєктів.
+            </p>
+          </div>
+          <div className="col-span-full" style={{ marginTop: '1rem' }}>
+            <CtaGroup>
+              <HeavyCta href="/contacts" variant="primary" size="lg">
+                КОНТАКТИ
+              </HeavyCta>
+              <HeavyCta href="/faq" variant="outline" size="lg">
+                FAQ
+              </HeavyCta>
+            </CtaGroup>
           </div>
         </Scaffold>
       </section>

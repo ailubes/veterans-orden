@@ -7,30 +7,63 @@ import { useTranslations } from 'next-intl';
 import { ThemeToggleCompact } from '@/components/ui/theme-toggle';
 import { LanguageSwitcherCompact } from '@/components/ui/language-switcher';
 import { HeavyCta } from '@/components/ui/heavy-cta';
-import { ContentAdapter } from '@/lib/content/ContentAdapter';
 import { Scaffold } from './skeleton-grid';
 
+interface NavItem {
+  href: string;
+  label: string;
+  children?: NavItem[];
+}
+
 /**
- * NavigationNew - Redesigned navigation with theme and language controls
- *
- * Features:
- * - Theme toggle (light/dark)
- * - Language switcher (UA/EN)
- * - Mobile hamburger menu
- * - Theme-aware styling
- * - i18n support
+ * NavigationNew - Redesigned navigation with dropdowns and comprehensive links
  */
 export function NavigationNew() {
   const t = useTranslations('nav');
   const tBrand = useTranslations('brand');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const navLinks = [
-    { href: '/about', label: t('about') },
-    { href: '/directions', label: t('directions') },
-    { href: '/news', label: t('events') },
-    { href: '/documents', label: t('documents') },
-    { href: '/contacts', label: t('contact') },
+  const navLinks: NavItem[] = [
+    {
+      href: '/about',
+      label: 'ПРО НАС',
+      children: [
+        { href: '/about', label: 'Про Орден' },
+        { href: '/mission', label: 'Місія та цінності' },
+        { href: '/governance', label: 'Управління (Тріада)' },
+        { href: '/honor-court', label: 'Суд Честі' },
+        { href: '/code-of-honor', label: 'Кодекс Честі' },
+      ],
+    },
+    {
+      href: '/directions',
+      label: 'НАПРЯМИ',
+      children: [
+        { href: '/directions', label: 'Усі напрями' },
+        { href: '/commanderies', label: 'Командерії (Осередки)' },
+      ],
+    },
+    { href: '/news', label: 'НОВИНИ' },
+    {
+      href: '/support',
+      label: 'ПІДТРИМАТИ',
+      children: [
+        { href: '/support', label: 'Підтримати' },
+        { href: '/support/partnership', label: 'Партнерство' },
+        { href: '/transparency', label: 'Прозорість' },
+      ],
+    },
+    {
+      href: '/help-request',
+      label: 'ДОПОМОГА',
+      children: [
+        { href: '/help-request', label: 'Потрібна допомога' },
+        { href: '/faq', label: 'FAQ' },
+        { href: '/contacts', label: 'Контакти' },
+      ],
+    },
+    { href: '/documents', label: 'ДОКУМЕНТИ' },
   ];
 
   return (
@@ -55,13 +88,51 @@ export function NavigationNew() {
           {/* Desktop Navigation */}
           <nav className="nav-links col-span-6">
             {navLinks.map((link) => (
-              <Link
+              <div
                 key={link.href}
-                href={link.href}
-                className="nav-link"
+                className="nav-item-wrapper"
+                onMouseEnter={() => link.children && setOpenDropdown(link.href)}
+                onMouseLeave={() => setOpenDropdown(null)}
               >
-                {link.label}
-              </Link>
+                <Link
+                  href={link.href}
+                  className="nav-link"
+                >
+                  {link.label}
+                  {link.children && (
+                    <svg
+                      className="nav-dropdown-arrow"
+                      width="10"
+                      height="6"
+                      viewBox="0 0 10 6"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 1L5 5L9 1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  )}
+                </Link>
+
+                {/* Dropdown */}
+                {link.children && openDropdown === link.href && (
+                  <div className="nav-dropdown">
+                    {link.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className="nav-dropdown-link"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -75,7 +146,7 @@ export function NavigationNew() {
               size="sm"
               className="nav-cta"
             >
-              {t('join')}
+              ПРИЄДНАТИСЯ
             </HeavyCta>
           </div>
 
@@ -102,14 +173,29 @@ export function NavigationNew() {
       >
         <div className="nav-mobile-content">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setIsMenuOpen(false)}
-              className="nav-mobile-link"
-            >
-              {link.label}
-            </Link>
+            <div key={link.href} className="nav-mobile-group">
+              <Link
+                href={link.href}
+                onClick={() => !link.children && setIsMenuOpen(false)}
+                className="nav-mobile-link nav-mobile-link--parent"
+              >
+                {link.label}
+              </Link>
+              {link.children && (
+                <div className="nav-mobile-children">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.href}
+                      href={child.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="nav-mobile-link nav-mobile-link--child"
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
 
           <div className="nav-mobile-controls">
@@ -124,7 +210,7 @@ export function NavigationNew() {
             fullWidth
             onClick={() => setIsMenuOpen(false)}
           >
-            {t('join')}
+            ПРИЄДНАТИСЯ
           </HeavyCta>
         </div>
       </div>
