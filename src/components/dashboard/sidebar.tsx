@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   Home,
@@ -22,7 +23,6 @@ import {
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Logo } from '@/components/ui/logo';
 import { useEffect, useState } from 'react';
 import { useMessenger } from '@/components/messaging/messenger-provider';
 
@@ -86,7 +86,13 @@ export function Sidebar() {
       {/* Logo */}
       <div className="p-6 border-b border-line">
         <Link href="/" className="flex items-center gap-3">
-          <Logo size={40} className="text-bronze" />
+          <Image
+            src="/images/logo-veterans-orden.png"
+            alt="Орден Ветеранів"
+            width={40}
+            height={40}
+            className="rounded-sm"
+          />
           <span className="font-syne font-bold text-lg tracking-tight">МЕРЕЖА</span>
         </Link>
       </div>

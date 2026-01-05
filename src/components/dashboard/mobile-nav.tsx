@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Grip,
@@ -26,7 +27,6 @@ import {
   User,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
-import { Logo } from '@/components/ui/logo';
 import { NotificationBell } from './notification-bell';
 import { useMessenger } from '@/components/messaging/messenger-provider';
 import {
@@ -134,7 +134,13 @@ export function MobileNav() {
       <header className="sticky top-0 z-40 flex items-center justify-between px-4 py-3.5 bg-panel-850 text-canvas shadow-lg border-b border-canvas/10">
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <Logo size={32} className="text-canvas" />
+          <Image
+            src="/images/logo-veterans-orden.png"
+            alt="Орден Ветеранів"
+            width={32}
+            height={32}
+            className="rounded-sm"
+          />
           <span className="font-syne font-bold text-base tracking-tight">МЕРЕЖА</span>
         </Link>
 
@@ -164,7 +170,7 @@ export function MobileNav() {
           >
             <MessagesSquare size={22} />
             {totalUnread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-white bg-orange-500 rounded-full px-1 shadow-md">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-bg-950 bg-bronze rounded-full px-1 shadow-md">
                 {totalUnread > 99 ? '99+' : totalUnread}
               </span>
             )}
@@ -236,7 +242,7 @@ export function MobileNav() {
               <div className="py-2">
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="flex items-center gap-3 px-4 py-2.5 cursor-pointer text-red-600 hover:bg-red-50 transition-colors font-medium"
+                  className="flex items-center gap-3 px-4 py-2.5 cursor-pointer text-red-400 hover:bg-red-500/10 transition-colors font-medium"
                 >
                   <LogOut size={18} />
                   <span className="text-sm">Вийти</span>
