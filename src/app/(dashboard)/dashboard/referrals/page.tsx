@@ -42,19 +42,19 @@ export default async function ReferralsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <p className="label mb-2">ЗАПРОШЕНО ВСЬОГО</p>
           <p className="font-syne text-4xl font-bold">{referralCount}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <p className="label mb-2">АКТИВНИХ</p>
           <p className="font-syne text-4xl font-bold">
             {referrals?.filter((r) => r.status === 'active').length || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <p className="label mb-2">ЗАРОБЛЕНО БАЛІВ</p>
           <p className="font-syne text-4xl font-bold">{earnedPoints}</p>
@@ -65,11 +65,11 @@ export default async function ReferralsPage() {
       <ReferralsList referrals={referrals} />
 
       {/* How it works */}
-      <div className="mt-8 bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="mt-8 bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
-        <p className="label text-accent mb-4">ЯК ЦЕ ПРАЦЮЄ</p>
+        <p className="label text-bronze mb-4">ЯК ЦЕ ПРАЦЮЄ</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
@@ -77,7 +77,7 @@ export default async function ReferralsPage() {
               1
             </div>
             <h3 className="font-syne font-bold mb-2">Поділіться посиланням</h3>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Надішліть ваше унікальне посилання друзям та знайомим
             </p>
           </div>
@@ -86,7 +86,7 @@ export default async function ReferralsPage() {
               2
             </div>
             <h3 className="font-syne font-bold mb-2">Друг реєструється</h3>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Коли друг зареєструється за вашим посиланням, він стане вашим
               рефералом
             </p>
@@ -96,7 +96,7 @@ export default async function ReferralsPage() {
               3
             </div>
             <h3 className="font-syne font-bold mb-2">Отримуйте бали</h3>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Ви отримуєте бали за кожного активного реферала
             </p>
           </div>

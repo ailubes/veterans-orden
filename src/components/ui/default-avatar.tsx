@@ -80,7 +80,7 @@ export function DefaultAvatar({
   const renderFallback = () => (
     <div
       className={cn(
-        'rounded-full bg-timber-light flex items-center justify-center text-timber-dark font-bold border-2 border-timber-dark/20',
+        'rounded-full bg-timber-light flex items-center justify-center text-timber-dark font-bold border border-line rounded-lg/20',
         sizeClasses[size],
         textSizeClasses[size],
         className
@@ -98,7 +98,7 @@ export function DefaultAvatar({
   return (
     <div
       className={cn(
-        'rounded-full bg-timber-light overflow-hidden border-2 border-timber-dark/20',
+        'rounded-full bg-timber-light overflow-hidden border border-line rounded-lg/20',
         sizeClasses[size],
         className
       )}

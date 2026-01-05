@@ -171,8 +171,8 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -197,7 +197,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
       <div className="mb-6">
         <Link
           href={`/admin/tasks/${taskId}`}
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД
@@ -206,7 +206,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
 
       {/* Header */}
       <div className="mb-8">
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ ЗАВДАННЯ</p>
+        <p className="label text-bronze mb-2">РЕДАГУВАННЯ ЗАВДАННЯ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">
           Редагувати завдання
         </h1>
@@ -224,7 +224,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
 
       {/* Form */}
       <form onSubmit={handleSubmit}>
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative mb-6">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -238,7 +238,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -249,7 +249,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[120px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[120px]"
                 required
               />
             </div>
@@ -260,7 +260,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
               <textarea
                 value={formData.requirements}
                 onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[100px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[100px]"
                 placeholder="Критерії прийняття, додаткові вимоги..."
               />
             </div>
@@ -272,7 +272,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                 <select
                   value={formData.priority}
                   onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="low">Низький</option>
@@ -287,7 +287,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="pending">Очікує</option>
@@ -306,7 +306,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                 <select
                   value={formData.assigned_to}
                   onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 >
                   <option value="">Не призначено</option>
                   {members.map((member) => (
@@ -323,7 +323,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                   type="date"
                   value={formData.due_date}
                   onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 />
               </div>
             </div>
@@ -337,7 +337,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                   min="0"
                   value={formData.points_reward}
                   onChange={(e) => setFormData({ ...formData, points_reward: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 />
               </div>
 
@@ -351,7 +351,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, requires_proof: e.target.checked })
                     }
-                    className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
+                    className="w-5 h-5 border border-line rounded-lg focus:ring-accent"
                   />
                   <label htmlFor="requires_proof" className="text-sm font-bold">
                     Вимагає доказів виконання

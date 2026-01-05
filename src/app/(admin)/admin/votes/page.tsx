@@ -50,23 +50,23 @@ export default async function AdminVotesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{votes?.length || 0}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">АКТИВНИХ</p>
           <p className="font-syne text-3xl font-bold text-green-600">
             {votes?.filter((v) => v.status === 'active').length || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ЗАВЕРШЕНИХ</p>
           <p className="font-syne text-3xl font-bold text-blue-600">
             {votes?.filter((v) => v.status === 'closed').length || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">УЧАСТЬ</p>
           <p className="font-syne text-3xl font-bold">
             {votes && votes.length > 0
@@ -87,13 +87,13 @@ export default async function AdminVotesPage() {
             {votes.map((vote) => (
               <div
                 key={vote.id}
-                className="bg-canvas border-2 border-timber-dark p-4 relative"
+                className="bg-panel-900 border border-line rounded-lg p-4 relative"
               >
                 <div className="joint joint-tl" />
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-sm line-clamp-2">{vote.title}</h3>
-                    <p className="text-xs text-timber-beam mt-1">
+                    <p className="text-xs text-muted-500 mt-1">
                       {vote.scope === 'national'
                         ? 'Національне'
                         : vote.scope === 'regional'
@@ -109,14 +109,14 @@ export default async function AdminVotesPage() {
                     {statusLabels[vote.status as keyof typeof statusLabels]}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-timber-beam mb-3">
+                <div className="flex items-center gap-3 text-xs text-muted-500 mb-3">
                   <span className="px-2 py-1 bg-timber-dark/10">
                     {typeLabels[vote.type as keyof typeof typeLabels]}
                   </span>
                   <span>{vote.total_votes || 0} голосів</span>
                   <span>{formatDate(vote.end_date)}</span>
                 </div>
-                <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                <div className="flex items-center gap-2 pt-3 border-t border-line/10">
                   <Link
                     href={`/admin/votes/${vote.id}`}
                     className="flex-1 btn btn-sm text-center"
@@ -125,7 +125,7 @@ export default async function AdminVotesPage() {
                   </Link>
                   <Link
                     href={`/admin/votes/${vote.id}/edit`}
-                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -138,12 +138,12 @@ export default async function AdminVotesPage() {
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+          <div className="hidden md:block bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b-2 border-timber-dark">
+                <thead className="border-b-2 border-line">
                   <tr>
                     <th className="text-left p-4 font-bold text-xs">НАЗВА</th>
                     <th className="text-left p-4 font-bold text-xs">ТИП</th>
@@ -157,11 +157,11 @@ export default async function AdminVotesPage() {
                   {votes.map((vote) => (
                     <tr
                       key={vote.id}
-                      className="border-b border-timber-dark/20 hover:bg-timber-dark/5"
+                      className="border-b border-line/20 hover:bg-timber-dark/5"
                     >
                       <td className="p-4">
                         <div className="font-bold">{vote.title}</div>
-                        <div className="text-xs text-timber-beam">
+                        <div className="text-xs text-muted-500">
                           {vote.scope === 'national'
                             ? 'Національне'
                             : vote.scope === 'regional'
@@ -223,14 +223,14 @@ export default async function AdminVotesPage() {
           </div>
         </>
       ) : (
-        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 relative text-center">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
-          <Vote className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <Vote className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">
             Немає голосувань
           </h3>
-          <p className="text-sm text-timber-beam mb-6">
+          <p className="text-sm text-muted-500 mb-6">
             Створіть перше голосування для членів Мережі
           </p>
           <Link href="/admin/votes/new" className="btn">

@@ -122,9 +122,9 @@ export function ConversationView() {
     if (messageElement) {
       messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       // Add highlight effect
-      messageElement.classList.add('bg-accent/20');
+      messageElement.classList.add('bg-bronze/20');
       setTimeout(() => {
-        messageElement.classList.remove('bg-accent/20');
+        messageElement.classList.remove('bg-bronze/20');
       }, 2000);
     }
   }, []);
@@ -195,13 +195,13 @@ export function ConversationView() {
       >
         {messagesLoading && messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <Loader2 className="w-6 h-6 animate-spin text-timber-beam" />
+            <Loader2 className="w-6 h-6 animate-spin text-muted-500" />
           </div>
         ) : (
           <>
             {messagesLoading && messages.length > 0 && (
               <div className="flex justify-center py-2">
-                <Loader2 className="w-5 h-5 animate-spin text-timber-beam" />
+                <Loader2 className="w-5 h-5 animate-spin text-muted-500" />
               </div>
             )}
             <MessageThread
@@ -245,7 +245,7 @@ export function ConversationView() {
       )}
 
       {/* Composer */}
-      <div className="border-t border-timber-dark/20 p-3">
+      <div className="border-t border-line/20 p-3">
         <MessageComposer
           onTyping={() => sendTypingIndicator(true)}
           onStopTyping={() => sendTypingIndicator(false)}

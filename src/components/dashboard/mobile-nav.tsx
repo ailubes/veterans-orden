@@ -143,7 +143,7 @@ export function MobileNav() {
           {/* Grip Menu */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
+            className="p-2.5 rounded-xl transition-all hover:bg-panel-900/10 active:scale-95"
             aria-label="Меню"
           >
             {isMenuOpen ? (
@@ -159,7 +159,7 @@ export function MobileNav() {
               setIsMenuOpen(false);
               toggleMessenger();
             }}
-            className="relative p-2.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
+            className="relative p-2.5 rounded-xl transition-all hover:bg-panel-900/10 active:scale-95"
             aria-label="Повідомлення"
           >
             <MessagesSquare size={22} />
@@ -177,10 +177,10 @@ export function MobileNav() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="flex items-center gap-1.5 p-1.5 rounded-xl transition-all hover:bg-canvas/10 active:scale-95"
+                className="flex items-center gap-1.5 p-1.5 rounded-xl transition-all hover:bg-panel-900/10 active:scale-95"
                 aria-label="Профіль"
               >
-                <div className="w-8 h-8 rounded-full bg-canvas text-timber-dark flex items-center justify-center text-sm font-bold overflow-hidden ring-2 ring-canvas/20">
+                <div className="w-8 h-8 rounded-full bg-panel-900 text-timber-dark flex items-center justify-center text-sm font-bold overflow-hidden ring-2 ring-canvas/20">
                   {profile?.avatar_url ? (
                     <img
                       src={profile.avatar_url}
@@ -196,15 +196,15 @@ export function MobileNav() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="w-56 p-0 bg-canvas border-2 border-timber-dark shadow-xl"
+              className="w-56 p-0 bg-panel-900 border border-line rounded-lg shadow-xl"
               sideOffset={10}
             >
               {/* User Info */}
-              <div className="px-4 py-3 border-b border-timber-dark/10 bg-timber-dark/5">
+              <div className="px-4 py-3 border-b border-line/10 bg-timber-dark/5">
                 <p className="font-syne font-bold text-sm truncate">
                   {profile?.first_name} {profile?.last_name}
                 </p>
-                <p className="text-xs text-timber-beam truncate mt-0.5">
+                <p className="text-xs text-muted-500 truncate mt-0.5">
                   {profile?.email}
                 </p>
               </div>
@@ -267,14 +267,14 @@ export function MobileNav() {
                       href={item.href}
                       className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
                         isActive
-                          ? 'bg-accent text-canvas shadow-md'
-                          : 'hover:bg-canvas/10 hover:translate-x-1'
+                          ? 'bg-bronze text-canvas shadow-md'
+                          : 'hover:bg-panel-900/10 hover:translate-x-1'
                       }`}
                     >
                       <Icon size={20} strokeWidth={2.5} />
                       <span className="flex-1">{item.label}</span>
                       {isActive && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-canvas animate-pulse" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-panel-900 animate-pulse" />
                       )}
                     </Link>
                   </li>
@@ -289,14 +289,14 @@ export function MobileNav() {
                   href="/admin"
                   className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
                     pathname.startsWith('/admin')
-                      ? 'bg-accent text-canvas shadow-md'
-                      : 'hover:bg-canvas/10 hover:translate-x-1'
+                      ? 'bg-bronze text-canvas shadow-md'
+                      : 'hover:bg-panel-900/10 hover:translate-x-1'
                   }`}
                 >
                   <Shield size={20} strokeWidth={2.5} />
                   <span className="flex-1">АДМІН-ПАНЕЛЬ</span>
                   {pathname.startsWith('/admin') && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-canvas animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-panel-900 animate-pulse" />
                   )}
                 </Link>
               </div>

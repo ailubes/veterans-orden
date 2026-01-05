@@ -264,12 +264,12 @@ export default function MembershipProgressionTab({
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
@@ -278,7 +278,7 @@ export default function MembershipProgressionTab({
     <>
       <div className="space-y-6">
         {/* Advancement Mode Setting */}
-        <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+        <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -290,7 +290,7 @@ export default function MembershipProgressionTab({
                 <Settings2 className="w-6 h-6" />
                 Режим підвищення ролей
               </h2>
-              <p className="text-timber-beam text-sm">
+              <p className="text-muted-500 text-sm">
                 Визначає, як користувачі отримують нові рівні членства
               </p>
             </div>
@@ -322,17 +322,17 @@ export default function MembershipProgressionTab({
             </Select>
 
             {updatingMode && (
-              <Loader2 className="w-5 h-5 animate-spin text-accent" />
+              <Loader2 className="w-5 h-5 animate-spin text-bronze" />
             )}
           </div>
 
           {!isSuperAdmin && (
-            <p className="text-sm text-timber-beam mt-4">
+            <p className="text-sm text-muted-500 mt-4">
               Тільки супер-адміністратор може змінювати цю настройку.
             </p>
           )}
 
-          <div className="mt-4 p-4 bg-timber-dark/5 border border-timber-dark/20">
+          <div className="mt-4 p-4 bg-timber-dark/5 border border-line/20">
             {advancementMode === 'automatic' ? (
               <p className="text-sm">
                 <strong>Автоматичний режим:</strong> Користувачі автоматично отримують нові рівні,
@@ -349,7 +349,7 @@ export default function MembershipProgressionTab({
 
         {/* Pending Requests */}
         {advancementMode === 'approval_required' && pendingRequests.length > 0 && (
-          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+          <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
@@ -375,19 +375,19 @@ export default function MembershipProgressionTab({
               {pendingRequests.map((request) => (
                 <div
                   key={request.id}
-                  className="border-2 border-timber-dark p-4 flex flex-col sm:flex-row sm:items-center gap-4"
+                  className="border border-line rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4"
                 >
                   <div className="flex-1">
                     <div className="font-bold">
                       {request.user.firstName} {request.user.lastName}
                     </div>
-                    <div className="text-sm text-timber-beam">{request.user.email}</div>
+                    <div className="text-sm text-muted-500">{request.user.email}</div>
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
                       <RoleBadge membershipRole={request.currentRole} size="sm" />
-                      <span className="text-timber-beam">→</span>
+                      <span className="text-muted-500">→</span>
                       <RoleBadge membershipRole={request.requestedRole} size="sm" />
                     </div>
-                    <div className="text-xs text-timber-beam mt-2">
+                    <div className="text-xs text-muted-500 mt-2">
                       Запит: {formatDate(request.requestedAt)}
                     </div>
                   </div>
@@ -421,7 +421,7 @@ export default function MembershipProgressionTab({
         )}
 
         {/* Role Requirements */}
-        <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+        <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -432,7 +432,7 @@ export default function MembershipProgressionTab({
               <TrendingUp className="w-6 h-6" />
               Рівні членства
             </h2>
-            <p className="text-timber-beam text-sm">
+            <p className="text-muted-500 text-sm">
               8 рівнів прогресії учасників Мережі Вільних Людей
             </p>
           </div>
@@ -441,7 +441,7 @@ export default function MembershipProgressionTab({
             {requirements.map((req) => (
               <div
                 key={req.id}
-                className="border-2 border-timber-dark overflow-hidden"
+                className="border border-line rounded-lg overflow-hidden"
               >
                 <button
                   onClick={() => setExpandedRole(expandedRole === req.id ? null : req.id)}
@@ -456,23 +456,23 @@ export default function MembershipProgressionTab({
                     </div>
                   </div>
                   {expandedRole === req.id ? (
-                    <ChevronUp className="w-5 h-5 text-timber-beam flex-shrink-0" />
+                    <ChevronUp className="w-5 h-5 text-muted-500 flex-shrink-0" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-timber-beam flex-shrink-0" />
+                    <ChevronDown className="w-5 h-5 text-muted-500 flex-shrink-0" />
                   )}
                 </button>
 
                 {expandedRole === req.id && (
-                  <div className="p-4 pt-0 border-t border-timber-dark/20">
+                  <div className="p-4 pt-0 border-t border-line/20">
                     {req.descriptionUk && (
-                      <p className="text-sm text-timber-beam mb-4">{req.descriptionUk}</p>
+                      <p className="text-sm text-muted-500 mb-4">{req.descriptionUk}</p>
                     )}
 
                     {/* Requirements */}
                     <div className="space-y-2 mb-4">
                       <h4 className="text-sm font-bold">Вимоги:</h4>
                       {req.roleLevel === 0 ? (
-                        <p className="text-sm text-timber-beam">Реєстрація на платформі</p>
+                        <p className="text-sm text-muted-500">Реєстрація на платформі</p>
                       ) : (
                         <ul className="text-sm space-y-1">
                           {req.requiresContribution && (
@@ -486,7 +486,7 @@ export default function MembershipProgressionTab({
                               <Users className="w-3 h-3 text-blue-600" />
                               {req.minDirectReferrals} прямих рефералів
                               {req.minDirectReferralsAtRole && (
-                                <span className="text-timber-beam">
+                                <span className="text-muted-500">
                                   (рівень: {MEMBERSHIP_ROLES[req.minDirectReferralsAtRole]?.label})
                                 </span>
                               )}
@@ -503,7 +503,7 @@ export default function MembershipProgressionTab({
                               <TrendingUp className="w-3 h-3 text-amber-600" />
                               {req.minHelpedAdvance} допомогли підвищити
                               {req.helpedAdvanceFromRole && req.helpedAdvanceToRole && (
-                                <span className="text-timber-beam">
+                                <span className="text-muted-500">
                                   (з {MEMBERSHIP_ROLES[req.helpedAdvanceFromRole]?.label} до{' '}
                                   {MEMBERSHIP_ROLES[req.helpedAdvanceToRole]?.label})
                                 </span>
@@ -522,7 +522,7 @@ export default function MembershipProgressionTab({
                           {req.privileges.map((privilege) => (
                             <span
                               key={privilege}
-                              className="text-xs bg-accent/10 text-accent px-2 py-0.5 border border-accent/30"
+                              className="text-xs bg-bronze/10 text-bronze px-2 py-0.5 border border-bronze/30"
                             >
                               {PRIVILEGE_LABELS[privilege as keyof typeof PRIVILEGE_LABELS] || privilege}
                             </span>
@@ -539,7 +539,7 @@ export default function MembershipProgressionTab({
 
         {/* Recent Advancements */}
         {recentAdvancements.length > 0 && (
-          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+          <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
@@ -554,20 +554,20 @@ export default function MembershipProgressionTab({
               {recentAdvancements.slice(0, 20).map((adv) => (
                 <div
                   key={adv.id}
-                  className="p-3 border border-timber-dark/20 flex flex-col sm:flex-row sm:items-center gap-2"
+                  className="p-3 border border-line/20 flex flex-col sm:flex-row sm:items-center gap-2"
                 >
                   <div className="flex-1">
                     <span className="font-medium">
                       {adv.user?.firstName} {adv.user?.lastName}
                     </span>
-                    <span className="text-timber-beam mx-2">•</span>
-                    <span className="text-sm text-timber-beam">
+                    <span className="text-muted-500 mx-2">•</span>
+                    <span className="text-sm text-muted-500">
                       {formatDate(adv.advancedAt)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <RoleBadge membershipRole={adv.fromRole} size="sm" showLabel={false} />
-                    <span className="text-timber-beam">→</span>
+                    <span className="text-muted-500">→</span>
                     <RoleBadge membershipRole={adv.toRole} size="sm" />
                   </div>
                 </div>
@@ -579,10 +579,10 @@ export default function MembershipProgressionTab({
 
       {/* Reject Dialog */}
       <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
-        <DialogContent className="border-2 border-timber-dark">
+        <DialogContent className="border border-line rounded-lg">
           <DialogHeader>
             <DialogTitle className="font-syne text-2xl">Відхилити запит</DialogTitle>
-            <DialogDescription className="text-timber-beam">
+            <DialogDescription className="text-muted-500">
               Вкажіть причину відхилення запиту на підвищення.
             </DialogDescription>
           </DialogHeader>
@@ -595,7 +595,7 @@ export default function MembershipProgressionTab({
               </p>
               <div className="flex items-center gap-2 mb-4">
                 <RoleBadge membershipRole={selectedRequest.currentRole} size="sm" />
-                <span className="text-timber-beam">→</span>
+                <span className="text-muted-500">→</span>
                 <RoleBadge membershipRole={selectedRequest.requestedRole} size="sm" />
               </div>
 
@@ -605,7 +605,7 @@ export default function MembershipProgressionTab({
               <textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                className="w-full border-2 border-timber-dark p-3 bg-canvas text-sm min-h-[100px]"
+                className="w-full border border-line rounded-lg p-3 bg-panel-900 text-sm min-h-[100px]"
                 placeholder="Вкажіть причину..."
               />
             </div>

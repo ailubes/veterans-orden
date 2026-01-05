@@ -54,7 +54,7 @@ export default async function SubmissionsPage() {
       <div className="mb-6">
         <Link
           href="/admin/tasks"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО ЗАВДАНЬ
@@ -65,14 +65,14 @@ export default async function SubmissionsPage() {
       <div className="mb-8">
         <p className="label mb-2">АДМІНІСТРУВАННЯ</p>
         <h1 className="font-syne text-3xl font-bold">Перевірка підтверджень</h1>
-        <p className="text-sm text-timber-beam mt-2">
+        <p className="text-sm text-muted-500 mt-2">
           Перегляньте та підтвердіть виконання завдань членами
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4 flex items-center gap-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
             <Clock size={24} className="text-yellow-600" />
           </div>
@@ -81,7 +81,7 @@ export default async function SubmissionsPage() {
             <p className="font-syne text-3xl font-bold text-yellow-600">{pendingCount}</p>
           </div>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4 flex items-center gap-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
             <FileCheck size={24} className="text-green-600" />
           </div>
@@ -90,7 +90,7 @@ export default async function SubmissionsPage() {
             <p className="font-syne text-3xl font-bold text-green-600">{approvedCount}</p>
           </div>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4 flex items-center gap-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
             <FileX size={24} className="text-red-600" />
           </div>
@@ -120,14 +120,14 @@ export default async function SubmissionsPage() {
 
       {/* Empty state for pending */}
       {pendingSubmissions.length === 0 && (
-        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center mb-8">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 relative text-center mb-8">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <FileCheck className="w-12 h-12 mx-auto mb-4 text-green-500" />
           <h3 className="font-syne text-xl font-bold mb-2">
             Всі підтвердження перевірені!
           </h3>
-          <p className="text-sm text-timber-beam">
+          <p className="text-sm text-muted-500">
             Нові підтвердження з&apos;являться тут після надсилання членами
           </p>
         </div>
@@ -139,12 +139,12 @@ export default async function SubmissionsPage() {
           <h2 className="font-syne text-xl font-bold mb-4">
             Історія перевірок ({reviewedSubmissions.length})
           </h2>
-          <div className="bg-canvas border-2 border-timber-dark relative">
+          <div className="bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b-2 border-timber-dark">
+                <thead className="border-b-2 border-line">
                   <tr>
                     <th className="text-left p-4 font-bold text-xs">ЗАВДАННЯ</th>
                     <th className="text-left p-4 font-bold text-xs">ЧЛЕН</th>
@@ -158,12 +158,12 @@ export default async function SubmissionsPage() {
                   {reviewedSubmissions.map((submission) => (
                     <tr
                       key={submission.id}
-                      className="border-b border-timber-dark/20 hover:bg-timber-dark/5"
+                      className="border-b border-line/20 hover:bg-timber-dark/5"
                     >
                       <td className="p-4">
                         <Link
                           href={`/admin/tasks/${submission.task?.id}`}
-                          className="font-bold hover:text-accent"
+                          className="font-bold hover:text-bronze"
                         >
                           {submission.task?.title}
                         </Link>
@@ -185,17 +185,17 @@ export default async function SubmissionsPage() {
                         </span>
                       </td>
                       <td className="p-4">
-                        <span className="font-bold text-accent">
+                        <span className="font-bold text-bronze">
                           {submission.status === 'approved' ? `+${submission.points_awarded}` : '—'}
                         </span>
                       </td>
                       <td className="p-4">
-                        <span className="text-sm text-timber-beam">
+                        <span className="text-sm text-muted-500">
                           {submission.reviewer?.first_name} {submission.reviewer?.last_name}
                         </span>
                       </td>
                       <td className="p-4">
-                        <span className="text-sm text-timber-beam">
+                        <span className="text-sm text-muted-500">
                           {formatDate(submission.reviewed_at)}
                         </span>
                       </td>

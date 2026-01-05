@@ -222,8 +222,8 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -248,13 +248,13 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       <div className="mb-8">
         <Link
           href={`/admin/news/${newsId}`}
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до статті
         </Link>
         <h1 className="font-syne text-3xl font-bold">Редагувати статтю</h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Оновіть вміст статті з підтримкою Rich Text Editor
         </p>
       </div>
@@ -262,7 +262,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info Card */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -280,7 +280,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -291,7 +291,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                 URL (SLUG) *
               </label>
               <div className="flex items-center">
-                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-timber-dark text-sm text-timber-beam whitespace-nowrap">
+                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                   /news/
                 </span>
                 <input
@@ -300,7 +300,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                   onChange={(e) =>
                     setFormData({ ...formData, slug: e.target.value })
                   }
-                  className={`flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none ${
+                  className={`flex-1 px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none ${
                     slugError ? 'border-red-500' : ''
                   }`}
                   required
@@ -327,7 +327,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, excerpt: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[80px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[80px]"
                 placeholder="Короткий опис для превью та соціальних мереж (необов'язково)"
                 maxLength={300}
               />
@@ -347,7 +347,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="announcement">📢 Оголошення</option>
@@ -367,7 +367,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="draft">📝 Чернетка</option>
@@ -380,7 +380,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
         </div>
 
         {/* Featured Image Card */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -398,7 +398,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
         </div>
 
         {/* Content Editor Card */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 

@@ -131,7 +131,7 @@ export default function NewVotePage() {
       <div className="mb-8">
         <Link
           href="/admin/votes"
-          className="text-sm text-timber-beam hover:text-accent flex items-center gap-2 mb-4"
+          className="text-sm text-muted-500 hover:text-bronze flex items-center gap-2 mb-4"
         >
           <ArrowLeft size={16} />
           Назад до голосувань
@@ -141,7 +141,7 @@ export default function NewVotePage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -154,7 +154,7 @@ export default function NewVotePage() {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Наприклад: Чи підтримуєте ви...?"
                 required
               />
@@ -166,7 +166,7 @@ export default function NewVotePage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
                 placeholder="Детальний опис питання..."
               />
             </div>
@@ -185,7 +185,7 @@ export default function NewVotePage() {
                       ]);
                     }
                   }}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="binary">Так / Ні</option>
                   <option value="multiple_choice">Вибір з варіантів</option>
@@ -196,7 +196,7 @@ export default function NewVotePage() {
                 <select
                   value={formData.scope}
                   onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="national">Національний</option>
                   <option value="regional">Регіональний</option>
@@ -210,7 +210,7 @@ export default function NewVotePage() {
               <select
                 value={formData.transparency}
                 onChange={(e) => setFormData({ ...formData, transparency: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
               >
                 <option value="anonymous">Анонімне</option>
                 <option value="public">Публічне (голоси видимі)</option>
@@ -220,7 +220,7 @@ export default function NewVotePage() {
         </div>
 
         {/* Options */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Варіанти відповіді</h2>
@@ -233,7 +233,7 @@ export default function NewVotePage() {
                     type="text"
                     value={option.text}
                     onChange={(e) => updateOption(index, 'text', e.target.value)}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     placeholder={`Варіант ${index + 1}`}
                     required
                   />
@@ -241,7 +241,7 @@ export default function NewVotePage() {
                     type="text"
                     value={option.description}
                     onChange={(e) => updateOption(index, 'description', e.target.value)}
-                    className="w-full px-3 py-2 bg-canvas border border-timber-dark/30 font-mono text-xs focus:border-accent focus:outline-none"
+                    className="w-full px-3 py-2 bg-panel-900 border border-line/30 font-mono text-xs focus:border-bronze focus:outline-none"
                     placeholder="Опис (необов'язково)"
                   />
                 </div>
@@ -261,7 +261,7 @@ export default function NewVotePage() {
               <button
                 type="button"
                 onClick={addOption}
-                className="flex items-center gap-2 text-sm text-accent hover:underline"
+                className="flex items-center gap-2 text-sm text-bronze hover:underline"
               >
                 <Plus size={16} />
                 Додати варіант
@@ -271,7 +271,7 @@ export default function NewVotePage() {
         </div>
 
         {/* Timing */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Час проведення</h2>
@@ -283,7 +283,7 @@ export default function NewVotePage() {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -293,7 +293,7 @@ export default function NewVotePage() {
                 type="time"
                 value={formData.startTime}
                 onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -303,7 +303,7 @@ export default function NewVotePage() {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -313,7 +313,7 @@ export default function NewVotePage() {
                 type="time"
                 value={formData.endTime}
                 onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -321,7 +321,7 @@ export default function NewVotePage() {
         </div>
 
         {/* Settings */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
@@ -333,7 +333,7 @@ export default function NewVotePage() {
                 type="number"
                 value={formData.quorumRequired}
                 onChange={(e) => setFormData({ ...formData, quorumRequired: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Без обмежень"
                 min="1"
               />
@@ -344,7 +344,7 @@ export default function NewVotePage() {
                 type="number"
                 value={formData.majorityRequired}
                 onChange={(e) => setFormData({ ...formData, majorityRequired: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 min="50"
                 max="100"
               />
@@ -354,7 +354,7 @@ export default function NewVotePage() {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
               >
                 <option value="draft">Чернетка</option>
                 <option value="active">Активне</option>

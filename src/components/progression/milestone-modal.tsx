@@ -57,7 +57,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
         <div
           className="
             relative max-w-md w-full
-            border-2 border-accent bg-canvas
+            border-2 border-bronze bg-panel-900
             card-with-joints
             p-8
             animate-in fade-in zoom-in duration-300
@@ -66,10 +66,10 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
         >
           {/* Sparkles decoration */}
           <div className="absolute -top-3 -right-3">
-            <Sparkles className="w-8 h-8 text-accent animate-pulse" />
+            <Sparkles className="w-8 h-8 text-bronze animate-pulse" />
           </div>
           <div className="absolute -bottom-3 -left-3">
-            <Sparkles className="w-8 h-8 text-accent animate-pulse" />
+            <Sparkles className="w-8 h-8 text-bronze animate-pulse" />
           </div>
 
           {/* Content */}
@@ -83,7 +83,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
             </div>
 
             {/* Title */}
-            <h2 className="font-syne text-3xl font-bold text-accent mb-4">
+            <h2 className="font-syne text-3xl font-bold text-bronze mb-4">
               {milestone.title}
             </h2>
 
@@ -99,11 +99,11 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
               className="
                 inline-flex items-center justify-center gap-2
                 px-8 py-4
-                bg-accent text-canvas
+                bg-bronze text-canvas
                 font-mono text-base font-semibold
-                border-2 border-accent
+                border-2 border-bronze
                 transition-all duration-200
-                hover:bg-timber-dark hover:border-timber-dark
+                hover:bg-timber-dark hover:border-line
                 disabled:opacity-50 disabled:cursor-not-allowed
               "
             >

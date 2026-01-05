@@ -114,7 +114,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
       <div className="mb-6">
         <Link
           href="/admin/votes"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО СПИСКУ
@@ -122,7 +122,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border-2 border-timber-dark p-6 mb-6 relative">
+      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -133,7 +133,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
           <div className="flex-1">
             <h1 className="font-syne text-3xl font-bold mb-3">{vote.question}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 bg-canvas text-timber-dark text-xs font-bold">
+              <span className="px-3 py-1 bg-panel-900 text-timber-dark text-xs font-bold">
                 {typeLabels[vote.vote_type] || vote.vote_type}
               </span>
               <span
@@ -185,7 +185,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                 </Link>
               )}
               {vote.status === 'active' && (
-                <button className="btn btn-outline btn-sm flex items-center gap-2 border-accent text-accent hover:bg-accent hover:text-canvas">
+                <button className="btn btn-outline btn-sm flex items-center gap-2 border-bronze text-bronze hover:bg-bronze hover:text-canvas">
                   <XCircle size={16} />
                   ЗАКРИТИ ДОСТРОКОВО
                 </button>
@@ -203,17 +203,17 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Results */}
         <div className="lg:col-span-2">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">РЕЗУЛЬТАТИ ГОЛОСУВАННЯ</p>
+            <p className="label text-bronze mb-4">РЕЗУЛЬТАТИ ГОЛОСУВАННЯ</p>
 
             {vote.description && (
-              <div className="mb-6 pb-6 border-b border-timber-dark/20">
-                <p className="text-sm whitespace-pre-wrap text-timber-beam">
+              <div className="mb-6 pb-6 border-b border-line/20">
+                <p className="text-sm whitespace-pre-wrap text-muted-500">
                   {vote.description}
                 </p>
               </div>
@@ -229,10 +229,10 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sm">{option.text}</span>
                       <div className="text-right">
-                        <span className="font-syne text-2xl font-bold text-accent">
+                        <span className="font-syne text-2xl font-bold text-bronze">
                           {count}
                         </span>
-                        <span className="text-xs text-timber-beam ml-2">
+                        <span className="text-xs text-muted-500 ml-2">
                           ({percentage.toFixed(1)}%)
                         </span>
                       </div>
@@ -241,7 +241,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                       <div
                         className={`h-3 ${
                           index === 0
-                            ? 'bg-accent'
+                            ? 'bg-bronze'
                             : index === 1
                             ? 'bg-green-500'
                             : index === 2
@@ -257,11 +257,11 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
             </div>
 
             {vote.requires_quorum && (
-              <div className="mt-6 pt-6 border-t border-timber-dark/20">
+              <div className="mt-6 pt-6 border-t border-line/20">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-bold text-sm">Статус кворуму</p>
-                    <p className="text-xs text-timber-beam">
+                    <p className="text-xs text-muted-500">
                       Необхідно {vote.quorum_percentage}% участі
                     </p>
                   </div>
@@ -284,29 +284,29 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
 
         {/* Vote Info */}
         <div className="lg:col-span-1">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative mb-6">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">НАЛАШТУВАННЯ</p>
+            <p className="label text-bronze mb-4">НАЛАШТУВАННЯ</p>
 
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-timber-beam mb-1">Тип голосування</p>
+                <p className="text-muted-500 mb-1">Тип голосування</p>
                 <p className="font-bold">{typeLabels[vote.vote_type] || vote.vote_type}</p>
               </div>
 
               <div>
-                <p className="text-timber-beam mb-1">Прозорість</p>
+                <p className="text-muted-500 mb-1">Прозорість</p>
                 <p className="font-bold capitalize">
                   {vote.transparency === 'public' ? 'Публічне' : vote.transparency === 'anonymous' ? 'Анонімне' : 'Приховане'}
                 </p>
               </div>
 
               <div>
-                <p className="text-timber-beam mb-1">Зміна голосу</p>
+                <p className="text-muted-500 mb-1">Зміна голосу</p>
                 <p className="font-bold">
                   {vote.allow_change_vote ? 'Дозволено' : 'Заборонено'}
                 </p>
@@ -314,25 +314,25 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
 
               {vote.requires_quorum && (
                 <div>
-                  <p className="text-timber-beam mb-1">Вимога кворуму</p>
+                  <p className="text-muted-500 mb-1">Вимога кворуму</p>
                   <p className="font-bold">{vote.quorum_percentage}%</p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-4 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-2">ОРГАНІЗАТОР</p>
+            <p className="label text-bronze mb-2">ОРГАНІЗАТОР</p>
             <p className="text-sm font-bold">
               {vote.created_by?.first_name} {vote.created_by?.last_name}
             </p>
-            <p className="text-xs text-timber-beam">{vote.created_by?.email}</p>
-            <p className="text-xs text-timber-beam mt-2">
+            <p className="text-xs text-muted-500">{vote.created_by?.email}</p>
+            <p className="text-xs text-muted-500 mt-2">
               Створено: {formatDate(vote.created_at)}
             </p>
           </div>
@@ -341,14 +341,14 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
 
       {/* Voters List (if public) */}
       {vote.transparency === 'public' && ballots && ballots.length > 0 && (
-        <div className="bg-canvas border-2 border-timber-dark relative">
+        <div className="bg-panel-900 border border-line rounded-lg relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
           <div className="p-6">
-            <p className="label text-accent mb-4">СПИСОК ГОЛОСІВ</p>
+            <p className="label text-bronze mb-4">СПИСОК ГОЛОСІВ</p>
 
             <div className="space-y-2">
               {ballots.map((ballot) => {
@@ -357,21 +357,21 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                 return (
                   <div
                     key={ballot.id}
-                    className="flex items-center justify-between p-3 border border-timber-dark/20"
+                    className="flex items-center justify-between p-3 border border-line/20"
                   >
                     <div>
                       <p className="font-bold text-sm">
                         {ballot.voter?.first_name} {ballot.voter?.last_name}
                       </p>
-                      <p className="text-xs text-timber-beam">{ballot.voter?.email}</p>
+                      <p className="text-xs text-muted-500">{ballot.voter?.email}</p>
                     </div>
                     <div className="text-right">
                       {selectedOption && (
-                        <p className="text-sm font-bold text-accent">
+                        <p className="text-sm font-bold text-bronze">
                           {selectedOption.text}
                         </p>
                       )}
-                      <p className="text-xs text-timber-beam">
+                      <p className="text-xs text-muted-500">
                         {formatDate(ballot.created_at)}
                       </p>
                     </div>

@@ -22,7 +22,7 @@ export function MessengerButton({ className }: MessengerButtonProps) {
     >
       <MessageCircle className="w-6 h-6" />
       {totalUnread > 0 && (
-        <span className="absolute -top-1 -right-1 bg-accent text-canvas text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1">
+        <span className="absolute -top-1 -right-1 bg-bronze text-canvas text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1">
           {totalUnread > 99 ? '99+' : totalUnread}
         </span>
       )}

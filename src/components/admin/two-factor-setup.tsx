@@ -136,17 +136,17 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
 
   if (!setupMode && !isEnabled) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         <div className="flex items-start gap-4">
-          <Shield className="w-8 h-8 text-timber-beam flex-shrink-0" />
+          <Shield className="w-8 h-8 text-muted-500 flex-shrink-0" />
           <div className="flex-1">
             <h3 className="font-bold text-lg mb-2">Двофакторна автентифікація</h3>
-            <p className="text-sm text-timber-beam mb-4">
+            <p className="text-sm text-muted-500 mb-4">
               Додайте додатковий рівень безпеки до вашого облікового запису за допомогою 2FA.
               Вам знадобиться додаток-автентифікатор (Google Authenticator, Authy, тощо).
             </p>
@@ -165,14 +165,14 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
 
   if (setupMode) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-          <Shield className="w-6 h-6 text-accent" />
+          <Shield className="w-6 h-6 text-bronze" />
           Налаштування 2FA
         </h3>
 
@@ -180,21 +180,21 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
           {/* Step 1: Scan QR Code */}
           <div>
             <p className="font-bold mb-2">Крок 1: Скануйте QR-код</p>
-            <p className="text-sm text-timber-beam mb-4">
+            <p className="text-sm text-muted-500 mb-4">
               Відскануйте цей QR-код у вашому додатку-автентифікаторі:
             </p>
-            <div className="bg-white p-4 inline-block border-2 border-timber-dark">
+            <div className="bg-white p-4 inline-block border border-line rounded-lg">
               <QRCodeSVG value={qrcodeUri} size={200} />
             </div>
           </div>
 
           {/* Manual Entry */}
           <div>
-            <p className="text-sm text-timber-beam mb-2">
+            <p className="text-sm text-muted-500 mb-2">
               Або введіть цей код вручну:
             </p>
             <div className="flex items-center gap-2">
-              <code className="flex-1 bg-timber-dark/10 px-4 py-2 font-mono text-sm border border-timber-dark/20">
+              <code className="flex-1 bg-timber-dark/10 px-4 py-2 font-mono text-sm border border-line/20">
                 {secret}
               </code>
               <button
@@ -210,7 +210,7 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
           {/* Step 2: Verify */}
           <div>
             <p className="font-bold mb-2">Крок 2: Підтвердіть налаштування</p>
-            <p className="text-sm text-timber-beam mb-4">
+            <p className="text-sm text-muted-500 mb-4">
               Введіть 6-значний код з додатку:
             </p>
             <div className="flex gap-2">
@@ -220,7 +220,7 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
                 onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="123456"
                 maxLength={6}
-                className="flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-2xl text-center focus:border-accent focus:outline-none"
+                className="flex-1 px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-2xl text-center focus:border-bronze focus:outline-none"
               />
               <button
                 onClick={handleEnable}
@@ -275,7 +275,7 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
 
   // 2FA is enabled
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
@@ -287,7 +287,7 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
         </div>
         <div className="flex-1">
           <h3 className="font-bold text-lg mb-2">2FA активовано</h3>
-          <p className="text-sm text-timber-beam mb-4">
+          <p className="text-sm text-muted-500 mb-4">
             Ваш обліковий запис захищено двофакторною автентифікацією.
           </p>
           <button

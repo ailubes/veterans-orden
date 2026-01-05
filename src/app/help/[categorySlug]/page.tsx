@@ -66,22 +66,22 @@ export default function CategoryPage() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-        <p className="mt-4 text-timber-beam">Завантаження...</p>
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+        <p className="mt-4 text-muted-500">Завантаження...</p>
       </div>
     );
   }
 
   if (error || !category) {
     return (
-      <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
+      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
-        <Folder className="mx-auto mb-4 text-timber-beam" size={64} />
+        <Folder className="mx-auto mb-4 text-muted-500" size={64} />
         <h2 className="font-syne text-2xl font-bold mb-2">Категорію не знайдено</h2>
-        <p className="text-timber-beam mb-6">{error || 'Неможливо знайти категорію'}</p>
-        <a href="/help" className="text-accent hover:underline font-bold">
+        <p className="text-muted-500 mb-6">{error || 'Неможливо знайти категорію'}</p>
+        <a href="/help" className="text-bronze hover:underline font-bold">
           ← Повернутися до головної
         </a>
       </div>
@@ -91,12 +91,12 @@ export default function CategoryPage() {
   return (
     <div className="space-y-8">
       {/* Category Header */}
-      <div className="bg-white border-2 border-timber-dark p-8 relative">
+      <div className="bg-white border border-line rounded-lg p-8 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
-        <div className="flex items-center gap-2 text-sm text-timber-beam mb-4">
-          <a href="/help" className="hover:text-accent">Допомога</a>
+        <div className="flex items-center gap-2 text-sm text-muted-500 mb-4">
+          <a href="/help" className="hover:text-bronze">Допомога</a>
           <span>/</span>
           <span className="font-bold">{category.nameUk}</span>
         </div>
@@ -104,11 +104,11 @@ export default function CategoryPage() {
         <h1 className="font-syne text-3xl font-bold mb-3">{category.nameUk}</h1>
 
         {category.description && (
-          <p className="text-lg text-timber-beam">{category.description}</p>
+          <p className="text-lg text-muted-500">{category.description}</p>
         )}
 
-        <div className="mt-4 pt-4 border-t-2 border-timber-dark/20">
-          <div className="flex items-center gap-2 text-sm text-timber-beam">
+        <div className="mt-4 pt-4 border-t-2 border-line/20">
+          <div className="flex items-center gap-2 text-sm text-muted-500">
             <FileText size={16} />
             <span>{articles.length} {articles.length === 1 ? 'стаття' : 'статей'}</span>
           </div>
@@ -124,16 +124,16 @@ export default function CategoryPage() {
               <a
                 key={subcat.id}
                 href={`/help/${subcat.slug}`}
-                className="bg-white border-2 border-timber-dark p-4 hover:border-accent transition-colors group relative"
+                className="bg-white border border-line rounded-lg p-4 hover:border-bronze transition-colors group relative"
               >
                 <div className="joint joint-tl" />
                 <div className="joint joint-br" />
 
-                <h3 className="font-bold mb-1 group-hover:text-accent transition-colors">
+                <h3 className="font-bold mb-1 group-hover:text-bronze transition-colors">
                   {subcat.nameUk}
                 </h3>
                 {subcat.description && (
-                  <p className="text-sm text-timber-beam line-clamp-2">{subcat.description}</p>
+                  <p className="text-sm text-muted-500 line-clamp-2">{subcat.description}</p>
                 )}
               </a>
             ))}
@@ -152,12 +152,12 @@ export default function CategoryPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
+        <div className="bg-white border border-line rounded-lg p-12 text-center relative">
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 
-          <FileText className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam">Статті в цій категорії ще не додані</p>
+          <FileText className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500">Статті в цій категорії ще не додані</p>
         </div>
       )}
     </div>

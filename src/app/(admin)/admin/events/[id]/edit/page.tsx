@@ -185,8 +185,8 @@ export default function EventEditPage({ params }: EventEditPageProps) {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -195,7 +195,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
   if (error && !canEdit) {
     return (
       <div className="max-w-3xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
           <p className="text-red-600 font-bold mb-4">{error}</p>
           <Link href="/admin/events" className="btn">
             НАЗАД ДО СПИСКУ
@@ -213,7 +213,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
       <div className="mb-6">
         <Link
           href={`/admin/events/${eventId}`}
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО ПОДІЇ
@@ -222,7 +222,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
 
       {/* Header */}
       <div className="mb-6">
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ ПОДІЇ</p>
+        <p className="label text-bronze mb-2">РЕДАГУВАННЯ ПОДІЇ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">{formData.title}</h1>
       </div>
 
@@ -246,7 +246,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -261,7 +261,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -272,7 +272,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
               />
             </div>
 
@@ -282,7 +282,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 value={formData.requirements}
                 onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
                 rows={3}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
                 placeholder="Наприклад: повнолітні члени мережі з підтвердженою особою"
               />
             </div>
@@ -293,7 +293,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 <select
                   value={formData.event_type}
                   onChange={(e) => setFormData({ ...formData, event_type: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="meeting">Збори</option>
                   <option value="protest">Протест</option>
@@ -307,7 +307,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 <select
                   value={formData.scope}
                   onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="national">Національний</option>
                   <option value="regional">Регіональний</option>
@@ -319,7 +319,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
         </div>
 
         {/* Location */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -345,7 +345,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                   type="url"
                   value={formData.online_url}
                   onChange={(e) => setFormData({ ...formData, online_url: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="https://zoom.us/j/..."
                 />
               </div>
@@ -356,7 +356,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                   type="text"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="вул. Хрещатик 1, Київ"
                 />
               </div>
@@ -365,7 +365,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
         </div>
 
         {/* Date & Time */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -380,7 +380,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50"
                 required
                 disabled={eventHasStarted}
               />
@@ -391,7 +391,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="time"
                 value={formData.startTime}
                 onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50"
                 required
                 disabled={eventHasStarted}
               />
@@ -402,7 +402,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50"
                 required
                 disabled={eventHasStarted}
               />
@@ -413,7 +413,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="time"
                 value={formData.endTime}
                 onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50"
                 required
                 disabled={eventHasStarted}
               />
@@ -422,7 +422,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
         </div>
 
         {/* Settings */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -437,7 +437,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 type="number"
                 value={formData.max_attendees}
                 onChange={(e) => setFormData({ ...formData, max_attendees: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Без обмежень"
                 min="1"
               />
@@ -447,7 +447,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
               >
                 <option value="draft">Чернетка</option>
                 <option value="published">Опубліковано</option>

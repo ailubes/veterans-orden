@@ -67,8 +67,8 @@ export default function AdminHelpPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-          <p className="mt-4 text-timber-beam">Завантаження...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+          <p className="mt-4 text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -79,7 +79,7 @@ export default function AdminHelpPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-syne text-3xl font-bold mb-2">Управління довідкою</h1>
-        <p className="text-timber-beam">
+        <p className="text-muted-500">
           Керуйте статтями допомоги, категоріями та підказками
         </p>
       </div>
@@ -87,56 +87,56 @@ export default function AdminHelpPage() {
       {/* Stats Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white border-2 border-timber-dark p-6 relative">
+          <div className="bg-white border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
-              <FileText className="text-accent" size={32} />
-              <span className="text-xs font-bold text-timber-beam">СТАТТІ</span>
+              <FileText className="text-bronze" size={32} />
+              <span className="text-xs font-bold text-muted-500">СТАТТІ</span>
             </div>
             <p className="font-syne text-4xl font-bold mb-2">{stats.totalArticles}</p>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               {stats.publishedArticles} опубліковано, {stats.draftArticles} чернеток
             </p>
           </div>
 
-          <div className="bg-white border-2 border-timber-dark p-6 relative">
+          <div className="bg-white border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
-              <Folder className="text-accent" size={32} />
-              <span className="text-xs font-bold text-timber-beam">КАТЕГОРІЇ</span>
+              <Folder className="text-bronze" size={32} />
+              <span className="text-xs font-bold text-muted-500">КАТЕГОРІЇ</span>
             </div>
             <p className="font-syne text-4xl font-bold mb-2">{stats.totalCategories}</p>
-            <p className="text-sm text-timber-beam">Активних категорій</p>
+            <p className="text-sm text-muted-500">Активних категорій</p>
           </div>
 
-          <div className="bg-white border-2 border-timber-dark p-6 relative">
+          <div className="bg-white border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
-              <Eye className="text-accent" size={32} />
-              <span className="text-xs font-bold text-timber-beam">ПЕРЕГЛЯДИ</span>
+              <Eye className="text-bronze" size={32} />
+              <span className="text-xs font-bold text-muted-500">ПЕРЕГЛЯДИ</span>
             </div>
             <p className="font-syne text-4xl font-bold mb-2">{stats.totalViews.toLocaleString()}</p>
-            <p className="text-sm text-timber-beam">Всього переглядів</p>
+            <p className="text-sm text-muted-500">Всього переглядів</p>
           </div>
 
-          <div className="bg-white border-2 border-timber-dark p-6 relative">
+          <div className="bg-white border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
-              <ThumbsUp className="text-accent" size={32} />
-              <span className="text-xs font-bold text-timber-beam">КОРИСНІСТЬ</span>
+              <ThumbsUp className="text-bronze" size={32} />
+              <span className="text-xs font-bold text-muted-500">КОРИСНІСТЬ</span>
             </div>
             <p className="font-syne text-4xl font-bold mb-2">
               {stats.averageHelpfulRate > 0 ? `${stats.averageHelpfulRate.toFixed(0)}%` : 'N/A'}
             </p>
-            <p className="text-sm text-timber-beam">Середня оцінка корисності</p>
+            <p className="text-sm text-muted-500">Середня оцінка корисності</p>
           </div>
         </div>
       )}
@@ -145,13 +145,13 @@ export default function AdminHelpPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Link
           href="/admin/help/articles/new"
-          className="bg-accent text-canvas border-2 border-timber-dark p-8 hover:shadow-[8px_8px_0px_0px_rgba(44,40,36,1)] transition-all group relative"
+          className="bg-bronze text-canvas border border-line rounded-lg p-8 hover:shadow-[8px_8px_0px_0px_rgba(44,40,36,1)] transition-all group relative"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-canvas/20">
+            <div className="p-4 bg-panel-900/20">
               <Plus size={32} className="text-canvas" />
             </div>
             <div>
@@ -163,31 +163,31 @@ export default function AdminHelpPage() {
 
         <Link
           href="/admin/help/categories"
-          className="bg-white border-2 border-timber-dark p-8 hover:border-accent transition-colors group relative"
+          className="bg-white border border-line rounded-lg p-8 hover:border-bronze transition-colors group relative"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-timber-dark/10 group-hover:bg-accent/10 transition-colors">
-              <Folder size={32} className="text-timber-dark group-hover:text-accent transition-colors" />
+            <div className="p-4 bg-timber-dark/10 group-hover:bg-bronze/10 transition-colors">
+              <Folder size={32} className="text-timber-dark group-hover:text-bronze transition-colors" />
             </div>
             <div>
-              <h2 className="font-syne text-2xl font-bold mb-1 group-hover:text-accent transition-colors">
+              <h2 className="font-syne text-2xl font-bold mb-1 group-hover:text-bronze transition-colors">
                 Категорії
               </h2>
-              <p className="text-timber-beam">Керування категоріями</p>
+              <p className="text-muted-500">Керування категоріями</p>
             </div>
           </div>
         </Link>
       </div>
 
       {/* Management Links */}
-      <div className="bg-white border-2 border-timber-dark relative">
+      <div className="bg-white border border-line rounded-lg relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
-        <div className="p-6 border-b-2 border-timber-dark/20">
+        <div className="p-6 border-b-2 border-line/20">
           <h2 className="font-syne text-xl font-bold">Управління контентом</h2>
         </div>
 
@@ -198,17 +198,17 @@ export default function AdminHelpPage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <FileText className="text-accent" size={24} />
+                <FileText className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-accent transition-colors">
+                  <h3 className="font-bold group-hover:text-bronze transition-colors">
                     Всі статті
                   </h3>
-                  <p className="text-sm text-timber-beam">
+                  <p className="text-sm text-muted-500">
                     Переглянути та редагувати всі статті довідки
                   </p>
                 </div>
               </div>
-              <span className="text-accent font-bold">→</span>
+              <span className="text-bronze font-bold">→</span>
             </div>
           </Link>
 
@@ -218,17 +218,17 @@ export default function AdminHelpPage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <MessageSquare className="text-accent" size={24} />
+                <MessageSquare className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-accent transition-colors">
+                  <h3 className="font-bold group-hover:text-bronze transition-colors">
                     Підказки
                   </h3>
-                  <p className="text-sm text-timber-beam">
+                  <p className="text-sm text-muted-500">
                     Контекстні підказки для інтерфейсу
                   </p>
                 </div>
               </div>
-              <span className="text-accent font-bold">→</span>
+              <span className="text-bronze font-bold">→</span>
             </div>
           </Link>
 
@@ -238,17 +238,17 @@ export default function AdminHelpPage() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <TrendingUp className="text-accent" size={24} />
+                <TrendingUp className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-accent transition-colors">
+                  <h3 className="font-bold group-hover:text-bronze transition-colors">
                     Аналітика
                   </h3>
-                  <p className="text-sm text-timber-beam">
+                  <p className="text-sm text-muted-500">
                     Статистика використання та ефективності
                   </p>
                 </div>
               </div>
-              <span className="text-accent font-bold">→</span>
+              <span className="text-bronze font-bold">→</span>
             </div>
           </Link>
         </div>

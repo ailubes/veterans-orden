@@ -18,16 +18,16 @@ export default async function AdminNotificationsPage() {
       <div className="mb-8">
         <Link
           href="/admin"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Назад до панелі
         </Link>
-        <p className="label text-accent mb-2">АДМІНІСТРУВАННЯ</p>
+        <p className="label text-bronze mb-2">АДМІНІСТРУВАННЯ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">
           Сповіщення
         </h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Надсилайте повідомлення членам мережі за різними критеріями
         </p>
       </div>

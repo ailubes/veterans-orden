@@ -20,9 +20,9 @@ export default function StreakCard({ streak }: StreakCardProps) {
     : 0;
 
   return (
-    <div className="border-2 border-timber-dark bg-canvas card-with-joints p-6">
+    <div className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
       <div className="flex items-center gap-2 mb-6">
-        <Flame className="w-6 h-6 text-accent" />
+        <Flame className="w-6 h-6 text-bronze" />
         <h3 className="font-syne text-xl font-bold text-timber-dark">
           Серія активності
         </h3>
@@ -32,7 +32,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
         {/* Current Streak */}
         <div>
           <div className="flex items-baseline gap-2 mb-2">
-            <span className="font-syne text-4xl font-bold text-accent">
+            <span className="font-syne text-4xl font-bold text-bronze">
               {streak.current}
             </span>
             <span className="font-mono text-sm text-timber-dark/60">
@@ -47,7 +47,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4">
           {/* Longest Streak */}
-          <div className="border border-timber-dark/20 bg-timber-dark/5 p-3">
+          <div className="border border-line/20 bg-timber-dark/5 p-3">
             <div className="flex items-center gap-2 mb-1">
               <Award className="w-4 h-4 text-timber-dark/60" />
               <span className="font-mono text-xs text-timber-dark/60">
@@ -60,7 +60,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
           </div>
 
           {/* Total Days */}
-          <div className="border border-timber-dark/20 bg-timber-dark/5 p-3">
+          <div className="border border-line/20 bg-timber-dark/5 p-3">
             <div className="flex items-center gap-2 mb-1">
               <Calendar className="w-4 h-4 text-timber-dark/60" />
               <span className="font-mono text-xs text-timber-dark/60">
@@ -91,7 +91,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
           </div>
           <div className="h-2 bg-timber-dark/10 rounded-full overflow-hidden">
             <div
-              className="h-full bg-accent rounded-full transition-all duration-500"
+              className="h-full bg-bronze rounded-full transition-all duration-500"
               style={{ width: `${Math.min(100, progressToMilestone)}%` }}
             />
           </div>
@@ -102,7 +102,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
 
         {/* Encouragement */}
         {streak.current === 0 && (
-          <div className="border-l-2 border-accent pl-3">
+          <div className="border-l-2 border-bronze pl-3">
             <p className="font-mono text-sm text-timber-dark/80">
               Почніть серію активності вже сьогодні!
             </p>
@@ -110,7 +110,7 @@ export default function StreakCard({ streak }: StreakCardProps) {
         )}
 
         {streak.current > 0 && streak.current < 7 && (
-          <div className="border-l-2 border-accent pl-3">
+          <div className="border-l-2 border-bronze pl-3">
             <p className="font-mono text-sm text-timber-dark/80">
               Продовжуйте! Серія набирає обертів 💪
             </p>

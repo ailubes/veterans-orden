@@ -172,7 +172,7 @@ export function MembersCSVImport() {
       </div>
 
       {/* Upload Card */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -181,12 +181,12 @@ export function MembersCSVImport() {
         <h3 className="font-bold mb-4">Завантаження CSV файлу</h3>
 
         <label className="block cursor-pointer">
-          <div className="border-2 border-dashed border-timber-dark p-8 text-center hover:bg-timber-dark/5 transition-colors">
-            <Upload className="w-12 h-12 mx-auto mb-3 text-timber-beam" />
+          <div className="border-2 border-dashed border-line p-8 text-center hover:bg-timber-dark/5 transition-colors">
+            <Upload className="w-12 h-12 mx-auto mb-3 text-muted-500" />
             <p className="font-bold mb-1">
               {file ? file.name : 'Оберіть CSV файл'}
             </p>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               або перетягніть файл сюди
             </p>
           </div>
@@ -201,7 +201,7 @@ export function MembersCSVImport() {
 
       {/* Preview */}
       {parsedData.length > 0 && !results && (
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -214,7 +214,7 @@ export function MembersCSVImport() {
           <div className="overflow-x-auto mb-4">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b-2 border-timber-dark">
+                <tr className="border-b-2 border-line">
                   <th className="text-left p-2 font-bold">#</th>
                   <th className="text-left p-2 font-bold">Ім&apos;я</th>
                   <th className="text-left p-2 font-bold">Прізвище</th>
@@ -225,8 +225,8 @@ export function MembersCSVImport() {
               </thead>
               <tbody>
                 {parsedData.slice(0, 10).map((row, index) => (
-                  <tr key={index} className="border-b border-timber-dark/10">
-                    <td className="p-2 text-timber-beam">{index + 1}</td>
+                  <tr key={index} className="border-b border-line/10">
+                    <td className="p-2 text-muted-500">{index + 1}</td>
                     <td className="p-2">{row.first_name}</td>
                     <td className="p-2">{row.last_name}</td>
                     <td className="p-2 font-mono text-xs">{row.email}</td>
@@ -239,7 +239,7 @@ export function MembersCSVImport() {
           </div>
 
           {parsedData.length > 10 && (
-            <p className="text-sm text-timber-beam mb-4">
+            <p className="text-sm text-muted-500 mb-4">
               Показано 10 з {parsedData.length} записів
             </p>
           )}
@@ -256,7 +256,7 @@ export function MembersCSVImport() {
 
       {/* Results */}
       {results && summary && (
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -266,8 +266,8 @@ export function MembersCSVImport() {
 
           {/* Summary */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-timber-dark/5 p-4 border border-timber-dark/20">
-              <p className="text-xs text-timber-beam mb-1">ВСЬОГО</p>
+            <div className="bg-timber-dark/5 p-4 border border-line/20">
+              <p className="text-xs text-muted-500 mb-1">ВСЬОГО</p>
               <p className="font-syne text-2xl font-bold">{summary.total}</p>
             </div>
             <div className="bg-green-50 p-4 border border-green-200">

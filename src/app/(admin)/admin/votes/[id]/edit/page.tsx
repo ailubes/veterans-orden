@@ -180,8 +180,8 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -190,7 +190,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
   if (error) {
     return (
       <div className="max-w-3xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
           <p className="text-red-600 font-bold mb-4">{error}</p>
           <Link href="/admin/votes" className="btn">
             НАЗАД ДО СПИСКУ
@@ -206,7 +206,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
       <div className="mb-6">
         <Link
           href={`/admin/votes/${voteId}`}
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО ГОЛОСУВАННЯ
@@ -215,7 +215,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
 
       {/* Header */}
       <div className="mb-6">
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ ГОЛОСУВАННЯ</p>
+        <p className="label text-bronze mb-2">РЕДАГУВАННЯ ГОЛОСУВАННЯ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">{formData.question}</h1>
       </div>
 
@@ -231,7 +231,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -246,7 +246,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 type="text"
                 value={formData.question}
                 onChange={(e) => setFormData({ ...formData, question: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -257,7 +257,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
                 placeholder="Додаткова інформація про голосування..."
               />
             </div>
@@ -268,7 +268,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 <select
                   value={formData.vote_type}
                   onChange={(e) => setFormData({ ...formData, vote_type: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="simple_majority">Проста більшість</option>
                   <option value="qualified_majority">Кваліфікована більшість</option>
@@ -282,7 +282,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 <select
                   value={formData.transparency}
                   onChange={(e) => setFormData({ ...formData, transparency: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="public">Публічне</option>
                   <option value="anonymous">Анонімне</option>
@@ -294,7 +294,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
         </div>
 
         {/* Date & Time */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -309,7 +309,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -319,7 +319,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 type="time"
                 value={formData.startTime}
                 onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -329,7 +329,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -339,7 +339,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                 type="time"
                 value={formData.endTime}
                 onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -347,7 +347,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
         </div>
 
         {/* Settings */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
@@ -373,7 +373,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
                   type="number"
                   value={formData.quorum_percentage}
                   onChange={(e) => setFormData({ ...formData, quorum_percentage: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="50"
                   min="1"
                   max="100"
@@ -396,7 +396,7 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
               >
                 <option value="draft">Чернетка</option>
                 <option value="active">Активне</option>

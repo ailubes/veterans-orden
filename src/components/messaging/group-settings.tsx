@@ -199,9 +199,9 @@ export function GroupSettings({
       case 'owner':
         return <Crown className="w-4 h-4 text-yellow-500" />;
       case 'admin':
-        return <Shield className="w-4 h-4 text-accent" />;
+        return <Shield className="w-4 h-4 text-bronze" />;
       default:
-        return <User className="w-4 h-4 text-timber-beam" />;
+        return <User className="w-4 h-4 text-muted-500" />;
     }
   };
 
@@ -255,7 +255,7 @@ export function GroupSettings({
                 )}
                 {canEditGroup && (
                   <button
-                    className="absolute -bottom-1 -right-1 p-1.5 bg-accent rounded-full text-canvas hover:bg-accent/90 transition-colors"
+                    className="absolute -bottom-1 -right-1 p-1.5 bg-bronze rounded-full text-canvas hover:bg-bronze/90 transition-colors"
                     onClick={() => {
                       // TODO: Implement avatar upload
                       alert('Завантаження аватара буде доступне незабаром');
@@ -275,20 +275,20 @@ export function GroupSettings({
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
                       placeholder="Назва групи"
-                      className="w-full px-3 py-1.5 border border-timber-dark/20 rounded text-sm focus:outline-none focus:border-timber-dark"
+                      className="w-full px-3 py-1.5 border border-line/20 rounded text-sm focus:outline-none focus:border-line"
                     />
                     <textarea
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
                       placeholder="Опис групи (необов'язково)"
-                      className="w-full px-3 py-1.5 border border-timber-dark/20 rounded text-sm focus:outline-none focus:border-timber-dark resize-none"
+                      className="w-full px-3 py-1.5 border border-line/20 rounded text-sm focus:outline-none focus:border-line resize-none"
                       rows={2}
                     />
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleSaveChanges}
                         disabled={saving || !editName.trim()}
-                        className="px-3 py-1 bg-accent text-canvas rounded text-sm font-medium hover:bg-accent/90 disabled:opacity-50"
+                        className="px-3 py-1 bg-bronze text-canvas rounded text-sm font-medium hover:bg-bronze/90 disabled:opacity-50"
                       >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Зберегти'}
                       </button>
@@ -298,7 +298,7 @@ export function GroupSettings({
                           setEditName(conversation.name || '');
                           setEditDescription(conversation.description || '');
                         }}
-                        className="px-3 py-1 text-sm text-timber-beam hover:text-timber-dark"
+                        className="px-3 py-1 text-sm text-muted-500 hover:text-timber-dark"
                       >
                         Скасувати
                       </button>
@@ -313,16 +313,16 @@ export function GroupSettings({
                       {canEditGroup && (
                         <button
                           onClick={() => setIsEditing(true)}
-                          className="p-1 text-timber-beam hover:text-timber-dark"
+                          className="p-1 text-muted-500 hover:text-timber-dark"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                       )}
                     </div>
                     {conversation.description && (
-                      <p className="text-sm text-timber-beam mt-1">{conversation.description}</p>
+                      <p className="text-sm text-muted-500 mt-1">{conversation.description}</p>
                     )}
-                    <p className="text-xs text-timber-beam mt-1">
+                    <p className="text-xs text-muted-500 mt-1">
                       {formatParticipantCount(conversation.participantCount)}
                     </p>
                   </div>
@@ -337,7 +337,7 @@ export function GroupSettings({
                 {canManageParticipants && (
                   <button
                     onClick={() => setIsAddParticipantsOpen(true)}
-                    className="flex items-center gap-1 text-sm text-accent hover:text-accent/80"
+                    className="flex items-center gap-1 text-sm text-bronze hover:text-bronze/80"
                   >
                     <UserPlus className="w-4 h-4" />
                     Додати
@@ -347,7 +347,7 @@ export function GroupSettings({
 
               {loading ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 animate-spin text-timber-beam" />
+                  <Loader2 className="w-6 h-6 animate-spin text-muted-500" />
                 </div>
               ) : (
                 <div className="space-y-1 max-h-[300px] overflow-y-auto">
@@ -361,7 +361,7 @@ export function GroupSettings({
                         key={participant.id}
                         className={cn(
                           'flex items-center gap-3 p-2 rounded-lg',
-                          isCurrentUser && 'bg-accent/10'
+                          isCurrentUser && 'bg-bronze/10'
                         )}
                       >
                         {/* Avatar */}
@@ -387,12 +387,12 @@ export function GroupSettings({
                             <p className="font-medium text-sm truncate">
                               {user.firstName} {user.lastName}
                               {isCurrentUser && (
-                                <span className="text-timber-beam ml-1">(ви)</span>
+                                <span className="text-muted-500 ml-1">(ви)</span>
                               )}
                             </p>
                             {getRoleIcon(participant.role)}
                           </div>
-                          <p className="text-xs text-timber-beam">
+                          <p className="text-xs text-muted-500">
                             {getRoleLabel(participant.role)}
                           </p>
                         </div>
@@ -401,7 +401,7 @@ export function GroupSettings({
                         {canManageThis && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="p-1.5 text-timber-beam hover:text-timber-dark rounded-lg hover:bg-timber-light/50">
+                              <button className="p-1.5 text-muted-500 hover:text-timber-dark rounded-lg hover:bg-timber-light/50">
                                 <MoreVertical className="w-4 h-4" />
                               </button>
                             </DropdownMenuTrigger>
@@ -412,7 +412,7 @@ export function GroupSettings({
                                     <DropdownMenuItem
                                       onClick={() => handleChangeRole(participant.userId, 'admin')}
                                     >
-                                      <Shield className="w-4 h-4 mr-2 text-accent" />
+                                      <Shield className="w-4 h-4 mr-2 text-bronze" />
                                       Зробити адміном
                                     </DropdownMenuItem>
                                   )}
@@ -445,7 +445,7 @@ export function GroupSettings({
             </div>
 
             {/* Leave Group Button */}
-            <div className="pt-4 border-t border-timber-dark/10">
+            <div className="pt-4 border-t border-line/10">
               <button
                 onClick={handleLeaveGroup}
                 className="flex items-center gap-2 w-full p-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"

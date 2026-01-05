@@ -124,19 +124,19 @@ export function GlobalSearch() {
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] bg-timber-dark/80 animate-in fade-in">
       {/* Search Dialog */}
       <div
-        className="w-full max-w-2xl bg-canvas border-4 border-accent shadow-2xl animate-in slide-in-from-top-4"
+        className="w-full max-w-2xl bg-panel-900 border-4 border-bronze shadow-2xl animate-in slide-in-from-top-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input */}
-        <div className="flex items-center gap-3 p-4 border-b-2 border-timber-dark">
-          <Search className="w-5 h-5 text-timber-beam" />
+        <div className="flex items-center gap-3 p-4 border-b-2 border-line">
+          <Search className="w-5 h-5 text-muted-500" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Пошук членів, подій, голосувань..."
-            className="flex-1 bg-transparent font-mono text-lg focus:outline-none placeholder:text-timber-beam/50"
+            className="flex-1 bg-transparent font-mono text-lg focus:outline-none placeholder:text-muted-500/50"
             autoFocus
           />
           <kbd className="px-2 py-1 bg-timber-dark/10 text-xs font-mono font-bold">
@@ -147,14 +147,14 @@ export function GlobalSearch() {
         {/* Results */}
         <div className="max-h-[60vh] overflow-y-auto">
           {loading && (
-            <div className="p-8 text-center text-timber-beam">
-              <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <div className="p-8 text-center text-muted-500">
+              <div className="w-8 h-8 border-2 border-bronze border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               <p className="text-sm">Пошук...</p>
             </div>
           )}
 
           {!loading && query.length >= 2 && results.length === 0 && (
-            <div className="p-8 text-center text-timber-beam">
+            <div className="p-8 text-center text-muted-500">
               <Search className="w-12 h-12 mx-auto mb-3 opacity-30" />
               <p className="text-sm">Нічого не знайдено</p>
               <p className="text-xs mt-1">Спробуйте інший запит</p>
@@ -162,7 +162,7 @@ export function GlobalSearch() {
           )}
 
           {!loading && query.length > 0 && query.length < 2 && (
-            <div className="p-8 text-center text-timber-beam">
+            <div className="p-8 text-center text-muted-500">
               <p className="text-sm">Введіть мінімум 2 символи</p>
             </div>
           )}
@@ -177,9 +177,9 @@ export function GlobalSearch() {
                   <button
                     key={`${result.type}-${result.id}`}
                     onClick={() => handleSelect(result)}
-                    className={`w-full flex items-center gap-4 p-4 border-b border-timber-dark/10 transition-colors text-left ${
+                    className={`w-full flex items-center gap-4 p-4 border-b border-line/10 transition-colors text-left ${
                       isSelected
-                        ? 'bg-accent/10 border-l-4 border-l-accent'
+                        ? 'bg-bronze/10 border-l-4 border-l-accent'
                         : 'hover:bg-timber-dark/5 border-l-4 border-l-transparent'
                     }`}
                   >
@@ -187,7 +187,7 @@ export function GlobalSearch() {
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center ${
                         isSelected
-                          ? 'bg-accent text-canvas'
+                          ? 'bg-bronze text-canvas'
                           : 'bg-timber-dark/10 text-timber-dark'
                       }`}
                     >
@@ -197,22 +197,22 @@ export function GlobalSearch() {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-bold text-timber-beam uppercase">
+                        <span className="text-xs font-bold text-muted-500 uppercase">
                           {TYPE_LABELS[result.type]}
                         </span>
-                        <span className="text-xs text-timber-beam/60">
+                        <span className="text-xs text-muted-500/60">
                           {result.meta}
                         </span>
                       </div>
                       <p className="font-bold truncate">{result.title}</p>
-                      <p className="text-sm text-timber-beam truncate">
+                      <p className="text-sm text-muted-500 truncate">
                         {result.subtitle}
                       </p>
                     </div>
 
                     {/* Arrow */}
                     {isSelected && (
-                      <ArrowRight className="w-5 h-5 text-accent" />
+                      <ArrowRight className="w-5 h-5 text-bronze" />
                     )}
                   </button>
                 );
@@ -249,7 +249,7 @@ export function GlobalSearch() {
                         router.push(link.url);
                         setIsOpen(false);
                       }}
-                      className="flex items-center gap-3 p-3 border-2 border-timber-dark hover:bg-timber-dark hover:text-canvas transition-colors text-left"
+                      className="flex items-center gap-3 p-3 border border-line rounded-lg hover:bg-timber-dark hover:text-canvas transition-colors text-left"
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-bold text-sm">{link.label}</span>
@@ -262,8 +262,8 @@ export function GlobalSearch() {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t-2 border-timber-dark bg-timber-dark/5">
-          <div className="flex items-center gap-4 text-xs text-timber-beam">
+        <div className="flex items-center justify-between px-4 py-3 border-t-2 border-line bg-timber-dark/5">
+          <div className="flex items-center gap-4 text-xs text-muted-500">
             <div className="flex items-center gap-1">
               <kbd className="px-1.5 py-0.5 bg-timber-dark/10 font-mono font-bold">
                 ↑
@@ -286,7 +286,7 @@ export function GlobalSearch() {
               setQuery('');
               setResults([]);
             }}
-            className="text-xs text-timber-beam hover:text-timber-dark"
+            className="text-xs text-muted-500 hover:text-timber-dark"
           >
             Закрити
           </button>

@@ -49,7 +49,7 @@ export function MessengerOverlay() {
       {/* Messenger Panel */}
       <div
         className={cn(
-          'absolute pointer-events-auto bg-canvas border-2 border-timber-dark shadow-2xl flex flex-col overflow-hidden transition-all duration-300',
+          'absolute pointer-events-auto bg-panel-900 border border-line rounded-lg shadow-2xl flex flex-col overflow-hidden transition-all duration-300',
           // Mobile: full screen
           'inset-0 sm:inset-auto',
           // Desktop: bottom right corner
@@ -59,12 +59,12 @@ export function MessengerOverlay() {
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-3 py-2.5 border-b-2 border-timber-dark bg-timber-dark text-canvas shrink-0">
+        <div className="flex items-center justify-between px-3 py-2.5 border-b-2 border-line bg-timber-dark text-canvas shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {activeView !== 'list' && (
               <button
                 onClick={backToList}
-                className="p-1.5 hover:bg-canvas/10 rounded transition-colors shrink-0"
+                className="p-1.5 hover:bg-panel-900/10 rounded transition-colors shrink-0"
                 aria-label="Назад"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -81,7 +81,7 @@ export function MessengerOverlay() {
               {activeView === 'new' && 'Нова розмова'}
             </h2>
             {activeView === 'list' && totalUnread > 0 && (
-              <span className="bg-accent text-canvas text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0">
+              <span className="bg-bronze text-canvas text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0">
                 {totalUnread > 99 ? '99+' : totalUnread}
               </span>
             )}
@@ -92,7 +92,7 @@ export function MessengerOverlay() {
             {activeView === 'list' && (
               <button
                 onClick={openNewConversation}
-                className="p-1.5 hover:bg-canvas/10 rounded transition-colors"
+                className="p-1.5 hover:bg-panel-900/10 rounded transition-colors"
                 aria-label="Нове повідомлення"
                 title="Нова розмова"
               >
@@ -104,7 +104,7 @@ export function MessengerOverlay() {
             {activeView === 'conversation' && isGroupConversation && (
               <button
                 onClick={() => setIsGroupSettingsOpen(true)}
-                className="p-1.5 hover:bg-canvas/10 rounded transition-colors"
+                className="p-1.5 hover:bg-panel-900/10 rounded transition-colors"
                 aria-label="Налаштування групи"
                 title="Налаштування групи"
               >
@@ -115,7 +115,7 @@ export function MessengerOverlay() {
             {/* Expand/Collapse (desktop only) */}
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="p-1.5 hover:bg-canvas/10 rounded transition-colors hidden sm:block"
+              className="p-1.5 hover:bg-panel-900/10 rounded transition-colors hidden sm:block"
               aria-label={isExpanded ? 'Згорнути' : 'Розгорнути'}
               title={isExpanded ? 'Згорнути' : 'Розгорнути'}
             >
@@ -129,7 +129,7 @@ export function MessengerOverlay() {
             {/* Close */}
             <button
               onClick={closeMessenger}
-              className="p-1.5 hover:bg-canvas/10 rounded transition-colors"
+              className="p-1.5 hover:bg-panel-900/10 rounded transition-colors"
               aria-label="Закрити"
             >
               <X className="w-4 h-4" />
@@ -143,14 +143,14 @@ export function MessengerOverlay() {
             // Expanded: Split view (list on left, conversation on right)
             <>
               {/* Conversation List Sidebar */}
-              <div className="w-[280px] border-r-2 border-timber-dark/20 flex flex-col shrink-0">
+              <div className="w-[280px] border-r-2 border-line/20 flex flex-col shrink-0">
                 <ConversationList compact />
               </div>
 
               {/* Main Content */}
               <div className="flex-1 flex flex-col overflow-hidden">
                 {activeView === 'list' && (
-                  <div className="flex-1 flex items-center justify-center text-timber-beam">
+                  <div className="flex-1 flex items-center justify-center text-muted-500">
                     <div className="text-center p-6">
                       <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-40" />
                       <p className="text-sm">Виберіть розмову або почніть нову</p>

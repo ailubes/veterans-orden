@@ -60,13 +60,13 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
 
   if (submitted) {
     return (
-      <div className="bg-white border-2 border-timber-dark p-6 text-center relative">
+      <div className="bg-white border border-line rounded-lg p-6 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
-        <CheckCircle className="mx-auto mb-3 text-accent" size={48} />
+        <CheckCircle className="mx-auto mb-3 text-bronze" size={48} />
         <h3 className="font-syne text-xl font-bold mb-2">Дякуємо за відгук!</h3>
-        <p className="text-timber-beam">
+        <p className="text-muted-500">
           Ваша думка допоможе нам покращити документацію.
         </p>
       </div>
@@ -74,14 +74,14 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
   }
 
   return (
-    <div className="bg-white border-2 border-timber-dark p-6 relative">
+    <div className="bg-white border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
       <div className="joint joint-br" />
 
       <h3 className="font-syne text-lg font-bold mb-4 flex items-center gap-2">
-        <MessageSquare className="text-accent" size={20} />
+        <MessageSquare className="text-bronze" size={20} />
         Чи була ця стаття корисною?
       </h3>
 
@@ -114,7 +114,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
-              className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono resize-none"
+              className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-mono resize-none"
               placeholder="Напишіть ваші коментарі..."
             />
           </div>

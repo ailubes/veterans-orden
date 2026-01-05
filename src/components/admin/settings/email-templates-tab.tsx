@@ -95,18 +95,18 @@ export default function EmailTemplatesTab({
 
   if (!canEdit) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-4">Email шаблони</h2>
-        <div className="p-8 border-2 border-accent bg-canvas/50 text-center">
-          <p className="text-accent font-medium">
+        <div className="p-8 border-2 border-bronze bg-panel-900/50 text-center">
+          <p className="text-bronze font-medium">
             ⚠️ Доступ заборонено
           </p>
-          <p className="text-timber-beam text-sm mt-2">
+          <p className="text-muted-500 text-sm mt-2">
             Тільки адміністратори можуть переглядати і редагувати email шаблони
           </p>
         </div>
@@ -116,18 +116,18 @@ export default function EmailTemplatesTab({
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
 
   return (
-    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+    <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
       {/* Joints */}
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
@@ -136,13 +136,13 @@ export default function EmailTemplatesTab({
 
       <div className="mb-6">
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Email шаблони</h2>
-        <p className="text-timber-beam text-sm">
+        <p className="text-muted-500 text-sm">
           Управління шаблонами автоматичних листів системи
         </p>
       </div>
 
       {/* Test Email Input */}
-      <div className="mb-6 p-4 border-2 border-timber-dark bg-canvas">
+      <div className="mb-6 p-4 border border-line rounded-lg bg-panel-900">
         <Label htmlFor="test-email" className="block mb-2">
           Email для тестових листів
         </Label>
@@ -154,7 +154,7 @@ export default function EmailTemplatesTab({
           onChange={(e) => setTestEmail(e.target.value)}
           className="max-w-md"
         />
-        <p className="text-xs text-timber-beam mt-1">
+        <p className="text-xs text-muted-500 mt-1">
           Введіть email, на який будуть надсилатися тестові листи
         </p>
       </div>
@@ -164,7 +164,7 @@ export default function EmailTemplatesTab({
         {templates.map((template) => (
           <div
             key={template.id}
-            className="border-2 border-timber-dark p-4 bg-canvas card-with-joints"
+            className="border border-line rounded-lg p-4 bg-panel-900 card-with-joints"
           >
             {/* Joints */}
             <div className="joint joint-tl" />
@@ -176,7 +176,7 @@ export default function EmailTemplatesTab({
               {/* Template Info */}
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <Mail className="w-5 h-5 text-accent" />
+                  <Mail className="w-5 h-5 text-bronze" />
                   <h3 className="font-syne font-bold text-lg">{template.name}</h3>
                   {template.isActive ? (
                     <CheckCircle className="w-4 h-4 text-green-600" />
@@ -185,9 +185,9 @@ export default function EmailTemplatesTab({
                   )}
                 </div>
 
-                <p className="text-timber-beam text-sm mb-2">{template.description}</p>
+                <p className="text-muted-500 text-sm mb-2">{template.description}</p>
 
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-timber-beam">
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-500">
                   <span>
                     <strong>Ключ:</strong> {template.templateKey}
                   </span>
@@ -245,8 +245,8 @@ export default function EmailTemplatesTab({
       </div>
 
       {/* Info Box */}
-      <div className="mt-6 p-4 border-2 border-accent bg-canvas/50">
-        <p className="text-sm text-accent">
+      <div className="mt-6 p-4 border-2 border-bronze bg-panel-900/50">
+        <p className="text-sm text-bronze">
           💡 <strong>Порада:</strong> Шаблони використовують систему змінних{' '}
           <code className="bg-timber-dark text-canvas px-1">{'{{variable}}'}</code>.
           Відредагуйте шаблон, щоб побачити доступні змінні для кожного типу листа.

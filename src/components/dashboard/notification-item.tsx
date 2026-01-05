@@ -41,7 +41,7 @@ export function NotificationItem({
         className={`
           w-full text-left p-3 transition-colors
           hover:bg-timber-dark/5
-          ${!notification.isRead ? 'bg-accent/5' : ''}
+          ${!notification.isRead ? 'bg-bronze/5' : ''}
         `}
       >
         <div className="flex gap-3">
@@ -52,12 +52,12 @@ export function NotificationItem({
             <p className={`text-sm truncate ${!notification.isRead ? 'font-semibold' : ''}`}>
               {notification.title}
             </p>
-            <p className="text-xs text-timber-beam mt-0.5">
+            <p className="text-xs text-muted-500 mt-0.5">
               {formatRelativeTime(notification.deliveredAt)}
             </p>
           </div>
           {!notification.isRead && (
-            <div className="flex-shrink-0 w-2 h-2 rounded-full bg-accent mt-2" />
+            <div className="flex-shrink-0 w-2 h-2 rounded-full bg-bronze mt-2" />
           )}
         </div>
       </button>
@@ -69,9 +69,9 @@ export function NotificationItem({
     <div
       onClick={handleClick}
       className={`
-        p-4 border-2 border-timber-dark/10 rounded-lg cursor-pointer
-        transition-all hover:border-timber-dark/20
-        ${!notification.isRead ? 'bg-accent/5 border-accent/20' : 'bg-white'}
+        p-4 border border-line rounded-lg/10 rounded-lg cursor-pointer
+        transition-all hover:border-line/20
+        ${!notification.isRead ? 'bg-bronze/5 border-bronze/20' : 'bg-white'}
       `}
     >
       <div className="flex gap-4">
@@ -84,15 +84,15 @@ export function NotificationItem({
               {notification.title}
             </h3>
             {!notification.isRead && (
-              <span className="flex-shrink-0 px-2 py-0.5 text-xs font-medium bg-accent text-white rounded">
+              <span className="flex-shrink-0 px-2 py-0.5 text-xs font-medium bg-bronze text-white rounded">
                 Нове
               </span>
             )}
           </div>
-          <p className="text-sm text-timber-beam mt-1 line-clamp-2">
+          <p className="text-sm text-muted-500 mt-1 line-clamp-2">
             {notification.message}
           </p>
-          <div className="flex items-center gap-2 mt-2 text-xs text-timber-beam/70">
+          <div className="flex items-center gap-2 mt-2 text-xs text-muted-500/70">
             <span>{formatRelativeTime(notification.deliveredAt)}</span>
             {notification.sender && (
               <>

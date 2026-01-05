@@ -118,27 +118,27 @@ export default function RoleManagementTab({
   }
 
   function getRoleBadgeColor(role: UserRole): string {
-    if (role === 'super_admin') return 'bg-accent text-canvas';
+    if (role === 'super_admin') return 'bg-bronze text-canvas';
     if (role === 'admin') return 'bg-timber-dark text-canvas';
     if (role === 'regional_leader') return 'bg-timber-beam text-canvas';
-    return 'bg-canvas text-timber-dark border-2 border-timber-dark';
+    return 'bg-panel-900 text-timber-dark border border-line rounded-lg';
   }
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
 
   return (
     <>
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
         {/* Joints */}
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
@@ -147,15 +147,15 @@ export default function RoleManagementTab({
 
         <div className="mb-6">
           <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Управління ролями</h2>
-          <p className="text-timber-beam text-sm">
+          <p className="text-muted-500 text-sm">
             Користувачі з підвищеними привілеями та їх ролі
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-          <div className="border-2 border-timber-dark p-4">
-            <div className="flex items-center gap-2 text-timber-beam mb-1">
+          <div className="border border-line rounded-lg p-4">
+            <div className="flex items-center gap-2 text-muted-500 mb-1">
               <Shield className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide">Адміністратори</span>
             </div>
@@ -164,8 +164,8 @@ export default function RoleManagementTab({
             </p>
           </div>
 
-          <div className="border-2 border-timber-dark p-4">
-            <div className="flex items-center gap-2 text-timber-beam mb-1">
+          <div className="border border-line rounded-lg p-4">
+            <div className="flex items-center gap-2 text-muted-500 mb-1">
               <UserCog className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide">Регіональні лідери</span>
             </div>
@@ -174,8 +174,8 @@ export default function RoleManagementTab({
             </p>
           </div>
 
-          <div className="border-2 border-timber-dark p-4">
-            <div className="flex items-center gap-2 text-timber-beam mb-1">
+          <div className="border border-line rounded-lg p-4">
+            <div className="flex items-center gap-2 text-muted-500 mb-1">
               <Users className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide">Лідери груп</span>
             </div>
@@ -188,32 +188,32 @@ export default function RoleManagementTab({
         {/* Mobile Cards */}
         <div className="space-y-3 md:hidden">
           {users.length === 0 ? (
-            <div className="text-center text-timber-beam py-8 border-2 border-timber-dark">
+            <div className="text-center text-muted-500 py-8 border border-line rounded-lg">
               Немає користувачів з підвищеними ролями
             </div>
           ) : (
             users.map((user) => (
               <div
                 key={user.id}
-                className="border-2 border-timber-dark p-4"
+                className="border border-line rounded-lg p-4"
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold">{user.first_name} {user.last_name}</h3>
-                    <p className="text-xs text-timber-beam truncate">{user.email}</p>
+                    <p className="text-xs text-muted-500 truncate">{user.email}</p>
                   </div>
                   <span className={`px-2 py-1 text-xs rounded flex-shrink-0 ${getRoleBadgeColor(user.role)}`}>
                     {getRoleLabel(user.role)}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-timber-beam mb-3">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-500 mb-3">
                   {user.oblast?.name && (
                     <span className="px-2 py-1 bg-timber-dark/10">{user.oblast.name}</span>
                   )}
                   <span>Рефералів: {user.referral_count || 0}</span>
                 </div>
                 {assignableRoles.length > 0 && (
-                  <div className="pt-3 border-t border-timber-dark/10">
+                  <div className="pt-3 border-t border-line/10">
                     <Select
                       value={user.role}
                       onValueChange={(value) => handleRoleChange(user, value as UserRole)}
@@ -237,10 +237,10 @@ export default function RoleManagementTab({
         </div>
 
         {/* Desktop Table */}
-        <div className="hidden md:block border-2 border-timber-dark overflow-x-auto">
+        <div className="hidden md:block border border-line rounded-lg overflow-x-auto">
           <Table className="min-w-[600px]">
             <TableHeader>
-              <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
+              <TableRow className="border-b-2 border-line hover:bg-transparent">
                 <TableHead className="font-syne font-bold">Ім&apos;я</TableHead>
                 <TableHead className="font-syne font-bold">Email</TableHead>
                 <TableHead className="font-syne font-bold">Область</TableHead>
@@ -251,7 +251,7 @@ export default function RoleManagementTab({
             <TableBody>
               {users.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-timber-beam py-8">
+                  <TableCell colSpan={5} className="text-center text-muted-500 py-8">
                     Немає користувачів з підвищеними ролями
                   </TableCell>
                 </TableRow>
@@ -261,7 +261,7 @@ export default function RoleManagementTab({
                     <TableCell className="font-medium">
                       {user.first_name} {user.last_name}
                     </TableCell>
-                    <TableCell className="text-sm text-timber-beam">{user.email}</TableCell>
+                    <TableCell className="text-sm text-muted-500">{user.email}</TableCell>
                     <TableCell className="text-sm">{user.oblast?.name || '-'}</TableCell>
                     <TableCell className="text-sm">{user.referral_count || 0}</TableCell>
                     <TableCell>
@@ -299,10 +299,10 @@ export default function RoleManagementTab({
 
       {/* Confirmation Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="border-2 border-timber-dark">
+        <DialogContent className="border border-line rounded-lg">
           <DialogHeader>
             <DialogTitle className="font-syne text-2xl">Підтвердити зміну ролі</DialogTitle>
-            <DialogDescription className="text-timber-beam">
+            <DialogDescription className="text-muted-500">
               Ви впевнені, що хочете змінити роль користувача?
             </DialogDescription>
           </DialogHeader>
@@ -319,8 +319,8 @@ export default function RoleManagementTab({
                 <strong>Нова роль:</strong> {getRoleLabel(newRole)}
               </p>
 
-              <div className="mt-4 p-4 border-2 border-accent bg-canvas/50">
-                <p className="text-sm text-accent">
+              <div className="mt-4 p-4 border-2 border-bronze bg-panel-900/50">
+                <p className="text-sm text-bronze">
                   ⚠️ Зміна ролі вплине на права доступу користувача
                 </p>
               </div>

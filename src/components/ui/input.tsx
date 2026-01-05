@@ -28,22 +28,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           id={inputId}
           className={cn(
-            'w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-base',
-            'placeholder:text-timber-beam/50',
-            'focus:outline-none focus:border-accent focus:ring-0',
+            'w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-base',
+            'placeholder:text-muted-500/50',
+            'focus:outline-none focus:border-bronze focus:ring-0',
             'transition-colors duration-200',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            error && 'border-accent',
+            error && 'border-bronze',
             className
           )}
           ref={ref}
           {...props}
         />
         {hint && !error && (
-          <p className="mt-2 font-mono text-xs text-timber-beam">{hint}</p>
+          <p className="mt-2 font-mono text-xs text-muted-500">{hint}</p>
         )}
         {error && (
-          <p className="mt-2 font-mono text-xs text-accent">{error}</p>
+          <p className="mt-2 font-mono text-xs text-bronze">{error}</p>
         )}
       </div>
     );

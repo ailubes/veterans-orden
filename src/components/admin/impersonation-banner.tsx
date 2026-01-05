@@ -96,7 +96,7 @@ export default function ImpersonationBanner() {
   if (loading || !session) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-accent border-b-4 border-timber-dark">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-bronze border-b-4 border-line">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-4">
@@ -123,11 +123,11 @@ export default function ImpersonationBanner() {
           <button
             onClick={endImpersonation}
             disabled={ending}
-            className="btn-outline bg-canvas text-accent border-2 border-canvas hover:bg-canvas/90 hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base whitespace-nowrap"
+            className="btn-outline bg-panel-900 text-bronze border-2 border-canvas hover:bg-panel-900/90 hover:text-bronze transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm sm:text-base whitespace-nowrap"
           >
             {ending ? (
               <>
-                <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-bronze border-t-transparent rounded-full animate-spin" />
                 Завершення...
               </>
             ) : (

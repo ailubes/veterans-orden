@@ -37,7 +37,7 @@ export default async function LeaderboardPage() {
     if (index === 0) return <Trophy className="text-yellow-500" size={24} />;
     if (index === 1) return <Medal className="text-gray-400" size={24} />;
     if (index === 2) return <Medal className="text-amber-600" size={24} />;
-    return <span className="w-6 h-6 flex items-center justify-center font-bold text-timber-beam">{index + 1}</span>;
+    return <span className="w-6 h-6 flex items-center justify-center font-bold text-muted-500">{index + 1}</span>;
   };
 
   return (
@@ -56,7 +56,7 @@ export default async function LeaderboardPage() {
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
-          <p className="label text-accent mb-4">ВАШ СТАТУС</p>
+          <p className="label text-bronze mb-4">ВАШ СТАТУС</p>
 
           <div className="grid grid-cols-3 gap-3 sm:gap-6">
             <div>
@@ -79,12 +79,12 @@ export default async function LeaderboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top by Points */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
           <div className="flex items-center gap-2 mb-6">
-            <Star className="text-accent" size={20} />
+            <Star className="text-bronze" size={20} />
             <h2 className="font-syne text-xl font-bold">Топ за балами</h2>
           </div>
 
@@ -95,7 +95,7 @@ export default async function LeaderboardPage() {
                   key={member.id}
                   className={`flex items-center gap-3 p-3 ${
                     member.id === profile?.id
-                      ? 'bg-accent/10 border border-accent'
+                      ? 'bg-bronze/10 border border-bronze'
                       : 'bg-timber-dark/5'
                   }`}
                 >
@@ -105,33 +105,33 @@ export default async function LeaderboardPage() {
                       {member.first_name} {member.last_name?.charAt(0)}.
                       {member.id === profile?.id && ' (ви)'}
                     </p>
-                    <p className="text-xs text-timber-beam">
+                    <p className="text-xs text-muted-500">
                       Рівень {member.level || 1}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-syne font-bold text-accent">
+                    <p className="font-syne font-bold text-bronze">
                       {member.points || 0}
                     </p>
-                    <p className="text-xs text-timber-beam">балів</p>
+                    <p className="text-xs text-muted-500">балів</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-timber-beam text-center py-8">
+            <p className="text-sm text-muted-500 text-center py-8">
               Поки що немає даних
             </p>
           )}
         </div>
 
         {/* Top by Referrals */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
           <div className="flex items-center gap-2 mb-6">
-            <TrendingUp className="text-accent" size={20} />
+            <TrendingUp className="text-bronze" size={20} />
             <h2 className="font-syne text-xl font-bold">Топ рекрутерів</h2>
           </div>
 
@@ -142,7 +142,7 @@ export default async function LeaderboardPage() {
                   key={member.id}
                   className={`flex items-center gap-3 p-3 ${
                     member.id === profile?.id
-                      ? 'bg-accent/10 border border-accent'
+                      ? 'bg-bronze/10 border border-bronze'
                       : 'bg-timber-dark/5'
                   }`}
                 >
@@ -154,16 +154,16 @@ export default async function LeaderboardPage() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-syne font-bold text-accent">
+                    <p className="font-syne font-bold text-bronze">
                       {member.referral_count || 0}
                     </p>
-                    <p className="text-xs text-timber-beam">запрошено</p>
+                    <p className="text-xs text-muted-500">запрошено</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-timber-beam text-center py-8">
+            <p className="text-sm text-muted-500 text-center py-8">
               Поки що немає даних
             </p>
           )}
@@ -171,7 +171,7 @@ export default async function LeaderboardPage() {
       </div>
 
       {/* Levels Info */}
-      <div className="mt-8 bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="mt-8 bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
 
         <h2 className="font-syne text-xl font-bold mb-4">Система рівнів</h2>
@@ -188,13 +188,13 @@ export default async function LeaderboardPage() {
               key={lvl.level}
               className={`p-3 text-center ${
                 (profile?.level || 1) >= lvl.level
-                  ? 'bg-accent/10 border border-accent'
+                  ? 'bg-bronze/10 border border-bronze'
                   : 'bg-timber-dark/5'
               }`}
             >
               <p className="font-syne text-2xl font-bold">{lvl.level}</p>
               <p className="text-sm font-bold">{lvl.name}</p>
-              <p className="text-xs text-timber-beam">{lvl.points}+ балів</p>
+              <p className="text-xs text-muted-500">{lvl.points}+ балів</p>
             </div>
           ))}
         </div>

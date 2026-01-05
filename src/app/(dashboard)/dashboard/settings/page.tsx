@@ -457,46 +457,46 @@ export default function SettingsPage() {
       </div>
 
       {/* Account Summary */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-6">ІНФОРМАЦІЯ ПРО АКАУНТ</p>
+        <p className="label text-bronze mb-6">ІНФОРМАЦІЯ ПРО АКАУНТ</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           <div className="text-center p-4 bg-timber-dark/5 rounded">
             <Star className="w-6 h-6 mx-auto mb-2 text-amber-500" />
             <p className="font-syne text-2xl font-bold">{user.points}</p>
-            <p className="text-xs text-timber-beam">Балів</p>
+            <p className="text-xs text-muted-500">Балів</p>
           </div>
           <div className="text-center p-4 bg-timber-dark/5 rounded">
-            <Award className="w-6 h-6 mx-auto mb-2 text-accent" />
+            <Award className="w-6 h-6 mx-auto mb-2 text-bronze" />
             <p className="font-syne text-2xl font-bold">{user.level}</p>
-            <p className="text-xs text-timber-beam">Рівень</p>
+            <p className="text-xs text-muted-500">Рівень</p>
           </div>
           <div className="text-center p-4 bg-timber-dark/5 rounded">
             <Users className="w-6 h-6 mx-auto mb-2 text-green-600" />
             <p className="font-syne text-2xl font-bold">{user.referralCount}</p>
-            <p className="text-xs text-timber-beam">Запрошено</p>
+            <p className="text-xs text-muted-500">Запрошено</p>
           </div>
           <div className="text-center p-4 bg-timber-dark/5 rounded">
             <Shield className="w-6 h-6 mx-auto mb-2 text-blue-600" />
             <p className="font-syne text-sm font-bold">{getRoleName(user.role)}</p>
-            <p className="text-xs text-timber-beam">Роль</p>
+            <p className="text-xs text-muted-500">Роль</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div className="flex items-center gap-3">
-            <Calendar className="w-4 h-4 text-timber-beam" />
-            <span className="text-timber-beam">Член з:</span>
+            <Calendar className="w-4 h-4 text-muted-500" />
+            <span className="text-muted-500">Член з:</span>
             <span className="font-medium">{formatDate(user.memberSince)}</span>
           </div>
           <div className="flex items-center gap-3">
-            <MapPin className="w-4 h-4 text-timber-beam" />
-            <span className="text-timber-beam">Локація:</span>
+            <MapPin className="w-4 h-4 text-muted-500" />
+            <span className="text-muted-500">Локація:</span>
             <span className="font-medium">
               {user.settlementName
                 ? `${user.settlementName}, ${user.oblastNameKatottg || ''}`
@@ -509,13 +509,13 @@ export default function SettingsPage() {
       </div>
 
       {/* Referral Section */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-6">РЕФЕРАЛЬНА ПРОГРАМА</p>
+        <p className="label text-bronze mb-6">РЕФЕРАЛЬНА ПРОГРАМА</p>
 
         {/* Who referred you */}
         {user.referredByName && (
@@ -531,12 +531,12 @@ export default function SettingsPage() {
         <div className="mb-4">
           <label className="label block mb-2">ВАШ РЕФЕРАЛЬНИЙ КОД</label>
           <div className="flex items-center gap-2">
-            <div className="flex-1 px-4 py-3 bg-timber-dark/5 border-2 border-timber-dark font-mono text-lg font-bold tracking-wider">
+            <div className="flex-1 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg font-mono text-lg font-bold tracking-wider">
               {user.referralCode}
             </div>
             <button
               onClick={copyReferralLink}
-              className="px-4 py-3 border-2 border-timber-dark hover:bg-timber-dark hover:text-white transition-colors flex items-center gap-2"
+              className="px-4 py-3 border border-line rounded-lg hover:bg-timber-dark hover:text-white transition-colors flex items-center gap-2"
               title="Скопіювати посилання"
             >
               {copied ? (
@@ -552,7 +552,7 @@ export default function SettingsPage() {
               )}
             </button>
           </div>
-          <p className="text-xs text-timber-beam mt-2">
+          <p className="text-xs text-muted-500 mt-2">
             Поділіться цим кодом з друзями, щоб запросити їх до Мережі
           </p>
         </div>
@@ -561,11 +561,11 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between p-4 bg-timber-dark/5 rounded">
           <div>
             <p className="font-bold">Запрошено людей</p>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Кожне успішне запрошення = +50 балів
             </p>
           </div>
-          <p className="font-syne text-3xl font-bold text-accent">
+          <p className="font-syne text-3xl font-bold text-bronze">
             {user.referralCount}
           </p>
         </div>
@@ -573,13 +573,13 @@ export default function SettingsPage() {
 
       {/* Message to Leader Section */}
       {(user.referredById || user.regionalLeaderId) && (
-        <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
-          <p className="label text-accent mb-6">НАПИСАТИ ЛІДЕРУ</p>
+          <p className="label text-bronze mb-6">НАПИСАТИ ЛІДЕРУ</p>
 
           <MessageToLeader
             referrerId={user.referredById}
@@ -592,13 +592,13 @@ export default function SettingsPage() {
       )}
 
       {/* Profile Photo */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-6">ФОТО ПРОФІЛЮ</p>
+        <p className="label text-bronze mb-6">ФОТО ПРОФІЛЮ</p>
 
         <ProfilePhotoUpload
           currentAvatarUrl={user.avatarUrl}
@@ -611,13 +611,13 @@ export default function SettingsPage() {
       </div>
 
       {/* Profile Form */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-6">ОСОБИСТІ ДАНІ</p>
+        <p className="label text-bronze mb-6">ОСОБИСТІ ДАНІ</p>
 
         <form onSubmit={handleUpdateProfile} className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -627,7 +627,7 @@ export default function SettingsPage() {
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               />
             </div>
             <div>
@@ -636,7 +636,7 @@ export default function SettingsPage() {
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               />
             </div>
           </div>
@@ -649,7 +649,7 @@ export default function SettingsPage() {
                 value={patronymic}
                 onChange={(e) => setPatronymic(e.target.value)}
                 placeholder="Необов'язково"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               />
             </div>
             <div>
@@ -657,7 +657,7 @@ export default function SettingsPage() {
               <select
                 value={sex || 'not_specified'}
                 onChange={(e) => setSex(e.target.value as UserSex)}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               >
                 <option value="not_specified">Не вказано</option>
                 <option value="male">Чоловік</option>
@@ -676,7 +676,7 @@ export default function SettingsPage() {
                 type="email"
                 value={user.email}
                 disabled
-                className="w-full px-4 py-3 bg-timber-beam/10 border-2 border-timber-dark font-mono text-sm opacity-60 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
               />
             </div>
             <div>
@@ -688,7 +688,7 @@ export default function SettingsPage() {
                 type="tel"
                 value={user.phone || '—'}
                 disabled
-                className="w-full px-4 py-3 bg-timber-beam/10 border-2 border-timber-dark font-mono text-sm opacity-60 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
               />
             </div>
           </div>
@@ -702,13 +702,13 @@ export default function SettingsPage() {
               type="text"
               value={formatDate(user.dateOfBirth)}
               disabled
-              className="w-full px-4 py-3 bg-timber-beam/10 border-2 border-timber-dark font-mono text-sm opacity-60 cursor-not-allowed"
+              className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
             />
           </div>
 
           {/* Location Section */}
-          <div className="border-t border-timber-dark/20 pt-6 mt-6">
-            <p className="label text-accent mb-4 flex items-center gap-2">
+          <div className="border-t border-line/20 pt-6 mt-6">
+            <p className="label text-bronze mb-4 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               ЛОКАЦІЯ
             </p>
@@ -735,18 +735,18 @@ export default function SettingsPage() {
             />
 
             {/* Info about location change restriction */}
-            <p className="text-xs text-timber-beam mt-2">
+            <p className="text-xs text-muted-500 mt-2">
               Локацію можна змінювати раз на 30 днів для забезпечення чесності виборчого процесу.
             </p>
           </div>
 
           {/* Delivery Address Section */}
-          <div className="border-t border-timber-dark/20 pt-6 mt-2">
-            <p className="label text-accent mb-4 flex items-center gap-2">
+          <div className="border-t border-line/20 pt-6 mt-2">
+            <p className="label text-bronze mb-4 flex items-center gap-2">
               <Home className="w-4 h-4" />
               АДРЕСА ДОСТАВКИ
             </p>
-            <p className="text-xs text-timber-beam mb-4">
+            <p className="text-xs text-muted-500 mb-4">
               Вкажіть адресу для отримання матеріалів Мережі
             </p>
 
@@ -758,7 +758,7 @@ export default function SettingsPage() {
                   value={streetAddress}
                   onChange={(e) => setStreetAddress(e.target.value)}
                   placeholder="Наприклад: вул. Хрещатик, 1, кв. 10"
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 />
               </div>
 
@@ -771,7 +771,7 @@ export default function SettingsPage() {
                     onChange={(e) => setPostalCode(e.target.value)}
                     placeholder="01001"
                     maxLength={10}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   />
                 </div>
               </div>
@@ -779,12 +779,12 @@ export default function SettingsPage() {
           </div>
 
           {/* Nova Poshta Section */}
-          <div className="border-t border-timber-dark/20 pt-6 mt-2">
-            <p className="label text-accent mb-4 flex items-center gap-2">
+          <div className="border-t border-line/20 pt-6 mt-2">
+            <p className="label text-bronze mb-4 flex items-center gap-2">
               <Package className="w-4 h-4" />
               НОВА ПОШТА
             </p>
-            <p className="text-xs text-timber-beam mb-4">
+            <p className="text-xs text-muted-500 mb-4">
               Вкажіть відділення Нової Пошти для отримання посилок
             </p>
 
@@ -796,7 +796,7 @@ export default function SettingsPage() {
             />
           </div>
 
-          <p className="text-xs text-timber-beam mt-6">
+          <p className="text-xs text-muted-500 mt-6">
             Для зміни інших особистих даних (телефон, дата народження) зверніться до адміністратора
           </p>
 
@@ -823,18 +823,18 @@ export default function SettingsPage() {
       </div>
 
       {/* Verification Status */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-6">СТАТУС ВЕРИФІКАЦІЇ</p>
+        <p className="label text-bronze mb-6">СТАТУС ВЕРИФІКАЦІЇ</p>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
             <div className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-timber-beam" />
+              <Mail className="w-4 h-4 text-muted-500" />
               <span>Електронна пошта</span>
             </div>
             {user.isEmailVerified ? (
@@ -848,7 +848,7 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
             <div className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-timber-beam" />
+              <Phone className="w-4 h-4 text-muted-500" />
               <span>Телефон</span>
             </div>
             {user.isPhoneVerified ? (
@@ -862,7 +862,7 @@ export default function SettingsPage() {
 
           <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
             <div className="flex items-center gap-3">
-              <Shield className="w-4 h-4 text-timber-beam" />
+              <Shield className="w-4 h-4 text-muted-500" />
               <span>Особистість</span>
             </div>
             {user.isIdentityVerified ? (
@@ -877,28 +877,28 @@ export default function SettingsPage() {
       </div>
 
       {/* Membership */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4">ЧЛЕНСТВО</p>
+        <p className="label text-bronze mb-4">ЧЛЕНСТВО</p>
 
         {user.membershipTier === 'free' ? (
           <>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="font-syne text-xl font-bold">Безкоштовний план</h3>
-                <p className="text-sm text-timber-beam">Базові можливості Мережі</p>
+                <p className="text-sm text-muted-500">Базові можливості Мережі</p>
               </div>
               <div className="text-right">
                 <p className="font-syne text-2xl font-bold">0 ₴</p>
-                <p className="text-xs text-timber-beam">/ місяць</p>
+                <p className="text-xs text-muted-500">/ місяць</p>
               </div>
             </div>
 
-            <div className="border-t border-timber-dark/20 pt-6">
+            <div className="border-t border-line/20 pt-6">
               <p className="font-bold mb-4">Оберіть план членства:</p>
               <MembershipUpgrade currentTier={user.membershipTier} />
             </div>
@@ -913,18 +913,18 @@ export default function SettingsPage() {
                   {user.membershipTier === 'supporter_200' && 'Підтримка+'}
                   {user.membershipTier === 'patron_500' && 'Меценат'}
                 </h3>
-                <p className="text-sm text-timber-beam">Активне членство</p>
+                <p className="text-sm text-muted-500">Активне членство</p>
               </div>
               <div className="px-3 py-1 bg-green-100 text-green-700 text-sm font-bold">
                 АКТИВНИЙ
               </div>
             </div>
 
-            <p className="text-sm text-timber-beam mb-4">
+            <p className="text-sm text-muted-500 mb-4">
               Дякуємо за підтримку Мережі Вільних Людей!
             </p>
 
-            <div className="border-t border-timber-dark/20 pt-6">
+            <div className="border-t border-line/20 pt-6">
               <p className="font-bold mb-4">Оновити план:</p>
               <MembershipUpgrade currentTier={user.membershipTier} />
             </div>
@@ -933,13 +933,13 @@ export default function SettingsPage() {
       </div>
 
       {/* Danger Zone */}
-      <div className="bg-canvas border-2 border-red-200 p-6 lg:p-8 relative">
+      <div className="bg-panel-900 border-2 border-red-200 p-6 lg:p-8 relative">
         <p className="label text-red-600 mb-4">НЕБЕЗПЕЧНА ЗОНА</p>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h3 className="font-syne font-bold">Вийти з акаунту</h3>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Ви будете перенаправлені на головну сторінку
             </p>
           </div>

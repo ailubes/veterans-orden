@@ -212,47 +212,47 @@ export default function NewProductPage() {
       <div className="mb-8">
         <Link
           href="/admin/marketplace/products"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до товарів
         </Link>
         <h1 className="font-syne text-3xl font-bold">Новий товар</h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Створіть новий товар для магазину Мережі Вільних Людей
         </p>
       </div>
 
       {/* Tabs */}
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
-        <Tabs.List className="flex gap-2 mb-6 border-b-2 border-timber-dark/20 overflow-x-auto">
+        <Tabs.List className="flex gap-2 mb-6 border-b-2 border-line/20 overflow-x-auto">
           <Tabs.Trigger
             value="basic"
-            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:border-transparent data-[state=inactive]:text-timber-beam hover:text-accent whitespace-nowrap"
+            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-bronze data-[state=active]:text-bronze data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-500 hover:text-bronze whitespace-nowrap"
           >
             1. Основна інформація
           </Tabs.Trigger>
           <Tabs.Trigger
             value="pricing"
-            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:border-transparent data-[state=inactive]:text-timber-beam hover:text-accent whitespace-nowrap"
+            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-bronze data-[state=active]:text-bronze data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-500 hover:text-bronze whitespace-nowrap"
           >
             2. Ціни і склад
           </Tabs.Trigger>
           <Tabs.Trigger
             value="media"
-            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:border-transparent data-[state=inactive]:text-timber-beam hover:text-accent whitespace-nowrap"
+            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-bronze data-[state=active]:text-bronze data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-500 hover:text-bronze whitespace-nowrap"
           >
             3. Медіа
           </Tabs.Trigger>
           <Tabs.Trigger
             value="delivery"
-            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:border-transparent data-[state=inactive]:text-timber-beam hover:text-accent whitespace-nowrap"
+            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-bronze data-[state=active]:text-bronze data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-500 hover:text-bronze whitespace-nowrap"
           >
             4. Доставка/Цифрові
           </Tabs.Trigger>
           <Tabs.Trigger
             value="advanced"
-            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-accent data-[state=active]:text-accent data-[state=inactive]:border-transparent data-[state=inactive]:text-timber-beam hover:text-accent whitespace-nowrap"
+            className="px-4 py-3 font-bold text-sm transition-all border-b-2 -mb-[2px] data-[state=active]:border-bronze data-[state=active]:text-bronze data-[state=inactive]:border-transparent data-[state=inactive]:text-muted-500 hover:text-bronze whitespace-nowrap"
           >
             5. Розширені
           </Tabs.Trigger>
@@ -260,7 +260,7 @@ export default function NewProductPage() {
 
         {/* Tab 1: Basic Information */}
         <Tabs.Content value="basic" className="space-y-6">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -276,7 +276,7 @@ export default function NewProductPage() {
                   type="text"
                   value={formData.name_uk}
                   onChange={(e) => setFormData({ ...formData, name_uk: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="наприклад: Картка члена Мережі"
                   required
                 />
@@ -296,14 +296,14 @@ export default function NewProductPage() {
                   )}
                 </label>
                 <div className="flex items-center">
-                  <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-timber-dark text-sm text-timber-beam whitespace-nowrap">
+                  <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                     /shop/
                   </span>
                   <input
                     type="text"
                     value={formData.slug}
                     onChange={(e) => handleSlugChange(e.target.value)}
-                    className={`flex-1 px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none ${
+                    className={`flex-1 px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none ${
                       slugError ? 'border-red-500' : ''
                     }`}
                     placeholder="kartka-chlena-merezhi"
@@ -314,7 +314,7 @@ export default function NewProductPage() {
                     onClick={handleRegenerateSlug}
                     disabled={!formData.name_uk}
                     title="Згенерувати slug з української назви"
-                    className="px-3 py-3 border-2 border-l-0 border-timber-dark hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-3 border-2 border-l-0 border-line hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                   </button>
@@ -338,7 +338,7 @@ export default function NewProductPage() {
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as ProductType })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="physical">📦 Фізичний товар</option>
@@ -355,7 +355,7 @@ export default function NewProductPage() {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as ProductStatus })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="draft">📝 Чернетка</option>
@@ -384,7 +384,7 @@ export default function NewProductPage() {
 
         {/* Tab 2: Pricing & Stock */}
         <Tabs.Content value="pricing" className="space-y-6">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -401,7 +401,7 @@ export default function NewProductPage() {
                   min="1"
                   value={formData.price_points}
                   onChange={(e) => setFormData({ ...formData, price_points: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="100"
                   required
                 />
@@ -425,7 +425,7 @@ export default function NewProductPage() {
                       const uah = parseFloat(e.target.value) || 0;
                       setFormData({ ...formData, price_uah: Math.round(uah * 100) });
                     }}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     placeholder="0.00"
                   />
                   <span className="text-sm font-bold">₴</span>
@@ -448,7 +448,7 @@ export default function NewProductPage() {
                     const val = e.target.value === '' ? null : parseInt(e.target.value);
                     setFormData({ ...formData, stock_quantity: val });
                   }}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="Необмежено (залиште пустим)"
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -466,7 +466,7 @@ export default function NewProductPage() {
                   min="1"
                   value={formData.max_per_user}
                   onChange={(e) => setFormData({ ...formData, max_per_user: parseInt(e.target.value) || 1 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Максимальна кількість для одного замовлення
@@ -474,7 +474,7 @@ export default function NewProductPage() {
               </div>
 
               {/* Access Control */}
-              <div className="border-t border-timber-dark/20 pt-4 mt-4">
+              <div className="border-t border-line/20 pt-4 mt-4">
                 <h3 className="font-bold mb-3">Контроль доступу</h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -487,7 +487,7 @@ export default function NewProductPage() {
                       min="1"
                       value={formData.required_level}
                       onChange={(e) => setFormData({ ...formData, required_level: parseInt(e.target.value) || 1 })}
-                      className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                      className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     />
                   </div>
 
@@ -499,7 +499,7 @@ export default function NewProductPage() {
                       type="text"
                       value={formData.required_role}
                       onChange={(e) => setFormData({ ...formData, required_role: e.target.value })}
-                      className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                      className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                       placeholder="наприклад: moderator"
                     />
                   </div>
@@ -511,7 +511,7 @@ export default function NewProductPage() {
 
         {/* Tab 3: Media */}
         <Tabs.Content value="media" className="space-y-6">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -542,7 +542,7 @@ export default function NewProductPage() {
 
         {/* Tab 4: Delivery/Digital */}
         <Tabs.Content value="delivery" className="space-y-6">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -579,7 +579,7 @@ export default function NewProductPage() {
                           const val = e.target.value === '' ? null : parseInt(e.target.value);
                           setFormData({ ...formData, weight: val });
                         }}
-                        className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                        className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                         placeholder="наприклад: 250"
                       />
                     </div>
@@ -607,7 +607,7 @@ export default function NewProductPage() {
                               },
                             });
                           }}
-                          className="px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                          className="px-3 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                         />
                         <input
                           type="number"
@@ -627,7 +627,7 @@ export default function NewProductPage() {
                               },
                             });
                           }}
-                          className="px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                          className="px-3 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                         />
                         <input
                           type="number"
@@ -647,7 +647,7 @@ export default function NewProductPage() {
                               },
                             });
                           }}
-                          className="px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                          className="px-3 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                         />
                       </div>
                     </div>
@@ -688,7 +688,7 @@ export default function NewProductPage() {
                       const val = e.target.value === '' ? null : parseInt(e.target.value);
                       setFormData({ ...formData, download_limit: val });
                     }}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     placeholder="Необмежено (залиште пустим)"
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -700,8 +700,8 @@ export default function NewProductPage() {
 
             {/* Event Ticket Settings */}
             {formData.type === 'event_ticket' && (
-              <div className="p-4 bg-timber-dark/5 border-2 border-timber-dark/20">
-                <p className="text-sm text-timber-beam">
+              <div className="p-4 bg-timber-dark/5 border border-line rounded-lg/20">
+                <p className="text-sm text-muted-500">
                   Квитки на події керуються через систему подій. Налаштуйте подію окремо в розділі Подій.
                 </p>
               </div>
@@ -711,7 +711,7 @@ export default function NewProductPage() {
 
         {/* Tab 5: Advanced */}
         <Tabs.Content value="advanced" className="space-y-6">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -728,7 +728,7 @@ export default function NewProductPage() {
                     type="datetime-local"
                     value={formData.available_from ?? ''}
                     onChange={(e) => setFormData({ ...formData, available_from: e.target.value || null })}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   />
                 </div>
 
@@ -740,7 +740,7 @@ export default function NewProductPage() {
                     type="datetime-local"
                     value={formData.available_until ?? ''}
                     onChange={(e) => setFormData({ ...formData, available_until: e.target.value || null })}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   />
                 </div>
               </div>
@@ -770,7 +770,7 @@ export default function NewProductPage() {
                     type="number"
                     value={formData.sort_order}
                     onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Меньше число = вище в списку
@@ -787,7 +787,7 @@ export default function NewProductPage() {
                   type="text"
                   value={formData.tags.join(', ')}
                   onChange={(e) => handleTagsChange(e.target.value)}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="наприклад: мерч, одяг, популярне"
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -811,7 +811,7 @@ export default function NewProductPage() {
       )}
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-4 pt-6 mt-6 border-t-2 border-timber-dark/20">
+      <div className="flex items-center gap-4 pt-6 mt-6 border-t-2 border-line/20">
         <button
           type="button"
           onClick={() => handleSubmit('draft')}
@@ -824,13 +824,13 @@ export default function NewProductPage() {
           type="button"
           onClick={() => handleSubmit('active')}
           disabled={loading || !!slugError || isCheckingSlug}
-          className="px-6 py-3 bg-accent text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+          className="px-6 py-3 bg-bronze text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
         >
           {loading ? 'ЗБЕРЕЖЕННЯ...' : '✅ ОПУБЛІКУВАТИ'}
         </button>
         <Link
           href="/admin/marketplace/products"
-          className="text-sm text-timber-beam hover:text-accent"
+          className="text-sm text-muted-500 hover:text-bronze"
         >
           Скасувати
         </Link>

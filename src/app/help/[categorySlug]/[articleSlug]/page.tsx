@@ -94,21 +94,21 @@ export default function ArticleDetailPage() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-        <p className="mt-4 text-timber-beam">Завантаження...</p>
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+        <p className="mt-4 text-muted-500">Завантаження...</p>
       </div>
     );
   }
 
   if (error || !article) {
     return (
-      <div className="bg-white border-2 border-timber-dark p-12 text-center relative">
+      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         <h2 className="font-syne text-2xl font-bold mb-2">Статтю не знайдено</h2>
-        <p className="text-timber-beam mb-6">{error || 'Неможливо знайти статтю'}</p>
-        <a href="/help" className="text-accent hover:underline font-bold">
+        <p className="text-muted-500 mb-6">{error || 'Неможливо знайти статтю'}</p>
+        <a href="/help" className="text-bronze hover:underline font-bold">
           ← Повернутися до допомоги
         </a>
       </div>
@@ -120,15 +120,15 @@ export default function ArticleDetailPage() {
       {/* Main Content */}
       <div className="lg:col-span-2 space-y-8">
         {/* Article Header */}
-        <div className="bg-white border-2 border-timber-dark p-8 relative">
+        <div className="bg-white border border-line rounded-lg p-8 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
           {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-sm text-timber-beam mb-4">
-            <a href="/help" className="hover:text-accent">Допомога</a>
+          <div className="flex items-center gap-2 text-sm text-muted-500 mb-4">
+            <a href="/help" className="hover:text-bronze">Допомога</a>
             <ChevronRight size={14} />
-            <a href={`/help/${article.category?.slug}`} className="hover:text-accent">
+            <a href={`/help/${article.category?.slug}`} className="hover:text-bronze">
               {article.category?.name_uk}
             </a>
             <ChevronRight size={14} />
@@ -139,7 +139,7 @@ export default function ArticleDetailPage() {
           <h1 className="font-syne text-4xl font-bold mb-6">{article.title}</h1>
 
           {/* Meta */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-timber-beam pb-6 border-b-2 border-timber-dark/20">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-500 pb-6 border-b-2 border-line/20">
             {article.author && (
               <div className="flex items-center gap-2">
                 <User size={16} />
@@ -160,14 +160,14 @@ export default function ArticleDetailPage() {
           <div className="flex gap-3 mt-6">
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold text-sm"
+              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold text-sm"
             >
               <Share2 size={16} />
               Поділитися
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold text-sm"
+              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold text-sm"
             >
               <Printer size={16} />
               Друк
@@ -181,7 +181,7 @@ export default function ArticleDetailPage() {
         )}
 
         {/* Article Content */}
-        <div className="bg-white border-2 border-timber-dark p-8 relative prose prose-timber max-w-none">
+        <div className="bg-white border border-line rounded-lg p-8 relative prose prose-timber max-w-none">
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 
@@ -199,11 +199,11 @@ export default function ArticleDetailPage() {
       <div className="lg:col-span-1 space-y-6">
         {/* Table of Contents */}
         {tableOfContents.length > 0 && (
-          <div className="bg-white border-2 border-timber-dark p-6 sticky top-4 relative">
+          <div className="bg-white border border-line rounded-lg p-6 sticky top-4 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
-            <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
+            <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-line/20">
               Зміст
             </h2>
 
@@ -212,8 +212,8 @@ export default function ArticleDetailPage() {
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  className={`block text-sm hover:text-accent transition-colors ${
-                    item.level === 3 ? 'ml-4 text-timber-beam' : 'font-bold'
+                  className={`block text-sm hover:text-bronze transition-colors ${
+                    item.level === 3 ? 'ml-4 text-muted-500' : 'font-bold'
                   }`}
                 >
                   {item.text}
@@ -225,11 +225,11 @@ export default function ArticleDetailPage() {
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
-          <div className="bg-white border-2 border-timber-dark p-6 relative">
+          <div className="bg-white border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 
-            <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
+            <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-line/20">
               Пов'язані статті
             </h2>
 
@@ -238,13 +238,13 @@ export default function ArticleDetailPage() {
                 <a
                   key={related.id}
                   href={`/help/${article.category?.slug}/${related.slug}`}
-                  className="block p-3 border-2 border-timber-dark/20 hover:border-accent transition-colors group"
+                  className="block p-3 border border-line rounded-lg/20 hover:border-bronze transition-colors group"
                 >
-                  <h3 className="font-bold text-sm mb-1 group-hover:text-accent transition-colors">
+                  <h3 className="font-bold text-sm mb-1 group-hover:text-bronze transition-colors">
                     {related.title}
                   </h3>
                   {related.excerpt && (
-                    <p className="text-xs text-timber-beam line-clamp-2">{related.excerpt}</p>
+                    <p className="text-xs text-muted-500 line-clamp-2">{related.excerpt}</p>
                   )}
                 </a>
               ))}

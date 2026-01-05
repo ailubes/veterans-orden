@@ -118,18 +118,18 @@ export default function SystemConfigTab({
 
   if (!canEdit) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-4">Системна конфігурація</h2>
-        <div className="p-8 border-2 border-accent bg-canvas/50 text-center">
-          <p className="text-accent font-medium">
+        <div className="p-8 border-2 border-bronze bg-panel-900/50 text-center">
+          <p className="text-bronze font-medium">
             ⚠️ Доступ заборонено
           </p>
-          <p className="text-timber-beam text-sm mt-2">
+          <p className="text-muted-500 text-sm mt-2">
             Тільки супер адміністратори можуть переглядати і редагувати системні налаштування
           </p>
         </div>
@@ -139,18 +139,18 @@ export default function SystemConfigTab({
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
 
   return (
-    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+    <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
       {/* Joints */}
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
@@ -159,7 +159,7 @@ export default function SystemConfigTab({
 
       <div className="mb-6">
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Системна конфігурація</h2>
-        <p className="text-timber-beam text-sm">
+        <p className="text-muted-500 text-sm">
           Глобальні налаштування системи (доступно тільки супер адміністраторам)
         </p>
       </div>
@@ -217,7 +217,7 @@ export default function SystemConfigTab({
         </div>
 
         {/* Feature Flags */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg">Функції платформи</h3>
 
           <div className="flex items-center space-x-2">
@@ -274,7 +274,7 @@ export default function SystemConfigTab({
         </div>
 
         {/* Points Configuration */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg">Нарахування балів</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -355,7 +355,7 @@ export default function SystemConfigTab({
         </div>
 
         {/* Payment Settings */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg">Налаштування платежів (LiqPay)</h3>
 
           <div className="flex items-center space-x-2">
@@ -399,13 +399,13 @@ export default function SystemConfigTab({
                 placeholder="sandbox_i12345678"
                 className="mt-1 font-mono text-xs"
               />
-              <p className="text-xs text-timber-beam mt-1">
+              <p className="text-xs text-muted-500 mt-1">
                 Отримайте на{' '}
                 <a
                   href="https://www.liqpay.ua/uk/adminbusiness"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:underline"
+                  className="text-bronze hover:underline"
                 >
                   liqpay.ua
                 </a>
@@ -483,7 +483,7 @@ export default function SystemConfigTab({
         </div>
 
         {/* Save Button */}
-        <div className="pt-6 border-t-2 border-timber-dark">
+        <div className="pt-6 border-t-2 border-line">
           <button type="submit" disabled={saving} className="btn inline-flex items-center gap-2">
             {saving ? (
               <>
@@ -498,8 +498,8 @@ export default function SystemConfigTab({
             )}
           </button>
 
-          <div className="mt-4 p-4 border-2 border-accent bg-canvas/50">
-            <p className="text-sm text-accent">
+          <div className="mt-4 p-4 border-2 border-bronze bg-panel-900/50">
+            <p className="text-sm text-bronze">
               ⚠️ <strong>Увага:</strong> Зміни системних налаштувань вплинуть на всіх користувачів
               платформи. Будьте обережні при внесенні змін.
             </p>

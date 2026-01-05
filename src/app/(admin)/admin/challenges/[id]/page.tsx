@@ -177,13 +177,13 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
     if (rank === 1) return <Trophy className="text-yellow-500" size={18} />;
     if (rank === 2) return <Medal className="text-gray-400" size={18} />;
     if (rank === 3) return <Medal className="text-amber-600" size={18} />;
-    return <span className="w-5 h-5 flex items-center justify-center font-bold text-timber-beam text-sm">{rank}</span>;
+    return <span className="w-5 h-5 flex items-center justify-center font-bold text-muted-500 text-sm">{rank}</span>;
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="animate-spin text-accent" size={48} />
+        <Loader2 className="animate-spin text-bronze" size={48} />
       </div>
     );
   }
@@ -193,14 +193,14 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto">
         <Link
           href="/admin/challenges"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-8"
         >
           <ArrowLeft size={16} />
           До списку челенджів
         </Link>
 
-        <div className="bg-canvas border-2 border-timber-dark p-12 text-center">
-          <Target className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+        <div className="bg-panel-900 border border-line rounded-lg p-12 text-center">
+          <Target className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h2 className="font-syne text-xl font-bold mb-2">{error || 'Челендж не знайдено'}</h2>
         </div>
       </div>
@@ -215,7 +215,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
       {/* Back link */}
       <Link
         href="/admin/challenges"
-        className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-8"
+        className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-8"
       >
         <ArrowLeft size={16} />
         До списку челенджів
@@ -228,13 +228,13 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
 
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-accent/20 text-accent rounded">
+            <div className="p-3 bg-bronze/20 text-bronze rounded">
               <GoalIcon size={32} />
             </div>
 
             <div>
               <div className="flex items-center gap-2 mb-2 flex-wrap">
-                <span className="px-2 py-0.5 text-xs font-bold bg-canvas/20">
+                <span className="px-2 py-0.5 text-xs font-bold bg-panel-900/20">
                   {CHALLENGE_TYPE_LABELS[challenge.type].uk}
                 </span>
                 <span className={`px-2 py-0.5 text-xs ${
@@ -268,7 +268,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                   <Target size={14} />
                   {challenge.goalTarget} {CHALLENGE_GOAL_TYPE_LABELS[challenge.goalType].uk.toLowerCase()}
                 </span>
-                <span className="flex items-center gap-1 text-accent font-bold">
+                <span className="flex items-center gap-1 text-bronze font-bold">
                   <Star size={14} />
                   +{challenge.points} балів
                 </span>
@@ -325,37 +325,37 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
         {/* Stats */}
         <div className="lg:col-span-2">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div className="bg-canvas border-2 border-timber-dark p-4">
+            <div className="bg-panel-900 border border-line rounded-lg p-4">
               <p className="label mb-1">УЧАСНИКІВ</p>
               <p className="font-syne text-2xl font-bold">{participants.length}</p>
             </div>
-            <div className="bg-canvas border-2 border-timber-dark p-4">
+            <div className="bg-panel-900 border border-line rounded-lg p-4">
               <p className="label mb-1">ВИКОНАЛИ</p>
               <p className="font-syne text-2xl font-bold text-green-600">{completedCount}</p>
             </div>
-            <div className="bg-canvas border-2 border-timber-dark p-4">
+            <div className="bg-panel-900 border border-line rounded-lg p-4">
               <p className="label mb-1">ЦІЛЬ</p>
               <p className="font-syne text-2xl font-bold">{challenge.goalTarget}</p>
             </div>
-            <div className="bg-canvas border-2 border-timber-dark p-4">
+            <div className="bg-panel-900 border border-line rounded-lg p-4">
               <p className="label mb-1">НАГОРОДА</p>
-              <p className="font-syne text-2xl font-bold text-accent">{challenge.points}</p>
+              <p className="font-syne text-2xl font-bold text-bronze">{challenge.points}</p>
             </div>
           </div>
 
           {/* Participants Table */}
-          <div className="bg-canvas border-2 border-timber-dark relative">
+          <div className="bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
-            <div className="p-4 border-b border-timber-dark">
+            <div className="p-4 border-b border-line">
               <h2 className="font-syne text-lg font-bold">Учасники ({participants.length})</h2>
             </div>
 
             {participants.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="border-b border-timber-dark/30">
+                  <thead className="border-b border-line/30">
                     <tr>
                       <th className="text-left p-3 text-xs font-bold">#</th>
                       <th className="text-left p-3 text-xs font-bold">УЧАСНИК</th>
@@ -365,7 +365,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                   </thead>
                   <tbody>
                     {participants.map((participant, index) => (
-                      <tr key={participant.id} className="border-b border-timber-dark/10 hover:bg-timber-dark/5">
+                      <tr key={participant.id} className="border-b border-line/10 hover:bg-timber-dark/5">
                         <td className="p-3">
                           {participant.rank ? getMedalIcon(participant.rank) : index + 1}
                         </td>
@@ -374,14 +374,14 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                             {participant.user.firstName} {participant.user.lastName?.charAt(0)}.
                           </div>
                           {participant.user.email && (
-                            <div className="text-xs text-timber-beam">{participant.user.email}</div>
+                            <div className="text-xs text-muted-500">{participant.user.email}</div>
                           )}
                         </td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
                             <div className="w-24 h-2 bg-timber-dark/20 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-accent"
+                                className="h-full bg-bronze"
                                 style={{ width: `${Math.min((participant.progress / challenge.goalTarget) * 100, 100)}%` }}
                               />
                             </div>
@@ -407,7 +407,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                 </table>
               </div>
             ) : (
-              <div className="p-8 text-center text-timber-beam">
+              <div className="p-8 text-center text-muted-500">
                 <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">Поки немає учасників</p>
               </div>
@@ -419,11 +419,11 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
         <div className="space-y-6">
           {/* Leaderboard */}
           {challenge.isCompetitive && leaderboard.length > 0 && (
-            <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+            <div className="bg-panel-900 border border-line rounded-lg p-4 relative">
               <div className="joint joint-tl" />
 
               <div className="flex items-center gap-2 mb-4">
-                <Trophy className="text-accent" size={18} />
+                <Trophy className="text-bronze" size={18} />
                 <h3 className="font-syne font-bold">Лідерборд</h3>
               </div>
 
@@ -436,7 +436,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                         {entry.firstName} {entry.lastName?.charAt(0)}.
                       </p>
                     </div>
-                    <span className="font-syne font-bold text-accent text-sm">{entry.progress}</span>
+                    <span className="font-syne font-bold text-bronze text-sm">{entry.progress}</span>
                   </div>
                 ))}
               </div>

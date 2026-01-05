@@ -7,6 +7,7 @@ import { UKRAINIAN_OBLASTS } from '@/lib/constants';
 import { Check, ChevronRight, ChevronLeft, User, MapPin } from 'lucide-react';
 import { Logo } from '@/components/ui/logo';
 import { KatottgSelector, KatottgDetails } from '@/components/ui/katottg-selector';
+import { HeavyCta } from '@/components/ui/heavy-cta';
 
 type Step = 'welcome' | 'personal' | 'region' | 'tier' | 'complete';
 
@@ -248,428 +249,442 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-8 relative max-w-lg mx-auto">
-      {/* Corner joints */}
-      <div className="joint joint-tl" />
-      <div className="joint joint-tr" />
-      <div className="joint joint-bl" />
-      <div className="joint joint-br" />
-
-      {/* Progress */}
-      <div className="flex items-center justify-center gap-2 mb-8">
-        {[1, 2, 3, 4, 5].map((num, idx) => (
-          <div key={num} className="flex items-center">
-            <div
-              className={`w-3 h-3 rounded-full transition-colors ${
-                getStepNumber() >= num ? 'bg-accent' : 'bg-timber-dark/30'
-              }`}
-            />
-            {idx < 4 && <div className="w-8 h-0.5 bg-timber-dark/30 ml-2" />}
-          </div>
-        ))}
-      </div>
-
-      {/* Step: Welcome */}
-      {step === 'welcome' && (
-        <div className="text-center">
-          <div className="flex items-center justify-center mx-auto mb-6">
-            <Logo size={64} className="text-accent" />
-          </div>
-
-          <h1 className="font-syne text-2xl font-bold mb-4">
-            Вітаємо!
-          </h1>
-
-          <p className="text-timber-beam mb-8">
-            Ви успішно зареєструвались у Мережі Вільних Людей. Давайте
-            налаштуємо ваш профіль.
-          </p>
-
-          <button
-            onClick={() => setStep('personal')}
-            className="btn w-full justify-center"
-          >
-            ПОЧАТИ <ChevronRight size={18} />
-          </button>
+    <div className="min-h-screen py-12 px-4">
+      <div className="bg-panel-900 border border-line rounded-lg p-8 max-w-lg mx-auto">
+        {/* Progress */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          {[1, 2, 3, 4, 5].map((num, idx) => (
+            <div key={num} className="flex items-center">
+              <div
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  getStepNumber() >= num ? 'bg-bronze' : 'bg-panel-850'
+                }`}
+              />
+              {idx < 4 && <div className="w-8 h-0.5 bg-panel-850 ml-2" />}
+            </div>
+          ))}
         </div>
-      )}
 
-      {/* Step: Personal Info */}
-      {step === 'personal' && (
-        <div>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <User size={24} className="text-accent" />
-            <h1 className="font-syne text-2xl font-bold">
-              Особисті дані
+        {/* Step: Welcome */}
+        {step === 'welcome' && (
+          <div className="text-center">
+            <div className="flex items-center justify-center mx-auto mb-6">
+              <Logo size={64} className="text-bronze" />
+            </div>
+
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4">
+              Вітаємо!
             </h1>
-          </div>
-          <p className="text-center text-sm text-timber-beam mb-6">
-            Заповніть інформацію про себе
-          </p>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <p className="text-muted-500 mb-8">
+              Ви успішно зареєструвались у Мережі Вільних Людей. Давайте
+              налаштуємо ваш профіль.
+            </p>
+
+            <HeavyCta
+              onClick={() => setStep('personal')}
+              variant="primary"
+              size="lg"
+              fullWidth
+            >
+              ПОЧАТИ <ChevronRight size={18} />
+            </HeavyCta>
+          </div>
+        )}
+
+        {/* Step: Personal Info */}
+        {step === 'personal' && (
+          <div>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <User size={24} className="text-bronze" />
+              <h1 className="font-inter font-black text-2xl text-text-100">
+                Особисті дані
+              </h1>
+            </div>
+            <p className="text-center text-sm text-muted-500 mb-6">
+              Заповніть інформацію про себе
+            </p>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ІМ&apos;Я *</label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ПРІЗВИЩЕ *</label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
+                    required
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="label block mb-2">ІМ&apos;Я *</label>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ПО БАТЬКОВІ</label>
                 <input
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  value={patronymic}
+                  onChange={(e) => setPatronymic(e.target.value)}
+                  placeholder="Наприклад: Іванович"
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ДАТА НАРОДЖЕННЯ *</label>
+                <input
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
                   required
                 />
               </div>
+
               <div>
-                <label className="label block mb-2">ПРІЗВИЩЕ *</label>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">НОМЕР ТЕЛЕФОНУ</label>
                 <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                  required
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+380 XX XXX XX XX"
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="label block mb-2">ПО БАТЬКОВІ</label>
-              <input
-                type="text"
-                value={patronymic}
-                onChange={(e) => setPatronymic(e.target.value)}
-                placeholder="Наприклад: Іванович"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              />
-            </div>
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
 
-            <div>
-              <label className="label block mb-2">ДАТА НАРОДЖЕННЯ *</label>
-              <input
-                type="date"
-                value={dateOfBirth}
-                onChange={(e) => setDateOfBirth(e.target.value)}
-                max={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="label block mb-2">НОМЕР ТЕЛЕФОНУ</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+380 XX XXX XX XX"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
-                {error}
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setStep('welcome')}
-                className="btn btn-outline flex-1 justify-center"
-              >
-                <ChevronLeft size={18} /> НАЗАД
-              </button>
-              <button
-                onClick={() => {
-                  if (validatePersonalInfo()) {
-                    setStep('region');
-                  }
-                }}
-                className="btn flex-1 justify-center"
-              >
-                ДАЛІ <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step: Region Selection */}
-      {step === 'region' && (
-        <div>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <MapPin size={24} className="text-accent" />
-            <h1 className="font-syne text-2xl font-bold">
-              Ваш регіон
-            </h1>
-          </div>
-          <p className="text-center text-sm text-timber-beam mb-6">
-            Оберіть область, потім знайдіть ваш населений пункт
-          </p>
-
-          <div className="space-y-4">
-            {/* Step 1: Select Oblast */}
-            <div>
-              <label className="label block mb-2">
-                <MapPin className="w-3 h-3 inline mr-1" />
-                ОБЛАСТЬ *
-              </label>
-              <select
-                value={selectedOblastCode}
-                onChange={(e) => {
-                  setSelectedOblastCode(e.target.value);
-                  // Reset settlement when oblast changes
-                  setKatottgCode(null);
-                  setKatottgDetails(null);
-                }}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-              >
-                <option value="">Оберіть область...</option>
-                {UKRAINIAN_OBLASTS.map((oblast) => (
-                  <option key={oblast.code} value={oblast.code}>
-                    {oblast.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Step 2: Select Settlement (only show after oblast selected) */}
-            {selectedOblastCode && (
-              <div>
-                <KatottgSelector
-                  value={katottgCode}
-                  onChange={(code, details) => {
-                    setKatottgCode(code);
-                    setKatottgDetails(details);
+              <div className="flex gap-3">
+                <HeavyCta
+                  onClick={() => setStep('welcome')}
+                  variant="outline"
+                  size="lg"
+                  className="flex-1"
+                >
+                  <ChevronLeft size={18} /> НАЗАД
+                </HeavyCta>
+                <HeavyCta
+                  onClick={() => {
+                    if (validatePersonalInfo()) {
+                      setStep('region');
+                    }
                   }}
-                  oblastFilter={selectedOblastCode}
-                  label="НАСЕЛЕНИЙ ПУНКТ"
-                  required={false}
-                />
-                <p className="text-xs text-timber-beam mt-2">
-                  Почніть вводити назву вашого міста, селища або села
-                </p>
+                  variant="primary"
+                  size="lg"
+                  className="flex-1"
+                >
+                  ДАЛІ <ChevronRight size={18} />
+                </HeavyCta>
               </div>
-            )}
+            </div>
+          </div>
+        )}
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
-                {error}
+        {/* Step: Region Selection */}
+        {step === 'region' && (
+          <div>
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <MapPin size={24} className="text-bronze" />
+              <h1 className="font-inter font-black text-2xl text-text-100">
+                Ваш регіон
+              </h1>
+            </div>
+            <p className="text-center text-sm text-muted-500 mb-6">
+              Оберіть область, потім знайдіть ваш населений пункт
+            </p>
+
+            <div className="space-y-4">
+              {/* Step 1: Select Oblast */}
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+                  <MapPin className="w-3 h-3 inline mr-1" />
+                  ОБЛАСТЬ *
+                </label>
+                <select
+                  value={selectedOblastCode}
+                  onChange={(e) => {
+                    setSelectedOblastCode(e.target.value);
+                    // Reset settlement when oblast changes
+                    setKatottgCode(null);
+                    setKatottgDetails(null);
+                  }}
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
+                >
+                  <option value="">Оберіть область...</option>
+                  {UKRAINIAN_OBLASTS.map((oblast) => (
+                    <option key={oblast.code} value={oblast.code}>
+                      {oblast.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
+
+              {/* Step 2: Select Settlement (only show after oblast selected) */}
+              {selectedOblastCode && (
+                <div>
+                  <KatottgSelector
+                    value={katottgCode}
+                    onChange={(code, details) => {
+                      setKatottgCode(code);
+                      setKatottgDetails(details);
+                    }}
+                    oblastFilter={selectedOblastCode}
+                    label="НАСЕЛЕНИЙ ПУНКТ"
+                    required={false}
+                  />
+                  <p className="text-xs text-muted-500 mt-2">
+                    Почніть вводити назву вашого міста, селища або села
+                  </p>
+                </div>
+              )}
+
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <HeavyCta
+                  onClick={() => setStep('personal')}
+                  variant="outline"
+                  size="lg"
+                  className="flex-1"
+                >
+                  <ChevronLeft size={18} /> НАЗАД
+                </HeavyCta>
+                <HeavyCta
+                  onClick={() => setStep('tier')}
+                  variant="primary"
+                  size="lg"
+                  className="flex-1"
+                >
+                  ДАЛІ <ChevronRight size={18} />
+                </HeavyCta>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step: Tier Selection */}
+        {step === 'tier' && (
+          <div>
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 text-center">
+              Оберіть план членства
+            </h1>
+            <p className="text-center text-sm text-muted-500 mb-6">
+              Підтримайте громаду та отримайте додаткові можливості
+            </p>
+
+            <div className="space-y-3 mb-6">
+              {/* Free Tier */}
+              <div
+                onClick={() => setSelectedTier('free')}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedTier === 'free'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line hover:border-muted-500'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-100">Безкоштовний</h3>
+                    <p className="text-sm text-muted-500">Базова участь у мережі</p>
+                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
+                      <li>• Доступ до голосувань</li>
+                      <li>• Перегляд подій</li>
+                      <li>• Участь у обговореннях</li>
+                    </ul>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-xl text-text-100">0₴</div>
+                    <div className="text-xs text-muted-500">на місяць</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Basic 49 */}
+              <div
+                onClick={() => setSelectedTier('basic_49')}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedTier === 'basic_49'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line hover:border-muted-500'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-100">Базовий</h3>
+                    <p className="text-sm text-muted-500">Повноцінне членство</p>
+                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
+                      <li>• Все з безкоштовного</li>
+                      <li>• Створення голосувань</li>
+                      <li>• Організація подій</li>
+                      <li>• Пріоритетна підтримка</li>
+                    </ul>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-xl text-text-100">49₴</div>
+                    <div className="text-xs text-muted-500">на місяць</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Supporter 100 */}
+              <div
+                onClick={() => setSelectedTier('supporter_100')}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedTier === 'supporter_100'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line hover:border-muted-500'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-100">Прихильник</h3>
+                    <p className="text-sm text-muted-500">Підтримка розвитку</p>
+                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
+                      <li>• Все з базового</li>
+                      <li>• Ваше ім&apos;я на сайті підтримки</li>
+                      <li>• Ексклюзивні новини</li>
+                    </ul>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-xl text-text-100">100₴</div>
+                    <div className="text-xs text-muted-500">на місяць</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Supporter 200 */}
+              <div
+                onClick={() => setSelectedTier('supporter_200')}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedTier === 'supporter_200'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line hover:border-muted-500'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-100">Прихильник+</h3>
+                    <p className="text-sm text-muted-500">Активна підтримка</p>
+                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
+                      <li>• Все з прихильника</li>
+                      <li>• Згадка у звітах</li>
+                      <li>• Доступ до закритих подій</li>
+                    </ul>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-xl text-text-100">200₴</div>
+                    <div className="text-xs text-muted-500">на місяць</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Patron 500 */}
+              <div
+                onClick={() => setSelectedTier('patron_500')}
+                className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                  selectedTier === 'patron_500'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line hover:border-muted-500'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-100">Патрон</h3>
+                    <p className="text-sm text-muted-500">Максимальна підтримка</p>
+                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
+                      <li>• Все з прихильника+</li>
+                      <li>• Особиста подяка від команди</li>
+                      <li>• Участь у стратегічних зустрічах</li>
+                      <li>• VIP-статус у спільноті</li>
+                    </ul>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-xl text-text-100">500₴</div>
+                    <div className="text-xs text-muted-500">на місяць</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="flex gap-3">
-              <button
-                onClick={() => setStep('personal')}
-                className="btn btn-outline flex-1 justify-center"
+              <HeavyCta
+                onClick={() => setStep('region')}
+                variant="outline"
+                size="lg"
+                className="flex-1"
               >
                 <ChevronLeft size={18} /> НАЗАД
-              </button>
-              <button
-                onClick={() => setStep('tier')}
-                className="btn flex-1 justify-center"
+              </HeavyCta>
+              <HeavyCta
+                onClick={handleCompleteOnboarding}
+                disabled={loading}
+                variant="primary"
+                size="lg"
+                className="flex-1"
               >
-                ДАЛІ <ChevronRight size={18} />
-              </button>
+                {loading ? 'ЗБЕРЕЖЕННЯ...' : (selectedTier === 'free' ? 'ЗАВЕРШИТИ' : 'ДО ОПЛАТИ')}
+              </HeavyCta>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Step: Tier Selection */}
-      {step === 'tier' && (
-        <div>
-          <h1 className="font-syne text-2xl font-bold mb-4 text-center">
-            Оберіть план членства
-          </h1>
-          <p className="text-center text-sm text-timber-beam mb-6">
-            Підтримайте громаду та отримайте додаткові можливості
-          </p>
-
-          <div className="space-y-3 mb-6">
-            {/* Free Tier */}
-            <div
-              onClick={() => setSelectedTier('free')}
-              className={`border-2 p-4 cursor-pointer transition-all ${
-                selectedTier === 'free'
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold">Безкоштовний</h3>
-                  <p className="text-sm text-timber-beam">Базова участь у мережі</p>
-                  <ul className="text-xs text-timber-beam mt-2 space-y-1">
-                    <li>• Доступ до голосувань</li>
-                    <li>• Перегляд подій</li>
-                    <li>• Участь у обговореннях</li>
-                  </ul>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-xl">0₴</div>
-                  <div className="text-xs text-timber-beam">на місяць</div>
-                </div>
-              </div>
+        {/* Step: Complete */}
+        {step === 'complete' && (
+          <div className="text-center">
+            <div className="w-16 h-16 bg-bronze text-bg-950 flex items-center justify-center mx-auto mb-6 rounded-full">
+              <Check size={32} />
             </div>
 
-            {/* Basic 49 */}
-            <div
-              onClick={() => setSelectedTier('basic_49')}
-              className={`border-2 p-4 cursor-pointer transition-all ${
-                selectedTier === 'basic_49'
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold">Базовий</h3>
-                  <p className="text-sm text-timber-beam">Повноцінне членство</p>
-                  <ul className="text-xs text-timber-beam mt-2 space-y-1">
-                    <li>• Все з безкоштовного</li>
-                    <li>• Створення голосувань</li>
-                    <li>• Організація подій</li>
-                    <li>• Пріоритетна підтримка</li>
-                  </ul>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-xl">49₴</div>
-                  <div className="text-xs text-timber-beam">на місяць</div>
-                </div>
-              </div>
-            </div>
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4">
+              Ласкаво просимо!
+            </h1>
 
-            {/* Supporter 100 */}
-            <div
-              onClick={() => setSelectedTier('supporter_100')}
-              className={`border-2 p-4 cursor-pointer transition-all ${
-                selectedTier === 'supporter_100'
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold">Прихильник</h3>
-                  <p className="text-sm text-timber-beam">Підтримка розвитку</p>
-                  <ul className="text-xs text-timber-beam mt-2 space-y-1">
-                    <li>• Все з базового</li>
-                    <li>• Ваше ім&apos;я на сайті підтримки</li>
-                    <li>• Ексклюзивні новини</li>
-                  </ul>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-xl">100₴</div>
-                  <div className="text-xs text-timber-beam">на місяць</div>
-                </div>
-              </div>
-            </div>
+            <p className="text-muted-500 mb-8">
+              Ваш профіль налаштовано. Тепер ви можете користуватися всіма
+              можливостями Мережі.
+            </p>
 
-            {/* Supporter 200 */}
-            <div
-              onClick={() => setSelectedTier('supporter_200')}
-              className={`border-2 p-4 cursor-pointer transition-all ${
-                selectedTier === 'supporter_200'
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold">Прихильник+</h3>
-                  <p className="text-sm text-timber-beam">Активна підтримка</p>
-                  <ul className="text-xs text-timber-beam mt-2 space-y-1">
-                    <li>• Все з прихильника</li>
-                    <li>• Згадка у звітах</li>
-                    <li>• Доступ до закритих подій</li>
-                  </ul>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-xl">200₴</div>
-                  <div className="text-xs text-timber-beam">на місяць</div>
-                </div>
-              </div>
-            </div>
+            <div className="space-y-3">
+              <HeavyCta
+                onClick={() => router.push('/dashboard')}
+                variant="primary"
+                size="lg"
+                fullWidth
+              >
+                ДО КАБІНЕТУ
+              </HeavyCta>
 
-            {/* Patron 500 */}
-            <div
-              onClick={() => setSelectedTier('patron_500')}
-              className={`border-2 p-4 cursor-pointer transition-all ${
-                selectedTier === 'patron_500'
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
-              }`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-bold">Патрон</h3>
-                  <p className="text-sm text-timber-beam">Максимальна підтримка</p>
-                  <ul className="text-xs text-timber-beam mt-2 space-y-1">
-                    <li>• Все з прихильника+</li>
-                    <li>• Особиста подяка від команди</li>
-                    <li>• Участь у стратегічних зустрічах</li>
-                    <li>• VIP-статус у спільноті</li>
-                  </ul>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-xl">500₴</div>
-                  <div className="text-xs text-timber-beam">на місяць</div>
-                </div>
-              </div>
+              <HeavyCta
+                onClick={() => router.push('/dashboard/referrals')}
+                variant="outline"
+                size="lg"
+                fullWidth
+              >
+                ЗАПРОСИТИ ДРУЗІВ
+              </HeavyCta>
             </div>
           </div>
-
-          <div className="flex gap-3">
-            <button
-              onClick={() => setStep('region')}
-              className="btn btn-outline flex-1 justify-center"
-            >
-              <ChevronLeft size={18} /> НАЗАД
-            </button>
-            <button
-              onClick={handleCompleteOnboarding}
-              disabled={loading}
-              className="btn flex-1 justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'ЗБЕРЕЖЕННЯ...' : (selectedTier === 'free' ? 'ЗАВЕРШИТИ →' : 'ДО ОПЛАТИ →')}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step: Complete */}
-      {step === 'complete' && (
-        <div className="text-center">
-          <div className="w-16 h-16 bg-green-500 text-white flex items-center justify-center mx-auto mb-6 rounded-full">
-            <Check size={32} />
-          </div>
-
-          <h1 className="font-syne text-2xl font-bold mb-4">
-            Ласкаво просимо!
-          </h1>
-
-          <p className="text-timber-beam mb-8">
-            Ваш профіль налаштовано. Тепер ви можете користуватися всіма
-            можливостями Мережі.
-          </p>
-
-          <div className="space-y-3">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="btn w-full justify-center"
-            >
-              ДО КАБІНЕТУ →
-            </button>
-
-            <button
-              onClick={() => router.push('/dashboard/referrals')}
-              className="btn btn-outline w-full justify-center"
-            >
-              ЗАПРОСИТИ ДРУЗІВ
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

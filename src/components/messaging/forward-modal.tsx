@@ -115,27 +115,27 @@ export function ForwardModal({
             <Forward className="w-5 h-5" />
             Переслати повідомлення
             {messageCount > 1 && (
-              <span className="text-sm text-timber-beam">({messageCount})</span>
+              <span className="text-sm text-muted-500">({messageCount})</span>
             )}
           </DialogTitle>
         </DialogHeader>
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Пошук розмов..."
-            className="w-full pl-9 pr-4 py-2 border border-timber-dark/20 rounded-lg text-sm focus:outline-none focus:border-timber-dark"
+            className="w-full pl-9 pr-4 py-2 border border-line/20 rounded-lg text-sm focus:outline-none focus:border-line"
           />
         </div>
 
         {/* Conversation list */}
         <div className="max-h-[300px] overflow-y-auto space-y-1">
           {filteredConversations.length === 0 ? (
-            <p className="text-center text-sm text-timber-beam py-4">
+            <p className="text-center text-sm text-muted-500 py-4">
               Немає доступних розмов
             </p>
           ) : (
@@ -149,7 +149,7 @@ export function ForwardModal({
                   onClick={() => toggleConversation(conv.id)}
                   className={cn(
                     'w-full flex items-center gap-3 p-2 rounded-lg transition-colors',
-                    isSelected ? 'bg-accent/20' : 'hover:bg-timber-light/50'
+                    isSelected ? 'bg-bronze/20' : 'hover:bg-timber-light/50'
                   )}
                 >
                   {/* Avatar */}
@@ -170,7 +170,7 @@ export function ForwardModal({
                       />
                     )}
                     {conv.type === 'group' && (
-                      <span className="absolute -bottom-0.5 -right-0.5 bg-accent text-canvas text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                      <span className="absolute -bottom-0.5 -right-0.5 bg-bronze text-canvas text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                         {conv.participantCount}
                       </span>
                     )}
@@ -180,7 +180,7 @@ export function ForwardModal({
                   <div className="flex-1 text-left min-w-0">
                     <p className="font-medium text-sm truncate">{display.name}</p>
                     {conv.type === 'group' && (
-                      <p className="text-xs text-timber-beam">Група</p>
+                      <p className="text-xs text-muted-500">Група</p>
                     )}
                   </div>
 
@@ -189,8 +189,8 @@ export function ForwardModal({
                     className={cn(
                       'w-5 h-5 rounded border-2 flex items-center justify-center transition-colors',
                       isSelected
-                        ? 'bg-accent border-accent text-canvas'
-                        : 'border-timber-dark/30'
+                        ? 'bg-bronze border-bronze text-canvas'
+                        : 'border-line/30'
                     )}
                   >
                     {isSelected && <Check className="w-3 h-3" />}
@@ -207,7 +207,7 @@ export function ForwardModal({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Додати коментар (необов'язково)..."
-            className="w-full resize-none rounded-lg border border-timber-dark/20 px-3 py-2 text-sm focus:outline-none focus:border-timber-dark min-h-[60px]"
+            className="w-full resize-none rounded-lg border border-line/20 px-3 py-2 text-sm focus:outline-none focus:border-line min-h-[60px]"
             rows={2}
           />
         </div>
@@ -216,7 +216,7 @@ export function ForwardModal({
         <div className="flex items-center justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm text-timber-beam hover:text-timber-dark transition-colors"
+            className="px-4 py-2 text-sm text-muted-500 hover:text-timber-dark transition-colors"
           >
             Скасувати
           </button>
@@ -226,8 +226,8 @@ export function ForwardModal({
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               selectedConversations.size > 0 && !loading
-                ? 'bg-accent text-canvas hover:bg-accent/90'
-                : 'bg-timber-light text-timber-beam cursor-not-allowed'
+                ? 'bg-bronze text-canvas hover:bg-bronze/90'
+                : 'bg-timber-light text-muted-500 cursor-not-allowed'
             )}
           >
             {loading ? (

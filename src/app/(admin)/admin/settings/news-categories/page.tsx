@@ -119,8 +119,8 @@ export default function NewsCategoriesPage() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -148,13 +148,13 @@ export default function NewsCategoriesPage() {
       <div className="mb-8">
         <Link
           href="/admin/settings"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до налаштувань
         </Link>
         <h1 className="font-syne text-3xl font-bold">Категорії новин</h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Керуйте метаданими категорій: назви, іконки, кольори та порядок відображення
         </p>
       </div>
@@ -244,7 +244,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
   };
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
 
@@ -285,7 +285,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
                 type="text"
                 value={formData.name_uk}
                 onChange={(e) => setFormData({ ...formData, name_uk: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze focus:outline-none"
               />
             </div>
             <div>
@@ -294,7 +294,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
                 type="text"
                 value={formData.name_en}
                 onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze focus:outline-none"
               />
             </div>
           </div>
@@ -304,7 +304,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent focus:outline-none min-h-[60px]"
+              className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze focus:outline-none min-h-[60px]"
             />
           </div>
 
@@ -315,7 +315,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
                 type="text"
                 value={formData.icon}
                 onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze focus:outline-none"
                 placeholder="📢 або megaphone"
               />
             </div>
@@ -325,7 +325,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
                 type="text"
                 value={formData.color}
                 onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent focus:outline-none"
+                className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze focus:outline-none"
                 placeholder="#ef4444"
               />
             </div>
@@ -343,7 +343,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
             <button
               onClick={handleCancel}
               disabled={saving}
-              className="px-4 py-2 border-2 border-timber-dark hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="px-4 py-2 border border-line rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
               Скасувати
             </button>

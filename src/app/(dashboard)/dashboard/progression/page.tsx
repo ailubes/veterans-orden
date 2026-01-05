@@ -173,7 +173,7 @@ export default function ProgressionPage() {
       {/* Hero Section */}
       <section className="mb-8">
         <div className="flex items-start gap-4 mb-6">
-          <Trophy className="w-16 h-16 text-accent flex-shrink-0" />
+          <Trophy className="w-16 h-16 text-bronze flex-shrink-0" />
           <div>
             <h1 className="font-syne text-4xl font-bold text-timber-dark mb-2">
               Ваш шлях у Мережі
@@ -185,11 +185,11 @@ export default function ProgressionPage() {
         </div>
 
         {/* Current Role Badge */}
-        <div className="border-2 border-accent bg-accent/5 card-with-joints p-6">
+        <div className="border-2 border-bronze bg-bronze/5 card-with-joints p-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <div className="flex items-baseline gap-2 mb-2">
-                <span className="font-syne text-3xl font-bold text-accent">
+                <span className="font-syne text-3xl font-bold text-bronze">
                   {data.currentRole.displayName}
                 </span>
                 <span className="font-mono text-sm text-timber-dark/60">
@@ -214,7 +214,7 @@ export default function ProgressionPage() {
                 </div>
                 <div className="h-2 bg-timber-dark/10 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-accent rounded-full transition-all duration-500"
+                    className="h-full bg-bronze rounded-full transition-all duration-500"
                     style={{ width: `${data.progress.progressPercent}%` }}
                   />
                 </div>
@@ -294,7 +294,7 @@ export default function ProgressionPage() {
 
           {/* Recent Achievements */}
           {data.achievements.length > 0 && (
-            <section className="border-2 border-timber-dark bg-canvas card-with-joints p-6">
+            <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-timber-dark" />
                 <h3 className="font-syne text-lg font-bold text-timber-dark">
@@ -310,12 +310,12 @@ export default function ProgressionPage() {
                     className="
                       w-full text-left
                       flex items-center gap-3 p-3
-                      border border-timber-dark/20 bg-timber-dark/5
+                      border border-line/20 bg-timber-dark/5
                       hover:bg-timber-dark/10
                       transition-colors
                     "
                   >
-                    <Trophy className="w-5 h-5 text-accent flex-shrink-0" />
+                    <Trophy className="w-5 h-5 text-bronze flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <div className="font-mono text-sm font-semibold text-timber-dark truncate">
                         {achievement.title}
@@ -332,16 +332,16 @@ export default function ProgressionPage() {
 
           {/* Next Level Info */}
           {data.progress?.nextRole && (
-            <section className="border-2 border-timber-dark bg-canvas card-with-joints p-6">
+            <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-accent" />
+                <Sparkles className="w-5 h-5 text-bronze" />
                 <h3 className="font-syne text-lg font-bold text-timber-dark">
                   Наступний рівень
                 </h3>
               </div>
 
               <div className="mb-4">
-                <div className="font-syne text-2xl font-bold text-accent mb-1">
+                <div className="font-syne text-2xl font-bold text-bronze mb-1">
                   {data.progress.nextRoleLabel}
                 </div>
                 <div className="font-mono text-xs text-timber-dark/60">
@@ -360,7 +360,7 @@ export default function ProgressionPage() {
                         key={priv}
                         className="flex items-start gap-2 font-mono text-sm text-timber-dark/80"
                       >
-                        <span className="text-accent">✨</span>
+                        <span className="text-bronze">✨</span>
                         {PRIVILEGE_LABELS[priv] || priv}
                       </li>
                     ))}

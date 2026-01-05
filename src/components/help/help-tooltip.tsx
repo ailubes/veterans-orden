@@ -128,13 +128,13 @@ export function HelpTooltip({
         <button
           ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
-          className="p-1 hover:bg-accent/10 transition-colors rounded-full group"
+          className="p-1 hover:bg-bronze/10 transition-colors rounded-full group"
           title="Довідка"
           aria-label="Показати довідку"
         >
           <HelpCircle
             size={18}
-            className="text-timber-beam group-hover:text-accent transition-colors"
+            className="text-muted-500 group-hover:text-bronze transition-colors"
           />
         </button>
 
@@ -142,15 +142,15 @@ export function HelpTooltip({
         {isOpen && (
           <div
             ref={popoverRef}
-            className={`absolute z-50 w-80 bg-white border-2 border-timber-dark shadow-lg ${getPositionClasses()}`}
+            className={`absolute z-50 w-80 bg-white border border-line rounded-lg shadow-lg ${getPositionClasses()}`}
           >
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
             {/* Header */}
-            <div className="flex items-center justify-between p-3 border-b-2 border-timber-dark bg-timber-dark/5">
+            <div className="flex items-center justify-between p-3 border-b-2 border-line bg-timber-dark/5">
               <div className="flex items-center gap-2">
-                <HelpCircle size={16} className="text-accent" />
+                <HelpCircle size={16} className="text-bronze" />
                 <p className="font-bold text-sm">Підказка</p>
               </div>
               <button
@@ -170,7 +170,7 @@ export function HelpTooltip({
               {tooltip.article && (
                 <Link
                   href={`/help/${tooltip.article.slug}`}
-                  className="inline-flex items-center gap-2 mt-3 text-sm font-bold text-accent hover:underline"
+                  className="inline-flex items-center gap-2 mt-3 text-sm font-bold text-bronze hover:underline"
                   onClick={() => setIsOpen(false)}
                 >
                   <ExternalLink size={14} />

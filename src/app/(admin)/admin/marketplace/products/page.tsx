@@ -110,7 +110,7 @@ export default function AdminProductsPage() {
         <div className="mb-8">
           <h1 className="font-syne text-3xl font-bold">Товари маркетплейсу</h1>
         </div>
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="text-center py-12 text-muted-500">Завантаження...</div>
       </div>
     );
   }
@@ -121,7 +121,7 @@ export default function AdminProductsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-syne text-3xl font-bold mb-2">Товари маркетплейсу</h1>
-          <p className="text-timber-beam">Управління каталогом товарів</p>
+          <p className="text-muted-500">Управління каталогом товарів</p>
         </div>
         <Link
           href="/admin/marketplace/products/new"
@@ -133,12 +133,12 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-2 border-timber-dark p-4 mb-6">
+      <div className="bg-white border border-line rounded-lg p-4 mb-6">
         <div className="flex flex-wrap gap-3">
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as ProductStatus | 'all')}
-            className="border-2 border-timber-dark px-3 py-2 font-bold"
+            className="border border-line rounded-lg px-3 py-2 font-bold"
           >
             <option value="all">Всі статуси</option>
             <option value="draft">Чернетки</option>
@@ -150,7 +150,7 @@ export default function AdminProductsPage() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as ProductType | 'all')}
-            className="border-2 border-timber-dark px-3 py-2 font-bold"
+            className="border border-line rounded-lg px-3 py-2 font-bold"
           >
             <option value="all">Всі типи</option>
             <option value="physical">Фізичні</option>
@@ -166,9 +166,9 @@ export default function AdminProductsPage() {
           {error}
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-12 bg-white border-2 border-timber-dark">
-          <Package className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam mb-6">Немає товарів</p>
+        <div className="text-center py-12 bg-white border border-line rounded-lg">
+          <Package className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500 mb-6">Немає товарів</p>
           <Link
             href="/admin/marketplace/products/new"
             className="btn btn-primary"
@@ -178,7 +178,7 @@ export default function AdminProductsPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-white border-2 border-timber-dark overflow-hidden">
+        <div className="bg-white border border-line rounded-lg overflow-hidden">
           <table className="w-full">
             <thead className="bg-timber-dark text-canvas">
               <tr>
@@ -197,7 +197,7 @@ export default function AdminProductsPage() {
                 return (
                   <tr
                     key={product.id}
-                    className="border-b border-timber-dark/10 last:border-0 hover:bg-timber-dark/5"
+                    className="border-b border-line/10 last:border-0 hover:bg-timber-dark/5"
                   >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
@@ -209,14 +209,14 @@ export default function AdminProductsPage() {
                           />
                         ) : (
                           <div className="w-12 h-12 bg-timber-dark/10 flex items-center justify-center">
-                            <Package size={20} className="text-timber-beam" />
+                            <Package size={20} className="text-muted-500" />
                           </div>
                         )}
                         <div>
                           <p className="font-bold">{product.nameUk}</p>
-                          <p className="text-xs text-timber-beam">{product.slug}</p>
+                          <p className="text-xs text-muted-500">{product.slug}</p>
                           {product.featured && (
-                            <Star size={14} className="text-accent fill-accent inline mt-1" />
+                            <Star size={14} className="text-bronze fill-accent inline mt-1" />
                           )}
                         </div>
                       </div>
@@ -226,16 +226,16 @@ export default function AdminProductsPage() {
                     </td>
                     <td className="p-4">{getStatusBadge(product.status)}</td>
                     <td className="p-4">
-                      <p className="font-syne font-bold text-accent">
+                      <p className="font-syne font-bold text-bronze">
                         {product.pricePoints}
                       </p>
-                      <p className="text-xs text-timber-beam">≈ {uahValue.toFixed(0)} грн</p>
+                      <p className="text-xs text-muted-500">≈ {uahValue.toFixed(0)} грн</p>
                     </td>
                     <td className="p-4">
                       {product.stockQuantity !== null ? (
                         <span className="text-sm">{product.stockQuantity} шт.</span>
                       ) : (
-                        <span className="text-sm text-timber-beam">Необмежено</span>
+                        <span className="text-sm text-muted-500">Необмежено</span>
                       )}
                     </td>
                     <td className="p-4">

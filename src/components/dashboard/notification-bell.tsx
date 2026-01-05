@@ -47,7 +47,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
   const recentNotifications = notifications.slice(0, 5);
 
   const textColor = variant === 'dark' ? 'text-canvas' : 'text-timber-dark';
-  const hoverBg = variant === 'dark' ? 'hover:bg-canvas/10' : 'hover:bg-timber-dark/10';
+  const hoverBg = variant === 'dark' ? 'hover:bg-panel-900/10' : 'hover:bg-timber-dark/10';
 
   const handleNotificationClick = (notification: Notification) => {
     setSelectedNotification(notification);
@@ -80,16 +80,16 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-80 p-0 bg-canvas border-2 border-timber-dark"
+          className="w-80 p-0 bg-panel-900 border border-line rounded-lg"
           sideOffset={8}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-3 border-b border-timber-dark/10">
+          <div className="flex items-center justify-between p-3 border-b border-line/10">
             <h3 className="font-syne font-bold text-sm">СПОВІЩЕННЯ</h3>
             {unreadCount > 0 && (
               <button
                 onClick={() => markAllAsRead()}
-                className="text-xs text-accent hover:underline"
+                className="text-xs text-bronze hover:underline"
               >
                 Прочитати всі
               </button>
@@ -99,13 +99,13 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
           {/* Notifications List */}
           <div className="max-h-[320px] overflow-y-auto">
             {isLoading && recentNotifications.length === 0 ? (
-              <div className="p-4 text-center text-sm text-timber-beam">
+              <div className="p-4 text-center text-sm text-muted-500">
                 Завантаження...
               </div>
             ) : recentNotifications.length === 0 ? (
               <div className="p-6 text-center">
-                <BellOff className="w-8 h-8 mx-auto mb-2 text-timber-beam/40" />
-                <p className="text-sm text-timber-beam">Немає сповіщень</p>
+                <BellOff className="w-8 h-8 mx-auto mb-2 text-muted-500/40" />
+                <p className="text-sm text-muted-500">Немає сповіщень</p>
               </div>
             ) : (
               <div className="divide-y divide-timber-dark/5">
@@ -126,7 +126,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
           <DropdownMenuSeparator className="bg-timber-dark/10" />
           <Link
             href="/dashboard/notifications"
-            className="block p-3 text-center text-sm font-medium text-accent hover:bg-accent/5 transition-colors"
+            className="block p-3 text-center text-sm font-medium text-bronze hover:bg-bronze/5 transition-colors"
           >
             Переглянути всі сповіщення →
           </Link>
@@ -135,7 +135,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
 
       {/* Full Notification Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="bg-canvas border-2 border-timber-dark max-w-md">
+        <DialogContent className="bg-panel-900 border border-line rounded-lg max-w-md">
           {selectedNotification && (
             <>
               <DialogHeader>
@@ -159,7 +159,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
                   {selectedNotification.message}
                 </p>
 
-                <div className="mt-4 pt-4 border-t border-timber-dark/10 text-xs text-timber-beam">
+                <div className="mt-4 pt-4 border-t border-line/10 text-xs text-muted-500">
                   <div className="flex justify-between">
                     <span>
                       {formatDateTime(selectedNotification.deliveredAt)}

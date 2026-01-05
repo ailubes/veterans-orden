@@ -69,7 +69,7 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
         <div
           className="
             relative max-w-lg w-full
-            border-2 border-timber-dark bg-canvas
+            border border-line rounded-lg bg-panel-900
             card-with-joints
             p-8
             animate-in fade-in zoom-in duration-300
@@ -97,12 +97,12 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
             <div className="
               inline-flex items-center justify-center
               w-20 h-20
-              bg-accent/10
-              border-2 border-accent
+              bg-bronze/10
+              border-2 border-bronze
               rounded-full
               mb-6
             ">
-              <Trophy className="w-10 h-10 text-accent" />
+              <Trophy className="w-10 h-10 text-bronze" />
             </div>
 
             {/* Title */}
@@ -116,7 +116,7 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
             </p>
 
             {/* Date */}
-            <div className="inline-block px-4 py-2 bg-timber-dark/5 border border-timber-dark/20 mb-8">
+            <div className="inline-block px-4 py-2 bg-timber-dark/5 border border-line/20 mb-8">
               <span className="font-mono text-sm text-timber-dark/60">
                 Отримано: {formatDate(achievement.earnedAt)}
               </span>
@@ -131,11 +131,11 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                 className="
                   inline-flex items-center justify-center gap-2
                   px-6 py-3
-                  bg-accent text-canvas
+                  bg-bronze text-canvas
                   font-mono text-sm font-semibold
-                  border-2 border-accent
+                  border-2 border-bronze
                   transition-all duration-200
-                  hover:bg-timber-dark hover:border-timber-dark
+                  hover:bg-timber-dark hover:border-line
                   disabled:opacity-50 disabled:cursor-not-allowed
                 "
               >
@@ -149,9 +149,9 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                 className="
                   inline-flex items-center justify-center gap-2
                   px-6 py-3
-                  bg-canvas text-timber-dark
+                  bg-panel-900 text-timber-dark
                   font-mono text-sm font-semibold
-                  border-2 border-timber-dark
+                  border border-line rounded-lg
                   transition-all duration-200
                   hover:bg-timber-dark/5
                 "

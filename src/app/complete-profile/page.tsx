@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { AlertCircle, CheckCircle } from 'lucide-react';
 import { checkProfileCompletion, getFieldLabel, type UserProfile } from '@/lib/profile-completion';
 import { KatottgSelector, type KatottgDetails } from '@/components/ui/katottg-selector';
+import { HeavyCta } from '@/components/ui/heavy-cta';
 
 export default function CompleteProfilePage() {
   const router = useRouter();
@@ -205,193 +206,185 @@ export default function CompleteProfilePage() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center py-12">
-          <p className="text-timber-beam">Завантаження...</p>
-        </div>
+      <div className="min-h-screen bg-bg-950 flex items-center justify-center">
+        <p className="text-muted-500">Завантаження...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <p className="label mb-2">НАЛАШТУВАННЯ ПРОФІЛЮ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">
-          Заповніть ваш профіль
-        </h1>
-        <p className="text-timber-beam mt-4">
-          Для продовження роботи з платформою, будь ласка, заповніть всю необхідну інформацію.
-        </p>
-      </div>
-
-      {/* Completion Progress */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-        <div className="joint joint-bl" />
-        <div className="joint joint-br" />
-
-        <p className="label text-accent mb-4">ПРОГРЕС ЗАПОВНЕННЯ</p>
-
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <div className="h-3 bg-timber-beam/20 relative">
-              <div
-                className="h-full bg-accent transition-all duration-500"
-                style={{ width: `${completionPercentage}%` }}
-              />
-            </div>
-          </div>
-          <span className="font-syne text-2xl font-bold">{completionPercentage}%</span>
+    <div className="min-h-screen bg-bg-950 py-12 px-4">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <p className="font-mono text-xs uppercase tracking-wider text-bronze mb-2">НАЛАШТУВАННЯ ПРОФІЛЮ</p>
+          <h1 className="font-inter font-black text-3xl lg:text-4xl text-text-100">
+            Заповніть ваш профіль
+          </h1>
+          <p className="text-muted-500 mt-4">
+            Для продовження роботи з платформою, будь ласка, заповніть всю необхідну інформацію.
+          </p>
         </div>
 
-        {missingFields.length > 0 && (
-          <div className="mt-4 text-sm text-timber-beam">
-            <p className="font-bold mb-2">Необхідно заповнити:</p>
-            <ul className="list-disc list-inside space-y-1">
-              {missingFields.map((field) => (
-                <li key={field}>{getFieldLabel(field)}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+        {/* Completion Progress */}
+        <div className="bg-panel-900 border border-line rounded-lg p-6 mb-6">
+          <p className="font-mono text-xs uppercase tracking-wider text-bronze mb-4">ПРОГРЕС ЗАПОВНЕННЯ</p>
 
-      {/* Profile Form */}
-      <form onSubmit={handleSubmit}>
-        <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-6">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-6">ОСОБИСТІ ДАНІ</p>
-
-          <div className="space-y-4">
-            {/* First Name */}
-            <div>
-              <label className="label block mb-2">
-                ІМ&apos;Я <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label className="label block mb-2">
-                ПРІЗВИЩЕ <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Patronymic & Sex */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="label block mb-2">ПО БАТЬКОВІ</label>
-                <input
-                  type="text"
-                  value={formData.patronymic}
-                  onChange={(e) => setFormData({ ...formData, patronymic: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+          <div className="flex items-center gap-4">
+            <div className="flex-1">
+              <div className="h-3 bg-panel-850 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-bronze transition-all duration-500"
+                  style={{ width: `${completionPercentage}%` }}
                 />
               </div>
-              <div>
-                <label className="label block mb-2">СТАТЬ</label>
-                <select
-                  value={formData.sex}
-                  onChange={(e) => setFormData({ ...formData, sex: e.target.value as UserSex })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                >
-                  <option value="not_specified">Не вказано</option>
-                  <option value="male">Чоловік</option>
-                  <option value="female">Жінка</option>
-                </select>
-              </div>
             </div>
-
-            {/* Phone */}
-            <div>
-              <label className="label block mb-2">
-                ТЕЛЕФОН <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+380XXXXXXXXX"
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Date of Birth */}
-            <div>
-              <label className="label block mb-2">
-                ДАТА НАРОДЖЕННЯ <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="date"
-                value={formData.dateOfBirth}
-                onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
-                required
-              />
-            </div>
-
-            {/* Location (KATOTTG) */}
-            <KatottgSelector
-              value={formData.katottgCode}
-              onChange={(code, details) => {
-                setFormData({ ...formData, katottgCode: code });
-                setKatottgDetails(details);
-              }}
-              required
-              error={!formData.katottgCode ? undefined : undefined}
-            />
+            <span className="font-inter font-black text-2xl text-text-100">{completionPercentage}%</span>
           </div>
+
+          {missingFields.length > 0 && (
+            <div className="mt-4 text-sm text-muted-500">
+              <p className="font-bold text-text-200 mb-2">Необхідно заповнити:</p>
+              <ul className="list-disc list-inside space-y-1">
+                {missingFields.map((field) => (
+                  <li key={field}>{getFieldLabel(field)}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {/* Success/Error Messages */}
-        {success && (
-          <div className="bg-green-50 border-2 border-green-200 p-4 mb-6 flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-green-800 font-bold">Профіль успішно заповнено!</p>
-              <p className="text-green-700 text-sm">Перенаправлення на панель управління...</p>
+        {/* Profile Form */}
+        <form onSubmit={handleSubmit}>
+          <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 mb-6">
+            <p className="font-mono text-xs uppercase tracking-wider text-bronze mb-6">ОСОБИСТІ ДАНІ</p>
+
+            <div className="space-y-4">
+              {/* First Name */}
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+                  ІМ&apos;Я <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Last Name */}
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+                  ПРІЗВИЩЕ <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Patronymic & Sex */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ПО БАТЬКОВІ</label>
+                  <input
+                    type="text"
+                    value={formData.patronymic}
+                    onChange={(e) => setFormData({ ...formData, patronymic: e.target.value })}
+                    className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">СТАТЬ</label>
+                  <select
+                    value={formData.sex}
+                    onChange={(e) => setFormData({ ...formData, sex: e.target.value as UserSex })}
+                    className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
+                  >
+                    <option value="not_specified">Не вказано</option>
+                    <option value="male">Чоловік</option>
+                    <option value="female">Жінка</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+                  ТЕЛЕФОН <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  placeholder="+380XXXXXXXXX"
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Date of Birth */}
+              <div>
+                <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+                  ДАТА НАРОДЖЕННЯ <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="date"
+                  value={formData.dateOfBirth}
+                  onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
+                  required
+                />
+              </div>
+
+              {/* Location (KATOTTG) */}
+              <KatottgSelector
+                value={formData.katottgCode}
+                onChange={(code, details) => {
+                  setFormData({ ...formData, katottgCode: code });
+                  setKatottgDetails(details);
+                }}
+                required
+                error={!formData.katottgCode ? undefined : undefined}
+              />
             </div>
           </div>
-        )}
 
-        {error && (
-          <div className="bg-red-50 border-2 border-red-200 p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <p className="text-red-800">{error}</p>
-          </div>
-        )}
+          {/* Success/Error Messages */}
+          {success && (
+            <div className="bg-bronze/10 border border-bronze/30 rounded-lg p-4 mb-6 flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-bronze flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-text-100 font-bold">Профіль успішно заповнено!</p>
+                <p className="text-muted-500 text-sm">Перенаправлення на панель управління...</p>
+              </div>
+            </div>
+          )}
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={saving || success}
-          className="btn w-full disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ТА ПРОДОВЖИТИ →'}
-        </button>
-      </form>
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <p className="text-red-400">{error}</p>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <HeavyCta
+            type="submit"
+            variant="primary"
+            size="lg"
+            fullWidth
+            disabled={saving || success}
+          >
+            {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ТА ПРОДОВЖИТИ'}
+          </HeavyCta>
+        </form>
+      </div>
     </div>
   );
 }

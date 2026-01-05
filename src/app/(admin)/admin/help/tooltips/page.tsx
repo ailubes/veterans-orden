@@ -245,8 +245,8 @@ export default function TooltipsPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-          <p className="mt-4 text-timber-beam">Завантаження...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+          <p className="mt-4 text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -258,14 +258,14 @@ export default function TooltipsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-syne text-3xl font-bold mb-2">Контекстні підказки</h1>
-          <p className="text-timber-beam">
+          <p className="text-muted-500">
             Керуйте підказками що відображаються в інтерфейсі
           </p>
         </div>
 
         <button
           onClick={openCreateModal}
-          className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
+          className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
         >
           <Plus size={20} />
           Нова підказка
@@ -273,12 +273,12 @@ export default function TooltipsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-2 border-timber-dark p-4 mb-6 relative">
+      <div className="bg-white border border-line rounded-lg p-4 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         <div className="flex items-center gap-2 mb-4">
-          <Search className="text-accent" size={20} />
+          <Search className="text-bronze" size={20} />
           <p className="font-bold">Фільтри</p>
         </div>
 
@@ -289,7 +289,7 @@ export default function TooltipsPage() {
             <select
               value={filterPage}
               onChange={(e) => setFilterPage(e.target.value)}
-              className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+              className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
             >
               <option value="">Всі сторінки</option>
               {uniquePages.map((page) => (
@@ -306,7 +306,7 @@ export default function TooltipsPage() {
             <select
               value={filterActive}
               onChange={(e) => setFilterActive(e.target.value)}
-              className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+              className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
             >
               <option value="all">Всі</option>
               <option value="true">Активні</option>
@@ -317,7 +317,7 @@ export default function TooltipsPage() {
       </div>
 
       {/* Tooltips Table */}
-      <div className="bg-white border-2 border-timber-dark relative overflow-x-auto">
+      <div className="bg-white border border-line rounded-lg relative overflow-x-auto">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -335,7 +335,7 @@ export default function TooltipsPage() {
           <tbody className="divide-y-2 divide-timber-dark/20">
             {tooltips.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-timber-beam">
+                <td colSpan={6} className="px-4 py-12 text-center text-muted-500">
                   <MessageSquare className="mx-auto mb-2" size={48} />
                   Підказки не знайдені
                 </td>
@@ -349,7 +349,7 @@ export default function TooltipsPage() {
                     </code>
                   </td>
                   <td className="px-4 py-3">
-                    <code className="text-xs bg-accent/10 px-2 py-1 text-accent font-bold">
+                    <code className="text-xs bg-bronze/10 px-2 py-1 text-bronze font-bold">
                       {tooltip.elementId}
                     </code>
                   </td>
@@ -361,7 +361,7 @@ export default function TooltipsPage() {
                           href={`/help/${tooltip.article.slug}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-accent hover:underline flex items-center gap-1 mt-1"
+                          className="text-xs text-bronze hover:underline flex items-center gap-1 mt-1"
                         >
                           <ExternalLink size={12} />
                           {tooltip.article.title}
@@ -399,18 +399,18 @@ export default function TooltipsPage() {
                         title={tooltip.isActive ? 'Вимкнути' : 'Увімкнути'}
                       >
                         {tooltip.isActive ? (
-                          <Eye size={16} className="text-timber-beam" />
+                          <Eye size={16} className="text-muted-500" />
                         ) : (
-                          <EyeOff size={16} className="text-timber-beam" />
+                          <EyeOff size={16} className="text-muted-500" />
                         )}
                       </button>
 
                       <button
                         onClick={() => openEditModal(tooltip)}
-                        className="p-2 hover:bg-accent/10 transition-colors"
+                        className="p-2 hover:bg-bronze/10 transition-colors"
                         title="Редагувати"
                       >
-                        <Edit size={16} className="text-accent" />
+                        <Edit size={16} className="text-bronze" />
                       </button>
 
                       <button
@@ -432,12 +432,12 @@ export default function TooltipsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border-2 border-timber-dark max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+          <div className="bg-white border border-line rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b-2 border-timber-dark">
+            <div className="flex items-center justify-between p-6 border-b-2 border-line">
               <h2 className="font-syne text-2xl font-bold">
                 {modalMode === 'create' ? 'Нова підказка' : 'Редагувати підказку'}
               </h2>
@@ -462,14 +462,14 @@ export default function TooltipsPage() {
                   onChange={(e) => setFormPageSlug(e.target.value)}
                   placeholder="dashboard-votes"
                   list="common-pages"
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-mono text-sm"
                 />
                 <datalist id="common-pages">
                   {commonPages.map((page) => (
                     <option key={page} value={page} />
                   ))}
                 </datalist>
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Ідентифікатор сторінки (напр: dashboard-votes, admin-members)
                 </p>
               </div>
@@ -484,9 +484,9 @@ export default function TooltipsPage() {
                   value={formElementId}
                   onChange={(e) => setFormElementId(e.target.value)}
                   placeholder="vote-submit-button"
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-mono text-sm"
                 />
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Унікальний ідентифікатор елемента на сторінці
                 </p>
               </div>
@@ -500,11 +500,11 @@ export default function TooltipsPage() {
                   value={formContent}
                   onChange={(e) => setFormContent(e.target.value)}
                   placeholder="Натисніть цю кнопку щоб підтвердити свій вибір..."
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none resize-none"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none resize-none"
                   rows={4}
                   maxLength={500}
                 />
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   {formContent.length}/500 символів
                 </p>
               </div>
@@ -517,7 +517,7 @@ export default function TooltipsPage() {
                 <select
                   value={formArticleId}
                   onChange={(e) => setFormArticleId(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
                 >
                   <option value="">Без посилання</option>
                   {articles
@@ -528,7 +528,7 @@ export default function TooltipsPage() {
                       </option>
                     ))}
                 </select>
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Додайте посилання "Дізнатися більше" на статтю
                 </p>
               </div>
@@ -539,7 +539,7 @@ export default function TooltipsPage() {
                 <select
                   value={formAudience}
                   onChange={(e) => setFormAudience(e.target.value as 'all' | 'members' | 'leaders' | 'admins')}
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
                 >
                   <option value="all">Всі користувачі</option>
                   <option value="members">Лише учасники</option>
@@ -555,21 +555,21 @@ export default function TooltipsPage() {
                     type="checkbox"
                     checked={formIsActive}
                     onChange={(e) => setFormIsActive(e.target.checked)}
-                    className="w-5 h-5 border-2 border-timber-dark accent-accent"
+                    className="w-5 h-5 border border-line rounded-lg accent-accent"
                   />
                   <span className="font-bold">Активна (відображати зараз)</span>
                 </label>
-                <p className="text-xs text-timber-beam mt-1 ml-8">
+                <p className="text-xs text-muted-500 mt-1 ml-8">
                   Неактивні підказки не відображаються користувачам
                 </p>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-timber-dark">
+            <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-line">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold"
+                className="px-6 py-3 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
               >
                 Скасувати
               </button>
@@ -577,7 +577,7 @@ export default function TooltipsPage() {
               <button
                 onClick={handleSubmit}
                 disabled={formSubmitting}
-                className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
               >
                 <Save size={18} />
                 {modalMode === 'create' ? 'Створити' : 'Зберегти'}

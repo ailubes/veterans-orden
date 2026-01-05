@@ -48,18 +48,18 @@ export default function OblastsManagementTab() {
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
 
   return (
-    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+    <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
       {/* Joints */}
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
@@ -68,31 +68,31 @@ export default function OblastsManagementTab() {
 
       <div className="mb-6">
         <h2 className="font-syne text-xl sm:text-2xl font-bold mb-2">Управління областями</h2>
-        <p className="text-timber-beam text-sm">
+        <p className="text-muted-500 text-sm">
           Адміністративні одиниці України з кількістю членів та регіональними лідерами
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-        <div className="border-2 border-timber-dark p-4">
-          <div className="flex items-center gap-2 text-timber-beam mb-1">
+        <div className="border border-line rounded-lg p-4">
+          <div className="flex items-center gap-2 text-muted-500 mb-1">
             <MapPin className="w-4 h-4" />
             <span className="text-xs uppercase tracking-wide">Всього областей</span>
           </div>
           <p className="font-syne text-2xl font-bold">{oblasts.length}</p>
         </div>
 
-        <div className="border-2 border-timber-dark p-4">
-          <div className="flex items-center gap-2 text-timber-beam mb-1">
+        <div className="border border-line rounded-lg p-4">
+          <div className="flex items-center gap-2 text-muted-500 mb-1">
             <Users className="w-4 h-4" />
             <span className="text-xs uppercase tracking-wide">Всього членів</span>
           </div>
           <p className="font-syne text-2xl font-bold">{totalMembers}</p>
         </div>
 
-        <div className="border-2 border-timber-dark p-4">
-          <div className="flex items-center gap-2 text-timber-beam mb-1">
+        <div className="border border-line rounded-lg p-4">
+          <div className="flex items-center gap-2 text-muted-500 mb-1">
             <UserCog className="w-4 h-4" />
             <span className="text-xs uppercase tracking-wide">Середньо на область</span>
           </div>
@@ -105,7 +105,7 @@ export default function OblastsManagementTab() {
       {/* Mobile Cards */}
       <div className="space-y-3 md:hidden">
         {oblasts.length === 0 ? (
-          <div className="text-center text-timber-beam py-8 border-2 border-timber-dark">
+          <div className="text-center text-muted-500 py-8 border border-line rounded-lg">
             Немає даних про області
           </div>
         ) : (
@@ -114,22 +114,22 @@ export default function OblastsManagementTab() {
             .map((oblast) => (
               <div
                 key={oblast.id}
-                className="border-2 border-timber-dark p-4"
+                className="border border-line rounded-lg p-4"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
                     <h3 className="font-bold">{oblast.name}</h3>
-                    <p className="text-xs text-timber-beam font-mono">{oblast.code}</p>
+                    <p className="text-xs text-muted-500 font-mono">{oblast.code}</p>
                   </div>
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-timber-dark/10 text-sm font-bold">
                     <Users className="w-4 h-4" />
                     {oblast.member_count}
                   </span>
                 </div>
-                <div className="pt-2 border-t border-timber-dark/10">
-                  <p className="text-xs text-timber-beam mb-1">Регіональні лідери:</p>
+                <div className="pt-2 border-t border-line/10">
+                  <p className="text-xs text-muted-500 mb-1">Регіональні лідери:</p>
                   {oblast.regional_leaders.length === 0 ? (
-                    <span className="text-sm text-timber-beam">Немає</span>
+                    <span className="text-sm text-muted-500">Немає</span>
                   ) : (
                     <div className="flex flex-wrap gap-1">
                       {oblast.regional_leaders.map((leader) => (
@@ -149,10 +149,10 @@ export default function OblastsManagementTab() {
       </div>
 
       {/* Desktop Table */}
-      <div className="hidden md:block border-2 border-timber-dark overflow-x-auto">
+      <div className="hidden md:block border border-line rounded-lg overflow-x-auto">
         <Table className="min-w-[500px]">
           <TableHeader>
-            <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
+            <TableRow className="border-b-2 border-line hover:bg-transparent">
               <TableHead className="font-syne font-bold">Код</TableHead>
               <TableHead className="font-syne font-bold">Назва</TableHead>
               <TableHead className="font-syne font-bold">Членів</TableHead>
@@ -162,7 +162,7 @@ export default function OblastsManagementTab() {
           <TableBody>
             {oblasts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center text-timber-beam py-8">
+                <TableCell colSpan={4} className="text-center text-muted-500 py-8">
                   Немає даних про області
                 </TableCell>
               </TableRow>
@@ -171,19 +171,19 @@ export default function OblastsManagementTab() {
                 .sort((a, b) => b.member_count - a.member_count)
                 .map((oblast) => (
                   <TableRow key={oblast.id} className="border-b border-timber-beam/30">
-                    <TableCell className="font-mono text-sm text-timber-beam">
+                    <TableCell className="font-mono text-sm text-muted-500">
                       {oblast.code}
                     </TableCell>
                     <TableCell className="font-medium">{oblast.name}</TableCell>
                     <TableCell>
                       <span className="inline-flex items-center gap-1">
-                        <Users className="w-4 h-4 text-timber-beam" />
+                        <Users className="w-4 h-4 text-muted-500" />
                         <span className="font-bold">{oblast.member_count}</span>
                       </span>
                     </TableCell>
                     <TableCell>
                       {oblast.regional_leaders.length === 0 ? (
-                        <span className="text-sm text-timber-beam">Немає</span>
+                        <span className="text-sm text-muted-500">Немає</span>
                       ) : (
                         <div className="space-y-1">
                           {oblast.regional_leaders.map((leader) => (
@@ -205,8 +205,8 @@ export default function OblastsManagementTab() {
       </div>
 
       {/* Info Note */}
-      <div className="mt-6 p-4 border-2 border-timber-beam bg-canvas/50">
-        <p className="text-sm text-timber-beam">
+      <div className="mt-6 p-4 border-2 border-timber-beam bg-panel-900/50">
+        <p className="text-sm text-muted-500">
           <strong>Примітка:</strong> Області є фіксованими адміністративними одиницями України.
           Редагування назв областей наразі не підтримується. Регіональні лідери призначаються
           через вкладку &quot;Ролі&quot;.

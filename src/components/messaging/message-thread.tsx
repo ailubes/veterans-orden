@@ -37,7 +37,7 @@ export function MessageThread({
   if (messages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-center px-4">
-        <p className="text-timber-beam text-sm">
+        <p className="text-muted-500 text-sm">
           Ще немає повідомлень. Напишіть перше!
         </p>
       </div>
@@ -51,7 +51,7 @@ export function MessageThread({
           {/* Date Separator */}
           <div className="flex items-center gap-3 my-4">
             <div className="flex-1 h-px bg-timber-dark/20" />
-            <span className="text-xs text-timber-beam font-medium px-2">
+            <span className="text-xs text-muted-500 font-medium px-2">
               {group.dateLabel}
             </span>
             <div className="flex-1 h-px bg-timber-dark/20" />

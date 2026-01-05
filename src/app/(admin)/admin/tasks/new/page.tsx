@@ -105,7 +105,7 @@ export default function NewTaskPage() {
       <div className="mb-8">
         <Link
           href="/admin/tasks"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до завдань
@@ -115,7 +115,7 @@ export default function NewTaskPage() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -128,7 +128,7 @@ export default function NewTaskPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Назва завдання"
                 required
               />
@@ -141,7 +141,7 @@ export default function NewTaskPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[120px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[120px]"
                 placeholder="Детальний опис завдання..."
               />
             </div>
@@ -154,7 +154,7 @@ export default function NewTaskPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, type: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="recruitment">Рекрутинг</option>
@@ -173,7 +173,7 @@ export default function NewTaskPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, priority: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   <option value="low">Низький</option>
@@ -193,7 +193,7 @@ export default function NewTaskPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, points: parseInt(e.target.value) || 0 })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min="0"
                   max="1000"
                   required
@@ -208,7 +208,7 @@ export default function NewTaskPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, due_date: e.target.value })
                   }
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 />
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function NewTaskPage() {
                 onChange={(e) =>
                   setFormData({ ...formData, requires_proof: e.target.checked })
                 }
-                className="w-5 h-5 border-2 border-timber-dark"
+                className="w-5 h-5 border border-line rounded-lg"
               />
               <label htmlFor="requires_proof" className="text-sm">
                 Потребує підтвердження виконання (посилання/скріншот)
@@ -229,7 +229,7 @@ export default function NewTaskPage() {
             </div>
 
             {/* Notification Option */}
-            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+            <div className="border-t border-line/20 pt-4 mt-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -237,10 +237,10 @@ export default function NewTaskPage() {
                   onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
                   className="w-5 h-5"
                 />
-                <Bell className="w-5 h-5 text-accent" />
+                <Bell className="w-5 h-5 text-bronze" />
                 <span className="font-bold">Сповістити всіх членів про завдання</span>
               </label>
-              <p className="text-xs text-timber-beam mt-2 ml-8">
+              <p className="text-xs text-muted-500 mt-2 ml-8">
                 Всі активні члени отримають сповіщення про нове завдання
               </p>
             </div>
@@ -263,7 +263,7 @@ export default function NewTaskPage() {
           </button>
           <Link
             href="/admin/tasks"
-            className="text-sm text-timber-beam hover:text-accent"
+            className="text-sm text-muted-500 hover:text-bronze"
           >
             Скасувати
           </Link>

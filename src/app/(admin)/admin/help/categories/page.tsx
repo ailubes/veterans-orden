@@ -316,10 +316,10 @@ export default function CategoriesPage() {
 
   // Render icon
   const renderIcon = (iconName: string | null) => {
-    if (!iconName) return <Folder size={20} className="text-timber-beam" />;
+    if (!iconName) return <Folder size={20} className="text-muted-500" />;
     const IconComponent = (LucideIcons as any)[iconName] as React.ComponentType<any> | undefined;
-    if (!IconComponent) return <Folder size={20} className="text-timber-beam" />;
-    return <IconComponent size={20} className="text-accent" />;
+    if (!IconComponent) return <Folder size={20} className="text-muted-500" />;
+    return <IconComponent size={20} className="text-bronze" />;
   };
 
   // Render category row
@@ -330,7 +330,7 @@ export default function CategoriesPage() {
     return (
       <div key={category.id}>
         <div
-          className={`flex items-center gap-3 py-3 px-4 hover:bg-timber-dark/5 transition-colors border-b border-timber-dark/10 ${
+          className={`flex items-center gap-3 py-3 px-4 hover:bg-timber-dark/5 transition-colors border-b border-line/10 ${
             depth > 0 ? 'ml-' + depth * 8 : ''
           }`}
           style={{ paddingLeft: `${depth * 32 + 16}px` }}
@@ -358,16 +358,16 @@ export default function CategoriesPage() {
                 </span>
               )}
             </div>
-            <p className="text-xs text-timber-beam truncate">/{category.slug}</p>
+            <p className="text-xs text-muted-500 truncate">/{category.slug}</p>
           </div>
 
           {/* Article Count */}
-          <div className="flex-shrink-0 text-sm text-timber-beam">
+          <div className="flex-shrink-0 text-sm text-muted-500">
             {category.articleCount} статей
           </div>
 
           {/* Order */}
-          <div className="flex-shrink-0 text-sm text-timber-beam w-16 text-center">
+          <div className="flex-shrink-0 text-sm text-muted-500 w-16 text-center">
             #{category.order}
           </div>
 
@@ -379,9 +379,9 @@ export default function CategoriesPage() {
               title={category.isVisible ? 'Приховати' : 'Показати'}
             >
               {category.isVisible ? (
-                <Eye size={16} className="text-timber-beam" />
+                <Eye size={16} className="text-muted-500" />
               ) : (
-                <EyeOff size={16} className="text-timber-beam" />
+                <EyeOff size={16} className="text-muted-500" />
               )}
             </button>
 
@@ -390,15 +390,15 @@ export default function CategoriesPage() {
               className="p-2 hover:bg-timber-dark/10 transition-colors"
               title="Додати підкатегорію"
             >
-              <Plus size={16} className="text-timber-beam" />
+              <Plus size={16} className="text-muted-500" />
             </button>
 
             <button
               onClick={() => openEditModal(category)}
-              className="p-2 hover:bg-accent/10 transition-colors"
+              className="p-2 hover:bg-bronze/10 transition-colors"
               title="Редагувати"
             >
-              <Edit size={16} className="text-accent" />
+              <Edit size={16} className="text-bronze" />
             </button>
 
             <button
@@ -425,8 +425,8 @@ export default function CategoriesPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-          <p className="mt-4 text-timber-beam">Завантаження...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+          <p className="mt-4 text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -438,14 +438,14 @@ export default function CategoriesPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-syne text-3xl font-bold mb-2">Категорії довідки</h1>
-          <p className="text-timber-beam">
+          <p className="text-muted-500">
             Керуйте категоріями та підкатегоріями центру допомоги
           </p>
         </div>
 
         <button
           onClick={() => openCreateModal()}
-          className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
+          className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
         >
           <Plus size={20} />
           Нова категорія
@@ -453,12 +453,12 @@ export default function CategoriesPage() {
       </div>
 
       {/* Categories Tree */}
-      <div className="bg-white border-2 border-timber-dark relative">
+      <div className="bg-white border border-line rounded-lg relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         {/* Table Header */}
-        <div className="flex items-center gap-3 py-3 px-4 bg-timber-dark text-canvas font-bold text-sm border-b-2 border-timber-dark">
+        <div className="flex items-center gap-3 py-3 px-4 bg-timber-dark text-canvas font-bold text-sm border-b-2 border-line">
           <div className="w-8"></div>
           <div className="w-8">Ікона</div>
           <div className="flex-1">Назва</div>
@@ -469,7 +469,7 @@ export default function CategoriesPage() {
 
         {/* Categories */}
         {categories.length === 0 ? (
-          <div className="p-12 text-center text-timber-beam">
+          <div className="p-12 text-center text-muted-500">
             <Folder className="mx-auto mb-2" size={48} />
             Категорії не знайдені
           </div>
@@ -481,12 +481,12 @@ export default function CategoriesPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white border-2 border-timber-dark max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+          <div className="bg-white border border-line rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b-2 border-timber-dark">
+            <div className="flex items-center justify-between p-6 border-b-2 border-line">
               <h2 className="font-syne text-2xl font-bold">
                 {modalMode === 'create' ? 'Нова категорія' : 'Редагувати категорію'}
               </h2>
@@ -510,7 +510,7 @@ export default function CategoriesPage() {
                   value={formNameUk}
                   onChange={(e) => setFormNameUk(e.target.value)}
                   placeholder="Початок роботи"
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none"
                 />
               </div>
 
@@ -524,7 +524,7 @@ export default function CategoriesPage() {
                   value={formNameEn}
                   onChange={(e) => setFormNameEn(e.target.value)}
                   placeholder="Getting Started"
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none"
                 />
               </div>
 
@@ -547,7 +547,7 @@ export default function CategoriesPage() {
                     )
                   }
                   placeholder="getting-started"
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-mono text-sm"
                 />
               </div>
 
@@ -558,7 +558,7 @@ export default function CategoriesPage() {
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
                   placeholder="Опис категорії..."
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none resize-none"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none resize-none"
                   rows={3}
                 />
               </div>
@@ -570,9 +570,9 @@ export default function CategoriesPage() {
                   <button
                     type="button"
                     onClick={() => setShowIconPicker(!showIconPicker)}
-                    className="w-full px-4 py-2 border-2 border-timber-dark hover:border-accent transition-colors flex items-center gap-3"
+                    className="w-full px-4 py-2 border border-line rounded-lg hover:border-bronze transition-colors flex items-center gap-3"
                   >
-                    {formIcon ? renderIcon(formIcon) : <Folder size={20} className="text-timber-beam" />}
+                    {formIcon ? renderIcon(formIcon) : <Folder size={20} className="text-muted-500" />}
                     <span className="flex-1 text-left">
                       {formIcon || 'Оберіть іконку...'}
                     </span>
@@ -580,14 +580,14 @@ export default function CategoriesPage() {
 
                   {/* Icon Picker Dropdown */}
                   {showIconPicker && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-timber-dark shadow-lg z-10 max-h-64 overflow-y-auto">
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-line rounded-lg shadow-lg z-10 max-h-64 overflow-y-auto">
                       <div className="p-2">
                         <input
                           type="text"
                           value={iconSearchQuery}
                           onChange={(e) => setIconSearchQuery(e.target.value)}
                           placeholder="Пошук іконки..."
-                          className="w-full px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm mb-2"
+                          className="w-full px-3 py-2 border border-line rounded-lg focus:border-bronze outline-none text-sm mb-2"
                         />
 
                         <div className="grid grid-cols-6 gap-2">
@@ -602,14 +602,14 @@ export default function CategoriesPage() {
                                   setShowIconPicker(false);
                                   setIconSearchQuery('');
                                 }}
-                                className={`p-3 border-2 hover:border-accent transition-colors flex items-center justify-center ${
+                                className={`p-3 border-2 hover:border-bronze transition-colors flex items-center justify-center ${
                                   formIcon === iconName
-                                    ? 'border-accent bg-accent/10'
-                                    : 'border-timber-dark/20'
+                                    ? 'border-bronze bg-bronze/10'
+                                    : 'border-line/20'
                                 }`}
                                 title={iconName}
                               >
-                                <IconComponent size={20} className="text-accent" />
+                                <IconComponent size={20} className="text-bronze" />
                               </button>
                             );
                           })}
@@ -626,7 +626,7 @@ export default function CategoriesPage() {
                 <select
                   value={formParentId}
                   onChange={(e) => setFormParentId(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold"
                 >
                   <option value="">Немає (кореневий рівень)</option>
                   {categories.map((cat) => (
@@ -648,10 +648,10 @@ export default function CategoriesPage() {
                   type="number"
                   value={formOrder}
                   onChange={(e) => setFormOrder(parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-2 border-2 border-timber-dark focus:border-accent outline-none"
+                  className="w-full px-4 py-2 border border-line rounded-lg focus:border-bronze outline-none"
                   min="0"
                 />
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Менше число = вище в списку
                 </p>
               </div>
@@ -663,21 +663,21 @@ export default function CategoriesPage() {
                     type="checkbox"
                     checked={formIsVisible}
                     onChange={(e) => setFormIsVisible(e.target.checked)}
-                    className="w-5 h-5 border-2 border-timber-dark accent-accent"
+                    className="w-5 h-5 border border-line rounded-lg accent-accent"
                   />
                   <span className="font-bold">Видима для користувачів</span>
                 </label>
-                <p className="text-xs text-timber-beam mt-1 ml-8">
+                <p className="text-xs text-muted-500 mt-1 ml-8">
                   Приховані категорії не відображаються в публічному центрі допомоги
                 </p>
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-timber-dark">
+            <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-line">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors font-bold"
+                className="px-6 py-3 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
               >
                 Скасувати
               </button>
@@ -685,7 +685,7 @@ export default function CategoriesPage() {
               <button
                 onClick={handleSubmit}
                 disabled={formSubmitting}
-                className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
               >
                 <Save size={18} />
                 {modalMode === 'create' ? 'Створити' : 'Зберегти'}

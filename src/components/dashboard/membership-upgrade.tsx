@@ -77,12 +77,12 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
               key={id}
               className={`border-2 p-4 relative ${
                 isCurrentTier
-                  ? 'border-accent bg-accent/5'
-                  : 'border-timber-dark hover:border-accent/50'
+                  ? 'border-bronze bg-bronze/5'
+                  : 'border-line hover:border-bronze/50'
               }`}
             >
               {isCurrentTier && (
-                <div className="absolute -top-3 left-4 bg-accent text-canvas px-2 py-0.5 text-xs font-bold">
+                <div className="absolute -top-3 left-4 bg-bronze text-canvas px-2 py-0.5 text-xs font-bold">
                   ПОТОЧНИЙ
                 </div>
               )}
@@ -90,18 +90,18 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="font-syne font-bold text-lg">{tier.name}</h3>
-                  <p className="text-sm text-timber-beam">{tier.description}</p>
+                  <p className="text-sm text-muted-500">{tier.description}</p>
                 </div>
                 <div className="text-right">
                   <span className="font-syne text-2xl font-bold">{tier.price}</span>
-                  <span className="text-sm text-timber-beam"> грн/міс</span>
+                  <span className="text-sm text-muted-500"> грн/міс</span>
                 </div>
               </div>
 
               <ul className="space-y-2 mb-4">
                 {tier.benefits.map((benefit, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm">
-                    <Check size={14} className="text-accent flex-shrink-0" />
+                    <Check size={14} className="text-bronze flex-shrink-0" />
                     {benefit}
                   </li>
                 ))}
@@ -110,14 +110,14 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
               {isCurrentTier ? (
                 <button
                   disabled
-                  className="w-full py-2 bg-timber-dark/10 text-timber-beam text-sm font-bold cursor-not-allowed"
+                  className="w-full py-2 bg-timber-dark/10 text-muted-500 text-sm font-bold cursor-not-allowed"
                 >
                   АКТИВНИЙ ПЛАН
                 </button>
               ) : isDowngrade ? (
                 <button
                   disabled
-                  className="w-full py-2 bg-timber-dark/10 text-timber-beam text-sm font-bold cursor-not-allowed"
+                  className="w-full py-2 bg-timber-dark/10 text-muted-500 text-sm font-bold cursor-not-allowed"
                 >
                   ЗНИЖЕННЯ НЕДОСТУПНЕ
                 </button>
@@ -142,7 +142,7 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
         })}
       </div>
 
-      <p className="text-xs text-timber-beam text-center">
+      <p className="text-xs text-muted-500 text-center">
         Оплата здійснюється через захищений сервіс LiqPay. Членство активується одразу після оплати.
       </p>
     </div>

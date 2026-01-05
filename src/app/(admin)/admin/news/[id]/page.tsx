@@ -72,7 +72,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       <div className="mb-6">
         <Link
           href="/admin/news"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО НОВИН
@@ -80,7 +80,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border-2 border-timber-dark p-6 mb-6 relative">
+      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -158,7 +158,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
         <div className="lg:col-span-2">
           {/* Featured Image */}
           {article.featured_image_url && (
-            <div className="bg-canvas border-2 border-timber-dark p-4 relative mb-6">
+            <div className="bg-panel-900 border border-line rounded-lg p-4 relative mb-6">
               <div className="joint joint-tl" />
               <div className="joint joint-tr" />
               <div className="joint joint-bl" />
@@ -176,7 +176,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
           {/* Excerpt */}
           {article.excerpt && (
-            <div className="bg-accent/10 border-2 border-accent p-6 relative mb-6">
+            <div className="bg-bronze/10 border-2 border-bronze p-6 relative mb-6">
               <div className="joint joint-tl" />
               <div className="joint joint-tr" />
               <div className="joint joint-bl" />
@@ -187,13 +187,13 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           )}
 
           {/* Content */}
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">ЗМІСТ СТАТТІ</p>
+            <p className="label text-bronze mb-4">ЗМІСТ СТАТТІ</p>
 
             <div className="prose prose-sm max-w-none">
               <p className="whitespace-pre-wrap">{article.content}</p>
@@ -203,69 +203,69 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
 
         {/* Article Info Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative mb-6">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">ІНФОРМАЦІЯ</p>
+            <p className="label text-bronze mb-4">ІНФОРМАЦІЯ</p>
 
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-timber-beam mb-1">Статус</p>
+                <p className="text-muted-500 mb-1">Статус</p>
                 <p className="font-bold">{statusLabels[article.status]}</p>
               </div>
 
               <div>
-                <p className="text-timber-beam mb-1">Категорія</p>
+                <p className="text-muted-500 mb-1">Категорія</p>
                 <p className="font-bold">{categoryLabels[article.category]}</p>
               </div>
 
               <div>
-                <p className="text-timber-beam mb-1">URL</p>
+                <p className="text-muted-500 mb-1">URL</p>
                 <p className="font-mono text-xs break-all">
                   /news/{article.slug}
                 </p>
               </div>
 
               <div>
-                <p className="text-timber-beam mb-1">Створено</p>
+                <p className="text-muted-500 mb-1">Створено</p>
                 <p className="font-bold">{formatDate(article.created_at)}</p>
               </div>
 
               {article.published_at && (
                 <div>
-                  <p className="text-timber-beam mb-1">Опубліковано</p>
+                  <p className="text-muted-500 mb-1">Опубліковано</p>
                   <p className="font-bold">{formatDate(article.published_at)}</p>
                 </div>
               )}
 
               {article.updated_at && article.updated_at !== article.created_at && (
                 <div>
-                  <p className="text-timber-beam mb-1">Оновлено</p>
+                  <p className="text-muted-500 mb-1">Оновлено</p>
                   <p className="font-bold">{formatDate(article.updated_at)}</p>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-4 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-2">АВТОР</p>
+            <p className="label text-bronze mb-2">АВТОР</p>
             {article.author ? (
               <>
                 <p className="text-sm font-bold">
                   {article.author.first_name} {article.author.last_name}
                 </p>
-                <p className="text-xs text-timber-beam">{article.author.email}</p>
+                <p className="text-xs text-muted-500">{article.author.email}</p>
               </>
             ) : (
-              <p className="text-sm text-timber-beam">—</p>
+              <p className="text-sm text-muted-500">—</p>
             )}
           </div>
         </div>

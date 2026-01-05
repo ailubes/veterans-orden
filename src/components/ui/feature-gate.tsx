@@ -116,7 +116,7 @@ export default function FeatureGate({
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div className="
           max-w-md w-full
-          border-2 border-timber-dark bg-canvas
+          border border-line rounded-lg bg-panel-900
           card-with-joints
           p-6
           text-center
@@ -132,9 +132,9 @@ export default function FeatureGate({
           </p>
 
           {/* Required role badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent mb-6">
-            <Lock className="w-4 h-4 text-accent" />
-            <span className="font-mono text-sm text-accent">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-bronze/10 border border-bronze mb-6">
+            <Lock className="w-4 h-4 text-bronze" />
+            <span className="font-mono text-sm text-bronze">
               Потрібно: <strong>{gateInfo?.requiredRoleLabel}</strong>
             </span>
           </div>
@@ -145,11 +145,11 @@ export default function FeatureGate({
             className="
               inline-flex items-center gap-2
               px-6 py-3
-              bg-accent text-canvas
+              bg-bronze text-canvas
               font-mono text-sm font-semibold
-              border-2 border-accent
+              border-2 border-bronze
               transition-all duration-200
-              hover:bg-timber-dark hover:border-timber-dark
+              hover:bg-timber-dark hover:border-line
             "
           >
             Дізнатися як розблокувати

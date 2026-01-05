@@ -21,7 +21,7 @@ export default function SettingsLoading() {
       </div>
 
       {/* Content Skeleton */}
-      <div className="bg-canvas border-2 border-timber-dark p-8 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-8 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />

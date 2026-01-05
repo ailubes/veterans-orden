@@ -223,7 +223,7 @@ export function KatottgSelector({
                   {CATEGORY_LABELS[selectedDetails.category]}
                 </span>
               </div>
-              <div className="text-xs text-timber-beam flex flex-wrap items-center gap-1">
+              <div className="text-xs text-muted-500 flex flex-wrap items-center gap-1">
                 {selectedDetails.oblastName && (
                   <span>{selectedDetails.oblastName}</span>
                 )}
@@ -245,7 +245,7 @@ export function KatottgSelector({
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-timber-beam hover:text-timber-dark p-1"
+                className="text-muted-500 hover:text-timber-dark p-1"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -258,7 +258,7 @@ export function KatottgSelector({
       {!selectedDetails && (
         <div className="relative" ref={dropdownRef}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500" />
             <input
               ref={inputRef}
               type="text"
@@ -271,14 +271,14 @@ export function KatottgSelector({
               }}
               placeholder="Почніть вводити назву міста або села..."
               disabled={disabled}
-              className={`w-full pl-10 pr-10 py-3 bg-canvas border-2 font-mono text-sm focus:outline-none transition-colors ${
+              className={`w-full pl-10 pr-10 py-3 bg-panel-900 border-2 font-mono text-sm focus:outline-none transition-colors ${
                 error
-                  ? 'border-accent focus:border-accent'
-                  : 'border-timber-dark focus:border-accent'
+                  ? 'border-bronze focus:border-bronze'
+                  : 'border-line focus:border-bronze'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
             />
             {loading && (
-              <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam animate-spin" />
+              <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500 animate-spin" />
             )}
             {searchInput && !disabled && (
               <button
@@ -286,24 +286,24 @@ export function KatottgSelector({
                 onClick={handleClear}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-timber-dark/10 rounded"
               >
-                <X className="w-4 h-4 text-timber-beam" />
+                <X className="w-4 h-4 text-muted-500" />
               </button>
             )}
           </div>
 
           {/* Search Results Dropdown */}
           {showDropdown && searchInput.length >= 2 && (
-            <div className="absolute z-50 w-full mt-1 bg-canvas border-2 border-timber-dark shadow-lg max-h-80 overflow-y-auto">
+            <div className="absolute z-50 w-full mt-1 bg-panel-900 border border-line rounded-lg shadow-lg max-h-80 overflow-y-auto">
               {loading ? (
                 <div className="p-4 text-center">
-                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-timber-beam" />
-                  <p className="text-sm text-timber-beam mt-2">Пошук...</p>
+                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-muted-500" />
+                  <p className="text-sm text-muted-500 mt-2">Пошук...</p>
                 </div>
               ) : results.length > 0 ? (
                 <div>
                   {Object.entries(groupedResults).map(([oblast, items]) => (
                     <div key={oblast}>
-                      <div className="px-3 py-2 bg-timber-dark/5 text-xs font-bold text-timber-beam uppercase tracking-wider sticky top-0">
+                      <div className="px-3 py-2 bg-timber-dark/5 text-xs font-bold text-muted-500 uppercase tracking-wider sticky top-0">
                         {oblast}
                       </div>
                       {items.map((result) => (
@@ -311,7 +311,7 @@ export function KatottgSelector({
                           key={result.code}
                           type="button"
                           onClick={() => handleSelect(result)}
-                          className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-timber-dark/10 last:border-b-0 transition-colors"
+                          className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-line/10 last:border-b-0 transition-colors"
                         >
                           <div className="flex items-start gap-2">
                             <span className="text-lg flex-shrink-0">
@@ -324,7 +324,7 @@ export function KatottgSelector({
                                   {CATEGORY_LABELS[result.category]}
                                 </span>
                               </div>
-                              <p className="text-xs text-timber-beam mt-0.5 truncate">
+                              <p className="text-xs text-muted-500 mt-0.5 truncate">
                                 {result.raionName && `${result.raionName}`}
                                 {result.hromadaName && ` · ${result.hromadaName}`}
                               </p>
@@ -336,7 +336,7 @@ export function KatottgSelector({
                   ))}
                 </div>
               ) : (
-                <div className="p-4 text-center text-timber-beam text-sm">
+                <div className="p-4 text-center text-muted-500 text-sm">
                   <p>Не знайдено населених пунктів</p>
                   <p className="text-xs mt-1">Спробуйте змінити запит</p>
                 </div>
@@ -346,7 +346,7 @@ export function KatottgSelector({
 
           {/* Hint */}
           {searchInput.length > 0 && searchInput.length < 2 && (
-            <p className="mt-2 text-xs text-timber-beam">
+            <p className="mt-2 text-xs text-muted-500">
               Введіть щонайменше 2 символи для пошуку
             </p>
           )}
@@ -354,7 +354,7 @@ export function KatottgSelector({
       )}
 
       {error && (
-        <p className="mt-2 font-mono text-xs text-accent">{error}</p>
+        <p className="mt-2 font-mono text-xs text-bronze">{error}</p>
       )}
     </div>
   );

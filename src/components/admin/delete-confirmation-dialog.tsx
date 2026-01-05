@@ -55,7 +55,7 @@ export function DeleteConfirmationDialog({
       />
 
       {/* Dialog */}
-      <div className="relative bg-canvas border-4 border-timber-dark max-w-md w-full shadow-2xl">
+      <div className="relative bg-panel-900 border-4 border-line max-w-md w-full shadow-2xl">
         {/* Joints */}
         <div className="joint joint-lg joint-tl" />
         <div className="joint joint-lg joint-tr" />
@@ -86,7 +86,7 @@ export function DeleteConfirmationDialog({
           </h2>
 
           {/* Description */}
-          <p className="text-center text-timber-beam mb-6">{description}</p>
+          <p className="text-center text-muted-500 mb-6">{description}</p>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
@@ -100,7 +100,7 @@ export function DeleteConfirmationDialog({
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="flex-1 px-6 py-3 bg-canvas text-timber-dark font-bold border-2 border-timber-dark hover:bg-timber-dark hover:text-canvas disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 px-6 py-3 bg-panel-900 text-timber-dark font-bold border border-line rounded-lg hover:bg-timber-dark hover:text-canvas disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {cancelText}
             </button>

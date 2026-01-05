@@ -24,10 +24,10 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                 <div
                   className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-colors ${
                     isCompleted
-                      ? 'bg-accent border-accent text-canvas'
+                      ? 'bg-bronze border-bronze text-canvas'
                       : isCurrent
-                      ? 'bg-timber-dark border-timber-dark text-canvas'
-                      : 'bg-canvas border-timber-dark/30 text-timber-beam'
+                      ? 'bg-timber-dark border-line text-canvas'
+                      : 'bg-panel-900 border-line/30 text-muted-500'
                   }`}
                 >
                   {isCompleted ? <Check size={20} /> : stepNumber}
@@ -35,12 +35,12 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                 <div className="mt-2 text-center hidden md:block">
                   <p
                     className={`text-xs font-bold ${
-                      isCurrent ? 'text-timber-dark' : 'text-timber-beam'
+                      isCurrent ? 'text-timber-dark' : 'text-muted-500'
                     }`}
                   >
                     {step.label}
                   </p>
-                  <p className="text-xs text-timber-beam hidden lg:block">
+                  <p className="text-xs text-muted-500 hidden lg:block">
                     {step.description}
                   </p>
                 </div>
@@ -50,7 +50,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
               {stepNumber < totalSteps && (
                 <div
                   className={`flex-1 h-0.5 mx-2 ${
-                    isCompleted ? 'bg-accent' : 'bg-timber-dark/20'
+                    isCompleted ? 'bg-bronze' : 'bg-timber-dark/20'
                   }`}
                 />
               )}

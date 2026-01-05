@@ -114,7 +114,7 @@ export default function NewChallengePage() {
       <div className="mb-8">
         <Link
           href="/admin/challenges"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до челенджів
@@ -124,7 +124,7 @@ export default function NewChallengePage() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -136,7 +136,7 @@ export default function NewChallengePage() {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Назва челенджу"
                 required
               />
@@ -148,7 +148,7 @@ export default function NewChallengePage() {
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[100px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[100px]"
                 placeholder="Детальний опис челенджу..."
               />
             </div>
@@ -160,7 +160,7 @@ export default function NewChallengePage() {
                 <select
                   value={formData.type}
                   onChange={(e) => handleTypeChange(e.target.value as ChallengeType)}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   {(Object.keys(CHALLENGE_TYPE_LABELS) as ChallengeType[]).map((type) => (
@@ -176,7 +176,7 @@ export default function NewChallengePage() {
                 <select
                   value={formData.goalType}
                   onChange={(e) => setFormData({ ...formData, goalType: e.target.value as ChallengeGoalType })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   {(Object.keys(CHALLENGE_GOAL_TYPE_LABELS) as ChallengeGoalType[]).map((goalType) => (
@@ -196,12 +196,12 @@ export default function NewChallengePage() {
                   type="number"
                   value={formData.goalTarget}
                   onChange={(e) => setFormData({ ...formData, goalTarget: parseInt(e.target.value) || 1 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min="1"
                   max="1000"
                   required
                 />
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Скільки {CHALLENGE_GOAL_TYPE_LABELS[formData.goalType].uk.toLowerCase()} потрібно
                 </p>
               </div>
@@ -212,7 +212,7 @@ export default function NewChallengePage() {
                   type="number"
                   value={formData.points}
                   onChange={(e) => setFormData({ ...formData, points: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min="1"
                   max="5000"
                   required
@@ -228,7 +228,7 @@ export default function NewChallengePage() {
                   type="date"
                   value={formData.startDate}
                   onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 />
               </div>
@@ -239,7 +239,7 @@ export default function NewChallengePage() {
                   type="date"
                   value={formData.endDate}
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min={formData.startDate}
                   required
                 />
@@ -247,7 +247,7 @@ export default function NewChallengePage() {
             </div>
 
             {/* Competitive Mode */}
-            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+            <div className="border-t border-line/20 pt-4 mt-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -258,7 +258,7 @@ export default function NewChallengePage() {
                 <Trophy className="w-5 h-5 text-orange-500" />
                 <span className="font-bold">Конкурентний режим</span>
               </label>
-              <p className="text-xs text-timber-beam mt-2 ml-8">
+              <p className="text-xs text-muted-500 mt-2 ml-8">
                 Переможці визначаються за найкращим результатом. Топ-N учасників отримують бонусні бали.
               </p>
 
@@ -269,11 +269,11 @@ export default function NewChallengePage() {
                     type="number"
                     value={formData.maxWinners}
                     onChange={(e) => setFormData({ ...formData, maxWinners: parseInt(e.target.value) || 1 })}
-                    className="w-32 px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-32 px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     min="1"
                     max="100"
                   />
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Перше місце отримає {Math.round(formData.points * CHALLENGE_REWARDS.COMPETITIVE_BONUS_MULTIPLIER)} балів
                   </p>
                 </div>
@@ -281,7 +281,7 @@ export default function NewChallengePage() {
             </div>
 
             {/* Notification Option */}
-            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+            <div className="border-t border-line/20 pt-4 mt-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -289,10 +289,10 @@ export default function NewChallengePage() {
                   onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
                   className="w-5 h-5"
                 />
-                <Bell className="w-5 h-5 text-accent" />
+                <Bell className="w-5 h-5 text-bronze" />
                 <span className="font-bold">Сповістити всіх членів</span>
               </label>
-              <p className="text-xs text-timber-beam mt-2 ml-8">
+              <p className="text-xs text-muted-500 mt-2 ml-8">
                 Всі активні члени отримають сповіщення про новий челендж
               </p>
             </div>
@@ -302,7 +302,7 @@ export default function NewChallengePage() {
         {/* Summary */}
         <div className="bg-timber-dark text-canvas p-4 relative">
           <div className="joint joint-tl" />
-          <p className="label text-accent mb-2">ПІДСУМОК</p>
+          <p className="label text-bronze mb-2">ПІДСУМОК</p>
           <p className="text-sm">
             {CHALLENGE_TYPE_LABELS[formData.type].uk} челендж: {formData.goalTarget}{' '}
             {CHALLENGE_GOAL_TYPE_LABELS[formData.goalType].uk.toLowerCase()} за{' '}
@@ -332,7 +332,7 @@ export default function NewChallengePage() {
               'СТВОРИТИ ЧЕЛЕНДЖ →'
             )}
           </button>
-          <Link href="/admin/challenges" className="text-sm text-timber-beam hover:text-accent">
+          <Link href="/admin/challenges" className="text-sm text-muted-500 hover:text-bronze">
             Скасувати
           </Link>
         </div>

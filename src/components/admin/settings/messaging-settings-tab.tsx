@@ -148,7 +148,7 @@ export default function MessagingSettingsTab({
 
   if (!canEdit) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -158,9 +158,9 @@ export default function MessagingSettingsTab({
           <MessageCircle className="w-6 h-6" />
           Налаштування повідомлень
         </h2>
-        <div className="p-8 border-2 border-accent bg-canvas/50 text-center">
-          <p className="text-accent font-medium">⚠️ Доступ заборонено</p>
-          <p className="text-timber-beam text-sm mt-2">
+        <div className="p-8 border-2 border-bronze bg-panel-900/50 text-center">
+          <p className="text-bronze font-medium">⚠️ Доступ заборонено</p>
+          <p className="text-muted-500 text-sm mt-2">
             Тільки супер адміністратори можуть переглядати і редагувати налаштування повідомлень
           </p>
         </div>
@@ -170,18 +170,18 @@ export default function MessagingSettingsTab({
 
   if (loading) {
     return (
-      <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+      <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <Loader2 className="w-8 h-8 animate-spin text-bronze" />
       </div>
     );
   }
 
   return (
-    <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+    <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
@@ -192,7 +192,7 @@ export default function MessagingSettingsTab({
           <MessageCircle className="w-6 h-6" />
           Налаштування повідомлень
         </h2>
-        <p className="text-timber-beam text-sm">
+        <p className="text-muted-500 text-sm">
           Керування системою особистих повідомлень та групових чатів
         </p>
       </div>
@@ -250,7 +250,7 @@ export default function MessagingSettingsTab({
         </div>
 
         {/* Permission Roles */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg flex items-center gap-2">
             <Users className="w-5 h-5" />
             Дозволи за ролями
@@ -261,7 +261,7 @@ export default function MessagingSettingsTab({
             <Label className="font-medium">
               Ролі, які можуть ініціювати особисті повідомлення:
             </Label>
-            <p className="text-sm text-timber-beam mb-2">
+            <p className="text-sm text-muted-500 mb-2">
               Оберіть ролі учасників, які можуть першими написати особисте повідомлення
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -285,7 +285,7 @@ export default function MessagingSettingsTab({
             <Label className="font-medium">
               Ролі, які можуть створювати групові чати:
             </Label>
-            <p className="text-sm text-timber-beam mb-2">
+            <p className="text-sm text-muted-500 mb-2">
               Оберіть ролі учасників, які можуть створювати нові групові чати
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -305,7 +305,7 @@ export default function MessagingSettingsTab({
           </div>
 
           {/* Future Features */}
-          <div className="mt-4 p-4 border-2 border-timber-beam/30 bg-canvas/50">
+          <div className="mt-4 p-4 border-2 border-timber-beam/30 bg-panel-900/50">
             <p className="text-sm font-medium mb-2">Майбутні функції:</p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
@@ -337,7 +337,7 @@ export default function MessagingSettingsTab({
         </div>
 
         {/* Attachments */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg flex items-center gap-2">
             <Paperclip className="w-5 h-5" />
             Вкладення
@@ -398,7 +398,7 @@ export default function MessagingSettingsTab({
         </div>
 
         {/* Limits */}
-        <div className="space-y-4 pt-6 border-t-2 border-timber-dark">
+        <div className="space-y-4 pt-6 border-t-2 border-line">
           <h3 className="font-syne font-bold text-lg flex items-center gap-2">
             <Clock className="w-5 h-5" />
             Обмеження
@@ -421,7 +421,7 @@ export default function MessagingSettingsTab({
                 }
                 className="mt-1"
               />
-              <p className="text-xs text-timber-beam mt-1">
+              <p className="text-xs text-muted-500 mt-1">
                 Максимальна кількість повідомлень від одного користувача за хвилину
               </p>
             </div>
@@ -442,7 +442,7 @@ export default function MessagingSettingsTab({
                 }
                 className="mt-1"
               />
-              <p className="text-xs text-timber-beam mt-1">
+              <p className="text-xs text-muted-500 mt-1">
                 Максимальна кількість учасників в груповому чаті
               </p>
             </div>
@@ -463,7 +463,7 @@ export default function MessagingSettingsTab({
                 }
                 className="mt-1"
               />
-              <p className="text-xs text-timber-beam mt-1">
+              <p className="text-xs text-muted-500 mt-1">
                 Час протягом якого можна редагувати повідомлення (0 = заборонено)
               </p>
             </div>
@@ -471,7 +471,7 @@ export default function MessagingSettingsTab({
         </div>
 
         {/* Save Button */}
-        <div className="pt-6 border-t-2 border-timber-dark">
+        <div className="pt-6 border-t-2 border-line">
           <button type="submit" disabled={saving} className="btn inline-flex items-center gap-2">
             {saving ? (
               <>
@@ -486,8 +486,8 @@ export default function MessagingSettingsTab({
             )}
           </button>
 
-          <div className="mt-4 p-4 border-2 border-accent bg-canvas/50">
-            <p className="text-sm text-accent">
+          <div className="mt-4 p-4 border-2 border-bronze bg-panel-900/50">
+            <p className="text-sm text-bronze">
               ⚠️ <strong>Увага:</strong> Зміни налаштувань повідомлень вплинуть на можливості
               комунікації всіх користувачів платформи.
             </p>

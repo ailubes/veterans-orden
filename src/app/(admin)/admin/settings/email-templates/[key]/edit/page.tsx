@@ -127,12 +127,12 @@ export default function EmailTemplateEditPage({
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto">
-        <div className="border-2 border-timber-dark p-8 bg-canvas card-with-joints flex items-center justify-center min-h-[400px]">
+        <div className="border border-line rounded-lg p-8 bg-panel-900 card-with-joints flex items-center justify-center min-h-[400px]">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
-          <Loader2 className="w-8 h-8 animate-spin text-accent" />
+          <Loader2 className="w-8 h-8 animate-spin text-bronze" />
         </div>
       </div>
     );
@@ -141,12 +141,12 @@ export default function EmailTemplateEditPage({
   if (!template) {
     return (
       <div className="max-w-6xl mx-auto">
-        <div className="border-2 border-timber-dark p-8 bg-canvas card-with-joints text-center">
+        <div className="border border-line rounded-lg p-8 bg-panel-900 card-with-joints text-center">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
-          <p className="text-accent font-medium">Шаблон не знайдено</p>
+          <p className="text-bronze font-medium">Шаблон не знайдено</p>
         </div>
       </div>
     );
@@ -158,17 +158,17 @@ export default function EmailTemplateEditPage({
       <div className="mb-8">
         <Link
           href="/admin/settings?tab=email-templates"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Назад до налаштувань
         </Link>
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ ШАБЛОНУ</p>
+        <p className="label text-bronze mb-2">РЕДАГУВАННЯ ШАБЛОНУ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">
           {template.name}
         </h1>
-        <p className="text-timber-beam mt-2">{template.description}</p>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">{template.description}</p>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-500 mt-2">
           <span>
             <strong>Версія:</strong> {template.version}
           </span>
@@ -183,19 +183,19 @@ export default function EmailTemplateEditPage({
         <TabsList className="flex flex-wrap gap-2 bg-transparent h-auto p-0 mb-8">
           <TabsTrigger
             value="edit"
-            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
           >
             Редагувати
           </TabsTrigger>
           <TabsTrigger
             value="variables"
-            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
           >
             Змінні
           </TabsTrigger>
           <TabsTrigger
             value="history"
-            className="border-2 border-timber-dark bg-canvas text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
           >
             Історія
           </TabsTrigger>
@@ -204,7 +204,7 @@ export default function EmailTemplateEditPage({
         {/* Edit Tab */}
         <TabsContent value="edit" className="mt-0">
           <form onSubmit={handleSubmit}>
-            <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+            <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
               <div className="joint joint-tl" />
               <div className="joint joint-tr" />
               <div className="joint joint-bl" />
@@ -223,7 +223,7 @@ export default function EmailTemplateEditPage({
                     className="mt-1"
                     required
                   />
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Використовуйте змінні у форматі{' '}
                     <code className="bg-timber-dark text-canvas px-1">
                       {'{{variable}}'}
@@ -234,7 +234,7 @@ export default function EmailTemplateEditPage({
                 {/* HTML Content */}
                 <div>
                   <Label htmlFor="html-content">HTML контент</Label>
-                  <div className="mt-1 border-2 border-timber-dark rounded">
+                  <div className="mt-1 border border-line rounded-lg rounded">
                     <RichTextEditor
                       content={formData.htmlContent}
                       onChange={(html) =>
@@ -244,7 +244,7 @@ export default function EmailTemplateEditPage({
                       minHeight="400px"
                     />
                   </div>
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Використовуйте змінні у форматі{' '}
                     <code className="bg-timber-dark text-canvas px-1">
                       {'{{variable}}'}
@@ -267,7 +267,7 @@ export default function EmailTemplateEditPage({
                     className="mt-1"
                     placeholder="Введіть текстову версію для клієнтів без підтримки HTML..."
                   />
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Текстова версія відправляється як альтернатива для email
                     клієнтів без HTML
                   </p>
@@ -301,13 +301,13 @@ export default function EmailTemplateEditPage({
                     className="mt-1"
                     placeholder="Напр: Оновлено посилання на сайт"
                   />
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Буде збережено в історії змін
                   </p>
                 </div>
 
                 {/* Submit */}
-                <div className="pt-4 border-t-2 border-timber-dark">
+                <div className="pt-4 border-t-2 border-line">
                   <button
                     type="submit"
                     disabled={saving}
@@ -333,14 +333,14 @@ export default function EmailTemplateEditPage({
 
         {/* Variables Tab */}
         <TabsContent value="variables" className="mt-0">
-          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+          <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <h2 className="font-syne text-xl font-bold mb-4">Доступні змінні</h2>
-            <p className="text-timber-beam text-sm mb-6">
+            <p className="text-muted-500 text-sm mb-6">
               Використовуйте ці змінні в темі та контенті листа у форматі{' '}
               <code className="bg-timber-dark text-canvas px-1">
                 {'{{variableName}}'}
@@ -351,20 +351,20 @@ export default function EmailTemplateEditPage({
               {template.availableVariables.map((variable) => (
                 <div
                   key={variable}
-                  className="p-4 border-2 border-timber-dark bg-canvas"
+                  className="p-4 border border-line rounded-lg bg-panel-900"
                 >
                   <div className="flex items-start gap-2">
-                    <Info className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                    <Info className="w-5 h-5 text-bronze flex-shrink-0 mt-0.5" />
                     <div>
                       <code className="bg-timber-dark text-canvas px-2 py-1 rounded text-sm">
                         {`{{${variable}}}`}
                       </code>
-                      <p className="text-timber-beam text-sm mt-2">
+                      <p className="text-muted-500 text-sm mt-2">
                         {template.variableDescriptions[variable] ||
                           'Опис не вказано'}
                       </p>
                       {template.previewData[variable] && (
-                        <p className="text-xs text-timber-beam mt-1">
+                        <p className="text-xs text-muted-500 mt-1">
                           <strong>Приклад:</strong> {template.previewData[variable]}
                         </p>
                       )}
@@ -378,14 +378,14 @@ export default function EmailTemplateEditPage({
 
         {/* History Tab */}
         <TabsContent value="history" className="mt-0">
-          <div className="border-2 border-timber-dark p-4 sm:p-8 bg-canvas card-with-joints">
+          <div className="border border-line rounded-lg p-4 sm:p-8 bg-panel-900 card-with-joints">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <h2 className="font-syne text-xl font-bold mb-4">Історія версій</h2>
-            <p className="text-timber-beam text-sm mb-6">
+            <p className="text-muted-500 text-sm mb-6">
               Всі зміни шаблону зберігаються для аудиту
             </p>
 
@@ -394,23 +394,23 @@ export default function EmailTemplateEditPage({
                 template.history.map((entry) => (
                   <div
                     key={entry.id}
-                    className="p-4 border-2 border-timber-dark bg-canvas"
+                    className="p-4 border border-line rounded-lg bg-panel-900"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <History className="w-4 h-4 text-accent" />
+                          <History className="w-4 h-4 text-bronze" />
                           <span className="font-bold">Версія {entry.version}</span>
                         </div>
-                        <p className="text-sm text-timber-beam">
+                        <p className="text-sm text-muted-500">
                           <strong>Тема:</strong> {entry.subject}
                         </p>
                         {entry.changeReason && (
-                          <p className="text-sm text-timber-beam mt-1">
+                          <p className="text-sm text-muted-500 mt-1">
                             <strong>Причина:</strong> {entry.changeReason}
                           </p>
                         )}
-                        <p className="text-xs text-timber-beam mt-2">
+                        <p className="text-xs text-muted-500 mt-2">
                           Змінено {new Date(entry.changedAt).toLocaleDateString('uk-UA')}{' '}
                           {entry.changedBy &&
                             `• ${entry.changedBy.first_name} ${entry.changedBy.last_name}`}
@@ -420,7 +420,7 @@ export default function EmailTemplateEditPage({
                   </div>
                 ))
               ) : (
-                <p className="text-timber-beam text-center py-8">
+                <p className="text-muted-500 text-center py-8">
                   Історія змін порожня
                 </p>
               )}

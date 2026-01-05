@@ -163,7 +163,7 @@ export function NovaPoshtaSelector({
         </label>
         <div className="relative" ref={dropdownRef}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500" />
             <input
               ref={inputRef}
               type="text"
@@ -180,10 +180,10 @@ export function NovaPoshtaSelector({
                 }
               }}
               placeholder="Почніть вводити назву міста..."
-              className="w-full pl-10 pr-10 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full pl-10 pr-10 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             />
             {loading && (
-              <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam animate-spin" />
+              <Loader2 className="absolute right-10 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500 animate-spin" />
             )}
             {cityInput && (
               <button
@@ -191,24 +191,24 @@ export function NovaPoshtaSelector({
                 onClick={handleClearCity}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-timber-dark/10 rounded"
               >
-                <X className="w-4 h-4 text-timber-beam" />
+                <X className="w-4 h-4 text-muted-500" />
               </button>
             )}
           </div>
 
           {/* City Dropdown */}
           {showDropdown && cities.length > 0 && !selectedCity && (
-            <div className="absolute z-50 w-full mt-1 bg-canvas border-2 border-timber-dark shadow-lg max-h-60 overflow-y-auto">
+            <div className="absolute z-50 w-full mt-1 bg-panel-900 border border-line rounded-lg shadow-lg max-h-60 overflow-y-auto">
               {cities.map((item, idx) => (
                 <button
                   key={`${item.ref}-${idx}`}
                   type="button"
                   onClick={() => handleCitySelect(item)}
-                  className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-timber-dark/10 last:border-b-0"
+                  className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-line/10 last:border-b-0"
                 >
                   <div className="font-medium">{item.name}</div>
                   {item.region && (
-                    <div className="text-xs text-timber-beam">{item.region}</div>
+                    <div className="text-xs text-muted-500">{item.region}</div>
                   )}
                 </button>
               ))}
@@ -235,7 +235,7 @@ export function NovaPoshtaSelector({
               <button
                 type="button"
                 onClick={() => onBranchChange('')}
-                className="text-timber-beam hover:text-timber-dark"
+                className="text-muted-500 hover:text-timber-dark"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -244,11 +244,11 @@ export function NovaPoshtaSelector({
 
           {/* Branch list */}
           {!branch && (
-            <div className="border-2 border-timber-dark max-h-80 overflow-y-auto">
+            <div className="border border-line rounded-lg max-h-80 overflow-y-auto">
               {loading ? (
                 <div className="p-4 text-center">
-                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-timber-beam" />
-                  <p className="text-sm text-timber-beam mt-2">Завантаження...</p>
+                  <Loader2 className="w-5 h-5 animate-spin mx-auto text-muted-500" />
+                  <p className="text-sm text-muted-500 mt-2">Завантаження...</p>
                 </div>
               ) : divisions.length > 0 ? (
                 <div>
@@ -258,7 +258,7 @@ export function NovaPoshtaSelector({
                       type="button"
                       onClick={() => handleBranchSelect(division)}
                       disabled={division.status !== 'Working'}
-                      className={`w-full p-3 text-left border-b border-timber-dark/10 last:border-b-0 transition-colors ${
+                      className={`w-full p-3 text-left border-b border-line/10 last:border-b-0 transition-colors ${
                         division.status === 'Working'
                           ? 'hover:bg-timber-dark/5'
                           : 'opacity-50 cursor-not-allowed bg-gray-50'
@@ -275,7 +275,7 @@ export function NovaPoshtaSelector({
                               {getCategoryLabel(division.category)}
                             </span>
                           </div>
-                          <p className="text-xs text-timber-beam mt-0.5 truncate">
+                          <p className="text-xs text-muted-500 mt-0.5 truncate">
                             {division.address}
                           </p>
                           {division.status !== 'Working' && (
@@ -289,14 +289,14 @@ export function NovaPoshtaSelector({
                   ))}
                 </div>
               ) : (
-                <div className="p-4 text-center text-timber-beam text-sm">
+                <div className="p-4 text-center text-muted-500 text-sm">
                   Відділень не знайдено
                 </div>
               )}
             </div>
           )}
 
-          <p className="text-xs text-timber-beam mt-2">
+          <p className="text-xs text-muted-500 mt-2">
             Знайдено {divisions.length} відділень у місті {selectedCity}
           </p>
         </div>

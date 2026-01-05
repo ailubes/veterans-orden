@@ -225,7 +225,7 @@ export function MessageActionsBar({
   return (
     <div
       className={cn(
-        'absolute top-0 flex items-center gap-1 bg-canvas border border-timber-dark/20 rounded shadow-sm px-1 py-0.5 z-10',
+        'absolute top-0 flex items-center gap-1 bg-panel-900 border border-line/20 rounded shadow-sm px-1 py-0.5 z-10',
         isOwnMessage ? '-left-24' : '-right-24'
       )}
     >

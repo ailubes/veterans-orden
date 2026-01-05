@@ -175,19 +175,19 @@ export default function AdminChallengesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{challenges.length}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ОЧІКУЮТЬСЯ</p>
           <p className="font-syne text-3xl font-bold text-blue-600">{upcomingCount}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">АКТИВНИХ</p>
           <p className="font-syne text-3xl font-bold text-green-600">{activeCount}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ЗАВЕРШЕНО</p>
           <p className="font-syne text-3xl font-bold text-gray-600">{completedCount}</p>
         </div>
@@ -198,7 +198,7 @@ export default function AdminChallengesPage() {
         <button
           onClick={() => setFilter({})}
           className={`px-3 py-1.5 text-xs font-bold transition-colors ${
-            !filter.status ? 'bg-timber-dark text-canvas' : 'bg-canvas border border-timber-dark/30'
+            !filter.status ? 'bg-timber-dark text-canvas' : 'bg-panel-900 border border-line/30'
           }`}
         >
           Усі
@@ -210,7 +210,7 @@ export default function AdminChallengesPage() {
             className={`px-3 py-1.5 text-xs font-bold transition-colors ${
               filter.status === status
                 ? 'bg-timber-dark text-canvas'
-                : 'bg-canvas border border-timber-dark/30 hover:border-timber-dark'
+                : 'bg-panel-900 border border-line/30 hover:border-line'
             }`}
           >
             {CHALLENGE_STATUS_LABELS[status].uk}
@@ -221,7 +221,7 @@ export default function AdminChallengesPage() {
       {/* Challenges List */}
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="animate-spin text-accent" size={32} />
+          <Loader2 className="animate-spin text-bronze" size={32} />
         </div>
       ) : challenges.length > 0 ? (
         <>
@@ -234,13 +234,13 @@ export default function AdminChallengesPage() {
               return (
                 <div
                   key={challenge.id}
-                  className="bg-canvas border-2 border-timber-dark p-4 relative"
+                  className="bg-panel-900 border border-line rounded-lg p-4 relative"
                 >
                   <div className="joint joint-tl" />
 
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex items-center gap-2">
-                      <GoalIcon size={20} className="text-timber-beam" />
+                      <GoalIcon size={20} className="text-muted-500" />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-sm line-clamp-1">{challenge.title}</h3>
                       </div>
@@ -263,14 +263,14 @@ export default function AdminChallengesPage() {
                         Топ-{challenge.maxWinners}
                       </span>
                     )}
-                    <span className="font-bold text-accent">+{challenge.points} балів</span>
+                    <span className="font-bold text-bronze">+{challenge.points} балів</span>
                   </div>
 
-                  <p className="text-xs text-timber-beam mb-3">
+                  <p className="text-xs text-muted-500 mb-3">
                     {formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}
                   </p>
 
-                  <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                  <div className="flex items-center gap-2 pt-3 border-t border-line/10">
                     <Link href={`/admin/challenges/${challenge.id}`} className="flex-1 btn btn-sm text-center">
                       {isLoading ? <Loader2 className="animate-spin mx-auto" size={16} /> : 'ПЕРЕГЛЯНУТИ'}
                     </Link>
@@ -301,12 +301,12 @@ export default function AdminChallengesPage() {
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+          <div className="hidden md:block bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b-2 border-timber-dark">
+                <thead className="border-b-2 border-line">
                   <tr>
                     <th className="text-left p-4 font-bold text-xs">ЧЕЛЕНДЖ</th>
                     <th className="text-left p-4 font-bold text-xs">ТИП</th>
@@ -323,10 +323,10 @@ export default function AdminChallengesPage() {
                     const isLoading = actionLoading === challenge.id;
 
                     return (
-                      <tr key={challenge.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
+                      <tr key={challenge.id} className="border-b border-line/20 hover:bg-timber-dark/5">
                         <td className="p-4 max-w-xs">
                           <div className="flex items-center gap-2">
-                            <GoalIcon size={18} className="text-timber-beam flex-shrink-0" />
+                            <GoalIcon size={18} className="text-muted-500 flex-shrink-0" />
                             <div>
                               <div className="font-bold">{challenge.title}</div>
                               {challenge.isCompetitive && (
@@ -359,7 +359,7 @@ export default function AdminChallengesPage() {
                           </span>
                         </td>
                         <td className="p-4">
-                          <span className="font-bold text-accent">{challenge.points}</span>
+                          <span className="font-bold text-bronze">{challenge.points}</span>
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-1">
@@ -428,12 +428,12 @@ export default function AdminChallengesPage() {
           </div>
         </>
       ) : (
-        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 relative text-center">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
-          <Target className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <Target className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає челенджів</h3>
-          <p className="text-sm text-timber-beam mb-6">
+          <p className="text-sm text-muted-500 mb-6">
             Створіть перший челендж для стимулювання активності
           </p>
           <Link href="/admin/challenges/new" className="btn">

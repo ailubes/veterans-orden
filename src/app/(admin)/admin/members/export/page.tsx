@@ -141,8 +141,8 @@ export default function MembersExportPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-8 text-center">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -154,7 +154,7 @@ export default function MembersExportPage() {
       <div className="mb-6">
         <Link
           href="/admin/members"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО СПИСКУ
@@ -163,12 +163,12 @@ export default function MembersExportPage() {
 
       {/* Header */}
       <div className="mb-6">
-        <p className="label text-accent mb-2">АДМІНІСТРУВАННЯ</p>
+        <p className="label text-bronze mb-2">АДМІНІСТРУВАННЯ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold flex items-center gap-3">
           <FileSpreadsheet size={32} />
           Експорт членів
         </h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Експорт даних членів у CSV файл (тільки для супер-адмінів)
         </p>
       </div>
@@ -189,24 +189,24 @@ export default function MembersExportPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label text-timber-beam mb-1">ВСЬОГО ЧЛЕНІВ</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
+          <p className="label text-muted-500 mb-1">ВСЬОГО ЧЛЕНІВ</p>
           <p className="font-syne text-3xl font-bold">{totalMembers}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label text-timber-beam mb-1">БУДЕ ЕКСПОРТОВАНО</p>
-          <p className="font-syne text-3xl font-bold text-accent">{filteredCount}</p>
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
+          <p className="label text-muted-500 mb-1">БУДЕ ЕКСПОРТОВАНО</p>
+          <p className="font-syne text-3xl font-bold text-bronze">{filteredCount}</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 mb-6 relative card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4 flex items-center gap-2">
+        <p className="label text-bronze mb-4 flex items-center gap-2">
           <Filter size={14} />
           ФІЛЬТРИ (ОПЦІЙНО)
         </p>
@@ -217,7 +217,7 @@ export default function MembersExportPage() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             >
               <option value="">Всі ролі</option>
               <option value="free_viewer">Спостерігач</option>
@@ -236,7 +236,7 @@ export default function MembersExportPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             >
               <option value="">Всі статуси</option>
               <option value="pending">На перевірці</option>
@@ -251,7 +251,7 @@ export default function MembersExportPage() {
             <select
               value={tierFilter}
               onChange={(e) => setTierFilter(e.target.value)}
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             >
               <option value="">Всі плани</option>
               <option value="free">Безкоштовний</option>
@@ -271,7 +271,7 @@ export default function MembersExportPage() {
               setStatusFilter('');
               setTierFilter('');
             }}
-            className="mt-4 text-sm text-accent hover:underline"
+            className="mt-4 text-sm text-bronze hover:underline"
           >
             Скинути всі фільтри
           </button>
@@ -279,15 +279,15 @@ export default function MembersExportPage() {
       </div>
 
       {/* Export Info */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 mb-6 relative card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4">ІНФОРМАЦІЯ ПРО ЕКСПОРТ</p>
+        <p className="label text-bronze mb-4">ІНФОРМАЦІЯ ПРО ЕКСПОРТ</p>
 
-        <div className="text-sm space-y-2 text-timber-beam">
+        <div className="text-sm space-y-2 text-muted-500">
           <p>CSV файл буде містити наступні поля:</p>
           <ul className="list-disc list-inside ml-4 space-y-1">
             <li>ID, Ім&apos;я, Прізвище, По-батькові</li>

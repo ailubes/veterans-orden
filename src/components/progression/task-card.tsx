@@ -23,10 +23,10 @@ interface TaskCardProps {
 export default function TaskCard({ task }: TaskCardProps) {
   return (
     <div className={`
-      border-2 bg-canvas card-with-joints
+      border-2 bg-panel-900 card-with-joints
       ${task.isCompleted
         ? 'border-green-600 bg-green-50'
-        : 'border-timber-dark'
+        : 'border-line'
       }
       p-6 transition-all duration-200 hover:shadow-lg
     `}>
@@ -67,7 +67,7 @@ export default function TaskCard({ task }: TaskCardProps) {
               <div
                 className={`
                   h-full rounded-full transition-all duration-500
-                  ${task.isCompleted ? 'bg-green-600' : 'bg-accent'}
+                  ${task.isCompleted ? 'bg-green-600' : 'bg-bronze'}
                 `}
                 style={{ width: `${task.progressPercent}%` }}
               />
@@ -81,11 +81,11 @@ export default function TaskCard({ task }: TaskCardProps) {
               className="
                 inline-flex items-center gap-2
                 px-4 py-2
-                bg-accent text-canvas
+                bg-bronze text-canvas
                 font-mono text-sm font-semibold
-                border-2 border-accent
+                border-2 border-bronze
                 transition-all duration-200
-                hover:bg-timber-dark hover:border-timber-dark
+                hover:bg-timber-dark hover:border-line
               "
             >
               {task.ctaText}

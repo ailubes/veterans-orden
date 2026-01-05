@@ -151,7 +151,7 @@ export function MessageItem({
   if (isSystemMessage) {
     return (
       <div className="flex justify-center my-2">
-        <span className="text-xs text-timber-beam bg-timber-light/50 px-3 py-1 rounded-full">
+        <span className="text-xs text-muted-500 bg-timber-light/50 px-3 py-1 rounded-full">
           {message.content}
         </span>
       </div>
@@ -163,7 +163,7 @@ export function MessageItem({
     return (
       <div className={cn('flex', isOwnMessage ? 'justify-end' : 'justify-start')}>
         <div className="max-w-[75%] px-3 py-2 bg-timber-light/30 rounded-lg">
-          <p className="text-sm text-timber-beam italic">
+          <p className="text-sm text-muted-500 italic">
             Повідомлення видалено
           </p>
         </div>
@@ -178,7 +178,7 @@ export function MessageItem({
         isOwnMessage ? 'flex-row-reverse' : 'flex-row',
         !isGrouped && 'mt-3',
         isSelectionMode && 'cursor-pointer',
-        isSelected && 'bg-accent/10'
+        isSelected && 'bg-bronze/10'
       )}
       onMouseEnter={() => !isSelectionMode && setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -191,7 +191,7 @@ export function MessageItem({
             type="checkbox"
             checked={isSelected}
             onChange={handleSelect}
-            className="w-5 h-5 rounded border-timber-dark accent-accent"
+            className="w-5 h-5 rounded border-line accent-accent"
           />
         </div>
       )}
@@ -236,7 +236,7 @@ export function MessageItem({
 
         {/* Forwarded indicator */}
         {message.forwardedFromMessageId && (
-          <div className="text-xs text-timber-beam bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-blue-500 flex items-center gap-1">
+          <div className="text-xs text-muted-500 bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-blue-500 flex items-center gap-1">
             <Forward size={10} />
             <span className="font-medium">
               Переслано від {message.forwardedFromSenderName || 'Хтось'}
@@ -246,7 +246,7 @@ export function MessageItem({
 
         {/* Reply preview */}
         {message.replyTo && (
-          <div className="text-xs text-timber-beam bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-accent">
+          <div className="text-xs text-muted-500 bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-bronze">
             <span className="font-medium">
               {message.replyTo.sender?.firstName || 'Хтось'}:
             </span>{' '}
@@ -269,19 +269,19 @@ export function MessageItem({
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full min-h-[60px] bg-canvas text-timber-dark p-2 rounded text-sm"
+                className="w-full min-h-[60px] bg-panel-900 text-timber-dark p-2 rounded text-sm"
                 autoFocus
               />
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="text-xs text-timber-beam hover:text-timber-dark"
+                  className="text-xs text-muted-500 hover:text-timber-dark"
                 >
                   Скасувати
                 </button>
                 <button
                   onClick={handleEdit}
-                  className="text-xs text-accent font-medium"
+                  className="text-xs text-bronze font-medium"
                 >
                   Зберегти
                 </button>
@@ -323,8 +323,8 @@ export function MessageItem({
                 className={cn(
                   'flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs',
                   reaction.hasReacted
-                    ? 'bg-accent/20 text-accent'
-                    : 'bg-timber-light/50 text-timber-beam hover:bg-timber-light'
+                    ? 'bg-bronze/20 text-bronze'
+                    : 'bg-timber-light/50 text-muted-500 hover:bg-timber-light'
                 )}
               >
                 <span>{reaction.emoji}</span>
@@ -347,16 +347,16 @@ export function MessageItem({
           )}
           {/* Pin indicator */}
           {isPinned && (
-            <Pin className="w-3 h-3 text-accent" />
+            <Pin className="w-3 h-3 text-bronze" />
           )}
-          <span className="text-[10px] text-timber-beam">
+          <span className="text-[10px] text-muted-500">
             {formatFullMessageTime(message.createdAt)}
           </span>
           {message.isEdited && (
-            <span className="text-[10px] text-timber-beam">(ред.)</span>
+            <span className="text-[10px] text-muted-500">(ред.)</span>
           )}
           {isOwnMessage && (
-            <span className="text-timber-beam">
+            <span className="text-muted-500">
               {message.status === 'read' ? (
                 <CheckCheck className="w-3 h-3" />
               ) : (

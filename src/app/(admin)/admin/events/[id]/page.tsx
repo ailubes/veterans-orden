@@ -99,7 +99,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       <div className="mb-6">
         <Link
           href="/admin/events"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО СПИСКУ
@@ -107,7 +107,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border-2 border-timber-dark p-6 mb-6 relative">
+      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -118,7 +118,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           <div className="flex-1">
             <h1 className="font-syne text-3xl font-bold mb-3">{event.title}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 bg-canvas text-timber-dark text-xs font-bold">
+              <span className="px-3 py-1 bg-panel-900 text-timber-dark text-xs font-bold">
                 {typeLabels[event.event_type] || event.event_type}
               </span>
               <span
@@ -182,39 +182,39 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Event Details */}
         <div className="lg:col-span-2">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative mb-6">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative mb-6">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">ОПИС ПОДІЇ</p>
+            <p className="label text-bronze mb-4">ОПИС ПОДІЇ</p>
 
             <div className="prose prose-sm max-w-none">
               <p className="whitespace-pre-wrap">{event.description}</p>
             </div>
 
             {event.requirements && (
-              <div className="mt-6 pt-6 border-t border-timber-dark/20">
-                <p className="label text-accent mb-2">ВИМОГИ ДО УЧАСНИКІВ</p>
+              <div className="mt-6 pt-6 border-t border-line/20">
+                <p className="label text-bronze mb-2">ВИМОГИ ДО УЧАСНИКІВ</p>
                 <p className="text-sm whitespace-pre-wrap">{event.requirements}</p>
               </div>
             )}
           </div>
 
           {/* Creator Info */}
-          <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-4 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-2">ОРГАНІЗАТОР</p>
+            <p className="label text-bronze mb-2">ОРГАНІЗАТОР</p>
             <p className="text-sm font-bold">
               {event.organizer?.first_name} {event.organizer?.last_name}
             </p>
-            <p className="text-xs text-timber-beam">{event.organizer?.email}</p>
-            <p className="text-xs text-timber-beam mt-2">
+            <p className="text-xs text-muted-500">{event.organizer?.email}</p>
+            <p className="text-xs text-muted-500 mt-2">
               Створено: {formatDate(event.created_at)}
             </p>
           </div>
@@ -222,13 +222,13 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
         {/* RSVP Stats */}
         <div className="lg:col-span-1">
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
-            <p className="label text-accent mb-4">СТАТИСТИКА ВІДВІДУВАНЬ</p>
+            <p className="label text-bronze mb-4">СТАТИСТИКА ВІДВІДУВАНЬ</p>
 
             <div className="space-y-4">
               <div>
@@ -288,10 +288,10 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-timber-dark/20">
+              <div className="pt-4 border-t border-line/20">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-bold">Відвідали</span>
-                  <span className="font-syne text-2xl font-bold text-accent">
+                  <span className="font-syne text-2xl font-bold text-bronze">
                     {attendedCount}
                   </span>
                 </div>
@@ -312,20 +312,20 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
       {/* RSVP List */}
       {rsvps && rsvps.length > 0 && (
-        <div className="bg-canvas border-2 border-timber-dark relative">
+        <div className="bg-panel-900 border border-line rounded-lg relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
           <div className="p-6">
-            <p className="label text-accent mb-4">ЗАРЕЄСТРОВАНІ УЧАСНИКИ</p>
+            <p className="label text-bronze mb-4">ЗАРЕЄСТРОВАНІ УЧАСНИКИ</p>
 
             <div className="space-y-2">
               {rsvps.map((rsvp) => (
                 <div
                   key={rsvp.id}
-                  className="flex items-center justify-between p-3 border border-timber-dark/20 hover:bg-timber-dark/5"
+                  className="flex items-center justify-between p-3 border border-line/20 hover:bg-timber-dark/5"
                 >
                   <div className="flex items-center gap-3">
                     {rsvp.attended ? (
@@ -337,7 +337,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                       <p className="font-bold text-sm">
                         {rsvp.user?.first_name} {rsvp.user?.last_name}
                       </p>
-                      <p className="text-xs text-timber-beam">{rsvp.user?.email}</p>
+                      <p className="text-xs text-muted-500">{rsvp.user?.email}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -355,7 +355,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                       {rsvp.status === 'not_going' && 'Не прийде'}
                     </span>
                     {!rsvp.attended && rsvp.status === 'going' && canEdit && (
-                      <button className="text-xs text-accent hover:underline font-bold">
+                      <button className="text-xs text-bronze hover:underline font-bold">
                         ВІДМІТИТИ ПРИСУТНІСТЬ
                       </button>
                     )}

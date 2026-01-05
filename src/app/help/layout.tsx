@@ -29,21 +29,21 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
   }, []);
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="min-h-screen bg-panel-900">
       {/* Header */}
-      <div className="border-b-2 border-timber-dark bg-white">
+      <div className="border-b-2 border-line bg-white">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <HelpCircle className="text-accent" size={32} />
+              <HelpCircle className="text-bronze" size={32} />
               <div>
                 <h1 className="font-syne text-2xl font-bold">Центр допомоги</h1>
-                <p className="text-sm text-timber-beam">Все про роботу з платформою</p>
+                <p className="text-sm text-muted-500">Все про роботу з платформою</p>
               </div>
             </div>
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 text-sm font-bold hover:text-accent transition-colors"
+              className="flex items-center gap-2 text-sm font-bold hover:text-bronze transition-colors"
             >
               <Home size={18} />
               На головну
@@ -59,11 +59,11 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="bg-white border-2 border-timber-dark p-4 sticky top-4">
+            <div className="bg-white border border-line rounded-lg p-4 sticky top-4">
               <div className="joint joint-tl" />
               <div className="joint joint-tr" />
 
-              <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-timber-dark/20">
+              <h2 className="font-syne font-bold mb-4 pb-2 border-b-2 border-line/20">
                 Категорії
               </h2>
 
@@ -79,11 +79,11 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                     href="/help"
                     className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                       pathname === '/help'
-                        ? 'bg-accent text-canvas border-2 border-timber-dark shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
+                        ? 'bg-bronze text-canvas border border-line rounded-lg shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
                         : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                     }`}
                   >
-                    <Home size={16} className={pathname === '/help' ? 'text-canvas' : 'text-accent'} />
+                    <Home size={16} className={pathname === '/help' ? 'text-canvas' : 'text-bronze'} />
                     Головна
                   </Link>
 
@@ -97,11 +97,11 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                           href={`/help/${category.slug}`}
                           className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                             isActive
-                              ? 'bg-accent text-canvas border-2 border-timber-dark shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
+                              ? 'bg-bronze text-canvas border border-line rounded-lg shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
                               : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                           }`}
                         >
-                          {Icon && <Icon size={16} className={isActive ? 'text-canvas' : 'text-accent'} />}
+                          {Icon && <Icon size={16} className={isActive ? 'text-canvas' : 'text-bronze'} />}
                           {category.nameUk}
                         </Link>
 
@@ -118,12 +118,12 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                                   href={`/help/${sub.slug}`}
                                   className={`flex items-center gap-2 px-3 py-1.5 text-xs transition-all rounded ${
                                     isSubActive
-                                      ? 'bg-accent text-canvas border border-timber-dark shadow-[2px_2px_0px_0px_rgba(44,40,36,1)]'
+                                      ? 'bg-bronze text-canvas border border-line shadow-[2px_2px_0px_0px_rgba(44,40,36,1)]'
                                       : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
                                   }`}
                                 >
-                                  <ChevronRight size={12} className={isSubActive ? 'text-canvas' : 'text-timber-beam'} />
-                                  {SubIcon && <SubIcon size={12} className={isSubActive ? 'text-canvas' : 'text-accent'} />}
+                                  <ChevronRight size={12} className={isSubActive ? 'text-canvas' : 'text-muted-500'} />
+                                  {SubIcon && <SubIcon size={12} className={isSubActive ? 'text-canvas' : 'text-bronze'} />}
                                   {sub.nameUk}
                                 </Link>
                               );

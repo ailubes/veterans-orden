@@ -168,7 +168,7 @@ export function AddParticipantsModal({
               <button
                 key={user.id}
                 onClick={() => toggleUser(user.id)}
-                className="flex items-center gap-1.5 px-2 py-1 bg-accent/20 rounded-full text-sm hover:bg-accent/30 transition-colors"
+                className="flex items-center gap-1.5 px-2 py-1 bg-bronze/20 rounded-full text-sm hover:bg-bronze/30 transition-colors"
               >
                 {user.avatarUrl ? (
                   <Image
@@ -188,7 +188,7 @@ export function AddParticipantsModal({
                 <span>
                   {user.firstName} {user.lastName}
                 </span>
-                <X className="w-3 h-3 text-timber-beam" />
+                <X className="w-3 h-3 text-muted-500" />
               </button>
             ))}
           </div>
@@ -196,28 +196,28 @@ export function AddParticipantsModal({
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Пошук користувачів..."
-            className="w-full pl-9 pr-4 py-2 border border-timber-dark/20 rounded-lg text-sm focus:outline-none focus:border-timber-dark"
+            className="w-full pl-9 pr-4 py-2 border border-line/20 rounded-lg text-sm focus:outline-none focus:border-line"
             autoFocus
           />
           {searching && (
-            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-timber-beam" />
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-muted-500" />
           )}
         </div>
 
         {/* Search Results */}
         <div className="max-h-[300px] overflow-y-auto space-y-1">
           {search.trim().length < 2 ? (
-            <p className="text-center text-sm text-timber-beam py-4">
+            <p className="text-center text-sm text-muted-500 py-4">
               Введіть мінімум 2 символи для пошуку
             </p>
           ) : searchResults.length === 0 && !searching ? (
-            <p className="text-center text-sm text-timber-beam py-4">
+            <p className="text-center text-sm text-muted-500 py-4">
               Користувачів не знайдено
             </p>
           ) : (
@@ -230,7 +230,7 @@ export function AddParticipantsModal({
                   onClick={() => toggleUser(user.id)}
                   className={cn(
                     'w-full flex items-center gap-3 p-2 rounded-lg transition-colors',
-                    isSelected ? 'bg-accent/20' : 'hover:bg-timber-light/50'
+                    isSelected ? 'bg-bronze/20' : 'hover:bg-timber-light/50'
                   )}
                 >
                   {/* Avatar */}
@@ -255,7 +255,7 @@ export function AddParticipantsModal({
                     <p className="font-medium text-sm truncate">
                       {user.firstName} {user.lastName}
                     </p>
-                    <p className="text-xs text-timber-beam capitalize">
+                    <p className="text-xs text-muted-500 capitalize">
                       {user.membershipRole?.replace('_', ' ') || 'Учасник'}
                     </p>
                   </div>
@@ -265,8 +265,8 @@ export function AddParticipantsModal({
                     className={cn(
                       'w-5 h-5 rounded border-2 flex items-center justify-center transition-colors',
                       isSelected
-                        ? 'bg-accent border-accent text-canvas'
-                        : 'border-timber-dark/30'
+                        ? 'bg-bronze border-bronze text-canvas'
+                        : 'border-line/30'
                     )}
                   >
                     {isSelected && <Check className="w-3 h-3" />}
@@ -278,10 +278,10 @@ export function AddParticipantsModal({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-timber-dark/10">
+        <div className="flex items-center justify-between pt-2 border-t border-line/10">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm text-timber-beam hover:text-timber-dark transition-colors"
+            className="px-4 py-2 text-sm text-muted-500 hover:text-timber-dark transition-colors"
           >
             Скасувати
           </button>
@@ -291,8 +291,8 @@ export function AddParticipantsModal({
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               selectedUsers.size > 0 && !loading
-                ? 'bg-accent text-canvas hover:bg-accent/90'
-                : 'bg-timber-light text-timber-beam cursor-not-allowed'
+                ? 'bg-bronze text-canvas hover:bg-bronze/90'
+                : 'bg-timber-light text-muted-500 cursor-not-allowed'
             )}
           >
             {loading ? (

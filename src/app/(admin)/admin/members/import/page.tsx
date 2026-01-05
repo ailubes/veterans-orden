@@ -22,14 +22,14 @@ export default async function MembersImportPage() {
       <div className="mb-8">
         <Link
           href="/admin/members"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до членів
         </Link>
         <p className="label mb-2">АДМІНІСТРУВАННЯ</p>
         <h1 className="font-syne text-3xl font-bold">Імпорт членів з CSV</h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Масове додавання членів через завантаження CSV файлу
         </p>
       </div>

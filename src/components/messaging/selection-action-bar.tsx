@@ -16,7 +16,7 @@ export function SelectionActionBar({
   onCancel,
 }: SelectionActionBarProps) {
   return (
-    <div className="flex items-center justify-between px-3 py-2 bg-timber-light border-t border-timber-dark/20">
+    <div className="flex items-center justify-between px-3 py-2 bg-timber-light border-t border-line/20">
       {/* Selection count */}
       <div className="flex items-center gap-2">
         <button
@@ -35,7 +35,7 @@ export function SelectionActionBar({
       <div className="flex items-center gap-2">
         <button
           onClick={onForward}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-canvas rounded hover:bg-accent/90 transition-colors text-sm font-medium"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-bronze text-canvas rounded hover:bg-bronze/90 transition-colors text-sm font-medium"
         >
           <Forward className="w-4 h-4" />
           Переслати

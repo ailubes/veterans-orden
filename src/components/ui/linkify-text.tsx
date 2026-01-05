@@ -81,7 +81,7 @@ export function LinkifyText({ text, className = '', maxUrlLength = 40 }: Linkify
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-accent hover:underline break-all"
+        className="text-bronze hover:underline break-all"
         title={url}
       >
         {shortenUrl(url, maxUrlLength)}

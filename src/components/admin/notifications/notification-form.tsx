@@ -130,7 +130,7 @@ export function NotificationForm({
   const availableScopes = getAvailableScopes();
 
   return (
-    <form onSubmit={handleSubmit} className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <form onSubmit={handleSubmit} className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
@@ -148,10 +148,10 @@ export function NotificationForm({
             onChange={(e) => setTitle(e.target.value)}
             maxLength={200}
             placeholder="Короткий заголовок сповіщення"
-            className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             required
           />
-          <p className="text-xs text-timber-beam mt-1">
+          <p className="text-xs text-muted-500 mt-1">
             {title.length}/200 символів
           </p>
         </div>
@@ -166,7 +166,7 @@ export function NotificationForm({
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
             placeholder="Детальний текст повідомлення"
-            className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+            className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
             required
           />
         </div>
@@ -182,8 +182,8 @@ export function NotificationForm({
                 onClick={() => setType(t.value)}
                 className={`px-3 py-2 text-sm font-bold border-2 transition-colors ${
                   type === t.value
-                    ? `${t.color} border-timber-dark`
-                    : 'bg-timber-dark/5 border-timber-dark/30 hover:border-timber-dark'
+                    ? `${t.color} border-line`
+                    : 'bg-timber-dark/5 border-line/30 hover:border-line'
                 }`}
               >
                 {t.label}
@@ -203,7 +203,7 @@ export function NotificationForm({
               setScope(e.target.value);
               setScopeValue('');
             }}
-            className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
             required
           >
             {availableScopes.map((s) => (
@@ -221,7 +221,7 @@ export function NotificationForm({
             <select
               value={scopeValue}
               onChange={(e) => setScopeValue(e.target.value)}
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               required
             >
               <option value="">Оберіть роль...</option>
@@ -240,7 +240,7 @@ export function NotificationForm({
             <select
               value={scopeValue}
               onChange={(e) => setScopeValue(e.target.value)}
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               required
             >
               <option value="">Оберіть план...</option>
@@ -263,7 +263,7 @@ export function NotificationForm({
               value={scopeValue}
               onChange={(e) => setScopeValue(e.target.value)}
               placeholder="UUID користувача"
-              className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
               required
             />
           </div>

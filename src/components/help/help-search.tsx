@@ -149,7 +149,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
     const parts = text.split(new RegExp(`(${query.trim()})`, 'gi'));
     return parts.map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? (
-        <mark key={index} className="bg-accent/30 font-bold">
+        <mark key={index} className="bg-bronze/30 font-bold">
           {part}
         </mark>
       ) : (
@@ -162,7 +162,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
     <div className="relative w-full">
       <form onSubmit={handleSubmit} className="relative">
         <Search
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-timber-beam pointer-events-none"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-500 pointer-events-none"
           size={20}
         />
         <input
@@ -173,12 +173,12 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
           onKeyDown={handleKeyDown}
           onFocus={() => query.trim().length >= 2 && results.length > 0 && setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-12 pr-12 py-3 border-2 border-timber-dark focus:border-accent outline-none font-mono text-sm"
+          className="w-full pl-12 pr-12 py-3 border border-line rounded-lg focus:border-bronze outline-none font-mono text-sm"
           autoComplete="off"
         />
         {isLoading && (
           <Loader2
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-accent animate-spin"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-bronze animate-spin"
             size={20}
           />
         )}
@@ -188,7 +188,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
       {isOpen && results.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-timber-dark shadow-lg max-h-96 overflow-y-auto z-50"
+          className="absolute top-full left-0 right-0 mt-2 bg-white border border-line rounded-lg shadow-lg max-h-96 overflow-y-auto z-50"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
@@ -200,26 +200,26 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
                 onClick={() => handleResultClick(result)}
                 className={`w-full text-left p-3 transition-colors border-2 mb-2 ${
                   selectedIndex === index
-                    ? 'border-accent bg-accent/10'
-                    : 'border-timber-dark/20 hover:border-accent hover:bg-timber-dark/5'
+                    ? 'border-bronze bg-bronze/10'
+                    : 'border-line/20 hover:border-bronze hover:bg-timber-dark/5'
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <FileText className="text-accent flex-shrink-0 mt-1" size={16} />
+                  <FileText className="text-bronze flex-shrink-0 mt-1" size={16} />
                   <div className="flex-1 min-w-0">
                     <h4 className="font-bold text-sm mb-1 line-clamp-1">
                       {highlightText(result.title, query)}
                     </h4>
                     {result.excerpt && (
-                      <p className="text-xs text-timber-beam line-clamp-2">
+                      <p className="text-xs text-muted-500 line-clamp-2">
                         {highlightText(result.excerpt, query)}
                       </p>
                     )}
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-accent font-bold">
+                      <span className="text-xs text-bronze font-bold">
                         {result.categoryName}
                       </span>
-                      <span className="text-xs text-timber-beam">
+                      <span className="text-xs text-muted-500">
                         • Релевантність: {Math.round(result.rank * 100)}%
                       </span>
                     </div>
@@ -233,13 +233,13 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
               onClick={handleSubmit}
               className={`w-full text-left p-3 transition-colors border-2 font-bold ${
                 selectedIndex === results.length
-                  ? 'border-accent bg-accent/10'
-                  : 'border-timber-dark/20 hover:border-accent hover:bg-timber-dark/5'
+                  ? 'border-bronze bg-bronze/10'
+                  : 'border-line/20 hover:border-bronze hover:bg-timber-dark/5'
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm">Переглянути всі результати для "{query}"</span>
-                <ArrowRight size={16} className="text-accent" />
+                <ArrowRight size={16} className="text-bronze" />
               </div>
             </button>
           </div>
@@ -250,16 +250,16 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
       {isOpen && !isLoading && query.trim().length >= 2 && results.length === 0 && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-timber-dark p-6 text-center z-50"
+          className="absolute top-full left-0 right-0 mt-2 bg-white border border-line rounded-lg p-6 text-center z-50"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
-          <Search className="mx-auto mb-2 text-timber-beam" size={32} />
-          <p className="text-timber-beam text-sm">
+          <Search className="mx-auto mb-2 text-muted-500" size={32} />
+          <p className="text-muted-500 text-sm">
             Нічого не знайдено за запитом "{query}"
           </p>
-          <p className="text-xs text-timber-beam mt-2">
+          <p className="text-xs text-muted-500 mt-2">
             Спробуйте інші ключові слова або перегляньте категорії
           </p>
         </div>

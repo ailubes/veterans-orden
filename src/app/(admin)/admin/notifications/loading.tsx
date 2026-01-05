@@ -15,7 +15,7 @@ export default function NotificationsLoading() {
         {/* Send Form Skeleton */}
         <div>
           <Skeleton className="h-6 w-48 mb-4" />
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
@@ -50,7 +50,7 @@ export default function NotificationsLoading() {
         {/* History Skeleton */}
         <div>
           <Skeleton className="h-6 w-40 mb-4" />
-          <div className="bg-canvas border-2 border-timber-dark relative">
+          <div className="bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="joint joint-bl" />
@@ -60,7 +60,7 @@ export default function NotificationsLoading() {
               {[1, 2, 3, 4, 5].map((i) => (
                 <div
                   key={i}
-                  className="p-4 border-b border-timber-dark/20 space-y-2"
+                  className="p-4 border-b border-line/20 space-y-2"
                 >
                   <div className="flex gap-2">
                     <Skeleton className="h-5 w-16" />

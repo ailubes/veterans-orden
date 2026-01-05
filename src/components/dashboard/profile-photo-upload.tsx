@@ -136,7 +136,7 @@ export function ProfilePhotoUpload({
       <div className="flex items-center gap-6">
         {/* Avatar Preview */}
         <div className="relative">
-          <div className="w-32 h-32 rounded-full border-4 border-timber-dark bg-timber-beam/10 flex items-center justify-center overflow-hidden">
+          <div className="w-32 h-32 rounded-full border-4 border-line bg-timber-beam/10 flex items-center justify-center overflow-hidden">
             {previewUrl ? (
               <img
                 src={previewUrl}
@@ -189,7 +189,7 @@ export function ProfilePhotoUpload({
             {uploading ? 'ЗАВАНТАЖЕННЯ...' : 'ЗАВАНТАЖИТИ ФОТО'}
           </label>
 
-          <p className="text-xs text-timber-beam mt-2">
+          <p className="text-xs text-muted-500 mt-2">
             JPG, PNG, WebP або GIF. Буде оптимізовано до 100KB.
           </p>
 

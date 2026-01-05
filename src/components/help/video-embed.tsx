@@ -27,14 +27,14 @@ export function VideoEmbed({ url, title }: VideoEmbedProps) {
 
   if (!videoId) {
     return (
-      <div className="bg-timber-dark/10 border-2 border-timber-dark/30 p-8 text-center">
-        <Video className="mx-auto mb-3 text-timber-beam" size={48} />
-        <p className="text-timber-beam">Неможливо завантажити відео</p>
+      <div className="bg-timber-dark/10 border border-line rounded-lg/30 p-8 text-center">
+        <Video className="mx-auto mb-3 text-muted-500" size={48} />
+        <p className="text-muted-500">Неможливо завантажити відео</p>
         <a
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-accent hover:underline text-sm mt-2 inline-block"
+          className="text-bronze hover:underline text-sm mt-2 inline-block"
         >
           Відкрити посилання
         </a>
@@ -43,7 +43,7 @@ export function VideoEmbed({ url, title }: VideoEmbedProps) {
   }
 
   return (
-    <div className="bg-white border-2 border-timber-dark relative overflow-hidden">
+    <div className="bg-white border border-line rounded-lg relative overflow-hidden">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />

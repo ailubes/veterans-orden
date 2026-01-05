@@ -46,23 +46,23 @@ export default async function AdminEventsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{events?.length || 0}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ОПУБЛІКОВАНО</p>
           <p className="font-syne text-3xl font-bold text-green-600">
             {events?.filter((e) => e.status === 'published').length || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ЧЕРНЕТКИ</p>
           <p className="font-syne text-3xl font-bold text-gray-500">
             {events?.filter((e) => e.status === 'draft').length || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">НАЙБЛИЖЧА</p>
           <p className="font-syne text-xl font-bold">
             {events?.find((e) => e.status === 'published' && new Date(e.start_date) > new Date())
@@ -80,13 +80,13 @@ export default async function AdminEventsPage() {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="bg-canvas border-2 border-timber-dark p-4 relative"
+                className="bg-panel-900 border border-line rounded-lg p-4 relative"
               >
                 <div className="joint joint-tl" />
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-sm line-clamp-2">{event.title}</h3>
-                    <p className="text-xs text-timber-beam mt-1">
+                    <p className="text-xs text-muted-500 mt-1">
                       {event.organizer?.first_name} {event.organizer?.last_name}
                     </p>
                   </div>
@@ -98,7 +98,7 @@ export default async function AdminEventsPage() {
                     {statusLabels[event.status as keyof typeof statusLabels]}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-timber-beam mb-3">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-500 mb-3">
                   <span className="font-mono">{formatDate(event.start_date)}</span>
                   <span>{formatTime(event.start_date)}</span>
                   <span className="px-2 py-1 bg-timber-dark/10">
@@ -106,7 +106,7 @@ export default async function AdminEventsPage() {
                   </span>
                   <span>{event.going_count || 0} / {event.max_attendees || '∞'}</span>
                 </div>
-                <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                <div className="flex items-center gap-2 pt-3 border-t border-line/10">
                   <Link
                     href={`/admin/events/${event.id}`}
                     className="flex-1 btn btn-sm text-center"
@@ -115,7 +115,7 @@ export default async function AdminEventsPage() {
                   </Link>
                   <Link
                     href={`/admin/events/${event.id}/edit`}
-                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -128,12 +128,12 @@ export default async function AdminEventsPage() {
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+          <div className="hidden md:block bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b-2 border-timber-dark">
+                <thead className="border-b-2 border-line">
                   <tr>
                     <th className="text-left p-4 font-bold text-xs">НАЗВА</th>
                     <th className="text-left p-4 font-bold text-xs">ДАТА</th>
@@ -145,10 +145,10 @@ export default async function AdminEventsPage() {
                 </thead>
                 <tbody>
                   {events.map((event) => (
-                    <tr key={event.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
+                    <tr key={event.id} className="border-b border-line/20 hover:bg-timber-dark/5">
                       <td className="p-4">
                         <div className="font-bold">{event.title}</div>
-                        <div className="text-xs text-timber-beam">
+                        <div className="text-xs text-muted-500">
                           {event.organizer?.first_name} {event.organizer?.last_name}
                         </div>
                       </td>
@@ -156,7 +156,7 @@ export default async function AdminEventsPage() {
                         <div className="font-mono text-sm">
                           {formatDate(event.start_date)}
                         </div>
-                        <div className="text-xs text-timber-beam">
+                        <div className="text-xs text-muted-500">
                           {formatTime(event.start_date)}
                         </div>
                       </td>
@@ -176,7 +176,7 @@ export default async function AdminEventsPage() {
                       </td>
                       <td className="p-4">
                         <span className="font-bold">{event.going_count || 0}</span>
-                        <span className="text-timber-beam text-sm">
+                        <span className="text-muted-500 text-sm">
                           {' '}
                           / {event.max_attendees || '∞'}
                         </span>
@@ -213,12 +213,12 @@ export default async function AdminEventsPage() {
           </div>
         </>
       ) : (
-        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 relative text-center">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
-          <Calendar className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає подій</h3>
-          <p className="text-sm text-timber-beam mb-6">
+          <p className="text-sm text-muted-500 mb-6">
             Створіть першу подію для членів Мережі
           </p>
           <Link href="/admin/events/new" className="btn">

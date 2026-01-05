@@ -35,7 +35,7 @@ export function EngagementChart() {
 
   if (loading) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="animate-pulse space-y-4">
@@ -47,7 +47,7 @@ export function EngagementChart() {
   }
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />

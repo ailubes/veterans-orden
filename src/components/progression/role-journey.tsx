@@ -18,7 +18,7 @@ interface RoleJourneyProps {
  */
 export default function RoleJourney({ roles }: RoleJourneyProps) {
   return (
-    <div className="border-2 border-timber-dark bg-canvas card-with-joints p-6">
+    <div className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
       <h2 className="font-syne text-2xl font-bold text-timber-dark mb-6">
         Шлях прогресу
       </h2>
@@ -40,8 +40,8 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                 ${role.isPast
                   ? 'bg-green-600 border-green-600'
                   : role.isCurrent
-                    ? 'bg-accent border-accent animate-pulse'
-                    : 'bg-canvas border-timber-dark/30'
+                    ? 'bg-bronze border-bronze animate-pulse'
+                    : 'bg-panel-900 border-line/30'
                 }
               `}>
                 {role.isPast && (
@@ -66,7 +66,7 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                     ${role.isPast
                       ? 'text-green-700'
                       : role.isCurrent
-                        ? 'text-accent'
+                        ? 'text-bronze'
                         : 'text-timber-dark/60'
                     }
                   `}>
@@ -78,8 +78,8 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                 </div>
 
                 {role.isCurrent && (
-                  <div className="inline-block px-2 py-1 bg-accent/10 border border-accent/30 mt-1">
-                    <span className="font-mono text-xs text-accent font-semibold">
+                  <div className="inline-block px-2 py-1 bg-bronze/10 border border-bronze/30 mt-1">
+                    <span className="font-mono text-xs text-bronze font-semibold">
                       Поточний рівень
                     </span>
                   </div>

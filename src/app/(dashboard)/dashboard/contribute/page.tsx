@@ -42,7 +42,7 @@ export default function ContributePage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-accent" />
+          <Loader2 className="w-8 h-8 animate-spin text-bronze" />
         </div>
       </div>
     );
@@ -53,25 +53,25 @@ export default function ContributePage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <Heart className="w-8 h-8 text-accent" />
+          <Heart className="w-8 h-8 text-bronze" />
           <h1 className="font-syne text-3xl lg:text-4xl font-bold">
             Підтримати Мережу
           </h1>
         </div>
-        <p className="text-timber-beam">
+        <p className="text-muted-500">
           Зробіть внесок для підвищення рівня членства та отримайте доступ до додаткових можливостей
         </p>
       </div>
 
       {/* Benefits Info */}
-      <div className="bg-accent/10 border-2 border-accent p-6 mb-8 relative">
+      <div className="bg-bronze/10 border-2 border-bronze p-6 mb-8 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         <div className="flex items-start gap-4">
-          <DollarSign className="w-6 h-6 text-accent flex-shrink-0" />
+          <DollarSign className="w-6 h-6 text-bronze flex-shrink-0" />
           <div>
             <h2 className="font-syne font-bold text-lg mb-2">
               Чому це важливо?
@@ -90,7 +90,7 @@ export default function ContributePage() {
       </div>
 
       {/* Membership Tiers */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 lg:p-8 relative mb-6">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 lg:p-8 relative mb-6">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -104,12 +104,12 @@ export default function ContributePage() {
       </div>
 
       {/* Additional Info */}
-      <div className="text-center text-sm text-timber-beam">
+      <div className="text-center text-sm text-muted-500">
         <p className="mb-2">
           Після оплати ваш рівень членства буде автоматично підвищено.
         </p>
         <p>
-          Маєте питання? <a href="/help" className="text-accent hover:underline font-bold">Перегляньте довідку</a>
+          Маєте питання? <a href="/help" className="text-bronze hover:underline font-bold">Перегляньте довідку</a>
         </p>
       </div>
     </div>

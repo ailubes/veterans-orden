@@ -113,7 +113,7 @@ export default function EditChallengePage({ params }: PageProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="animate-spin text-accent" size={48} />
+        <Loader2 className="animate-spin text-bronze" size={48} />
       </div>
     );
   }
@@ -123,12 +123,12 @@ export default function EditChallengePage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto">
         <Link
           href="/admin/challenges"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до челенджів
         </Link>
-        <div className="bg-canvas border-2 border-timber-dark p-12 text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 text-center">
           <p className="text-red-600">{error}</p>
         </div>
       </div>
@@ -140,14 +140,14 @@ export default function EditChallengePage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto">
         <Link
           href={`/admin/challenges/${id}`}
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до челенджу
         </Link>
-        <div className="bg-canvas border-2 border-timber-dark p-12 text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 text-center">
           <p className="font-syne text-xl font-bold mb-2">Редагування недоступне</p>
-          <p className="text-timber-beam">
+          <p className="text-muted-500">
             Можна редагувати тільки челенджі зі статусом &quot;Очікується&quot;
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function EditChallengePage({ params }: PageProps) {
       <div className="mb-8">
         <Link
           href={`/admin/challenges/${id}`}
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4"
         >
           <ArrowLeft size={16} />
           Назад до челенджу
@@ -171,7 +171,7 @@ export default function EditChallengePage({ params }: PageProps) {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -183,7 +183,7 @@ export default function EditChallengePage({ params }: PageProps) {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Назва челенджу"
                 required
               />
@@ -195,7 +195,7 @@ export default function EditChallengePage({ params }: PageProps) {
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none min-h-[100px]"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none min-h-[100px]"
                 placeholder="Детальний опис челенджу..."
               />
             </div>
@@ -207,7 +207,7 @@ export default function EditChallengePage({ params }: PageProps) {
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as ChallengeType })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   {(Object.keys(CHALLENGE_TYPE_LABELS) as ChallengeType[]).map((type) => (
@@ -223,7 +223,7 @@ export default function EditChallengePage({ params }: PageProps) {
                 <select
                   value={formData.goalType}
                   onChange={(e) => setFormData({ ...formData, goalType: e.target.value as ChallengeGoalType })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 >
                   {(Object.keys(CHALLENGE_GOAL_TYPE_LABELS) as ChallengeGoalType[]).map((goalType) => (
@@ -243,7 +243,7 @@ export default function EditChallengePage({ params }: PageProps) {
                   type="number"
                   value={formData.goalTarget}
                   onChange={(e) => setFormData({ ...formData, goalTarget: parseInt(e.target.value) || 1 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min="1"
                   max="1000"
                   required
@@ -256,7 +256,7 @@ export default function EditChallengePage({ params }: PageProps) {
                   type="number"
                   value={formData.points}
                   onChange={(e) => setFormData({ ...formData, points: parseInt(e.target.value) || 0 })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min="1"
                   max="5000"
                   required
@@ -272,7 +272,7 @@ export default function EditChallengePage({ params }: PageProps) {
                   type="date"
                   value={formData.startDate}
                   onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   required
                 />
               </div>
@@ -283,7 +283,7 @@ export default function EditChallengePage({ params }: PageProps) {
                   type="date"
                   value={formData.endDate}
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   min={formData.startDate}
                   required
                 />
@@ -291,7 +291,7 @@ export default function EditChallengePage({ params }: PageProps) {
             </div>
 
             {/* Competitive Mode */}
-            <div className="border-t border-timber-dark/20 pt-4 mt-4">
+            <div className="border-t border-line/20 pt-4 mt-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -310,11 +310,11 @@ export default function EditChallengePage({ params }: PageProps) {
                     type="number"
                     value={formData.maxWinners}
                     onChange={(e) => setFormData({ ...formData, maxWinners: parseInt(e.target.value) || 1 })}
-                    className="w-32 px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                    className="w-32 px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                     min="1"
                     max="100"
                   />
-                  <p className="text-xs text-timber-beam mt-1">
+                  <p className="text-xs text-muted-500 mt-1">
                     Перше місце отримає {Math.round(formData.points * CHALLENGE_REWARDS.COMPETITIVE_BONUS_MULTIPLIER)} балів
                   </p>
                 </div>
@@ -344,7 +344,7 @@ export default function EditChallengePage({ params }: PageProps) {
               'ЗБЕРЕГТИ ЗМІНИ →'
             )}
           </button>
-          <Link href={`/admin/challenges/${id}`} className="text-sm text-timber-beam hover:text-accent">
+          <Link href={`/admin/challenges/${id}`} className="text-sm text-muted-500 hover:text-bronze">
             Скасувати
           </Link>
         </div>

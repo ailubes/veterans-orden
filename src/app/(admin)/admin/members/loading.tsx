@@ -18,7 +18,7 @@ export default function MembersLoading() {
       {/* Stats Grid Skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-canvas border-2 border-timber-dark p-4">
+          <div key={i} className="bg-panel-900 border border-line rounded-lg p-4">
             <Skeleton className="h-3 w-20 mb-2" />
             <Skeleton className="h-8 w-16" />
           </div>
@@ -26,7 +26,7 @@ export default function MembersLoading() {
       </div>
 
       {/* Filters Skeleton */}
-      <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-4 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="flex flex-wrap gap-4">
@@ -39,14 +39,14 @@ export default function MembersLoading() {
       </div>
 
       {/* Table Skeleton */}
-      <div className="bg-canvas border-2 border-timber-dark relative">
+      <div className="bg-panel-900 border border-line rounded-lg relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
         {/* Header */}
-        <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-timber-dark bg-timber-dark/5">
+        <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-line bg-timber-dark/5">
           <div className="col-span-1">
             <Skeleton className="h-5 w-5" />
           </div>
@@ -62,7 +62,7 @@ export default function MembersLoading() {
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <div
             key={i}
-            className="grid grid-cols-12 gap-4 p-4 border-b border-timber-dark/20"
+            className="grid grid-cols-12 gap-4 p-4 border-b border-line/20"
           >
             <div className="col-span-1 flex items-center">
               <Skeleton className="h-5 w-5" />

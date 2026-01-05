@@ -97,7 +97,7 @@ export function MessageComposer({
 
   if (disabled) {
     return (
-      <div className="text-center text-sm text-timber-beam py-2">
+      <div className="text-center text-sm text-muted-500 py-2">
         Відповіді в цій групі обмежено
       </div>
     );
@@ -107,13 +107,13 @@ export function MessageComposer({
     <div className="space-y-2">
       {/* Reply preview */}
       {replyToMessage && (
-        <div className="flex items-center gap-2 px-2 py-1.5 bg-timber-light/50 rounded border-l-2 border-accent">
-          <Reply className="w-4 h-4 text-accent flex-shrink-0" />
+        <div className="flex items-center gap-2 px-2 py-1.5 bg-timber-light/50 rounded border-l-2 border-bronze">
+          <Reply className="w-4 h-4 text-bronze flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <span className="text-xs font-medium text-accent">
+            <span className="text-xs font-medium text-bronze">
               {replyToMessage.sender?.firstName || 'Хтось'}
             </span>
-            <p className="text-xs text-timber-beam truncate">
+            <p className="text-xs text-muted-500 truncate">
               {replyToMessage.content?.substring(0, 100) || 'Вкладення'}
               {(replyToMessage.content?.length || 0) > 100 && '...'}
             </p>
@@ -122,7 +122,7 @@ export function MessageComposer({
             onClick={onCancelReply}
             className="p-1 hover:bg-timber-light rounded transition-colors flex-shrink-0"
           >
-            <X className="w-4 h-4 text-timber-beam" />
+            <X className="w-4 h-4 text-muted-500" />
           </button>
         </div>
       )}
@@ -136,7 +136,7 @@ export function MessageComposer({
             className="p-2 hover:bg-timber-light rounded transition-colors"
             aria-label="Емодзі"
           >
-            <Smile className="w-5 h-5 text-timber-beam" />
+            <Smile className="w-5 h-5 text-muted-500" />
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-2" align="start">
@@ -167,9 +167,9 @@ export function MessageComposer({
             onKeyDown={handleKeyDown}
             placeholder="Напишіть повідомлення..."
             className={cn(
-              'w-full resize-none rounded-lg border-2 border-timber-dark/30 px-3 py-2',
-              'text-sm placeholder:text-timber-beam/50',
-              'focus:border-timber-dark focus:outline-none',
+              'w-full resize-none rounded-lg border border-line rounded-lg/30 px-3 py-2',
+              'text-sm placeholder:text-muted-500/50',
+              'focus:border-line focus:outline-none',
               'min-h-[40px] max-h-[120px]'
             )}
             rows={1}
@@ -185,7 +185,7 @@ export function MessageComposer({
             'p-2 rounded transition-colors',
             content.trim() && !sending
               ? 'bg-timber-dark text-canvas hover:bg-timber-dark/90'
-              : 'bg-timber-light text-timber-beam cursor-not-allowed'
+              : 'bg-timber-light text-muted-500 cursor-not-allowed'
           )}
           aria-label="Надіслати"
         >

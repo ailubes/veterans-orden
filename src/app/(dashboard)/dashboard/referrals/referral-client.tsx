@@ -115,18 +115,18 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
       <div className="joint joint-bl" />
       <div className="joint joint-br" />
 
-      <p className="label text-accent mb-4">ТВОЄ ЗАПРОШУВАЛЬНЕ ПОСИЛАННЯ</p>
+      <p className="label text-bronze mb-4">ТВОЄ ЗАПРОШУВАЛЬНЕ ПОСИЛАННЯ</p>
 
       <div className="flex flex-col gap-4 mb-6">
         {/* Link Section */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 bg-canvas/10 p-4 font-mono text-sm break-all">
+          <div className="flex-1 bg-panel-900/10 p-4 font-mono text-sm break-all">
             {referralLink}
           </div>
           <div className="flex gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center justify-center gap-2 bg-accent text-canvas px-6 py-3 font-bold text-sm hover:bg-accent/90 transition-colors min-w-[140px]"
+              className="flex items-center justify-center gap-2 bg-bronze text-canvas px-6 py-3 font-bold text-sm hover:bg-bronze/90 transition-colors min-w-[140px]"
             >
               {copied ? (
                 <>
@@ -143,7 +143,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
             {'share' in navigator && (
               <button
                 onClick={handleShare}
-                className="flex items-center justify-center gap-2 bg-canvas/10 text-canvas px-4 py-3 font-bold text-sm hover:bg-canvas/20 transition-colors"
+                className="flex items-center justify-center gap-2 bg-panel-900/10 text-canvas px-4 py-3 font-bold text-sm hover:bg-panel-900/20 transition-colors"
                 aria-label="Поділитися"
               >
                 <Share2 size={18} />
@@ -151,7 +151,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
             )}
             <button
               onClick={() => setShowQR(!showQR)}
-              className="flex items-center justify-center gap-2 bg-canvas/10 text-canvas px-4 py-3 font-bold text-sm hover:bg-canvas/20 transition-colors"
+              className="flex items-center justify-center gap-2 bg-panel-900/10 text-canvas px-4 py-3 font-bold text-sm hover:bg-panel-900/20 transition-colors"
               aria-label="QR код"
             >
               <QrCode size={18} />
@@ -161,16 +161,16 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
 
         {/* QR Code Section */}
         {showQR && (
-          <div className="bg-canvas/10 p-6 flex flex-col items-center gap-4">
+          <div className="bg-panel-900/10 p-6 flex flex-col items-center gap-4">
             {qrCodeUrl && (
-              <div className="bg-canvas p-4">
+              <div className="bg-panel-900 p-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64" />
               </div>
             )}
             <button
               onClick={handleDownloadQR}
-              className="flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold text-sm hover:bg-accent/90 transition-colors"
+              className="flex items-center gap-2 bg-bronze text-canvas px-6 py-3 font-bold text-sm hover:bg-bronze/90 transition-colors"
             >
               <Download size={18} />
               ЗАВАНТАЖИТИ QR КОД

@@ -65,15 +65,15 @@ export function PinnedMessagesBar({
     <div
       onClick={handleClick}
       className={cn(
-        'flex items-center gap-2 px-3 py-2 bg-accent/10 border-b border-timber-dark/20',
-        'cursor-pointer hover:bg-accent/20 transition-colors'
+        'flex items-center gap-2 px-3 py-2 bg-bronze/10 border-b border-line/20',
+        'cursor-pointer hover:bg-bronze/20 transition-colors'
       )}
     >
       {/* Pin icon with indicator */}
       <div className="flex-shrink-0 relative">
-        <Pin className="w-4 h-4 text-accent" />
+        <Pin className="w-4 h-4 text-bronze" />
         {hasMultiple && (
-          <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent text-canvas text-[8px] font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-bronze text-canvas text-[8px] font-bold rounded-full flex items-center justify-center">
             {pinnedMessages.length}
           </span>
         )}
@@ -89,7 +89,7 @@ export function PinnedMessagesBar({
           >
             <ChevronLeft className="w-3 h-3" />
           </button>
-          <span className="text-[10px] text-timber-beam min-w-[24px] text-center">
+          <span className="text-[10px] text-muted-500 min-w-[24px] text-center">
             {currentIndex + 1}/{pinnedMessages.length}
           </span>
           <button
@@ -105,11 +105,11 @@ export function PinnedMessagesBar({
       {/* Message preview */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
-          <span className="text-xs font-medium text-accent truncate">
+          <span className="text-xs font-medium text-bronze truncate">
             Закріплено
           </span>
           {currentMessage.senderName && (
-            <span className="text-xs text-timber-beam truncate">
+            <span className="text-xs text-muted-500 truncate">
               - {currentMessage.senderName}
             </span>
           )}
@@ -124,7 +124,7 @@ export function PinnedMessagesBar({
           className="flex-shrink-0 p-1 hover:bg-timber-light rounded transition-colors"
           title="Відкріпити"
         >
-          <X className="w-4 h-4 text-timber-beam hover:text-red-600" />
+          <X className="w-4 h-4 text-muted-500 hover:text-red-600" />
         </button>
       )}
     </div>

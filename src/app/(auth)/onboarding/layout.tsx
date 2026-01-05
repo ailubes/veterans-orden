@@ -26,17 +26,7 @@ export default async function OnboardingLayout({
   }
 
   return (
-    <div className="min-h-screen bg-canvas">
-      {/* Grain overlay */}
-      <div className="fixed inset-0 opacity-[0.03] pointer-events-none">
-        <svg width="100%" height="100%">
-          <filter id="noise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#noise)" />
-        </svg>
-      </div>
-
+    <div className="min-h-screen bg-bg-950">
       <div className="relative z-10">
         {children}
       </div>

@@ -112,7 +112,7 @@ export default function RoleBadge({
               {roleInfo.label}
             </span>
             {size !== 'sm' && (
-              <span className="text-xs text-timber-beam">
+              <span className="text-xs text-muted-500">
                 Рівень {roleInfo.level}
               </span>
             )}
@@ -123,7 +123,7 @@ export default function RoleBadge({
           <span
             className={`
               inline-flex items-center gap-1 rounded-full border
-              bg-timber-dark text-canvas border-timber-dark
+              bg-timber-dark text-canvas border-line
               ${sizeClasses[size]}
             `}
             title={STAFF_ROLES[staffRole].label}
@@ -157,7 +157,7 @@ export default function RoleBadge({
         <span
           className={`
             inline-flex items-center gap-1 rounded-full border
-            bg-timber-dark text-canvas border-timber-dark
+            bg-timber-dark text-canvas border-line
             ${sizeClasses[size]}
           `}
           title={STAFF_ROLES[staffRole].label}

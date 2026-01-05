@@ -12,7 +12,7 @@ interface BadgeGridProps {
 export function BadgeGrid({ badges, emptyMessage = 'Поки немає відзнак', size = 'md' }: BadgeGridProps) {
   if (badges.length === 0) {
     return (
-      <div className="text-center py-8 text-timber-beam">
+      <div className="text-center py-8 text-muted-500">
         <p className="text-4xl mb-2">🏅</p>
         <p className="text-sm">{emptyMessage}</p>
       </div>

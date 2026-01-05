@@ -132,28 +132,28 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
       <div className="mb-8">
         <Link
           href="/admin/settings"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-4 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Назад до налаштувань
         </Link>
-        <p className="label text-accent mb-2">АУДИТ</p>
+        <p className="label text-bronze mb-2">АУДИТ</p>
         <h1 className="font-syne text-2xl sm:text-3xl lg:text-4xl font-bold">Журнал аудиту</h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Історія дій адміністраторів у системі
         </p>
       </div>
 
       {/* Filters */}
       {!isRegionalLeader(adminProfile.role) && (
-        <div className="border-2 border-timber-dark p-4 sm:p-6 bg-canvas card-with-joints mb-6">
+        <div className="border border-line rounded-lg p-4 sm:p-6 bg-panel-900 card-with-joints mb-6">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
           <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-accent" />
+            <Filter className="w-5 h-5 text-bronze" />
             <h2 className="font-syne text-lg font-bold">Фільтри</h2>
           </div>
 
@@ -163,7 +163,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               <select
                 name="user"
                 defaultValue={userFilter}
-                className="w-full border-2 border-timber-dark px-3 py-2 bg-canvas"
+                className="w-full border border-line rounded-lg px-3 py-2 bg-panel-900"
               >
                 <option value="">Всі користувачі</option>
                 {admins?.map((admin) => (
@@ -179,7 +179,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               <select
                 name="action"
                 defaultValue={actionFilter}
-                className="w-full border-2 border-timber-dark px-3 py-2 bg-canvas"
+                className="w-full border border-line rounded-lg px-3 py-2 bg-panel-900"
               >
                 <option value="">Всі дії</option>
                 {uniqueActions.map((action) => (
@@ -195,7 +195,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               <select
                 name="entity_type"
                 defaultValue={entityTypeFilter}
-                className="w-full border-2 border-timber-dark px-3 py-2 bg-canvas"
+                className="w-full border border-line rounded-lg px-3 py-2 bg-panel-900"
               >
                 <option value="">Всі типи</option>
                 {uniqueEntityTypes.map((type) => (
@@ -219,13 +219,13 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
       )}
 
       {/* Audit Log Header */}
-      <div className="border-2 border-timber-dark bg-canvas card-with-joints">
+      <div className="border border-line rounded-lg bg-panel-900 card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <div className="p-4 sm:p-6 border-b-2 border-timber-dark flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="p-4 sm:p-6 border-b-2 border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <h2 className="font-syne text-lg sm:text-xl font-bold">
             Записи ({totalCount || 0})
           </h2>
@@ -251,19 +251,19 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
                   </div>
                   <div className="space-y-1 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-timber-beam">Користувач:</span>
+                      <span className="text-muted-500">Користувач:</span>
                       <span className="font-medium">
                         {log.user?.first_name} {log.user?.last_name}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-timber-beam">Час:</span>
+                      <span className="text-muted-500">Час:</span>
                       <span className="font-mono">{formatDate(log.created_at)}</span>
                     </div>
                     {log.entity_id && (
                       <div className="flex items-center gap-2">
-                        <span className="text-timber-beam">ID:</span>
-                        <span className="font-mono text-timber-beam truncate max-w-[200px]">
+                        <span className="text-muted-500">ID:</span>
+                        <span className="font-mono text-muted-500 truncate max-w-[200px]">
                           {log.entity_id}
                         </span>
                       </div>
@@ -273,7 +273,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
               ))}
             </div>
           ) : (
-            <div className="text-center text-timber-beam py-12 px-4">
+            <div className="text-center text-muted-500 py-12 px-4">
               Немає записів для відображення
             </div>
           )}
@@ -283,7 +283,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
         <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="border-b-2 border-timber-dark hover:bg-transparent">
+              <TableRow className="border-b-2 border-line hover:bg-transparent">
                 <TableHead className="font-syne font-bold">Дата/Час</TableHead>
                 <TableHead className="font-syne font-bold">Користувач</TableHead>
                 <TableHead className="font-syne font-bold">Дія</TableHead>
@@ -301,20 +301,20 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
                     <TableCell className="text-sm">
                       {log.user?.first_name} {log.user?.last_name}
                       <br />
-                      <span className="text-xs text-timber-beam">{log.user?.email}</span>
+                      <span className="text-xs text-muted-500">{log.user?.email}</span>
                     </TableCell>
                     <TableCell>
                       <span className="text-sm font-medium">{formatAction(log.action)}</span>
                     </TableCell>
-                    <TableCell className="text-sm text-timber-beam">{log.entity_type}</TableCell>
-                    <TableCell className="font-mono text-xs text-timber-beam">
+                    <TableCell className="text-sm text-muted-500">{log.entity_type}</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-500">
                       {log.entity_id}
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center text-timber-beam py-12">
+                  <TableCell colSpan={5} className="text-center text-muted-500 py-12">
                     Немає записів для відображення
                   </TableCell>
                 </TableRow>
@@ -325,8 +325,8 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="p-4 sm:p-6 border-t-2 border-timber-dark flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-sm text-timber-beam">
+          <div className="p-4 sm:p-6 border-t-2 border-line flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-sm text-muted-500">
               Сторінка {page} з {totalPages}
             </p>
             <div className="flex gap-2">

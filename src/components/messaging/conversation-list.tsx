@@ -34,10 +34,10 @@ export function ConversationList({ compact = false }: ConversationListProps) {
   return (
     <div className="flex flex-col h-full">
       {/* Search and New */}
-      <div className={compact ? "p-2 border-b border-timber-dark/20" : "p-3 border-b border-timber-dark/20"}>
+      <div className={compact ? "p-2 border-b border-line/20" : "p-3 border-b border-line/20"}>
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-timber-beam" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-500" />
             <Input
               type="text"
               placeholder="Пошук..."
@@ -62,23 +62,23 @@ export function ConversationList({ compact = false }: ConversationListProps) {
       <div className="flex-1 overflow-y-auto">
         {loading ? (
           <div className="flex items-center justify-center h-32">
-            <Loader2 className="w-6 h-6 animate-spin text-timber-beam" />
+            <Loader2 className="w-6 h-6 animate-spin text-muted-500" />
           </div>
         ) : filteredConversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-32 text-center px-4">
-            <MessageCircle className="w-10 h-10 text-timber-beam/50 mb-2" />
+            <MessageCircle className="w-10 h-10 text-muted-500/50 mb-2" />
             {searchQuery ? (
-              <p className="text-timber-beam text-sm">
+              <p className="text-muted-500 text-sm">
                 Нічого не знайдено за запитом "{searchQuery}"
               </p>
             ) : (
               <>
-                <p className="text-timber-beam text-sm font-medium">
+                <p className="text-muted-500 text-sm font-medium">
                   У вас ще немає розмов
                 </p>
                 <button
                   onClick={openNewConversation}
-                  className="mt-2 text-accent text-sm hover:underline"
+                  className="mt-2 text-bronze text-sm hover:underline"
                 >
                   Почати нову розмову
                 </button>

@@ -89,7 +89,7 @@ export function TaskAnalytics() {
 
   if (loading) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="animate-pulse space-y-4">
           <div className="h-6 bg-timber-dark/10 w-1/3" />
@@ -101,7 +101,7 @@ export function TaskAnalytics() {
 
   if (error || !data) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative text-center">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative text-center">
         <p className="text-red-600">{error || 'Немає даних'}</p>
       </div>
     );
@@ -114,53 +114,53 @@ export function TaskAnalytics() {
     <div className="space-y-6">
       {/* Task Overview Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-3 sm:p-4 relative">
           <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <CheckSquare className="text-accent" size={16} />
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-bronze/10 flex items-center justify-center flex-shrink-0">
+              <CheckSquare className="text-bronze" size={16} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-timber-beam truncate">ВИКОНАНО</p>
+              <p className="text-xs text-muted-500 truncate">ВИКОНАНО</p>
               <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.completedTasks}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-3 sm:p-4 relative">
           <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
               <TrendingUp className="text-green-500" size={16} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-timber-beam truncate">КОНВЕРСІЯ</p>
+              <p className="text-xs text-muted-500 truncate">КОНВЕРСІЯ</p>
               <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.completionRate}%</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-3 sm:p-4 relative">
           <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
               <Star className="text-yellow-500" size={16} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-timber-beam truncate">БАЛІВ</p>
+              <p className="text-xs text-muted-500 truncate">БАЛІВ</p>
               <p className="font-syne text-xl sm:text-2xl font-bold">{data.pointsStats.totalAwarded.toLocaleString()}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-3 sm:p-4 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-3 sm:p-4 relative">
           <div className="joint joint-tl" />
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
               <Clock className="text-purple-500" size={16} />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-timber-beam truncate">СЕР. ЧАС</p>
+              <p className="text-xs text-muted-500 truncate">СЕР. ЧАС</p>
               <p className="font-syne text-xl sm:text-2xl font-bold">{data.overview.avgCompletionTimeHours}г</p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export function TaskAnalytics() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Daily Trend Chart */}
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -179,7 +179,7 @@ export function TaskAnalytics() {
             {data.dailyTrend.map((day, index) => (
               <div
                 key={day.date}
-                className="flex-1 bg-accent/20 hover:bg-accent/40 transition-colors relative group"
+                className="flex-1 bg-bronze/20 hover:bg-bronze/40 transition-colors relative group"
                 style={{
                   height: `${(day.count / maxDailyCount) * 100}%`,
                   minHeight: day.count > 0 ? '4px' : '0',
@@ -196,14 +196,14 @@ export function TaskAnalytics() {
             ))}
           </div>
 
-          <div className="flex justify-between mt-2 text-xs text-timber-beam">
+          <div className="flex justify-between mt-2 text-xs text-muted-500">
             <span>30 днів тому</span>
             <span>Сьогодні</span>
           </div>
         </div>
 
         {/* Top Performers */}
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -212,7 +212,7 @@ export function TaskAnalytics() {
               <Trophy className="text-yellow-500" size={18} />
               Топ виконавці
             </h3>
-            <Link href="/admin/members" className="text-xs text-accent hover:underline">
+            <Link href="/admin/members" className="text-xs text-bronze hover:underline">
               Всі →
             </Link>
           </div>
@@ -225,7 +225,7 @@ export function TaskAnalytics() {
                     index === 0 ? 'bg-yellow-500 text-white' :
                     index === 1 ? 'bg-gray-300 text-gray-700' :
                     index === 2 ? 'bg-orange-400 text-white' :
-                    'bg-timber-dark/10 text-timber-beam'
+                    'bg-timber-dark/10 text-muted-500'
                   }`}>
                     {index + 1}
                   </span>
@@ -233,7 +233,7 @@ export function TaskAnalytics() {
                     {performer.avatarUrl ? (
                       <img src={performer.avatarUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <Users size={16} className="text-timber-beam" />
+                      <Users size={16} className="text-muted-500" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -241,14 +241,14 @@ export function TaskAnalytics() {
                       {performer.firstName} {performer.lastName}
                     </p>
                   </div>
-                  <span className="font-mono text-sm font-bold text-accent">
+                  <span className="font-mono text-sm font-bold text-bronze">
                     {performer.completedCount}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-timber-beam text-center py-4">
+            <p className="text-sm text-muted-500 text-center py-4">
               Немає даних про виконавців
             </p>
           )}
@@ -258,7 +258,7 @@ export function TaskAnalytics() {
       {/* Status and Priority Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Distribution */}
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
 
           <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за статусом</h3>
@@ -294,7 +294,7 @@ export function TaskAnalytics() {
         </div>
 
         {/* Priority Distribution */}
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
 
           <h3 className="font-syne text-base sm:text-lg font-bold mb-4">Розподіл за пріоритетом</h3>
@@ -333,7 +333,7 @@ export function TaskAnalytics() {
           <h3 className="font-syne text-base sm:text-lg font-bold">Статистика підтверджень</h3>
           <Link
             href="/admin/tasks/submissions"
-            className="text-sm text-accent hover:underline"
+            className="text-sm text-bronze hover:underline"
           >
             Перевірити →
           </Link>

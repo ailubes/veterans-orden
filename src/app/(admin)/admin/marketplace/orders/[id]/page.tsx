@@ -85,7 +85,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto">
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="text-center py-12 text-muted-500">Завантаження...</div>
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         </div>
         <Link
           href="/admin/marketplace/orders"
-          className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors"
+          className="inline-flex items-center gap-2 bg-bronze text-canvas px-6 py-3 font-bold hover:bg-bronze/90 transition-colors"
         >
           <ArrowLeft size={20} />
           Повернутися до замовлень
@@ -116,7 +116,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
       {/* Header */}
       <Link
         href="/admin/marketplace/orders"
-        className="inline-flex items-center gap-2 text-timber-beam hover:text-timber-dark mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-500 hover:text-timber-dark mb-6 transition-colors"
       >
         <ArrowLeft size={20} />
         Повернутися до замовлень
@@ -141,7 +141,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Customer Info */}
-          <div className="bg-white border-2 border-timber-dark p-6">
+          <div className="bg-white border border-line rounded-lg p-6">
             <h2 className="font-syne text-xl font-bold mb-4">Клієнт</h2>
             <div className="space-y-2">
               <p>
@@ -159,7 +159,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Order Items */}
-          <div className="bg-white border-2 border-timber-dark p-6">
+          <div className="bg-white border border-line rounded-lg p-6">
             <h2 className="font-syne text-xl font-bold mb-4">Товари</h2>
             <div className="space-y-3">
               {order.orderItems.map((item: any) => {
@@ -169,17 +169,17 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 return (
                   <div
                     key={item.id}
-                    className="flex justify-between items-center py-3 border-b border-timber-dark/10 last:border-0"
+                    className="flex justify-between items-center py-3 border-b border-line/10 last:border-0"
                   >
                     <div className="flex-1">
                       <p className="font-bold mb-1">{item.productName}</p>
-                      <p className="text-sm text-timber-beam">
+                      <p className="text-sm text-muted-500">
                         {item.pricePoints} балів × {item.quantity}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-syne font-bold text-accent">{itemTotal}</p>
-                      <p className="text-xs text-timber-beam">≈ {itemUah.toFixed(0)} грн</p>
+                      <p className="font-syne font-bold text-bronze">{itemTotal}</p>
+                      <p className="text-xs text-muted-500">≈ {itemUah.toFixed(0)} грн</p>
                     </div>
                   </div>
                 );
@@ -189,14 +189,14 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
           {/* Shipping Info */}
           {order.requiresShipping && (
-            <div className="bg-white border-2 border-timber-dark p-6">
+            <div className="bg-white border border-line rounded-lg p-6">
               <h2 className="font-syne text-xl font-bold mb-4">Доставка</h2>
 
               {order.novaPoshtaBranch ? (
                 <div>
                   <p className="font-bold mb-2">Нова Пошта</p>
-                  <p className="text-sm text-timber-beam mb-1">{order.novaPoshtaCity}</p>
-                  <p className="text-sm text-timber-beam">{order.novaPoshtaBranch}</p>
+                  <p className="text-sm text-muted-500 mb-1">{order.novaPoshtaCity}</p>
+                  <p className="text-sm text-muted-500">{order.novaPoshtaBranch}</p>
                 </div>
               ) : order.shippingAddress ? (
                 <div>
@@ -217,9 +217,9 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
 
           {/* Customer Notes */}
           {order.customerNotes && (
-            <div className="bg-white border-2 border-timber-dark p-6">
+            <div className="bg-white border border-line rounded-lg p-6">
               <h2 className="font-bold mb-2">Коментар клієнта</h2>
-              <p className="text-sm text-timber-beam">{order.customerNotes}</p>
+              <p className="text-sm text-muted-500">{order.customerNotes}</p>
             </div>
           )}
         </div>
@@ -237,7 +237,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
               <div className="flex justify-between border-t border-canvas/20 pt-3">
                 <span className="opacity-80">Сплачено:</span>
                 <div className="text-right">
-                  <p className="font-syne font-bold text-accent">{order.totalPoints}</p>
+                  <p className="font-syne font-bold text-bronze">{order.totalPoints}</p>
                   <p className="text-xs opacity-60">≈ {uahValue.toFixed(0)} грн</p>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Status Management */}
-          <div className="bg-white border-2 border-timber-dark p-6">
+          <div className="bg-white border border-line rounded-lg p-6">
             <h2 className="font-bold mb-4">Управління замовленням</h2>
 
             {error && (
@@ -260,7 +260,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as OrderStatus)}
-                  className="w-full border-2 border-timber-dark px-3 py-2"
+                  className="w-full border border-line rounded-lg px-3 py-2"
                 >
                   <option value="pending">Очікує підтвердження</option>
                   <option value="confirmed">Підтверджено</option>
@@ -282,7 +282,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                     value={trackingNumber}
                     onChange={(e) => setTrackingNumber(e.target.value)}
                     placeholder="20400048622017"
-                    className="w-full border-2 border-timber-dark px-3 py-2"
+                    className="w-full border border-line rounded-lg px-3 py-2"
                   />
                 </div>
               )}
@@ -293,7 +293,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
                   rows={3}
-                  className="w-full border-2 border-timber-dark px-3 py-2"
+                  className="w-full border border-line rounded-lg px-3 py-2"
                   placeholder="Внутрішні примітки..."
                 />
               </div>
@@ -301,7 +301,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="w-full bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-bronze text-canvas px-6 py-3 font-bold hover:bg-bronze/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <Save size={20} />
                 {saving ? 'Збереження...' : 'Зберегти зміни'}
@@ -310,7 +310,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
           </div>
 
           {/* Timestamps */}
-          <div className="bg-white border-2 border-timber-dark p-6">
+          <div className="bg-white border border-line rounded-lg p-6">
             <h2 className="font-bold mb-4">Часові мітки</h2>
             <div className="space-y-2 text-sm">
               <p>

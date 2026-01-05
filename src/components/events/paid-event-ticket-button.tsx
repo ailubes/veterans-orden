@@ -126,27 +126,27 @@ export function PaidEventTicketButton({
   }
 
   return (
-    <div className="bg-white border-2 border-timber-dark p-6">
+    <div className="bg-white border border-line rounded-lg p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <Ticket size={24} className="text-accent" />
+          <Ticket size={24} className="text-bronze" />
           <div>
             <h3 className="font-syne font-bold">Придбати квиток</h3>
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Для участі потрібен квиток
             </p>
           </div>
         </div>
         <div className="text-right">
-          <p className="font-syne text-2xl font-bold text-accent">
+          <p className="font-syne text-2xl font-bold text-bronze">
             {ticketPricePoints}
           </p>
-          <p className="text-xs text-timber-beam">≈ {uahValue.toFixed(0)} грн</p>
+          <p className="text-xs text-muted-500">≈ {uahValue.toFixed(0)} грн</p>
         </div>
       </div>
 
       {remainingTickets !== null && (
-        <p className="text-sm text-timber-beam mb-4">
+        <p className="text-sm text-muted-500 mb-4">
           Залишилось квитків: {remainingTickets}
         </p>
       )}
@@ -172,7 +172,7 @@ export function PaidEventTicketButton({
         className={`w-full py-3 px-4 font-bold transition-colors flex items-center justify-center gap-2 ${
           purchasing || !canAfford
             ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-            : 'bg-accent text-canvas hover:bg-accent/90'
+            : 'bg-bronze text-canvas hover:bg-bronze/90'
         }`}
       >
         <ShoppingCart size={20} />
@@ -181,12 +181,12 @@ export function PaidEventTicketButton({
 
       {!canAfford && userBalance !== null && (
         <div className="mt-4 text-center">
-          <p className="text-sm text-timber-beam mb-2">
+          <p className="text-sm text-muted-500 mb-2">
             Вам потрібно ще {ticketPricePoints - userBalance} балів
           </p>
           <Link
             href="/dashboard/points"
-            className="text-sm text-accent hover:underline"
+            className="text-sm text-bronze hover:underline"
           >
             Як заробити бали?
           </Link>

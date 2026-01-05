@@ -96,14 +96,14 @@ export function EmailTester() {
   };
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
       <div className="joint joint-br" />
 
       <div className="flex items-center gap-3 mb-6">
-        <Mail className="w-6 h-6 text-accent" />
+        <Mail className="w-6 h-6 text-bronze" />
         <h3 className="font-bold text-xl">Тестування Email</h3>
       </div>
 
@@ -114,7 +114,7 @@ export function EmailTester() {
           <select
             value={emailType}
             onChange={(e) => setEmailType(e.target.value as 'welcome' | 'event_reminder' | 'vote_reminder')}
-            className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
           >
             <option value="welcome">Вітальний email</option>
             <option value="event_reminder">Нагадування про подію</option>
@@ -130,7 +130,7 @@ export function EmailTester() {
             value={testEmail}
             onChange={(e) => setTestEmail(e.target.value)}
             placeholder="test@example.com"
-            className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
           />
         </div>
 

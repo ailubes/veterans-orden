@@ -128,23 +128,23 @@ export default async function AdminTasksPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{tasks?.length || 0}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВІДКРИТО</p>
           <p className="font-syne text-3xl font-bold text-blue-600">
             {openCount}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">В РОБОТІ</p>
           <p className="font-syne text-3xl font-bold text-yellow-600">
             {inProgressCount}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВИКОНАНО</p>
           <p className="font-syne text-3xl font-bold text-green-600">
             {completedCount}
@@ -160,7 +160,7 @@ export default async function AdminTasksPage() {
             {tasks.map((task) => (
               <div
                 key={task.id}
-                className="bg-canvas border-2 border-timber-dark p-4 relative"
+                className="bg-panel-900 border border-line rounded-lg p-4 relative"
               >
                 <div className="joint joint-tl" />
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -174,7 +174,7 @@ export default async function AdminTasksPage() {
                             href={urlInfo.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-1"
+                            className="inline-flex items-center gap-1 text-xs text-bronze hover:underline mt-1"
                           >
                             <ExternalLink size={12} />
                             {urlInfo.displayText}
@@ -182,7 +182,7 @@ export default async function AdminTasksPage() {
                         );
                       }
                       return (
-                        <p className="text-xs text-timber-beam mt-1 line-clamp-1 break-all">
+                        <p className="text-xs text-muted-500 mt-1 line-clamp-1 break-all">
                           {task.description}
                         </p>
                       );
@@ -207,14 +207,14 @@ export default async function AdminTasksPage() {
                   >
                     {priorityLabels[task.priority as keyof typeof priorityLabels]}
                   </span>
-                  <span className="font-bold text-accent">+{task.points || 0} балів</span>
+                  <span className="font-bold text-bronze">+{task.points || 0} балів</span>
                 </div>
                 {task.assignee && (
-                  <p className="text-xs text-timber-beam mb-3">
+                  <p className="text-xs text-muted-500 mb-3">
                     Виконавець: {task.assignee.first_name} {task.assignee.last_name?.charAt(0)}.
                   </p>
                 )}
-                <div className="flex items-center gap-2 pt-3 border-t border-timber-dark/10">
+                <div className="flex items-center gap-2 pt-3 border-t border-line/10">
                   <Link
                     href={`/admin/tasks/${task.id}`}
                     className="flex-1 btn btn-sm text-center"
@@ -223,7 +223,7 @@ export default async function AdminTasksPage() {
                   </Link>
                   <Link
                     href={`/admin/tasks/${task.id}/edit`}
-                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -236,12 +236,12 @@ export default async function AdminTasksPage() {
           </div>
 
           {/* Desktop Table */}
-          <div className="hidden md:block bg-canvas border-2 border-timber-dark relative">
+          <div className="hidden md:block bg-panel-900 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="border-b-2 border-timber-dark">
+                <thead className="border-b-2 border-line">
                   <tr>
                     <th className="text-left p-4 font-bold text-xs">ЗАВДАННЯ</th>
                     <th className="text-left p-4 font-bold text-xs">ТИП</th>
@@ -254,7 +254,7 @@ export default async function AdminTasksPage() {
                 </thead>
                 <tbody>
                   {tasks.map((task) => (
-                    <tr key={task.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
+                    <tr key={task.id} className="border-b border-line/20 hover:bg-timber-dark/5">
                       <td className="p-4 max-w-xs">
                         <div className="font-bold">{task.title}</div>
                         {(() => {
@@ -265,7 +265,7 @@ export default async function AdminTasksPage() {
                                 href={urlInfo.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-xs text-accent hover:underline"
+                                className="inline-flex items-center gap-1 text-xs text-bronze hover:underline"
                               >
                                 <ExternalLink size={12} />
                                 {urlInfo.displayText}
@@ -273,7 +273,7 @@ export default async function AdminTasksPage() {
                             );
                           }
                           return (
-                            <div className="text-xs text-timber-beam line-clamp-1 break-all">
+                            <div className="text-xs text-muted-500 line-clamp-1 break-all">
                               {task.description}
                             </div>
                           );
@@ -308,11 +308,11 @@ export default async function AdminTasksPage() {
                             {task.assignee.first_name} {task.assignee.last_name?.charAt(0)}.
                           </span>
                         ) : (
-                          <span className="text-sm text-timber-beam">—</span>
+                          <span className="text-sm text-muted-500">—</span>
                         )}
                       </td>
                       <td className="p-4">
-                        <span className="font-bold text-accent">{task.points || 0}</span>
+                        <span className="font-bold text-bronze">{task.points || 0}</span>
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
@@ -346,12 +346,12 @@ export default async function AdminTasksPage() {
           </div>
         </>
       ) : (
-        <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
+        <div className="bg-panel-900 border border-line rounded-lg p-12 relative text-center">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
-          <CheckSquare className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+          <CheckSquare className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає завдань</h3>
-          <p className="text-sm text-timber-beam mb-6">
+          <p className="text-sm text-muted-500 mb-6">
             Створіть перше завдання для членів Мережі
           </p>
           <Link href="/admin/tasks/new" className="btn">

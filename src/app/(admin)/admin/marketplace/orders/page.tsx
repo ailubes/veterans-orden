@@ -69,7 +69,7 @@ export default function AdminOrdersPage() {
       case 'refunded':
         return <XCircle className="text-red-600" size={18} />;
       default:
-        return <Package className="text-timber-beam" size={18} />;
+        return <Package className="text-muted-500" size={18} />;
     }
   };
 
@@ -108,7 +108,7 @@ export default function AdminOrdersPage() {
         <div className="mb-8">
           <h1 className="font-syne text-3xl font-bold">Замовлення</h1>
         </div>
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="text-center py-12 text-muted-500">Завантаження...</div>
       </div>
     );
   }
@@ -118,17 +118,17 @@ export default function AdminOrdersPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="font-syne text-3xl font-bold mb-2">Замовлення</h1>
-        <p className="text-timber-beam">Управління замовленнями маркетплейсу</p>
+        <p className="text-muted-500">Управління замовленнями маркетплейсу</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-2 border-timber-dark p-4 mb-6">
+      <div className="bg-white border border-line rounded-lg p-4 mb-6">
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setFilterStatus('all')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'all'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -138,7 +138,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilterStatus('pending')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'pending'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -148,7 +148,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilterStatus('confirmed')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'confirmed'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -158,7 +158,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilterStatus('processing')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'processing'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -168,7 +168,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilterStatus('shipped')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'shipped'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -178,7 +178,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilterStatus('delivered')}
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'delivered'
-                ? 'bg-accent text-canvas'
+                ? 'bg-bronze text-canvas'
                 : 'bg-timber-dark/10 hover:bg-timber-dark/20'
             }`}
           >
@@ -193,12 +193,12 @@ export default function AdminOrdersPage() {
           {error}
         </div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-12 bg-white border-2 border-timber-dark">
-          <Package className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam">Немає замовлень</p>
+        <div className="text-center py-12 bg-white border border-line rounded-lg">
+          <Package className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500">Немає замовлень</p>
         </div>
       ) : (
-        <div className="bg-white border-2 border-timber-dark overflow-hidden">
+        <div className="bg-white border border-line rounded-lg overflow-hidden">
           <table className="w-full">
             <thead className="bg-timber-dark text-canvas">
               <tr>
@@ -218,12 +218,12 @@ export default function AdminOrdersPage() {
                 return (
                   <tr
                     key={order.id}
-                    className="border-b border-timber-dark/10 last:border-0 hover:bg-timber-dark/5"
+                    className="border-b border-line/10 last:border-0 hover:bg-timber-dark/5"
                   >
                     <td className="p-4">
                       <p className="font-mono font-bold text-sm">{order.order_number}</p>
                       {order.tracking_number && (
-                        <p className="text-xs text-timber-beam mt-1">
+                        <p className="text-xs text-muted-500 mt-1">
                           ТТН: {order.tracking_number}
                         </p>
                       )}
@@ -232,14 +232,14 @@ export default function AdminOrdersPage() {
                       <p className="font-bold">
                         {order.users.first_name} {order.users.last_name}
                       </p>
-                      <p className="text-xs text-timber-beam">{order.users.email}</p>
+                      <p className="text-xs text-muted-500">{order.users.email}</p>
                     </td>
                     <td className="p-4">
                       <span className="text-sm">{order.order_items?.length || 0} шт.</span>
                     </td>
                     <td className="p-4">
-                      <p className="font-syne font-bold text-accent">{order.total_points}</p>
-                      <p className="text-xs text-timber-beam">≈ {uahValue.toFixed(0)} грн</p>
+                      <p className="font-syne font-bold text-bronze">{order.total_points}</p>
+                      <p className="text-xs text-muted-500">≈ {uahValue.toFixed(0)} грн</p>
                     </td>
                     <td className="p-4">{getStatusBadge(order.status)}</td>
                     <td className="p-4">
@@ -249,7 +249,7 @@ export default function AdminOrdersPage() {
                           month: 'short',
                         })}
                       </p>
-                      <p className="text-xs text-timber-beam">
+                      <p className="text-xs text-muted-500">
                         {new Date(order.created_at).toLocaleTimeString('uk-UA', {
                           hour: '2-digit',
                           minute: '2-digit',

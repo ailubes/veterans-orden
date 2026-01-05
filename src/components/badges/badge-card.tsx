@@ -70,7 +70,7 @@ export function BadgeCard({ badge, earnedAt, size = 'md', showDetails = true }: 
             {BADGE_RARITY_LABELS[badge.rarity].uk}
           </p>
           {earnedAt && (
-            <p className="text-xs text-timber-beam mt-1">
+            <p className="text-xs text-muted-500 mt-1">
               {new Date(earnedAt).toLocaleDateString('uk-UA')}
             </p>
           )}

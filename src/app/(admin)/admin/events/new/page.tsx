@@ -137,7 +137,7 @@ export default function NewEventPage() {
       <div className="mb-8">
         <Link
           href="/admin/events"
-          className="text-sm text-timber-beam hover:text-accent flex items-center gap-2 mb-4"
+          className="text-sm text-muted-500 hover:text-bronze flex items-center gap-2 mb-4"
         >
           <ArrowLeft size={16} />
           Назад до подій
@@ -147,7 +147,7 @@ export default function NewEventPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -160,7 +160,7 @@ export default function NewEventPage() {
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Наприклад: Загальні збори Мережі"
                 required
               />
@@ -172,7 +172,7 @@ export default function NewEventPage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
                 placeholder="Детальний опис події..."
               />
             </div>
@@ -183,7 +183,7 @@ export default function NewEventPage() {
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="meeting">Зустріч</option>
                   <option value="rally">Мітинг</option>
@@ -198,7 +198,7 @@ export default function NewEventPage() {
                 <select
                   value={formData.scope}
                   onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                 >
                   <option value="national">Національний</option>
                   <option value="regional">Регіональний</option>
@@ -210,7 +210,7 @@ export default function NewEventPage() {
         </div>
 
         {/* Location */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Місце проведення</h2>
@@ -233,7 +233,7 @@ export default function NewEventPage() {
                   type="url"
                   value={formData.onlineUrl}
                   onChange={(e) => setFormData({ ...formData, onlineUrl: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="https://zoom.us/j/..."
                 />
               </div>
@@ -244,7 +244,7 @@ export default function NewEventPage() {
                   type="text"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                   placeholder="вул. Хрещатик 1, Київ"
                 />
               </div>
@@ -253,7 +253,7 @@ export default function NewEventPage() {
         </div>
 
         {/* Date & Time */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Дата та час</h2>
@@ -265,7 +265,7 @@ export default function NewEventPage() {
                 type="date"
                 value={formData.startDate}
                 onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -275,7 +275,7 @@ export default function NewEventPage() {
                 type="time"
                 value={formData.startTime}
                 onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -285,7 +285,7 @@ export default function NewEventPage() {
                 type="date"
                 value={formData.endDate}
                 onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -295,7 +295,7 @@ export default function NewEventPage() {
                 type="time"
                 value={formData.endTime}
                 onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 required
               />
             </div>
@@ -303,7 +303,7 @@ export default function NewEventPage() {
         </div>
 
         {/* Settings */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
 
           <h2 className="font-syne text-xl font-bold mb-6">Налаштування</h2>
@@ -315,7 +315,7 @@ export default function NewEventPage() {
                 type="number"
                 value={formData.maxAttendees}
                 onChange={(e) => setFormData({ ...formData, maxAttendees: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
                 placeholder="Без обмежень"
                 min="1"
               />
@@ -325,7 +325,7 @@ export default function NewEventPage() {
               <select
                 value={formData.status}
                 onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
               >
                 <option value="draft">Чернетка</option>
                 <option value="published">Опублікувати</option>
@@ -334,7 +334,7 @@ export default function NewEventPage() {
           </div>
 
           {/* Notification Settings */}
-          <div className="border-t border-timber-dark/20 pt-6">
+          <div className="border-t border-line/20 pt-6">
             <label className="flex items-center gap-3 cursor-pointer mb-4">
               <input
                 type="checkbox"
@@ -342,7 +342,7 @@ export default function NewEventPage() {
                 onChange={(e) => setFormData({ ...formData, notifyMembers: e.target.checked })}
                 className="w-5 h-5"
               />
-              <Bell className="w-5 h-5 text-accent" />
+              <Bell className="w-5 h-5 text-bronze" />
               <span className="font-bold">Сповістити членів про подію</span>
             </label>
 
@@ -353,7 +353,7 @@ export default function NewEventPage() {
                   <select
                     value={formData.notifyScope}
                     onChange={(e) => setFormData({ ...formData, notifyScope: e.target.value as 'all' | 'oblast' })}
-                    className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                    className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                   >
                     <option value="all">Всіх активних членів</option>
                     <option value="oblast">Тільки певну область</option>
@@ -366,7 +366,7 @@ export default function NewEventPage() {
                     <select
                       value={formData.oblastId}
                       onChange={(e) => setFormData({ ...formData, oblastId: e.target.value })}
-                      className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm"
+                      className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm"
                       required={formData.notifyScope === 'oblast'}
                     >
                       <option value="">Оберіть область...</option>
@@ -379,7 +379,7 @@ export default function NewEventPage() {
                   </div>
                 )}
 
-                <p className="text-xs text-timber-beam">
+                <p className="text-xs text-muted-500">
                   Сповіщення буде надіслано тільки якщо статус події &quot;Опублікувати&quot;
                 </p>
               </div>

@@ -55,23 +55,23 @@ export default async function AdminNewsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ВСЬОГО</p>
           <p className="font-syne text-3xl font-bold">{articles?.length || 0}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ОПУБЛІКОВАНО</p>
           <p className="font-syne text-3xl font-bold text-green-600">
             {publishedCount}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ЧЕРНЕТКИ</p>
           <p className="font-syne text-3xl font-bold text-gray-500">
             {draftCount}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
+        <div className="bg-panel-900 border border-line rounded-lg p-4">
           <p className="label mb-1">ОСТАННЯ ПУБЛІКАЦІЯ</p>
           <p className="font-syne text-lg font-bold">
             {articles?.find((a) => a.status === 'published')
@@ -82,14 +82,14 @@ export default async function AdminNewsPage() {
       </div>
 
       {/* Articles Table */}
-      <div className="bg-canvas border-2 border-timber-dark relative">
+      <div className="bg-panel-900 border border-line rounded-lg relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         {articles && articles.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b-2 border-timber-dark">
+              <thead className="border-b-2 border-line">
                 <tr>
                   <th className="text-left p-4 font-bold text-xs">ЗАГОЛОВОК</th>
                   <th className="text-left p-4 font-bold text-xs">КАТЕГОРІЯ</th>
@@ -101,10 +101,10 @@ export default async function AdminNewsPage() {
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-timber-dark/20 hover:bg-timber-dark/5">
+                  <tr key={article.id} className="border-b border-line/20 hover:bg-timber-dark/5">
                     <td className="p-4">
                       <div className="font-bold">{article.title}</div>
-                      <div className="text-xs text-timber-beam line-clamp-1">
+                      <div className="text-xs text-muted-500 line-clamp-1">
                         {article.excerpt || article.content?.substring(0, 100)}
                       </div>
                     </td>
@@ -128,7 +128,7 @@ export default async function AdminNewsPage() {
                           {article.author.first_name} {article.author.last_name?.charAt(0)}.
                         </span>
                       ) : (
-                        <span className="text-sm text-timber-beam">—</span>
+                        <span className="text-sm text-muted-500">—</span>
                       )}
                     </td>
                     <td className="p-4">
@@ -177,9 +177,9 @@ export default async function AdminNewsPage() {
           </div>
         ) : (
           <div className="p-12 text-center">
-            <FileText className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
+            <FileText className="w-12 h-12 mx-auto mb-4 text-muted-500" />
             <h3 className="font-syne text-xl font-bold mb-2">Немає новин</h3>
-            <p className="text-sm text-timber-beam mb-6">
+            <p className="text-sm text-muted-500 mb-6">
               Створіть першу новину для членів Мережі
             </p>
             <Link href="/admin/news/new" className="btn">

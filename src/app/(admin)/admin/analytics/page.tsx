@@ -106,17 +106,17 @@ export default async function AdminAnalyticsPage() {
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
-              <p className="label text-accent mb-1 sm:mb-2">ВСЬОГО ЧЛЕНІВ</p>
+              <p className="label text-bronze mb-1 sm:mb-2">ВСЬОГО ЧЛЕНІВ</p>
               <p className="font-syne text-2xl sm:text-4xl font-bold">{totalMembers || 0}</p>
               <p className="text-xs sm:text-sm opacity-60 mt-1 sm:mt-2">
                 {activeMembers || 0} активних
               </p>
             </div>
-            <Users className="text-accent hidden sm:block" size={32} />
+            <Users className="text-bronze hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
@@ -124,7 +124,7 @@ export default async function AdminAnalyticsPage() {
               <p className="font-syne text-2xl sm:text-4xl font-bold text-green-600">
                 +{newMembersWeek || 0}
               </p>
-              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
+              <p className="text-xs sm:text-sm text-muted-500 mt-1 sm:mt-2">
                 +{newMembersMonth || 0} за місяць
               </p>
             </div>
@@ -132,49 +132,49 @@ export default async function AdminAnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ПОДІЇ</p>
               <p className="font-syne text-2xl sm:text-4xl font-bold">{totalEvents || 0}</p>
-              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
+              <p className="text-xs sm:text-sm text-muted-500 mt-1 sm:mt-2">
                 {upcomingEvents || 0} найближчих
               </p>
             </div>
-            <Calendar className="text-accent hidden sm:block" size={32} />
+            <Calendar className="text-bronze hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ГОЛОСУВАННЯ</p>
               <p className="font-syne text-2xl sm:text-4xl font-bold">{totalVotes || 0}</p>
-              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
+              <p className="text-xs sm:text-sm text-muted-500 mt-1 sm:mt-2">
                 {activeVotes || 0} активних
               </p>
             </div>
-            <Vote className="text-accent hidden sm:block" size={32} />
+            <Vote className="text-bronze hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
               <p className="label mb-1 sm:mb-2">ЗАВДАННЯ</p>
               <p className="font-syne text-2xl sm:text-4xl font-bold">{totalTasks || 0}</p>
-              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">
+              <p className="text-xs sm:text-sm text-muted-500 mt-1 sm:mt-2">
                 {completedTasks || 0} виконано
               </p>
             </div>
-            <CheckSquare className="text-accent hidden sm:block" size={32} />
+            <CheckSquare className="text-bronze hidden sm:block" size={32} />
           </div>
         </div>
 
-        <div className="bg-canvas border-2 border-timber-dark p-4 sm:p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
@@ -184,9 +184,9 @@ export default async function AdminAnalyticsPage() {
                   ? Math.round(((tierCounts['basic_49'] || 0) + (tierCounts['supporter_100'] || 0) + (tierCounts['supporter_200'] || 0) + (tierCounts['patron_500'] || 0)) / totalMembers * 100)
                   : 0}%
               </p>
-              <p className="text-xs sm:text-sm text-timber-beam mt-1 sm:mt-2">платних членів</p>
+              <p className="text-xs sm:text-sm text-muted-500 mt-1 sm:mt-2">платних членів</p>
             </div>
-            <DollarSign className="text-accent hidden sm:block" size={32} />
+            <DollarSign className="text-bronze hidden sm:block" size={32} />
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@ export default async function AdminAnalyticsPage() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Regional Distribution */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -216,7 +216,7 @@ export default async function AdminAnalyticsPage() {
             <div className="space-y-3">
               {regionalData.map((oblast, index) => (
                 <div key={oblast.name} className="flex items-center gap-3">
-                  <span className="w-6 text-center font-bold text-timber-beam">
+                  <span className="w-6 text-center font-bold text-muted-500">
                     {index + 1}
                   </span>
                   <div className="flex-1">
@@ -228,7 +228,7 @@ export default async function AdminAnalyticsPage() {
                     </div>
                     <div className="h-2 bg-timber-dark/10">
                       <div
-                        className="h-full bg-accent"
+                        className="h-full bg-bronze"
                         style={{
                           width: `${Math.min(
                             ((oblast.member_count || 0) /
@@ -244,14 +244,14 @@ export default async function AdminAnalyticsPage() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-timber-beam text-center py-8">
+            <p className="text-sm text-muted-500 text-center py-8">
               Немає даних про регіони
             </p>
           )}
         </div>
 
         {/* Membership Tiers */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+        <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -272,7 +272,7 @@ export default async function AdminAnalyticsPage() {
                   <div className="h-3 bg-timber-dark/10">
                     <div
                       className={`h-full ${
-                        tier === 'free' ? 'bg-gray-400' : 'bg-accent'
+                        tier === 'free' ? 'bg-gray-400' : 'bg-bronze'
                       }`}
                       style={{ width: `${percentage}%` }}
                     />
@@ -291,7 +291,7 @@ export default async function AdminAnalyticsPage() {
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <h2 className="font-syne text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-accent">
+        <h2 className="font-syne text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-bronze">
           Прогрес до мети: 1,000,000 членів
         </h2>
 
@@ -302,14 +302,14 @@ export default async function AdminAnalyticsPage() {
             <span>500K</span>
             <span>1M</span>
           </div>
-          <div className="h-4 sm:h-6 bg-canvas/10 relative">
+          <div className="h-4 sm:h-6 bg-panel-900/10 relative">
             <div
-              className="absolute left-0 top-0 bottom-0 bg-accent transition-all"
+              className="absolute left-0 top-0 bottom-0 bg-bronze transition-all"
               style={{ width: `${Math.min(((totalMembers || 0) / 1000000) * 100, 100)}%` }}
             />
             {/* Milestones */}
-            <div className="absolute left-[10%] top-0 bottom-0 w-0.5 bg-canvas/30" />
-            <div className="absolute left-[50%] top-0 bottom-0 w-0.5 bg-canvas/30" />
+            <div className="absolute left-[10%] top-0 bottom-0 w-0.5 bg-panel-900/30" />
+            <div className="absolute left-[50%] top-0 bottom-0 w-0.5 bg-panel-900/30" />
           </div>
         </div>
 

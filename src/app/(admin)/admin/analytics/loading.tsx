@@ -12,7 +12,7 @@ export default function AnalyticsLoading() {
       {/* Main Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div key={i} className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="flex items-start justify-between">
               <div className="flex-1">
@@ -29,7 +29,7 @@ export default function AnalyticsLoading() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-canvas border-2 border-timber-dark p-6 relative">
+          <div key={i} className="bg-panel-900 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
             <Skeleton className="h-6 w-48 mb-6" />
@@ -54,11 +54,11 @@ export default function AnalyticsLoading() {
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
-        <Skeleton className="h-6 w-64 mb-6 bg-canvas/20" />
-        <Skeleton className="h-6 w-full mb-4 bg-canvas/20" />
+        <Skeleton className="h-6 w-64 mb-6 bg-panel-900/20" />
+        <Skeleton className="h-6 w-full mb-4 bg-panel-900/20" />
         <div className="flex justify-between">
-          <Skeleton className="h-10 w-24 bg-canvas/20" />
-          <Skeleton className="h-10 w-32 bg-canvas/20" />
+          <Skeleton className="h-10 w-24 bg-panel-900/20" />
+          <Skeleton className="h-10 w-32 bg-panel-900/20" />
         </div>
       </div>
     </div>

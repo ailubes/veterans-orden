@@ -29,8 +29,8 @@ const ACTIVITY_COLORS = {
   event: 'text-blue-600',
   vote: 'text-purple-600',
   task: 'text-green-600',
-  points: 'text-accent',
-  profile: 'text-timber-beam',
+  points: 'text-bronze',
+  profile: 'text-muted-500',
   other: 'text-gray-500',
 };
 
@@ -104,13 +104,13 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
 
   if (loading) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
+        <p className="label text-bronze mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
         <div className="animate-pulse space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-3">
@@ -128,14 +128,14 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
 
   if (error) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
-        <div className="text-center py-8 text-timber-beam">
+        <p className="label text-bronze mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
+        <div className="text-center py-8 text-muted-500">
           <p className="text-sm">{error}</p>
         </div>
       </div>
@@ -144,14 +144,14 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
 
   if (activities.length === 0) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
         <div className="joint joint-br" />
 
-        <p className="label text-accent mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
-        <div className="text-center py-8 text-timber-beam">
+        <p className="label text-bronze mb-4">АКТИВНІСТЬ ЧЛЕНА</p>
+        <div className="text-center py-8 text-muted-500">
           <p className="text-sm">Поки що немає активності</p>
         </div>
       </div>
@@ -161,13 +161,13 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
   const groupedActivities = groupActivitiesByDate(activities);
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
+    <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />
       <div className="joint joint-br" />
 
-      <p className="label text-accent mb-6">АКТИВНІСТЬ ЧЛЕНА</p>
+      <p className="label text-bronze mb-6">АКТИВНІСТЬ ЧЛЕНА</p>
 
       <div className="space-y-6">
         {Object.entries(groupedActivities).map(([date, dateActivities]) => (
@@ -175,7 +175,7 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
             {/* Date Header */}
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-timber-dark/20" />
-              <p className="text-xs font-bold text-timber-beam uppercase">{date}</p>
+              <p className="text-xs font-bold text-muted-500 uppercase">{date}</p>
               <div className="h-px flex-1 bg-timber-dark/20" />
             </div>
 
@@ -195,7 +195,7 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
                   >
                     {/* Icon */}
                     <div
-                      className={`relative z-10 w-8 h-8 bg-canvas border-2 border-timber-dark rounded-full flex items-center justify-center ${colorClass}`}
+                      className={`relative z-10 w-8 h-8 bg-panel-900 border border-line rounded-lg rounded-full flex items-center justify-center ${colorClass}`}
                     >
                       <Icon size={14} />
                     </div>
@@ -207,10 +207,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
                           <p className="text-sm font-bold mb-1">
                             {activity.title}
                           </p>
-                          <p className="text-sm text-timber-beam mb-1">
+                          <p className="text-sm text-muted-500 mb-1">
                             {activity.description}
                           </p>
-                          <p className="text-xs text-timber-beam/60">
+                          <p className="text-xs text-muted-500/60">
                             {formatActivityDate(activity.timestamp)}
                           </p>
                         </div>
@@ -218,7 +218,7 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
                         {/* Points badge */}
                         {activity.points !== undefined && activity.points > 0 && (
                           <div className="flex-shrink-0">
-                            <span className="px-2 py-1 bg-accent/10 text-accent text-xs font-bold border border-accent/20">
+                            <span className="px-2 py-1 bg-bronze/10 text-bronze text-xs font-bold border border-bronze/20">
                               +{activity.points}
                             </span>
                           </div>
@@ -234,8 +234,8 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
       </div>
 
       {/* Show total count */}
-      <div className="mt-6 pt-4 border-t border-timber-dark/20 text-center">
-        <p className="text-xs text-timber-beam">
+      <div className="mt-6 pt-4 border-t border-line/20 text-center">
+        <p className="text-xs text-muted-500">
           Показано {activities.length} {activities.length === 1 ? 'активність' : 'активностей'}
         </p>
       </div>

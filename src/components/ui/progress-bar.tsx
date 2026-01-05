@@ -27,7 +27,7 @@ export function ProgressBar({
     >
       {/* Progress fill */}
       <div
-        className="absolute left-0 top-0 bottom-0 bg-accent transition-all duration-500"
+        className="absolute left-0 top-0 bottom-0 bg-bronze transition-all duration-500"
         style={{ width: `${percentage}%`, minWidth: '4px' }}
       />
 

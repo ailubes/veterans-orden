@@ -31,7 +31,7 @@ export function MessageToLeader({
 
   if (!hasReferrer && !hasRegionalLeader) {
     return (
-      <div className="text-center text-timber-beam py-4">
+      <div className="text-center text-muted-500 py-4">
         <p className="text-sm">
           Наразі немає доступних лідерів для надсилання повідомлень.
         </p>
@@ -103,14 +103,14 @@ export function MessageToLeader({
               onClick={() => setTargetType('referrer')}
               className={`flex items-center gap-3 px-4 py-3 border-2 transition-colors ${
                 targetType === 'referrer'
-                  ? 'border-accent bg-accent/10'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
+                  ? 'border-bronze bg-bronze/10'
+                  : 'border-line/30 hover:border-line'
               }`}
             >
               <User className="w-5 h-5 flex-shrink-0" />
               <div className="text-left">
                 <div className="font-bold text-sm">Моєму рефереру</div>
-                <div className="text-xs text-timber-beam">{referrerName}</div>
+                <div className="text-xs text-muted-500">{referrerName}</div>
               </div>
             </button>
 
@@ -119,14 +119,14 @@ export function MessageToLeader({
               onClick={() => setTargetType('regional_leader')}
               className={`flex items-center gap-3 px-4 py-3 border-2 transition-colors ${
                 targetType === 'regional_leader'
-                  ? 'border-accent bg-accent/10'
-                  : 'border-timber-dark/30 hover:border-timber-dark'
+                  ? 'border-bronze bg-bronze/10'
+                  : 'border-line/30 hover:border-line'
               }`}
             >
               <Users className="w-5 h-5 flex-shrink-0" />
               <div className="text-left">
                 <div className="font-bold text-sm">Регіональному лідеру</div>
-                <div className="text-xs text-timber-beam">
+                <div className="text-xs text-muted-500">
                   {regionalLeaderName} ({oblastName})
                 </div>
               </div>
@@ -137,21 +137,21 @@ export function MessageToLeader({
 
       {/* Single option display */}
       {hasReferrer && !hasRegionalLeader && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border-2 border-timber-dark/20">
-          <User className="w-5 h-5 text-accent" />
+        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg/20">
+          <User className="w-5 h-5 text-bronze" />
           <div>
             <div className="font-bold text-sm">Надіслати моєму рефереру</div>
-            <div className="text-xs text-timber-beam">{referrerName}</div>
+            <div className="text-xs text-muted-500">{referrerName}</div>
           </div>
         </div>
       )}
 
       {!hasReferrer && hasRegionalLeader && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border-2 border-timber-dark/20">
-          <Users className="w-5 h-5 text-accent" />
+        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg/20">
+          <Users className="w-5 h-5 text-bronze" />
           <div>
             <div className="font-bold text-sm">Надіслати регіональному лідеру</div>
-            <div className="text-xs text-timber-beam">
+            <div className="text-xs text-muted-500">
               {regionalLeaderName} ({oblastName})
             </div>
           </div>
@@ -169,10 +169,10 @@ export function MessageToLeader({
           onChange={(e) => setTitle(e.target.value)}
           maxLength={200}
           placeholder="Коротка тема повідомлення"
-          className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+          className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
           required
         />
-        <p className="text-xs text-timber-beam mt-1">{title.length}/200</p>
+        <p className="text-xs text-muted-500 mt-1">{title.length}/200</p>
       </div>
 
       {/* Message */}
@@ -185,7 +185,7 @@ export function MessageToLeader({
           onChange={(e) => setMessage(e.target.value)}
           rows={4}
           placeholder="Ваше повідомлення..."
-          className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+          className="w-full px-4 py-2 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
           required
         />
       </div>

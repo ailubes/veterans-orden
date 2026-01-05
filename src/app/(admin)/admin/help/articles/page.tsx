@@ -76,8 +76,8 @@ export default function AdminArticlesPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="text-center py-12">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-timber-dark border-t-accent"></div>
-          <p className="mt-4 text-timber-beam">Завантаження...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
+          <p className="mt-4 text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -89,14 +89,14 @@ export default function AdminArticlesPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-syne text-3xl font-bold mb-2">Статті довідки</h1>
-          <p className="text-timber-beam">
+          <p className="text-muted-500">
             Всього: {filteredArticles.length} {filteredArticles.length !== articles.length && `з ${articles.length}`}
           </p>
         </div>
 
         <Link
           href="/admin/help/articles/new"
-          className="flex items-center gap-2 px-6 py-3 bg-accent text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
+          className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
         >
           <Plus size={20} />
           Нова стаття
@@ -104,25 +104,25 @@ export default function AdminArticlesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border-2 border-timber-dark p-4 mb-6 relative">
+      <div className="bg-white border border-line rounded-lg p-4 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="text-accent" size={20} />
+          <Filter className="text-bronze" size={20} />
           <p className="font-bold">Фільтри</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-timber-beam" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-500" size={16} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Пошук за назвою..."
-              className="w-full pl-10 pr-3 py-2 border-2 border-timber-dark focus:border-accent outline-none text-sm"
+              className="w-full pl-10 pr-3 py-2 border border-line rounded-lg focus:border-bronze outline-none text-sm"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function AdminArticlesPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+            className="px-3 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
           >
             <option value="all">Всі статуси</option>
             <option value="published">Опубліковано</option>
@@ -142,7 +142,7 @@ export default function AdminArticlesPage() {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-2 border-2 border-timber-dark focus:border-accent outline-none font-bold text-sm"
+            className="px-3 py-2 border border-line rounded-lg focus:border-bronze outline-none font-bold text-sm"
           >
             <option value="all">Всі категорії</option>
             {categories.map((cat) => (
@@ -155,7 +155,7 @@ export default function AdminArticlesPage() {
       </div>
 
       {/* Articles Table */}
-      <div className="bg-white border-2 border-timber-dark relative overflow-x-auto">
+      <div className="bg-white border border-line rounded-lg relative overflow-x-auto">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -173,7 +173,7 @@ export default function AdminArticlesPage() {
           <tbody className="divide-y-2 divide-timber-dark/20">
             {filteredArticles.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-timber-beam">
+                <td colSpan={6} className="px-4 py-12 text-center text-muted-500">
                   <FileText className="mx-auto mb-2" size={48} />
                   Статті не знайдені
                 </td>
@@ -185,14 +185,14 @@ export default function AdminArticlesPage() {
                     <div>
                       <p className="font-bold line-clamp-1">{article.title}</p>
                       {article.excerpt && (
-                        <p className="text-xs text-timber-beam line-clamp-1 mt-1">
+                        <p className="text-xs text-muted-500 line-clamp-1 mt-1">
                           {article.excerpt}
                         </p>
                       )}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-accent font-bold">
+                    <span className="text-sm text-bronze font-bold">
                       {article.category?.name_uk || 'N/A'}
                     </span>
                   </td>
@@ -201,13 +201,13 @@ export default function AdminArticlesPage() {
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex items-center justify-center gap-1">
-                      <Eye size={14} className="text-timber-beam" />
+                      <Eye size={14} className="text-muted-500" />
                       <span className="text-sm">{article.view_count || 0}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex items-center justify-center gap-1">
-                      <ThumbsUp size={14} className="text-timber-beam" />
+                      <ThumbsUp size={14} className="text-muted-500" />
                       <span className="text-sm">{getHelpfulRate(article)}</span>
                     </div>
                   </td>
@@ -215,10 +215,10 @@ export default function AdminArticlesPage() {
                     <div className="flex items-center justify-center gap-2">
                       <Link
                         href={`/admin/help/articles/${article.id}/edit`}
-                        className="p-2 hover:bg-accent/10 transition-colors"
+                        className="p-2 hover:bg-bronze/10 transition-colors"
                         title="Редагувати"
                       >
-                        <Edit size={16} className="text-accent" />
+                        <Edit size={16} className="text-bronze" />
                       </Link>
                       <button
                         onClick={async () => {

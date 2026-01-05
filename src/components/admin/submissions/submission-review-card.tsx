@@ -115,7 +115,7 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
 
   return (
     <>
-      <div className="bg-canvas border-2 border-timber-dark p-4 relative">
+      <div className="bg-panel-900 border border-line rounded-lg p-4 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -133,14 +133,14 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
                   >
                     {priorityLabels[submission.task?.priority || 'medium']}
                   </span>
-                  <span className="flex items-center gap-1 text-accent font-bold text-sm">
+                  <span className="flex items-center gap-1 text-bronze font-bold text-sm">
                     <Star size={14} />
                     +{submission.task?.points || 0}
                   </span>
                 </div>
                 <Link
                   href={`/admin/tasks/${submission.task?.id}`}
-                  className="font-syne text-lg font-bold hover:text-accent transition-colors"
+                  className="font-syne text-lg font-bold hover:text-bronze transition-colors"
                 >
                   {submission.task?.title}
                 </Link>
@@ -159,17 +159,17 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
                     className="object-cover"
                   />
                 ) : (
-                  <User size={20} className="text-timber-beam" />
+                  <User size={20} className="text-muted-500" />
                 )}
               </div>
               <div>
                 <p className="font-bold text-sm">
                   {submission.user?.first_name} {submission.user?.last_name}
                 </p>
-                <p className="text-xs text-timber-beam">{submission.user?.email}</p>
+                <p className="text-xs text-muted-500">{submission.user?.email}</p>
               </div>
               <div className="ml-auto text-right">
-                <p className="text-xs text-timber-beam">Надіслано</p>
+                <p className="text-xs text-muted-500">Надіслано</p>
                 <p className="text-xs font-bold">{submittedDate}</p>
               </div>
             </div>
@@ -194,7 +194,7 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
             {submission.proof_type === 'image' && submission.proof_image_url ? (
               <button
                 onClick={() => setShowImageModal(true)}
-                className="w-full h-32 border-2 border-timber-dark/20 rounded overflow-hidden hover:border-accent transition-colors"
+                className="w-full h-32 border border-line rounded-lg/20 rounded overflow-hidden hover:border-bronze transition-colors"
               >
                 <img
                   src={submission.proof_image_url}
@@ -207,13 +207,13 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
                 href={submission.proof_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-3 border-2 border-timber-dark/20 rounded hover:border-accent transition-colors text-sm text-accent truncate"
+                className="flex items-center gap-2 p-3 border border-line rounded-lg/20 rounded hover:border-bronze transition-colors text-sm text-bronze truncate"
               >
                 <ExternalLink size={16} className="flex-shrink-0" />
                 <span className="truncate">{submission.proof_url}</span>
               </a>
             ) : (
-              <p className="text-sm text-timber-beam">Немає підтвердження</p>
+              <p className="text-sm text-muted-500">Немає підтвердження</p>
             )}
           </div>
 
@@ -247,7 +247,7 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
 
       {/* Image Modal */}
       <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
-        <DialogContent className="bg-canvas border-2 border-timber-dark max-w-3xl">
+        <DialogContent className="bg-panel-900 border border-line rounded-lg max-w-3xl">
           <DialogHeader>
             <DialogTitle className="font-syne">Скріншот підтвердження</DialogTitle>
           </DialogHeader>
@@ -274,12 +274,12 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
 
       {/* Reject Modal */}
       <Dialog open={showRejectModal} onOpenChange={setShowRejectModal}>
-        <DialogContent className="bg-canvas border-2 border-timber-dark max-w-md">
+        <DialogContent className="bg-panel-900 border border-line rounded-lg max-w-md">
           <DialogHeader>
             <DialogTitle className="font-syne">Відхилення підтвердження</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Ви впевнені, що хочете відхилити це підтвердження? Член отримає сповіщення.
             </p>
             <div>
@@ -290,7 +290,7 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 placeholder="Опишіть причину відхилення..."
-                className="w-full px-4 py-3 border-2 border-timber-dark bg-canvas text-sm focus:border-accent focus:outline-none resize-none"
+                className="w-full px-4 py-3 border border-line rounded-lg bg-panel-900 text-sm focus:border-bronze focus:outline-none resize-none"
                 rows={3}
               />
             </div>
