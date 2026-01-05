@@ -92,7 +92,7 @@ export function Hero() {
     >
       {/* Floating Timber Element */}
       <div
-        className="floating-timber hide-mobile"
+        className="floating-element hide-mobile"
         style={{
           position: 'absolute',
           width: '300px',
@@ -148,10 +148,10 @@ export function Hero() {
           <Link href="/join" className="btn">
             ПРИЄДНАТИСЯ →
           </Link>
-          <Link href="/support" className="btn" style={{ backgroundColor: 'var(--accent)', color: 'var(--timber-dark)' }}>
+          <Link href="/support" className="btn" style={{ backgroundColor: 'var(--accent)', color: 'var(--panel-850)' }}>
             ПІДТРИМАТИ
           </Link>
-          <Link href="/help-request" className="btn" style={{ backgroundColor: 'transparent', border: '2px solid var(--timber-dark)', color: 'var(--timber-dark)' }}>
+          <Link href="/help-request" className="btn" style={{ backgroundColor: 'transparent', border: '2px solid var(--panel-850)', color: 'var(--panel-850)' }}>
             ПОТРІБНА ДОПОМОГА
           </Link>
         </div>
@@ -170,7 +170,7 @@ export function Hero() {
           top: '80px',
           /* Left edge is 20px right of center (50% of hero) */
           left: 'calc(50% + 20px)',
-          border: '2px solid var(--timber-dark)',
+          border: '2px solid var(--panel-850)',
         }}
       >
         {/* Corner joints - positioned so card corner is in center of joint */}

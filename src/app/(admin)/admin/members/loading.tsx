@@ -46,7 +46,7 @@ export default function MembersLoading() {
         <div className="joint joint-br" />
 
         {/* Header */}
-        <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-line bg-timber-dark/5">
+        <div className="hidden md:grid grid-cols-12 gap-4 p-4 border-b-2 border-line bg-panel-850/5">
           <div className="col-span-1">
             <Skeleton className="h-5 w-5" />
           </div>

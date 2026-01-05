@@ -16,17 +16,17 @@ export function SelectionActionBar({
   onCancel,
 }: SelectionActionBarProps) {
   return (
-    <div className="flex items-center justify-between px-3 py-2 bg-timber-light border-t border-line/20">
+    <div className="flex items-center justify-between px-3 py-2 bg-panel-850 border-t border-line/20">
       {/* Selection count */}
       <div className="flex items-center gap-2">
         <button
           onClick={onCancel}
-          className="p-1 hover:bg-timber-dark/10 rounded transition-colors"
+          className="p-1 hover:bg-panel-850/10 rounded transition-colors"
           title="Скасувати вибір"
         >
-          <X className="w-5 h-5 text-timber-dark" />
+          <X className="w-5 h-5 text-text-100" />
         </button>
-        <span className="text-sm font-medium text-timber-dark">
+        <span className="text-sm font-medium text-text-100">
           Вибрано: {selectedCount}
         </span>
       </div>

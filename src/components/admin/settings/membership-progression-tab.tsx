@@ -332,7 +332,7 @@ export default function MembershipProgressionTab({
             </p>
           )}
 
-          <div className="mt-4 p-4 bg-timber-dark/5 border border-line/20">
+          <div className="mt-4 p-4 bg-panel-850/5 border border-line/20">
             {advancementMode === 'automatic' ? (
               <p className="text-sm">
                 <strong>Автоматичний режим:</strong> Користувачі автоматично отримують нові рівні,
@@ -445,10 +445,10 @@ export default function MembershipProgressionTab({
               >
                 <button
                   onClick={() => setExpandedRole(expandedRole === req.id ? null : req.id)}
-                  className="w-full p-4 flex items-center justify-between gap-4 hover:bg-timber-dark/5 transition-colors text-left"
+                  className="w-full p-4 flex items-center justify-between gap-4 hover:bg-panel-850/5 transition-colors text-left"
                 >
                   <div className="flex items-center gap-3 flex-1 min-w-0">
-                    <span className="w-6 h-6 rounded-full bg-timber-dark text-canvas flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    <span className="w-6 h-6 rounded-full bg-panel-850 text-canvas flex items-center justify-center text-xs font-bold flex-shrink-0">
                       {req.roleLevel}
                     </span>
                     <div className="flex-1 min-w-0">

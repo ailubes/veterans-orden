@@ -9,7 +9,7 @@ export default function PrivacyPage() {
     <div
       style={{
         backgroundColor: 'var(--canvas)',
-        color: 'var(--timber-dark)',
+        color: 'var(--panel-850)',
         fontFamily: "'Space Mono', monospace",
         minHeight: '100vh',
       }}

@@ -110,7 +110,7 @@ export default async function AdminVotesPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-muted-500 mb-3">
-                  <span className="px-2 py-1 bg-timber-dark/10">
+                  <span className="px-2 py-1 bg-panel-850/10">
                     {typeLabels[vote.type as keyof typeof typeLabels]}
                   </span>
                   <span>{vote.total_votes || 0} голосів</span>
@@ -125,7 +125,7 @@ export default async function AdminVotesPage() {
                   </Link>
                   <Link
                     href={`/admin/votes/${vote.id}/edit`}
-                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-panel-850/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -157,7 +157,7 @@ export default async function AdminVotesPage() {
                   {votes.map((vote) => (
                     <tr
                       key={vote.id}
-                      className="border-b border-line/20 hover:bg-timber-dark/5"
+                      className="border-b border-line/20 hover:bg-panel-850/5"
                     >
                       <td className="p-4">
                         <div className="font-bold">{vote.title}</div>
@@ -170,7 +170,7 @@ export default async function AdminVotesPage() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                        <span className="px-2 py-1 bg-panel-850/10 text-xs">
                           {typeLabels[vote.type as keyof typeof typeLabels]}
                         </span>
                       </td>
@@ -195,14 +195,14 @@ export default async function AdminVotesPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/admin/votes/${vote.id}`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Результати"
                           >
                             <BarChart3 size={16} />
                           </Link>
                           <Link
                             href={`/admin/votes/${vote.id}/edit`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Редагувати"
                           >
                             <Edit2 size={16} />

@@ -136,7 +136,7 @@ export function ProfilePhotoUpload({
       <div className="flex items-center gap-6">
         {/* Avatar Preview */}
         <div className="relative">
-          <div className="w-32 h-32 rounded-full border-4 border-line bg-timber-beam/10 flex items-center justify-center overflow-hidden">
+          <div className="w-32 h-32 rounded-full border-4 border-line bg-bronze/10 flex items-center justify-center overflow-hidden">
             {previewUrl ? (
               <img
                 src={previewUrl}
@@ -161,7 +161,7 @@ export function ProfilePhotoUpload({
 
           {/* Upload progress */}
           {uploading && (
-            <div className="absolute inset-0 bg-timber-dark/80 rounded-full flex items-center justify-center">
+            <div className="absolute inset-0 bg-panel-850/80 rounded-full flex items-center justify-center">
               <div className="text-canvas text-sm font-bold">{uploadProgress}%</div>
             </div>
           )}
@@ -181,7 +181,7 @@ export function ProfilePhotoUpload({
 
           <label
             htmlFor="avatar-upload"
-            className={`inline-flex items-center gap-2 px-6 py-3 bg-timber-dark text-canvas font-bold text-sm font-mono uppercase tracking-wider cursor-pointer transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] ${
+            className={`inline-flex items-center gap-2 px-6 py-3 bg-panel-850 text-canvas font-bold text-sm font-mono uppercase tracking-wider cursor-pointer transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] ${
               uploading ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''
             }`}
           >

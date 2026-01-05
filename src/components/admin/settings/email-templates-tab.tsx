@@ -248,7 +248,7 @@ export default function EmailTemplatesTab({
       <div className="mt-6 p-4 border-2 border-bronze bg-panel-900/50">
         <p className="text-sm text-bronze">
           💡 <strong>Порада:</strong> Шаблони використовують систему змінних{' '}
-          <code className="bg-timber-dark text-canvas px-1">{'{{variable}}'}</code>.
+          <code className="bg-panel-850 text-canvas px-1">{'{{variable}}'}</code>.
           Відредагуйте шаблон, щоб побачити доступні змінні для кожного типу листа.
         </p>
       </div>

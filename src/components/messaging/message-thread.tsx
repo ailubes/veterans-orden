@@ -50,11 +50,11 @@ export function MessageThread({
         <div key={group.date}>
           {/* Date Separator */}
           <div className="flex items-center gap-3 my-4">
-            <div className="flex-1 h-px bg-timber-dark/20" />
+            <div className="flex-1 h-px bg-panel-850/20" />
             <span className="text-xs text-muted-500 font-medium px-2">
               {group.dateLabel}
             </span>
-            <div className="flex-1 h-px bg-timber-dark/20" />
+            <div className="flex-1 h-px bg-panel-850/20" />
           </div>
 
           {/* Messages for this date */}

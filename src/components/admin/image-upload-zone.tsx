@@ -162,12 +162,12 @@ export function ImageUploadZone({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <label className="block text-sm font-medium text-[--timber-dark]">{label}</label>
+      <label className="block text-sm font-medium text-[--text-100]">{label}</label>
 
       {value && !isUploading ? (
         // Preview uploaded image
         <div className="relative">
-          <div className="relative h-64 bg-gray-100 border-2 border-[--timber-dark] overflow-hidden">
+          <div className="relative h-64 bg-gray-100 border-2 border-[--text-100] overflow-hidden">
             <Image
               src={value}
               alt="Preview"
@@ -196,14 +196,14 @@ export function ImageUploadZone({
             relative h-64 border-2 border-dashed rounded-lg
             flex flex-col items-center justify-center
             transition-all cursor-pointer
-            ${isDragging ? 'border-[--accent] bg-[--accent]/5' : 'border-[--timber-dark]/30 hover:border-[--accent]'}
+            ${isDragging ? 'border-[--accent] bg-[--accent]/5' : 'border-[--text-100]/30 hover:border-[--accent]'}
             ${isUploading ? 'pointer-events-none' : ''}
           `}
         >
           {isUploading ? (
             <div className="text-center">
               <Loader2 className="w-12 h-12 text-[--accent] animate-spin mx-auto mb-4" />
-              <p className="text-[--timber] font-medium">Завантаження...</p>
+              <p className="text-[--muted-500] font-medium">Завантаження...</p>
               <div className="mt-4 w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[--accent] transition-all duration-300"
@@ -214,8 +214,8 @@ export function ImageUploadZone({
             </div>
           ) : (
             <>
-              <Upload className="w-12 h-12 text-[--timber-dark]/40 mb-4" />
-              <p className="text-[--timber-dark] font-medium mb-1">
+              <Upload className="w-12 h-12 text-[--text-100]/40 mb-4" />
+              <p className="text-[--text-100] font-medium mb-1">
                 Перетягніть зображення сюди
               </p>
               <p className="text-sm text-gray-500">або клацніть, щоб вибрати файл</p>

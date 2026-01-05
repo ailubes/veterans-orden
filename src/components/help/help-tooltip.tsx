@@ -148,14 +148,14 @@ export function HelpTooltip({
             <div className="joint joint-tr" />
 
             {/* Header */}
-            <div className="flex items-center justify-between p-3 border-b-2 border-line bg-timber-dark/5">
+            <div className="flex items-center justify-between p-3 border-b-2 border-line bg-panel-850/5">
               <div className="flex items-center gap-2">
                 <HelpCircle size={16} className="text-bronze" />
                 <p className="font-bold text-sm">Підказка</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-timber-dark/10 transition-colors rounded"
+                className="p-1 hover:bg-panel-850/10 transition-colors rounded"
                 aria-label="Закрити"
               >
                 <X size={16} />

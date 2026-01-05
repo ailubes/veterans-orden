@@ -27,7 +27,7 @@ export function VideoEmbed({ url, title }: VideoEmbedProps) {
 
   if (!videoId) {
     return (
-      <div className="bg-timber-dark/10 border border-line rounded-lg/30 p-8 text-center">
+      <div className="bg-panel-850/10 border border-line rounded-lg/30 p-8 text-center">
         <Video className="mx-auto mb-3 text-muted-500" size={48} />
         <p className="text-muted-500">Неможливо завантажити відео</p>
         <a

@@ -15,7 +15,7 @@ export function MessengerButton({ className }: MessengerButtonProps) {
     <button
       onClick={toggleMessenger}
       className={cn(
-        'relative p-2 rounded-full hover:bg-timber-light transition-colors',
+        'relative p-2 rounded-full hover:bg-panel-850 transition-colors',
         className
       )}
       aria-label={`Повідомлення${totalUnread > 0 ? ` (${totalUnread} непрочитаних)` : ''}`}

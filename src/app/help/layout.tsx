@@ -70,7 +70,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
               {loading ? (
                 <div className="space-y-2">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-10 bg-timber-dark/10 animate-pulse" />
+                    <div key={i} className="h-10 bg-panel-850/10 animate-pulse" />
                   ))}
                 </div>
               ) : (
@@ -80,7 +80,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                     className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                       pathname === '/help'
                         ? 'bg-bronze text-canvas border border-line rounded-lg shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
-                        : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
+                        : 'hover:bg-panel-850/10 hover:translate-x-0.5'
                     }`}
                   >
                     <Home size={16} className={pathname === '/help' ? 'text-canvas' : 'text-bronze'} />
@@ -98,7 +98,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                           className={`flex items-center gap-2 px-3 py-2.5 text-sm font-bold transition-all rounded ${
                             isActive
                               ? 'bg-bronze text-canvas border border-line rounded-lg shadow-[3px_3px_0px_0px_rgba(44,40,36,1)]'
-                              : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
+                              : 'hover:bg-panel-850/10 hover:translate-x-0.5'
                           }`}
                         >
                           {Icon && <Icon size={16} className={isActive ? 'text-canvas' : 'text-bronze'} />}
@@ -119,7 +119,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
                                   className={`flex items-center gap-2 px-3 py-1.5 text-xs transition-all rounded ${
                                     isSubActive
                                       ? 'bg-bronze text-canvas border border-line shadow-[2px_2px_0px_0px_rgba(44,40,36,1)]'
-                                      : 'hover:bg-timber-dark/10 hover:translate-x-0.5'
+                                      : 'hover:bg-panel-850/10 hover:translate-x-0.5'
                                   }`}
                                 >
                                   <ChevronRight size={12} className={isSubActive ? 'text-canvas' : 'text-muted-500'} />

@@ -76,10 +76,10 @@ export default function ContributePage() {
             <h2 className="font-syne font-bold text-lg mb-2">
               Чому це важливо?
             </h2>
-            <p className="text-sm text-timber-dark mb-3">
+            <p className="text-sm text-text-100 mb-3">
               Ваші внески допомагають нам розвивати платформу, організовувати події та підтримувати спільноту активних громадян.
             </p>
-            <ul className="text-sm text-timber-dark space-y-1">
+            <ul className="text-sm text-text-100 space-y-1">
               <li>• Вищий рівень = більше можливостей впливу</li>
               <li>• Доступ до голосувань на праймеріз</li>
               <li>• Можливість створювати події та завдання</li>

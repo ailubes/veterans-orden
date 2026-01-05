@@ -34,7 +34,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
           position: 'absolute',
           height: '2px',
           width: '100%',
-          background: 'var(--timber-dark)',
+          background: 'var(--panel-850)',
           left: 0,
           top: isOpen ? '9px' : 0,
           transform: isOpen ? 'rotate(45deg)' : 'none',
@@ -46,7 +46,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
           position: 'absolute',
           height: '2px',
           width: '100%',
-          background: 'var(--timber-dark)',
+          background: 'var(--panel-850)',
           left: 0,
           top: '9px',
           opacity: isOpen ? 0 : 1,
@@ -58,7 +58,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
           position: 'absolute',
           height: '2px',
           width: '100%',
-          background: 'var(--timber-dark)',
+          background: 'var(--panel-850)',
           left: 0,
           bottom: isOpen ? '9px' : 0,
           transform: isOpen ? 'rotate(-45deg)' : 'none',
@@ -82,7 +82,7 @@ export function Navigation() {
             fontSize: '20px',
             fontWeight: 800,
             textDecoration: 'none',
-            color: 'var(--timber-dark)',
+            color: 'var(--panel-850)',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
@@ -102,7 +102,7 @@ export function Navigation() {
                 href={link.href}
                 style={{
                   textDecoration: 'none',
-                  color: 'var(--timber-dark)',
+                  color: 'var(--panel-850)',
                   fontSize: '12px',
                   fontWeight: 700,
                   letterSpacing: '0.05em',
@@ -143,7 +143,7 @@ export function Navigation() {
             className="syne"
             style={{
               textDecoration: 'none',
-              color: 'var(--timber-dark)',
+              color: 'var(--panel-850)',
               fontSize: '28px',
               fontWeight: 700,
               letterSpacing: '0.05em',

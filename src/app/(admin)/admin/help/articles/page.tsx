@@ -160,7 +160,7 @@ export default function AdminArticlesPage() {
         <div className="joint joint-tr" />
 
         <table className="w-full">
-          <thead className="bg-timber-dark text-canvas">
+          <thead className="bg-panel-850 text-canvas">
             <tr>
               <th className="px-4 py-3 text-left font-bold text-sm">Назва</th>
               <th className="px-4 py-3 text-left font-bold text-sm">Категорія</th>
@@ -170,7 +170,7 @@ export default function AdminArticlesPage() {
               <th className="px-4 py-3 text-center font-bold text-sm">Дії</th>
             </tr>
           </thead>
-          <tbody className="divide-y-2 divide-timber-dark/20">
+          <tbody className="divide-y-2 divide-line/20">
             {filteredArticles.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-12 text-center text-muted-500">
@@ -180,7 +180,7 @@ export default function AdminArticlesPage() {
               </tr>
             ) : (
               filteredArticles.map((article) => (
-                <tr key={article.id} className="hover:bg-timber-dark/5 transition-colors">
+                <tr key={article.id} className="hover:bg-panel-850/5 transition-colors">
                   <td className="px-4 py-3">
                     <div>
                       <p className="font-bold line-clamp-1">{article.title}</p>

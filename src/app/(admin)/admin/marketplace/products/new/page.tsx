@@ -269,7 +269,7 @@ export default function NewProductPage() {
             <div className="space-y-4">
               {/* Title */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   НАЗВА *
                 </label>
                 <input
@@ -287,7 +287,7 @@ export default function NewProductPage() {
 
               {/* Slug */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   URL (SLUG) *
                   {slugManuallyEdited && (
                     <span className="ml-2 text-xs text-amber-600 font-normal">
@@ -296,7 +296,7 @@ export default function NewProductPage() {
                   )}
                 </label>
                 <div className="flex items-center">
-                  <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
+                  <span className="px-4 py-3 bg-panel-850/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                     /shop/
                   </span>
                   <input
@@ -314,7 +314,7 @@ export default function NewProductPage() {
                     onClick={handleRegenerateSlug}
                     disabled={!formData.name_uk}
                     title="Згенерувати slug з української назви"
-                    className="px-3 py-3 border-2 border-l-0 border-line hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-3 border-2 border-l-0 border-line hover:bg-panel-850/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                   </button>
@@ -332,7 +332,7 @@ export default function NewProductPage() {
 
               {/* Product Type */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   ТИП ТОВАРУ *
                 </label>
                 <select
@@ -349,7 +349,7 @@ export default function NewProductPage() {
 
               {/* Status */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   СТАТУС *
                 </label>
                 <select
@@ -367,7 +367,7 @@ export default function NewProductPage() {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   ОПИС
                 </label>
                 <RichTextEditor
@@ -393,7 +393,7 @@ export default function NewProductPage() {
             <div className="space-y-4">
               {/* Price in Points */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   ЦІНА В БАЛАХ *
                 </label>
                 <input
@@ -412,7 +412,7 @@ export default function NewProductPage() {
 
               {/* Price in UAH */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   ЦІНА В ГРН (необов'язково)
                 </label>
                 <div className="flex items-center gap-2">
@@ -437,7 +437,7 @@ export default function NewProductPage() {
 
               {/* Stock Quantity */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   КІЛЬКІСТЬ НА СКЛАДІ
                 </label>
                 <input
@@ -458,7 +458,7 @@ export default function NewProductPage() {
 
               {/* Max Per User */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   МАКСИМУМ НА КОРИСТУВАЧА
                 </label>
                 <input
@@ -479,7 +479,7 @@ export default function NewProductPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-timber-dark mb-2">
+                    <label className="block text-sm font-medium text-text-100 mb-2">
                       МІНІМАЛЬНИЙ РІВЕНЬ
                     </label>
                     <input
@@ -492,7 +492,7 @@ export default function NewProductPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-timber-dark mb-2">
+                    <label className="block text-sm font-medium text-text-100 mb-2">
                       РОЛЬ (необов'язково)
                     </label>
                     <input
@@ -568,7 +568,7 @@ export default function NewProductPage() {
                 {formData.requires_shipping && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-timber-dark mb-2">
+                      <label className="block text-sm font-medium text-text-100 mb-2">
                         ВАГА (грами)
                       </label>
                       <input
@@ -585,7 +585,7 @@ export default function NewProductPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-timber-dark mb-2">
+                      <label className="block text-sm font-medium text-text-100 mb-2">
                         РОЗМІРИ (см)
                       </label>
                       <div className="grid grid-cols-3 gap-2">
@@ -660,7 +660,7 @@ export default function NewProductPage() {
             {formData.type === 'digital' && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">
+                  <label className="block text-sm font-medium text-text-100 mb-2">
                     URL ЦИФРОВОГО ФАЙЛУ
                   </label>
                   <ImageUploadZone
@@ -677,7 +677,7 @@ export default function NewProductPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">
+                  <label className="block text-sm font-medium text-text-100 mb-2">
                     ЛІМІТ ЗАВАНТАЖЕНЬ
                   </label>
                   <input
@@ -700,7 +700,7 @@ export default function NewProductPage() {
 
             {/* Event Ticket Settings */}
             {formData.type === 'event_ticket' && (
-              <div className="p-4 bg-timber-dark/5 border border-line rounded-lg/20">
+              <div className="p-4 bg-panel-850/5 border border-line rounded-lg/20">
                 <p className="text-sm text-muted-500">
                   Квитки на події керуються через систему подій. Налаштуйте подію окремо в розділі Подій.
                 </p>
@@ -721,7 +721,7 @@ export default function NewProductPage() {
               {/* Availability Dates */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">
+                  <label className="block text-sm font-medium text-text-100 mb-2">
                     ДОСТУПНИЙ З
                   </label>
                   <input
@@ -733,7 +733,7 @@ export default function NewProductPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">
+                  <label className="block text-sm font-medium text-text-100 mb-2">
                     ДОСТУПНИЙ ДО
                   </label>
                   <input
@@ -763,7 +763,7 @@ export default function NewProductPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">
+                  <label className="block text-sm font-medium text-text-100 mb-2">
                     ПОРЯДОК СОРТУВАННЯ
                   </label>
                   <input
@@ -780,7 +780,7 @@ export default function NewProductPage() {
 
               {/* Tags */}
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   ТЕГИ
                 </label>
                 <input
@@ -816,7 +816,7 @@ export default function NewProductPage() {
           type="button"
           onClick={() => handleSubmit('draft')}
           disabled={loading || !!slugError || isCheckingSlug}
-          className="px-6 py-3 bg-timber-dark/20 text-timber-dark font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+          className="px-6 py-3 bg-panel-850/20 text-text-100 font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--panel-850)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
         >
           {loading ? 'ЗБЕРЕЖЕННЯ...' : '📝 ЗБЕРЕГТИ ЧЕРНЕТКУ'}
         </button>
@@ -824,7 +824,7 @@ export default function NewProductPage() {
           type="button"
           onClick={() => handleSubmit('active')}
           disabled={loading || !!slugError || isCheckingSlug}
-          className="px-6 py-3 bg-bronze text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+          className="px-6 py-3 bg-bronze text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--panel-850)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
         >
           {loading ? 'ЗБЕРЕЖЕННЯ...' : '✅ ОПУБЛІКУВАТИ'}
         </button>

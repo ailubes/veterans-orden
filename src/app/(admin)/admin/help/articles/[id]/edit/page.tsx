@@ -230,7 +230,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-4">
           <Link
             href="/admin/help/articles"
-            className="p-2 hover:bg-timber-dark/10 transition-colors"
+            className="p-2 hover:bg-panel-850/10 transition-colors"
           >
             <ArrowLeft size={24} />
           </Link>
@@ -243,7 +243,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowPreview(!showPreview)}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
+            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
           >
             <Eye size={18} />
             {showPreview ? 'Редагувати' : 'Попередній перегляд'}
@@ -260,7 +260,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
           <button
             onClick={() => handleSubmit()}
             disabled={submitting}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold disabled:opacity-50"
           >
             <Save size={18} />
             Зберегти зміни
@@ -296,7 +296,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         {status === 'published' && (
           <button
             onClick={() => handleSubmit('archived')}
-            className="ml-3 text-sm font-bold text-muted-500 hover:text-timber-dark"
+            className="ml-3 text-sm font-bold text-muted-500 hover:text-text-100"
           >
             → Перемістити в архів
           </button>
@@ -304,7 +304,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
         {status === 'archived' && (
           <button
             onClick={() => handleSubmit('published')}
-            className="ml-3 text-sm font-bold text-bronze hover:text-timber-dark"
+            className="ml-3 text-sm font-bold text-bronze hover:text-text-100"
           >
             → Відновити до опублікованого
           </button>
@@ -522,7 +522,7 @@ export default function EditArticlePage({ params }: { params: Promise<{ id: stri
                 {keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="flex items-center gap-1 px-3 py-1 bg-timber-dark/10 border border-line text-sm"
+                    className="flex items-center gap-1 px-3 py-1 bg-panel-850/10 border border-line text-sm"
                   >
                     {keyword}
                     <button

@@ -193,7 +193,7 @@ function SearchResults() {
             За запитом "{query}" не знайдено жодної статті
           </p>
 
-          <div className="bg-timber-dark/5 border border-line rounded-lg/20 p-6 max-w-md mx-auto">
+          <div className="bg-panel-850/5 border border-line rounded-lg/20 p-6 max-w-md mx-auto">
             <h3 className="font-bold mb-3">Поради для пошуку:</h3>
             <ul className="text-sm text-left space-y-2 text-muted-500">
               <li className="flex items-start gap-2">

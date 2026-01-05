@@ -95,7 +95,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
 
   if (!referralCode) {
     return (
-      <div className="bg-timber-dark text-canvas p-6 lg:p-8 relative mb-8">
+      <div className="bg-panel-850 text-canvas p-6 lg:p-8 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -109,7 +109,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
   }
 
   return (
-    <div className="bg-timber-dark text-canvas p-6 lg:p-8 relative mb-8">
+    <div className="bg-panel-850 text-canvas p-6 lg:p-8 relative mb-8">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />

@@ -36,8 +36,8 @@ export function ConversationItem({ conversation, onClick }: ConversationItemProp
     <button
       onClick={onClick}
       className={cn(
-        'w-full flex items-start gap-3 p-3 hover:bg-timber-light/50 transition-colors text-left',
-        hasUnread && 'bg-timber-light/30'
+        'w-full flex items-start gap-3 p-3 hover:bg-panel-850/50 transition-colors text-left',
+        hasUnread && 'bg-panel-850/30'
       )}
     >
       {/* Avatar */}
@@ -51,7 +51,7 @@ export function ConversationItem({ conversation, onClick }: ConversationItemProp
             className="w-12 h-12 rounded-full object-cover border border-line rounded-lg"
           />
         ) : conversation.type === 'group' ? (
-          <div className="w-12 h-12 rounded-full flex items-center justify-center border border-line rounded-lg bg-timber-dark text-canvas font-bold text-sm">
+          <div className="w-12 h-12 rounded-full flex items-center justify-center border border-line rounded-lg bg-panel-850 text-canvas font-bold text-sm">
             <Users className="w-5 h-5" />
           </div>
         ) : (
@@ -83,7 +83,7 @@ export function ConversationItem({ conversation, onClick }: ConversationItemProp
           <p
             className={cn(
               'text-sm truncate',
-              hasUnread ? 'text-timber-dark font-medium' : 'text-muted-500'
+              hasUnread ? 'text-text-100 font-medium' : 'text-muted-500'
             )}
           >
             {conversation.lastMessagePreview || 'Немає повідомлень'}

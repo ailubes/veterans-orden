@@ -201,7 +201,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
                 className={`w-full text-left p-3 transition-colors border-2 mb-2 ${
                   selectedIndex === index
                     ? 'border-bronze bg-bronze/10'
-                    : 'border-line/20 hover:border-bronze hover:bg-timber-dark/5'
+                    : 'border-line/20 hover:border-bronze hover:bg-panel-850/5'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -234,7 +234,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
               className={`w-full text-left p-3 transition-colors border-2 font-bold ${
                 selectedIndex === results.length
                   ? 'border-bronze bg-bronze/10'
-                  : 'border-line/20 hover:border-bronze hover:bg-timber-dark/5'
+                  : 'border-line/20 hover:border-bronze hover:bg-panel-850/5'
               }`}
             >
               <div className="flex items-center justify-between">

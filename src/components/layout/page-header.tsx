@@ -13,7 +13,7 @@ export function PageHeader({ label, title, description }: PageHeaderProps) {
       style={{
         gridColumn: '2 / 5',
         padding: '80px 0 60px',
-        borderBottom: '2px solid var(--timber-dark)',
+        borderBottom: '2px solid var(--panel-850)',
         marginBottom: '60px',
       }}
     >

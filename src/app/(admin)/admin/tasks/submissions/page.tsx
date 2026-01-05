@@ -158,7 +158,7 @@ export default async function SubmissionsPage() {
                   {reviewedSubmissions.map((submission) => (
                     <tr
                       key={submission.id}
-                      className="border-b border-line/20 hover:bg-timber-dark/5"
+                      className="border-b border-line/20 hover:bg-panel-850/5"
                     >
                       <td className="p-4">
                         <Link

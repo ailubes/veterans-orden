@@ -89,7 +89,7 @@ export default function FeatureGate({
   if (isLoading) {
     return (
       <div className="animate-pulse">
-        <div className="h-40 bg-timber-dark/10 rounded" />
+        <div className="h-40 bg-panel-850/10 rounded" />
       </div>
     );
   }
@@ -121,13 +121,13 @@ export default function FeatureGate({
           p-6
           text-center
         ">
-          <Lock className="w-12 h-12 text-timber-dark mx-auto mb-4" />
+          <Lock className="w-12 h-12 text-text-100 mx-auto mb-4" />
 
-          <h3 className="font-syne text-2xl font-bold text-timber-dark mb-2">
+          <h3 className="font-syne text-2xl font-bold text-text-100 mb-2">
             {gateInfo?.displayName || 'Функція заблокована'}
           </h3>
 
-          <p className="font-mono text-sm text-timber-dark/80 mb-4">
+          <p className="font-mono text-sm text-text-100/80 mb-4">
             {gateInfo?.description || 'Ця функція доступна на вищих рівнях членства'}
           </p>
 
@@ -149,7 +149,7 @@ export default function FeatureGate({
               font-mono text-sm font-semibold
               border-2 border-bronze
               transition-all duration-200
-              hover:bg-timber-dark hover:border-line
+              hover:bg-panel-850 hover:border-line
             "
           >
             Дізнатися як розблокувати
@@ -157,7 +157,7 @@ export default function FeatureGate({
           </Link>
 
           {/* Progress indicator */}
-          <p className="font-mono text-xs text-timber-dark/60 mt-4">
+          <p className="font-mono text-xs text-text-100/60 mt-4">
             Ваш рівень: {gateInfo?.currentRoleLabel} (рівень {gateInfo?.currentRoleLevel})
           </p>
         </div>

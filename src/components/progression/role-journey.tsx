@@ -19,13 +19,13 @@ interface RoleJourneyProps {
 export default function RoleJourney({ roles }: RoleJourneyProps) {
   return (
     <div className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
-      <h2 className="font-syne text-2xl font-bold text-timber-dark mb-6">
+      <h2 className="font-syne text-2xl font-bold text-text-100 mb-6">
         Шлях прогресу
       </h2>
 
       <div className="relative">
         {/* Vertical timeline line */}
-        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-timber-dark/20" />
+        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-panel-850/20" />
 
         <div className="space-y-6">
           {roles.map((role, index) => (
@@ -51,7 +51,7 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                   <div className="w-4 h-4 bg-white rounded-full" />
                 )}
                 {role.isFuture && (
-                  <Lock className="w-6 h-6 text-timber-dark/40" />
+                  <Lock className="w-6 h-6 text-text-100/40" />
                 )}
               </div>
 
@@ -67,12 +67,12 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                       ? 'text-green-700'
                       : role.isCurrent
                         ? 'text-bronze'
-                        : 'text-timber-dark/60'
+                        : 'text-text-100/60'
                     }
                   `}>
                     {role.displayName}
                   </span>
-                  <span className="font-mono text-xs text-timber-dark/50">
+                  <span className="font-mono text-xs text-text-100/50">
                     Рівень {role.level}
                   </span>
                 </div>
@@ -92,7 +92,7 @@ export default function RoleJourney({ roles }: RoleJourneyProps) {
                 )}
 
                 {role.isFuture && index === roles.findIndex(r => r.isFuture) && (
-                  <div className="font-mono text-xs text-timber-dark/60 mt-1">
+                  <div className="font-mono text-xs text-text-100/60 mt-1">
                     Наступна мета
                   </div>
                 )}

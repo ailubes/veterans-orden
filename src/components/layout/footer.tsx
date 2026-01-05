@@ -79,7 +79,7 @@ export function Footer() {
       <div
         style={{
           gridColumn: '1 / -1',
-          background: 'var(--timber-dark)',
+          background: 'var(--panel-850)',
           color: 'var(--canvas)',
         }}
       >

@@ -189,7 +189,7 @@ export function NovaPoshtaSelector({
               <button
                 type="button"
                 onClick={handleClearCity}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-timber-dark/10 rounded"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-panel-850/10 rounded"
               >
                 <X className="w-4 h-4 text-muted-500" />
               </button>
@@ -204,7 +204,7 @@ export function NovaPoshtaSelector({
                   key={`${item.ref}-${idx}`}
                   type="button"
                   onClick={() => handleCitySelect(item)}
-                  className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-line/10 last:border-b-0"
+                  className="w-full px-4 py-3 text-left hover:bg-panel-850/5 border-b border-line/10 last:border-b-0"
                 >
                   <div className="font-medium">{item.name}</div>
                   {item.region && (
@@ -235,7 +235,7 @@ export function NovaPoshtaSelector({
               <button
                 type="button"
                 onClick={() => onBranchChange('')}
-                className="text-muted-500 hover:text-timber-dark"
+                className="text-muted-500 hover:text-text-100"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -260,7 +260,7 @@ export function NovaPoshtaSelector({
                       disabled={division.status !== 'Working'}
                       className={`w-full p-3 text-left border-b border-line/10 last:border-b-0 transition-colors ${
                         division.status === 'Working'
-                          ? 'hover:bg-timber-dark/5'
+                          ? 'hover:bg-panel-850/5'
                           : 'opacity-50 cursor-not-allowed bg-gray-50'
                       }`}
                     >
@@ -271,7 +271,7 @@ export function NovaPoshtaSelector({
                             <span className="font-medium text-sm">
                               {division.shortName || division.name}
                             </span>
-                            <span className="text-xs px-1.5 py-0.5 bg-timber-dark/10 rounded">
+                            <span className="text-xs px-1.5 py-0.5 bg-panel-850/10 rounded">
                               {getCategoryLabel(division.category)}
                             </span>
                           </div>

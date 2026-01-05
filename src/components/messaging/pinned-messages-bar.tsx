@@ -84,7 +84,7 @@ export function PinnedMessagesBar({
         <div className="flex-shrink-0 flex items-center gap-0.5">
           <button
             onClick={goToPrevious}
-            className="p-0.5 hover:bg-timber-light rounded transition-colors"
+            className="p-0.5 hover:bg-panel-850 rounded transition-colors"
             title="Попереднє закріплене"
           >
             <ChevronLeft className="w-3 h-3" />
@@ -94,7 +94,7 @@ export function PinnedMessagesBar({
           </span>
           <button
             onClick={goToNext}
-            className="p-0.5 hover:bg-timber-light rounded transition-colors"
+            className="p-0.5 hover:bg-panel-850 rounded transition-colors"
             title="Наступне закріплене"
           >
             <ChevronRight className="w-3 h-3" />
@@ -114,14 +114,14 @@ export function PinnedMessagesBar({
             </span>
           )}
         </div>
-        <p className="text-xs text-timber-dark truncate">{previewContent}</p>
+        <p className="text-xs text-text-100 truncate">{previewContent}</p>
       </div>
 
       {/* Unpin button (admin only) */}
       {canUnpin && onUnpin && (
         <button
           onClick={handleUnpin}
-          className="flex-shrink-0 p-1 hover:bg-timber-light rounded transition-colors"
+          className="flex-shrink-0 p-1 hover:bg-panel-850 rounded transition-colors"
           title="Відкріпити"
         >
           <X className="w-4 h-4 text-muted-500 hover:text-red-600" />

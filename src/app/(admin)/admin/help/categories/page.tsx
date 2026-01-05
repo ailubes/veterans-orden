@@ -330,7 +330,7 @@ export default function CategoriesPage() {
     return (
       <div key={category.id}>
         <div
-          className={`flex items-center gap-3 py-3 px-4 hover:bg-timber-dark/5 transition-colors border-b border-line/10 ${
+          className={`flex items-center gap-3 py-3 px-4 hover:bg-panel-850/5 transition-colors border-b border-line/10 ${
             depth > 0 ? 'ml-' + depth * 8 : ''
           }`}
           style={{ paddingLeft: `${depth * 32 + 16}px` }}
@@ -338,7 +338,7 @@ export default function CategoriesPage() {
           {/* Expand/Collapse */}
           <button
             onClick={() => toggleExpand(category.id)}
-            className={`p-1 hover:bg-timber-dark/10 transition-colors ${
+            className={`p-1 hover:bg-panel-850/10 transition-colors ${
               hasChildren ? '' : 'invisible'
             }`}
           >
@@ -375,7 +375,7 @@ export default function CategoriesPage() {
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => toggleVisibility(category)}
-              className="p-2 hover:bg-timber-dark/10 transition-colors"
+              className="p-2 hover:bg-panel-850/10 transition-colors"
               title={category.isVisible ? 'Приховати' : 'Показати'}
             >
               {category.isVisible ? (
@@ -387,7 +387,7 @@ export default function CategoriesPage() {
 
             <button
               onClick={() => openCreateModal(category.id)}
-              className="p-2 hover:bg-timber-dark/10 transition-colors"
+              className="p-2 hover:bg-panel-850/10 transition-colors"
               title="Додати підкатегорію"
             >
               <Plus size={16} className="text-muted-500" />
@@ -458,7 +458,7 @@ export default function CategoriesPage() {
         <div className="joint joint-tr" />
 
         {/* Table Header */}
-        <div className="flex items-center gap-3 py-3 px-4 bg-timber-dark text-canvas font-bold text-sm border-b-2 border-line">
+        <div className="flex items-center gap-3 py-3 px-4 bg-panel-850 text-canvas font-bold text-sm border-b-2 border-line">
           <div className="w-8"></div>
           <div className="w-8">Ікона</div>
           <div className="flex-1">Назва</div>
@@ -492,7 +492,7 @@ export default function CategoriesPage() {
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2 hover:bg-timber-dark/10 transition-colors"
+                className="p-2 hover:bg-panel-850/10 transition-colors"
               >
                 <X size={24} />
               </button>
@@ -677,7 +677,7 @@ export default function CategoriesPage() {
             <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-line">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
+                className="px-6 py-3 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
               >
                 Скасувати
               </button>

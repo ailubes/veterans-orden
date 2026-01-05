@@ -40,7 +40,7 @@ export function NotificationItem({
         onClick={handleClick}
         className={`
           w-full text-left p-3 transition-colors
-          hover:bg-timber-dark/5
+          hover:bg-panel-850/5
           ${!notification.isRead ? 'bg-bronze/5' : ''}
         `}
       >

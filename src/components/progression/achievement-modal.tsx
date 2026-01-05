@@ -62,7 +62,7 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
 
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-timber-dark/50 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-panel-850/50 z-50 flex items-center justify-center p-4"
         onClick={onClose}
       >
         {/* Modal */}
@@ -83,7 +83,7 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
               absolute top-4 right-4
               w-8 h-8
               flex items-center justify-center
-              text-timber-dark/60 hover:text-timber-dark
+              text-text-100/60 hover:text-text-100
               transition-colors
             "
             aria-label="Закрити"
@@ -106,18 +106,18 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
             </div>
 
             {/* Title */}
-            <h2 className="font-syne text-3xl font-bold text-timber-dark mb-3">
+            <h2 className="font-syne text-3xl font-bold text-text-100 mb-3">
               {achievement.title}
             </h2>
 
             {/* Description */}
-            <p className="font-mono text-base text-timber-dark/80 mb-6">
+            <p className="font-mono text-base text-text-100/80 mb-6">
               {achievement.description}
             </p>
 
             {/* Date */}
-            <div className="inline-block px-4 py-2 bg-timber-dark/5 border border-line/20 mb-8">
-              <span className="font-mono text-sm text-timber-dark/60">
+            <div className="inline-block px-4 py-2 bg-panel-850/5 border border-line/20 mb-8">
+              <span className="font-mono text-sm text-text-100/60">
                 Отримано: {formatDate(achievement.earnedAt)}
               </span>
             </div>
@@ -135,7 +135,7 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                   font-mono text-sm font-semibold
                   border-2 border-bronze
                   transition-all duration-200
-                  hover:bg-timber-dark hover:border-line
+                  hover:bg-panel-850 hover:border-line
                   disabled:opacity-50 disabled:cursor-not-allowed
                 "
               >
@@ -149,11 +149,11 @@ export default function AchievementModal({ achievement, onClose }: AchievementMo
                 className="
                   inline-flex items-center justify-center gap-2
                   px-6 py-3
-                  bg-panel-900 text-timber-dark
+                  bg-panel-900 text-text-100
                   font-mono text-sm font-semibold
                   border border-line rounded-lg
                   transition-all duration-200
-                  hover:bg-timber-dark/5
+                  hover:bg-panel-850/5
                 "
               >
                 Закрити

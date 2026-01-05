@@ -271,7 +271,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
           <div className="space-y-4">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 ЗАГОЛОВОК *
               </label>
               <input
@@ -287,11 +287,11 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
 
             {/* Slug */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 URL (SLUG) *
               </label>
               <div className="flex items-center">
-                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
+                <span className="px-4 py-3 bg-panel-850/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                   /news/
                 </span>
                 <input
@@ -319,7 +319,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
 
             {/* Excerpt */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 КОРОТКИЙ ОПИС
               </label>
               <textarea
@@ -339,7 +339,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
             {/* Categories and Status */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   КАТЕГОРІЯ *
                 </label>
                 <select
@@ -359,7 +359,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   СТАТУС *
                 </label>
                 <select

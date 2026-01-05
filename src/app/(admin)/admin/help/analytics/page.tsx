@@ -433,7 +433,7 @@ export default function HelpAnalyticsPage() {
                       )}
                     </div>
                   </div>
-                  <p className="text-sm text-timber-dark mb-2">{feedback.comment}</p>
+                  <p className="text-sm text-text-100 mb-2">{feedback.comment}</p>
                   <p className="text-xs text-muted-500">
                     {new Date(feedback.created_at).toLocaleDateString('uk-UA', {
                       year: 'numeric',

@@ -237,7 +237,7 @@ export function GroupSettings({
 
           <div className="flex-1 overflow-y-auto space-y-4">
             {/* Group Info Section */}
-            <div className="flex items-start gap-4 p-3 bg-timber-light/30 rounded-lg">
+            <div className="flex items-start gap-4 p-3 bg-panel-850/30 rounded-lg">
               {/* Group Avatar */}
               <div className="relative flex-shrink-0">
                 {conversation.avatarUrl ? (
@@ -249,7 +249,7 @@ export function GroupSettings({
                     className="w-16 h-16 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-timber-light flex items-center justify-center text-xl font-bold text-timber-dark">
+                  <div className="w-16 h-16 rounded-full bg-panel-850 flex items-center justify-center text-xl font-bold text-text-100">
                     {conversation.name?.charAt(0).toUpperCase() || 'Г'}
                   </div>
                 )}
@@ -298,7 +298,7 @@ export function GroupSettings({
                           setEditName(conversation.name || '');
                           setEditDescription(conversation.description || '');
                         }}
-                        className="px-3 py-1 text-sm text-muted-500 hover:text-timber-dark"
+                        className="px-3 py-1 text-sm text-muted-500 hover:text-text-100"
                       >
                         Скасувати
                       </button>
@@ -313,7 +313,7 @@ export function GroupSettings({
                       {canEditGroup && (
                         <button
                           onClick={() => setIsEditing(true)}
-                          className="p-1 text-muted-500 hover:text-timber-dark"
+                          className="p-1 text-muted-500 hover:text-text-100"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
@@ -401,7 +401,7 @@ export function GroupSettings({
                         {canManageThis && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="p-1.5 text-muted-500 hover:text-timber-dark rounded-lg hover:bg-timber-light/50">
+                              <button className="p-1.5 text-muted-500 hover:text-text-100 rounded-lg hover:bg-panel-850/50">
                                 <MoreVertical className="w-4 h-4" />
                               </button>
                             </DropdownMenuTrigger>

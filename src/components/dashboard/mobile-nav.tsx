@@ -131,7 +131,7 @@ export function MobileNav() {
   return (
     <div className="lg:hidden">
       {/* Header */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-4 py-3.5 bg-timber-dark text-canvas shadow-lg border-b border-canvas/10">
+      <header className="sticky top-0 z-40 flex items-center justify-between px-4 py-3.5 bg-panel-850 text-canvas shadow-lg border-b border-canvas/10">
         {/* Logo */}
         <Link href="/dashboard" className="flex items-center gap-2.5">
           <Logo size={32} className="text-canvas" />
@@ -180,7 +180,7 @@ export function MobileNav() {
                 className="flex items-center gap-1.5 p-1.5 rounded-xl transition-all hover:bg-panel-900/10 active:scale-95"
                 aria-label="Профіль"
               >
-                <div className="w-8 h-8 rounded-full bg-panel-900 text-timber-dark flex items-center justify-center text-sm font-bold overflow-hidden ring-2 ring-canvas/20">
+                <div className="w-8 h-8 rounded-full bg-panel-900 text-text-100 flex items-center justify-center text-sm font-bold overflow-hidden ring-2 ring-canvas/20">
                   {profile?.avatar_url ? (
                     <img
                       src={profile.avatar_url}
@@ -200,7 +200,7 @@ export function MobileNav() {
               sideOffset={10}
             >
               {/* User Info */}
-              <div className="px-4 py-3 border-b border-line/10 bg-timber-dark/5">
+              <div className="px-4 py-3 border-b border-line/10 bg-panel-850/5">
                 <p className="font-syne font-bold text-sm truncate">
                   {profile?.first_name} {profile?.last_name}
                 </p>
@@ -213,7 +213,7 @@ export function MobileNav() {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-timber-dark/5 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-panel-850/5 transition-colors"
                   >
                     <User size={18} />
                     <span className="text-sm font-medium">Мій профіль</span>
@@ -223,7 +223,7 @@ export function MobileNav() {
                 <DropdownMenuItem asChild>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-timber-dark/5 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-panel-850/5 transition-colors"
                   >
                     <Settings size={18} />
                     <span className="text-sm font-medium">Налаштування</span>
@@ -231,7 +231,7 @@ export function MobileNav() {
                 </DropdownMenuItem>
               </div>
 
-              <DropdownMenuSeparator className="bg-timber-dark/10" />
+              <DropdownMenuSeparator className="bg-panel-850/10" />
 
               <div className="py-2">
                 <DropdownMenuItem
@@ -249,7 +249,7 @@ export function MobileNav() {
 
       {/* Full Screen Mobile Menu */}
       {isMenuOpen && (
-        <nav className="fixed inset-0 top-[60px] bg-timber-dark text-canvas z-50 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
+        <nav className="fixed inset-0 top-[60px] bg-panel-850 text-canvas z-50 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="min-h-full pb-20">
             {/* Navigation Items */}
             <ul className="py-3">

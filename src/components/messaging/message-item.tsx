@@ -151,7 +151,7 @@ export function MessageItem({
   if (isSystemMessage) {
     return (
       <div className="flex justify-center my-2">
-        <span className="text-xs text-muted-500 bg-timber-light/50 px-3 py-1 rounded-full">
+        <span className="text-xs text-muted-500 bg-panel-850/50 px-3 py-1 rounded-full">
           {message.content}
         </span>
       </div>
@@ -162,7 +162,7 @@ export function MessageItem({
   if (message.isDeleted) {
     return (
       <div className={cn('flex', isOwnMessage ? 'justify-end' : 'justify-start')}>
-        <div className="max-w-[75%] px-3 py-2 bg-timber-light/30 rounded-lg">
+        <div className="max-w-[75%] px-3 py-2 bg-panel-850/30 rounded-lg">
           <p className="text-sm text-muted-500 italic">
             Повідомлення видалено
           </p>
@@ -229,14 +229,14 @@ export function MessageItem({
       >
         {/* Sender name for group chats */}
         {!isGrouped && !isOwnMessage && message.sender && (
-          <p className="text-xs font-medium text-timber-dark mb-1 ml-1">
+          <p className="text-xs font-medium text-text-100 mb-1 ml-1">
             {message.sender.firstName} {message.sender.lastName}
           </p>
         )}
 
         {/* Forwarded indicator */}
         {message.forwardedFromMessageId && (
-          <div className="text-xs text-muted-500 bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-blue-500 flex items-center gap-1">
+          <div className="text-xs text-muted-500 bg-panel-850/50 px-2 py-1 rounded mb-1 border-l-2 border-blue-500 flex items-center gap-1">
             <Forward size={10} />
             <span className="font-medium">
               Переслано від {message.forwardedFromSenderName || 'Хтось'}
@@ -246,7 +246,7 @@ export function MessageItem({
 
         {/* Reply preview */}
         {message.replyTo && (
-          <div className="text-xs text-muted-500 bg-timber-light/50 px-2 py-1 rounded mb-1 border-l-2 border-bronze">
+          <div className="text-xs text-muted-500 bg-panel-850/50 px-2 py-1 rounded mb-1 border-l-2 border-bronze">
             <span className="font-medium">
               {message.replyTo.sender?.firstName || 'Хтось'}:
             </span>{' '}
@@ -260,8 +260,8 @@ export function MessageItem({
           className={cn(
             'px-3 py-2 rounded-lg',
             isOwnMessage
-              ? 'bg-timber-dark text-canvas rounded-br-none'
-              : 'bg-timber-light rounded-bl-none'
+              ? 'bg-panel-850 text-canvas rounded-br-none'
+              : 'bg-panel-850 rounded-bl-none'
           )}
         >
           {isEditing ? (
@@ -269,13 +269,13 @@ export function MessageItem({
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full min-h-[60px] bg-panel-900 text-timber-dark p-2 rounded text-sm"
+                className="w-full min-h-[60px] bg-panel-900 text-text-100 p-2 rounded text-sm"
                 autoFocus
               />
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="text-xs text-muted-500 hover:text-timber-dark"
+                  className="text-xs text-muted-500 hover:text-text-100"
                 >
                   Скасувати
                 </button>
@@ -324,7 +324,7 @@ export function MessageItem({
                   'flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs',
                   reaction.hasReacted
                     ? 'bg-bronze/20 text-bronze'
-                    : 'bg-timber-light/50 text-muted-500 hover:bg-timber-light'
+                    : 'bg-panel-850/50 text-muted-500 hover:bg-panel-850'
                 )}
               >
                 <span>{reaction.emoji}</span>

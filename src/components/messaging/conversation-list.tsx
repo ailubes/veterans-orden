@@ -49,7 +49,7 @@ export function ConversationList({ compact = false }: ConversationListProps) {
           {!compact && (
             <button
               onClick={openNewConversation}
-              className="flex items-center justify-center w-9 h-9 bg-timber-dark text-canvas hover:bg-timber-dark/90 transition-colors"
+              className="flex items-center justify-center w-9 h-9 bg-panel-850 text-canvas hover:bg-panel-850/90 transition-colors"
               aria-label="Нова розмова"
             >
               <Plus className="w-5 h-5" />
@@ -86,7 +86,7 @@ export function ConversationList({ compact = false }: ConversationListProps) {
             )}
           </div>
         ) : (
-          <ul className="divide-y divide-timber-dark/10">
+          <ul className="divide-y divide-line/10">
             {filteredConversations.map((conversation) => (
               <li key={conversation.id}>
                 <ConversationItem

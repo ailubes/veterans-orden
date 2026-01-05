@@ -148,8 +148,8 @@ export function SubmissionReviewCard({ submission }: SubmissionReviewCardProps) 
             </div>
 
             {/* User info */}
-            <div className="flex items-center gap-3 p-3 bg-timber-dark/5 rounded">
-              <div className="w-10 h-10 rounded-full bg-timber-dark/10 flex items-center justify-center overflow-hidden">
+            <div className="flex items-center gap-3 p-3 bg-panel-850/5 rounded">
+              <div className="w-10 h-10 rounded-full bg-panel-850/10 flex items-center justify-center overflow-hidden">
                 {submission.user?.avatar_url ? (
                   <Image
                     src={submission.user.avatar_url}

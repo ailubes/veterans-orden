@@ -43,51 +43,51 @@ export default async function AdminSettingsPage() {
         <TabsList className="flex flex-wrap gap-2 bg-transparent h-auto p-0 mb-8">
           <TabsTrigger
             value="organization"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
             Організація
           </TabsTrigger>
           <TabsTrigger
             value="roles"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
             disabled={adminProfile.role === 'regional_leader'}
           >
             Ролі
           </TabsTrigger>
           <TabsTrigger
             value="membership"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
             Прогресія
           </TabsTrigger>
           <TabsTrigger
             value="oblasts"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
             Області
           </TabsTrigger>
           <TabsTrigger
             value="audit"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
             Аудит
           </TabsTrigger>
           <TabsTrigger
             value="email-templates"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
           >
             Email
           </TabsTrigger>
           <TabsTrigger
             value="messaging"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
             disabled={!isSuperAdmin(adminProfile.role)}
           >
             Повідомлення
           </TabsTrigger>
           <TabsTrigger
             value="system"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
             disabled={!isSuperAdmin(adminProfile.role)}
           >
             Система

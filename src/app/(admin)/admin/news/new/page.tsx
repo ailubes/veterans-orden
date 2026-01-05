@@ -217,7 +217,7 @@ export default function NewNewsPage() {
           <div className="space-y-4">
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 ЗАГОЛОВОК *
               </label>
               <input
@@ -238,7 +238,7 @@ export default function NewNewsPage() {
 
             {/* Slug */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 URL (SLUG) *
                 {slugManuallyEdited && (
                   <span className="ml-2 text-xs text-amber-600 font-normal">
@@ -247,7 +247,7 @@ export default function NewNewsPage() {
                 )}
               </label>
               <div className="flex items-center">
-                <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
+                <span className="px-4 py-3 bg-panel-850/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                   /news/
                 </span>
                 <input
@@ -265,7 +265,7 @@ export default function NewNewsPage() {
                   onClick={handleRegenerateSlug}
                   disabled={!formData.title}
                   title="Згенерувати slug з заголовка"
-                  className="px-3 py-3 border-2 border-l-0 border-line hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="px-3 py-3 border-2 border-l-0 border-line hover:bg-panel-850/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <RefreshCw className="w-4 h-4" />
                 </button>
@@ -286,7 +286,7 @@ export default function NewNewsPage() {
 
             {/* Excerpt */}
             <div>
-              <label className="block text-sm font-medium text-timber-dark mb-2">
+              <label className="block text-sm font-medium text-text-100 mb-2">
                 КОРОТКИЙ ОПИС
               </label>
               <textarea
@@ -306,7 +306,7 @@ export default function NewNewsPage() {
             {/* Categories and Status */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   КАТЕГОРІЯ *
                 </label>
                 <select
@@ -326,7 +326,7 @@ export default function NewNewsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   СТАТУС *
                 </label>
                 <select
@@ -417,7 +417,7 @@ export default function NewNewsPage() {
           <button
             type="submit"
             disabled={loading || !!slugError || isCheckingSlug}
-            className="px-6 py-3 bg-timber-dark text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+            className="px-6 py-3 bg-panel-850 text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
           >
             {loading
               ? 'ЗБЕРЕЖЕННЯ...'

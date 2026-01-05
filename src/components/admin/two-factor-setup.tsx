@@ -194,7 +194,7 @@ export function TwoFactorSetup({ isEnabled: initialEnabled, onStatusChange }: Tw
               Або введіть цей код вручну:
             </p>
             <div className="flex items-center gap-2">
-              <code className="flex-1 bg-timber-dark/10 px-4 py-2 font-mono text-sm border border-line/20">
+              <code className="flex-1 bg-panel-850/10 px-4 py-2 font-mono text-sm border border-line/20">
                 {secret}
               </code>
               <button

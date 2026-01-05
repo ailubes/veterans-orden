@@ -19,7 +19,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block font-mono text-xs uppercase tracking-wider text-timber-dark mb-2"
+            className="block font-mono text-xs uppercase tracking-wider text-text-100 mb-2"
           >
             {label}
           </label>

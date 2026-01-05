@@ -305,7 +305,7 @@ export default function MessagingSettingsTab({
           </div>
 
           {/* Future Features */}
-          <div className="mt-4 p-4 border-2 border-timber-beam/30 bg-panel-900/50">
+          <div className="mt-4 p-4 border-2 border-bronze/30 bg-panel-900/50">
             <p className="text-sm font-medium mb-2">Майбутні функції:</p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">

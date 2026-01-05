@@ -238,14 +238,14 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
         {/* Mobile Cards */}
         <div className="md:hidden">
           {logs && logs.length > 0 ? (
-            <div className="divide-y divide-timber-dark/20">
+            <div className="divide-y divide-line/20">
               {logs.map((log) => (
                 <div key={log.id} className="p-4">
                   <div className="flex items-start justify-between gap-3 mb-2">
-                    <span className="text-sm font-bold text-timber-dark">
+                    <span className="text-sm font-bold text-text-100">
                       {formatAction(log.action)}
                     </span>
-                    <span className="px-2 py-1 bg-timber-dark/10 text-xs font-medium flex-shrink-0">
+                    <span className="px-2 py-1 bg-panel-850/10 text-xs font-medium flex-shrink-0">
                       {log.entity_type}
                     </span>
                   </div>
@@ -294,7 +294,7 @@ export default async function AuditLogPage({ searchParams }: AuditLogPageProps) 
             <TableBody>
               {logs && logs.length > 0 ? (
                 logs.map((log) => (
-                  <TableRow key={log.id} className="border-b border-timber-beam/30">
+                  <TableRow key={log.id} className="border-b border-bronze/30">
                     <TableCell className="font-mono text-xs">
                       {formatDate(log.created_at)}
                     </TableCell>

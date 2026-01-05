@@ -129,7 +129,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'all'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             Всі
@@ -139,7 +139,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'pending'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             Очікують
@@ -149,7 +149,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'confirmed'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             Підтверджені
@@ -159,7 +159,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'processing'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             В обробці
@@ -169,7 +169,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'shipped'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             Відправлені
@@ -179,7 +179,7 @@ export default function AdminOrdersPage() {
             className={`px-4 py-2 font-bold text-sm transition-colors ${
               filterStatus === 'delivered'
                 ? 'bg-bronze text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                : 'bg-panel-850/10 hover:bg-panel-850/20'
             }`}
           >
             Доставлені
@@ -200,7 +200,7 @@ export default function AdminOrdersPage() {
       ) : (
         <div className="bg-white border border-line rounded-lg overflow-hidden">
           <table className="w-full">
-            <thead className="bg-timber-dark text-canvas">
+            <thead className="bg-panel-850 text-canvas">
               <tr>
                 <th className="text-left p-4 font-bold">Номер</th>
                 <th className="text-left p-4 font-bold">Клієнт</th>
@@ -218,7 +218,7 @@ export default function AdminOrdersPage() {
                 return (
                   <tr
                     key={order.id}
-                    className="border-b border-line/10 last:border-0 hover:bg-timber-dark/5"
+                    className="border-b border-line/10 last:border-0 hover:bg-panel-850/5"
                   >
                     <td className="p-4">
                       <p className="font-mono font-bold text-sm">{order.order_number}</p>
@@ -260,7 +260,7 @@ export default function AdminOrdersPage() {
                       <div className="flex items-center justify-end gap-2">
                         <Link
                           href={`/admin/marketplace/orders/${order.id}`}
-                          className="p-2 hover:bg-timber-dark/10 transition-colors inline-flex items-center gap-1 font-bold text-sm"
+                          className="p-2 hover:bg-panel-850/10 transition-colors inline-flex items-center gap-1 font-bold text-sm"
                         >
                           <Eye size={18} />
                           Деталі

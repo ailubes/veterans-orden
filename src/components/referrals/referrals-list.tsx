@@ -21,7 +21,7 @@ export default function ReferralsList({ referrals }: ReferralsListProps) {
             {referrals.map((referral) => (
               <div
                 key={referral.id}
-                className="flex items-center justify-between p-4 bg-timber-dark/5 border border-line/10"
+                className="flex items-center justify-between p-4 bg-panel-850/5 border border-line/10"
               >
                 <div>
                   <p className="font-bold">

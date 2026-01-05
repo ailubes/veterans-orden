@@ -110,13 +110,13 @@ export default function NotificationsPage() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
         {/* Read/Unread Filter */}
-        <div className="flex bg-timber-dark/5 rounded-lg p-1">
+        <div className="flex bg-panel-850/5 rounded-lg p-1">
           <button
             onClick={() => handleFilterChange('all')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               filter === 'all'
-                ? 'bg-timber-dark text-canvas'
-                : 'text-muted-500 hover:text-timber-dark'
+                ? 'bg-panel-850 text-canvas'
+                : 'text-muted-500 hover:text-text-100'
             }`}
           >
             Всі
@@ -125,8 +125,8 @@ export default function NotificationsPage() {
             onClick={() => handleFilterChange('unread')}
             className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${
               filter === 'unread'
-                ? 'bg-timber-dark text-canvas'
-                : 'text-muted-500 hover:text-timber-dark'
+                ? 'bg-panel-850 text-canvas'
+                : 'text-muted-500 hover:text-text-100'
             }`}
           >
             Непрочитані
@@ -160,7 +160,7 @@ export default function NotificationsPage() {
       {isLoading && filteredNotifications.length === 0 ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="animate-pulse bg-timber-dark/5 rounded-lg h-24" />
+            <div key={i} className="animate-pulse bg-panel-850/5 rounded-lg h-24" />
           ))}
         </div>
       ) : error ? (
@@ -211,7 +211,7 @@ export default function NotificationsPage() {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted-500 hover:text-timber-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted-500 hover:text-text-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-4 h-4" />
             Попередня
@@ -224,7 +224,7 @@ export default function NotificationsPage() {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted-500 hover:text-timber-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-muted-500 hover:text-text-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Наступна
             <ChevronRight className="w-4 h-4" />
@@ -254,7 +254,7 @@ export default function NotificationsPage() {
               </DialogHeader>
 
               <div className="mt-2">
-                <p className="text-sm text-timber-dark whitespace-pre-wrap">
+                <p className="text-sm text-text-100 whitespace-pre-wrap">
                   {selectedNotification.message}
                 </p>
 

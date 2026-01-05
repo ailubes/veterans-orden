@@ -169,8 +169,8 @@ export default function AdminHelpPage() {
           <div className="joint joint-br" />
 
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-timber-dark/10 group-hover:bg-bronze/10 transition-colors">
-              <Folder size={32} className="text-timber-dark group-hover:text-bronze transition-colors" />
+            <div className="p-4 bg-panel-850/10 group-hover:bg-bronze/10 transition-colors">
+              <Folder size={32} className="text-text-100 group-hover:text-bronze transition-colors" />
             </div>
             <div>
               <h2 className="font-syne text-2xl font-bold mb-1 group-hover:text-bronze transition-colors">
@@ -191,10 +191,10 @@ export default function AdminHelpPage() {
           <h2 className="font-syne text-xl font-bold">Управління контентом</h2>
         </div>
 
-        <div className="divide-y-2 divide-timber-dark/20">
+        <div className="divide-y-2 divide-line/20">
           <Link
             href="/admin/help/articles"
-            className="block p-6 hover:bg-timber-dark/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850/5 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -214,7 +214,7 @@ export default function AdminHelpPage() {
 
           <Link
             href="/admin/help/tooltips"
-            className="block p-6 hover:bg-timber-dark/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850/5 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -234,7 +234,7 @@ export default function AdminHelpPage() {
 
           <Link
             href="/admin/help/analytics"
-            className="block p-6 hover:bg-timber-dark/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850/5 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">

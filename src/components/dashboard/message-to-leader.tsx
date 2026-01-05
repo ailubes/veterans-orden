@@ -137,7 +137,7 @@ export function MessageToLeader({
 
       {/* Single option display */}
       {hasReferrer && !hasRegionalLeader && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg/20">
+        <div className="flex items-center gap-3 px-4 py-3 bg-panel-850/5 border border-line rounded-lg/20">
           <User className="w-5 h-5 text-bronze" />
           <div>
             <div className="font-bold text-sm">Надіслати моєму рефереру</div>
@@ -147,7 +147,7 @@ export function MessageToLeader({
       )}
 
       {!hasReferrer && hasRegionalLeader && (
-        <div className="flex items-center gap-3 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg/20">
+        <div className="flex items-center gap-3 px-4 py-3 bg-panel-850/5 border border-line rounded-lg/20">
           <Users className="w-5 h-5 text-bronze" />
           <div>
             <div className="font-bold text-sm">Надіслати регіональному лідеру</div>

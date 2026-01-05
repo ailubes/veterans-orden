@@ -322,7 +322,7 @@ export default function TooltipsPage() {
         <div className="joint joint-tr" />
 
         <table className="w-full">
-          <thead className="bg-timber-dark text-canvas">
+          <thead className="bg-panel-850 text-canvas">
             <tr>
               <th className="px-4 py-3 text-left font-bold text-sm">Сторінка</th>
               <th className="px-4 py-3 text-left font-bold text-sm">Елемент ID</th>
@@ -332,7 +332,7 @@ export default function TooltipsPage() {
               <th className="px-4 py-3 text-center font-bold text-sm">Дії</th>
             </tr>
           </thead>
-          <tbody className="divide-y-2 divide-timber-dark/20">
+          <tbody className="divide-y-2 divide-line/20">
             {tooltips.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-12 text-center text-muted-500">
@@ -342,9 +342,9 @@ export default function TooltipsPage() {
               </tr>
             ) : (
               tooltips.map((tooltip) => (
-                <tr key={tooltip.id} className="hover:bg-timber-dark/5 transition-colors">
+                <tr key={tooltip.id} className="hover:bg-panel-850/5 transition-colors">
                   <td className="px-4 py-3">
-                    <code className="text-xs bg-timber-dark/10 px-2 py-1">
+                    <code className="text-xs bg-panel-850/10 px-2 py-1">
                       {tooltip.pageSlug}
                     </code>
                   </td>
@@ -370,7 +370,7 @@ export default function TooltipsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className="text-xs font-bold px-2 py-1 bg-timber-dark/10">
+                    <span className="text-xs font-bold px-2 py-1 bg-panel-850/10">
                       {tooltip.audience === 'all'
                         ? 'ВСІ'
                         : tooltip.audience === 'members'
@@ -395,7 +395,7 @@ export default function TooltipsPage() {
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={() => toggleActive(tooltip)}
-                        className="p-2 hover:bg-timber-dark/10 transition-colors"
+                        className="p-2 hover:bg-panel-850/10 transition-colors"
                         title={tooltip.isActive ? 'Вимкнути' : 'Увімкнути'}
                       >
                         {tooltip.isActive ? (
@@ -443,7 +443,7 @@ export default function TooltipsPage() {
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2 hover:bg-timber-dark/10 transition-colors"
+                className="p-2 hover:bg-panel-850/10 transition-colors"
               >
                 <X size={24} />
               </button>
@@ -569,7 +569,7 @@ export default function TooltipsPage() {
             <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-line">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
+                className="px-6 py-3 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
               >
                 Скасувати
               </button>

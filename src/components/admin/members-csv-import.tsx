@@ -181,7 +181,7 @@ export function MembersCSVImport() {
         <h3 className="font-bold mb-4">Завантаження CSV файлу</h3>
 
         <label className="block cursor-pointer">
-          <div className="border-2 border-dashed border-line p-8 text-center hover:bg-timber-dark/5 transition-colors">
+          <div className="border-2 border-dashed border-line p-8 text-center hover:bg-panel-850/5 transition-colors">
             <Upload className="w-12 h-12 mx-auto mb-3 text-muted-500" />
             <p className="font-bold mb-1">
               {file ? file.name : 'Оберіть CSV файл'}
@@ -266,7 +266,7 @@ export function MembersCSVImport() {
 
           {/* Summary */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-timber-dark/5 p-4 border border-line/20">
+            <div className="bg-panel-850/5 p-4 border border-line/20">
               <p className="text-xs text-muted-500 mb-1">ВСЬОГО</p>
               <p className="font-syne text-2xl font-bold">{summary.total}</p>
             </div>

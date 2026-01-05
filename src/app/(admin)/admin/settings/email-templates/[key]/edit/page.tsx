@@ -183,19 +183,19 @@ export default function EmailTemplateEditPage({
         <TabsList className="flex flex-wrap gap-2 bg-transparent h-auto p-0 mb-8">
           <TabsTrigger
             value="edit"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-12 px-4"
           >
             Редагувати
           </TabsTrigger>
           <TabsTrigger
             value="variables"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-12 px-4"
           >
             Змінні
           </TabsTrigger>
           <TabsTrigger
             value="history"
-            className="border border-line rounded-lg bg-panel-900 text-timber-dark font-bold data-[state=active]:bg-timber-dark data-[state=active]:text-canvas h-12 px-4"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-12 px-4"
           >
             Історія
           </TabsTrigger>
@@ -225,7 +225,7 @@ export default function EmailTemplateEditPage({
                   />
                   <p className="text-xs text-muted-500 mt-1">
                     Використовуйте змінні у форматі{' '}
-                    <code className="bg-timber-dark text-canvas px-1">
+                    <code className="bg-panel-850 text-canvas px-1">
                       {'{{variable}}'}
                     </code>
                   </p>
@@ -246,7 +246,7 @@ export default function EmailTemplateEditPage({
                   </div>
                   <p className="text-xs text-muted-500 mt-1">
                     Використовуйте змінні у форматі{' '}
-                    <code className="bg-timber-dark text-canvas px-1">
+                    <code className="bg-panel-850 text-canvas px-1">
                       {'{{variable}}'}
                     </code>
                   </p>
@@ -342,7 +342,7 @@ export default function EmailTemplateEditPage({
             <h2 className="font-syne text-xl font-bold mb-4">Доступні змінні</h2>
             <p className="text-muted-500 text-sm mb-6">
               Використовуйте ці змінні в темі та контенті листа у форматі{' '}
-              <code className="bg-timber-dark text-canvas px-1">
+              <code className="bg-panel-850 text-canvas px-1">
                 {'{{variableName}}'}
               </code>
             </p>
@@ -356,7 +356,7 @@ export default function EmailTemplateEditPage({
                   <div className="flex items-start gap-2">
                     <Info className="w-5 h-5 text-bronze flex-shrink-0 mt-0.5" />
                     <div>
-                      <code className="bg-timber-dark text-canvas px-2 py-1 rounded text-sm">
+                      <code className="bg-panel-850 text-canvas px-2 py-1 rounded text-sm">
                         {`{{${variable}}}`}
                       </code>
                       <p className="text-muted-500 text-sm mt-2">

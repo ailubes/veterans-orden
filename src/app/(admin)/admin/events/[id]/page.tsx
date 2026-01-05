@@ -107,7 +107,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
+      <div className="bg-panel-850 text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -118,7 +118,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           <div className="flex-1">
             <h1 className="font-syne text-3xl font-bold mb-3">{event.title}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 bg-panel-900 text-timber-dark text-xs font-bold">
+              <span className="px-3 py-1 bg-panel-900 text-text-100 text-xs font-bold">
                 {typeLabels[event.event_type] || event.event_type}
               </span>
               <span
@@ -236,7 +236,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                   <span className="text-sm font-bold text-green-600">Підтвердили</span>
                   <span className="text-sm font-bold">{goingCount}</span>
                 </div>
-                <div className="w-full bg-timber-dark/10 h-2">
+                <div className="w-full bg-panel-850/10 h-2">
                   <div
                     className="bg-green-500 h-2"
                     style={{
@@ -255,7 +255,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                   <span className="text-sm font-bold text-yellow-600">Можливо</span>
                   <span className="text-sm font-bold">{maybeCount}</span>
                 </div>
-                <div className="w-full bg-timber-dark/10 h-2">
+                <div className="w-full bg-panel-850/10 h-2">
                   <div
                     className="bg-yellow-500 h-2"
                     style={{
@@ -274,7 +274,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                   <span className="text-sm font-bold text-red-600">Не прийдуть</span>
                   <span className="text-sm font-bold">{notGoingCount}</span>
                 </div>
-                <div className="w-full bg-timber-dark/10 h-2">
+                <div className="w-full bg-panel-850/10 h-2">
                   <div
                     className="bg-red-500 h-2"
                     style={{
@@ -325,7 +325,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
               {rsvps.map((rsvp) => (
                 <div
                   key={rsvp.id}
-                  className="flex items-center justify-between p-3 border border-line/20 hover:bg-timber-dark/5"
+                  className="flex items-center justify-between p-3 border border-line/20 hover:bg-panel-850/5"
                 >
                   <div className="flex items-center gap-3">
                     {rsvp.attended ? (

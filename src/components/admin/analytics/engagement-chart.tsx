@@ -39,8 +39,8 @@ export function EngagementChart() {
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-timber-dark/10 w-48" />
-          <div className="h-64 bg-timber-dark/10" />
+          <div className="h-6 bg-panel-850/10 w-48" />
+          <div className="h-64 bg-panel-850/10" />
         </div>
       </div>
     );

@@ -366,7 +366,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">НАЗВА *</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">НАЗВА *</label>
                 <input
                   type="text"
                   value={formData.name_uk}
@@ -377,14 +377,14 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">
+                <label className="block text-sm font-medium text-text-100 mb-2">
                   URL (SLUG) *
                   {slugManuallyEdited && (
                     <span className="ml-2 text-xs text-amber-600 font-normal">(редаговано вручну)</span>
                   )}
                 </label>
                 <div className="flex items-center">
-                  <span className="px-4 py-3 bg-timber-dark/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
+                  <span className="px-4 py-3 bg-panel-850/10 border-2 border-r-0 border-line text-sm text-muted-500 whitespace-nowrap">
                     /shop/
                   </span>
                   <input
@@ -401,7 +401,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     onClick={handleRegenerateSlug}
                     disabled={!formData.name_uk}
                     title="Згенерувати slug з української назви"
-                    className="px-3 py-3 border-2 border-l-0 border-line hover:bg-timber-dark/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-3 py-3 border-2 border-l-0 border-line hover:bg-panel-850/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <RefreshCw className="w-4 h-4" />
                   </button>
@@ -416,7 +416,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ТИП ТОВАРУ *</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">ТИП ТОВАРУ *</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as ProductType })}
@@ -430,7 +430,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">СТАТУС *</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">СТАТУС *</label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as ProductStatus })}
@@ -445,7 +445,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ОПИС</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">ОПИС</label>
                 <RichTextEditor
                   content={formData.description_uk}
                   onChange={(html) => setFormData({ ...formData, description_uk: html })}
@@ -468,7 +468,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ЦІНА В БАЛАХ *</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">ЦІНА В БАЛАХ *</label>
                 <input
                   type="number"
                   min="1"
@@ -480,7 +480,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ЦІНА В ГРН (необов'язково)</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">ЦІНА В ГРН (необов'язково)</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -499,7 +499,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">КІЛЬКІСТЬ НА СКЛАДІ</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">КІЛЬКІСТЬ НА СКЛАДІ</label>
                 <input
                   type="number"
                   min="0"
@@ -514,7 +514,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">МАКСИМУМ НА КОРИСТУВАЧА</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">МАКСИМУМ НА КОРИСТУВАЧА</label>
                 <input
                   type="number"
                   min="1"
@@ -528,7 +528,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <h3 className="font-bold mb-3">Контроль доступу</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-timber-dark mb-2">МІНІМАЛЬНИЙ РІВЕНЬ</label>
+                    <label className="block text-sm font-medium text-text-100 mb-2">МІНІМАЛЬНИЙ РІВЕНЬ</label>
                     <input
                       type="number"
                       min="1"
@@ -539,7 +539,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-timber-dark mb-2">РОЛЬ (необов'язково)</label>
+                    <label className="block text-sm font-medium text-text-100 mb-2">РОЛЬ (необов'язково)</label>
                     <input
                       type="text"
                       value={formData.required_role}
@@ -610,7 +610,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 {formData.requires_shipping && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-timber-dark mb-2">ВАГА (грами)</label>
+                      <label className="block text-sm font-medium text-text-100 mb-2">ВАГА (грами)</label>
                       <input
                         type="number"
                         min="0"
@@ -624,7 +624,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-timber-dark mb-2">РОЗМІРИ (см)</label>
+                      <label className="block text-sm font-medium text-text-100 mb-2">РОЗМІРИ (см)</label>
                       <div className="grid grid-cols-3 gap-2">
                         <input
                           type="number"
@@ -696,7 +696,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             {formData.type === 'digital' && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">URL ЦИФРОВОГО ФАЙЛУ</label>
+                  <label className="block text-sm font-medium text-text-100 mb-2">URL ЦИФРОВОГО ФАЙЛУ</label>
                   <ImageUploadZone
                     value={formData.digital_asset_url}
                     onChange={(url) => setFormData({ ...formData, digital_asset_url: url })}
@@ -708,7 +708,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">ЛІМІТ ЗАВАНТАЖЕНЬ</label>
+                  <label className="block text-sm font-medium text-text-100 mb-2">ЛІМІТ ЗАВАНТАЖЕНЬ</label>
                   <input
                     type="number"
                     min="1"
@@ -725,7 +725,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             )}
 
             {formData.type === 'event_ticket' && (
-              <div className="p-4 bg-timber-dark/5 border border-line rounded-lg/20">
+              <div className="p-4 bg-panel-850/5 border border-line rounded-lg/20">
                 <p className="text-sm text-muted-500">
                   Квитки на події керуються через систему подій.
                 </p>
@@ -744,7 +744,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">ДОСТУПНИЙ З</label>
+                  <label className="block text-sm font-medium text-text-100 mb-2">ДОСТУПНИЙ З</label>
                   <input
                     type="datetime-local"
                     value={formData.available_from ?? ''}
@@ -754,7 +754,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">ДОСТУПНИЙ ДО</label>
+                  <label className="block text-sm font-medium text-text-100 mb-2">ДОСТУПНИЙ ДО</label>
                   <input
                     type="datetime-local"
                     value={formData.available_until ?? ''}
@@ -778,7 +778,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-timber-dark mb-2">ПОРЯДОК СОРТУВАННЯ</label>
+                  <label className="block text-sm font-medium text-text-100 mb-2">ПОРЯДОК СОРТУВАННЯ</label>
                   <input
                     type="number"
                     value={formData.sort_order}
@@ -789,7 +789,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-timber-dark mb-2">ТЕГИ</label>
+                <label className="block text-sm font-medium text-text-100 mb-2">ТЕГИ</label>
                 <input
                   type="text"
                   value={formData.tags.join(', ')}
@@ -822,7 +822,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             type="button"
             onClick={() => handleUpdate('draft')}
             disabled={saving || !!slugError || isCheckingSlug}
-            className="px-6 py-3 bg-timber-dark/20 text-timber-dark font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-panel-850/20 text-text-100 font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--panel-850)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'ЗБЕРЕЖЕННЯ...' : '📝 ЗБЕРЕГТИ ЧЕРНЕТКУ'}
           </button>
@@ -830,7 +830,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             type="button"
             onClick={() => handleUpdate('active')}
             disabled={saving || !!slugError || isCheckingSlug}
-            className="px-6 py-3 bg-bronze text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-bronze text-canvas font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--panel-850)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'ЗБЕРЕЖЕННЯ...' : '✅ ЗБЕРЕГТИ ЗМІНИ'}
           </button>
@@ -843,7 +843,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
           type="button"
           onClick={handleDelete}
           disabled={deleting}
-          className="px-6 py-3 bg-red-600 text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--timber-dark)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="px-6 py-3 bg-red-600 text-white font-bold font-mono uppercase tracking-wider transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--panel-850)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           <Trash2 className="w-4 h-4" />
           {deleting ? 'ВИДАЛЕННЯ...' : 'ВИДАЛИТИ'}

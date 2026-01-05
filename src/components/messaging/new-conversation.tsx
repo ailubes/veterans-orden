@@ -149,7 +149,7 @@ export function NewConversation() {
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-2 border-2 rounded transition-colors',
             type === 'dm'
-              ? 'border-line bg-timber-dark text-canvas'
+              ? 'border-line bg-panel-850 text-canvas'
               : 'border-line/30 hover:border-line'
           )}
         >
@@ -161,7 +161,7 @@ export function NewConversation() {
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-2 border-2 rounded transition-colors',
             type === 'group'
-              ? 'border-line bg-timber-dark text-canvas'
+              ? 'border-line bg-panel-850 text-canvas'
               : 'border-line/30 hover:border-line'
           )}
         >
@@ -193,10 +193,10 @@ export function NewConversation() {
             <button
               key={user.id}
               onClick={() => toggleUser(user)}
-              className="flex items-center gap-1 bg-timber-light px-2 py-1 rounded-full text-sm"
+              className="flex items-center gap-1 bg-panel-850 px-2 py-1 rounded-full text-sm"
             >
               {user.firstName} {user.lastName}
-              <span className="text-muted-500 hover:text-timber-dark">×</span>
+              <span className="text-muted-500 hover:text-text-100">×</span>
             </button>
           ))}
         </div>
@@ -235,8 +235,8 @@ export function NewConversation() {
                   <button
                     onClick={() => toggleUser(user)}
                     className={cn(
-                      'w-full flex items-center gap-3 p-2 rounded hover:bg-timber-light/50 transition-colors',
-                      isSelected && 'bg-timber-light'
+                      'w-full flex items-center gap-3 p-2 rounded hover:bg-panel-850/50 transition-colors',
+                      isSelected && 'bg-panel-850'
                     )}
                     disabled={creating}
                   >

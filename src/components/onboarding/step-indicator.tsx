@@ -26,7 +26,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                     isCompleted
                       ? 'bg-bronze border-bronze text-canvas'
                       : isCurrent
-                      ? 'bg-timber-dark border-line text-canvas'
+                      ? 'bg-panel-850 border-line text-canvas'
                       : 'bg-panel-900 border-line/30 text-muted-500'
                   }`}
                 >
@@ -35,7 +35,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
                 <div className="mt-2 text-center hidden md:block">
                   <p
                     className={`text-xs font-bold ${
-                      isCurrent ? 'text-timber-dark' : 'text-muted-500'
+                      isCurrent ? 'text-text-100' : 'text-muted-500'
                     }`}
                   >
                     {step.label}
@@ -50,7 +50,7 @@ export function StepIndicator({ currentStep, totalSteps, steps }: StepIndicatorP
               {stepNumber < totalSteps && (
                 <div
                   className={`flex-1 h-0.5 mx-2 ${
-                    isCompleted ? 'bg-bronze' : 'bg-timber-dark/20'
+                    isCompleted ? 'bg-bronze' : 'bg-panel-850/20'
                   }`}
                 />
               )}

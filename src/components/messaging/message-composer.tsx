@@ -107,7 +107,7 @@ export function MessageComposer({
     <div className="space-y-2">
       {/* Reply preview */}
       {replyToMessage && (
-        <div className="flex items-center gap-2 px-2 py-1.5 bg-timber-light/50 rounded border-l-2 border-bronze">
+        <div className="flex items-center gap-2 px-2 py-1.5 bg-panel-850/50 rounded border-l-2 border-bronze">
           <Reply className="w-4 h-4 text-bronze flex-shrink-0" />
           <div className="flex-1 min-w-0">
             <span className="text-xs font-medium text-bronze">
@@ -120,7 +120,7 @@ export function MessageComposer({
           </div>
           <button
             onClick={onCancelReply}
-            className="p-1 hover:bg-timber-light rounded transition-colors flex-shrink-0"
+            className="p-1 hover:bg-panel-850 rounded transition-colors flex-shrink-0"
           >
             <X className="w-4 h-4 text-muted-500" />
           </button>
@@ -133,7 +133,7 @@ export function MessageComposer({
         <PopoverTrigger asChild>
           <button
             type="button"
-            className="p-2 hover:bg-timber-light rounded transition-colors"
+            className="p-2 hover:bg-panel-850 rounded transition-colors"
             aria-label="Емодзі"
           >
             <Smile className="w-5 h-5 text-muted-500" />
@@ -145,7 +145,7 @@ export function MessageComposer({
               <button
                 key={r.emoji}
                 onClick={() => insertEmoji(r.emoji)}
-                className="p-2 text-xl hover:bg-timber-light rounded"
+                className="p-2 text-xl hover:bg-panel-850 rounded"
                 title={r.label}
               >
                 {r.emoji}
@@ -184,8 +184,8 @@ export function MessageComposer({
           className={cn(
             'p-2 rounded transition-colors',
             content.trim() && !sending
-              ? 'bg-timber-dark text-canvas hover:bg-timber-dark/90'
-              : 'bg-timber-light text-muted-500 cursor-not-allowed'
+              ? 'bg-panel-850 text-canvas hover:bg-panel-850/90'
+              : 'bg-panel-850 text-muted-500 cursor-not-allowed'
           )}
           aria-label="Надіслати"
         >

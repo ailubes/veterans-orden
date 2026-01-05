@@ -80,7 +80,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
+      <div className="bg-panel-850 text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />

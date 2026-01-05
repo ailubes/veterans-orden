@@ -466,22 +466,22 @@ export default function SettingsPage() {
         <p className="label text-bronze mb-6">ІНФОРМАЦІЯ ПРО АКАУНТ</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div className="text-center p-4 bg-timber-dark/5 rounded">
+          <div className="text-center p-4 bg-panel-850/5 rounded">
             <Star className="w-6 h-6 mx-auto mb-2 text-amber-500" />
             <p className="font-syne text-2xl font-bold">{user.points}</p>
             <p className="text-xs text-muted-500">Балів</p>
           </div>
-          <div className="text-center p-4 bg-timber-dark/5 rounded">
+          <div className="text-center p-4 bg-panel-850/5 rounded">
             <Award className="w-6 h-6 mx-auto mb-2 text-bronze" />
             <p className="font-syne text-2xl font-bold">{user.level}</p>
             <p className="text-xs text-muted-500">Рівень</p>
           </div>
-          <div className="text-center p-4 bg-timber-dark/5 rounded">
+          <div className="text-center p-4 bg-panel-850/5 rounded">
             <Users className="w-6 h-6 mx-auto mb-2 text-green-600" />
             <p className="font-syne text-2xl font-bold">{user.referralCount}</p>
             <p className="text-xs text-muted-500">Запрошено</p>
           </div>
-          <div className="text-center p-4 bg-timber-dark/5 rounded">
+          <div className="text-center p-4 bg-panel-850/5 rounded">
             <Shield className="w-6 h-6 mx-auto mb-2 text-blue-600" />
             <p className="font-syne text-sm font-bold">{getRoleName(user.role)}</p>
             <p className="text-xs text-muted-500">Роль</p>
@@ -531,12 +531,12 @@ export default function SettingsPage() {
         <div className="mb-4">
           <label className="label block mb-2">ВАШ РЕФЕРАЛЬНИЙ КОД</label>
           <div className="flex items-center gap-2">
-            <div className="flex-1 px-4 py-3 bg-timber-dark/5 border border-line rounded-lg font-mono text-lg font-bold tracking-wider">
+            <div className="flex-1 px-4 py-3 bg-panel-850/5 border border-line rounded-lg font-mono text-lg font-bold tracking-wider">
               {user.referralCode}
             </div>
             <button
               onClick={copyReferralLink}
-              className="px-4 py-3 border border-line rounded-lg hover:bg-timber-dark hover:text-white transition-colors flex items-center gap-2"
+              className="px-4 py-3 border border-line rounded-lg hover:bg-panel-850 hover:text-white transition-colors flex items-center gap-2"
               title="Скопіювати посилання"
             >
               {copied ? (
@@ -558,7 +558,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Stats */}
-        <div className="flex items-center justify-between p-4 bg-timber-dark/5 rounded">
+        <div className="flex items-center justify-between p-4 bg-panel-850/5 rounded">
           <div>
             <p className="font-bold">Запрошено людей</p>
             <p className="text-sm text-muted-500">
@@ -676,7 +676,7 @@ export default function SettingsPage() {
                 type="email"
                 value={user.email}
                 disabled
-                className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-bronze/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
               />
             </div>
             <div>
@@ -688,7 +688,7 @@ export default function SettingsPage() {
                 type="tel"
                 value={user.phone || '—'}
                 disabled
-                className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
+                className="w-full px-4 py-3 bg-bronze/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
               />
             </div>
           </div>
@@ -702,7 +702,7 @@ export default function SettingsPage() {
               type="text"
               value={formatDate(user.dateOfBirth)}
               disabled
-              className="w-full px-4 py-3 bg-timber-beam/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
+              className="w-full px-4 py-3 bg-bronze/10 border border-line rounded-lg font-mono text-sm opacity-60 cursor-not-allowed"
             />
           </div>
 
@@ -832,7 +832,7 @@ export default function SettingsPage() {
         <p className="label text-bronze mb-6">СТАТУС ВЕРИФІКАЦІЇ</p>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
+          <div className="flex items-center justify-between p-3 bg-panel-850/5 rounded">
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-muted-500" />
               <span>Електронна пошта</span>
@@ -846,7 +846,7 @@ export default function SettingsPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
+          <div className="flex items-center justify-between p-3 bg-panel-850/5 rounded">
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-muted-500" />
               <span>Телефон</span>
@@ -860,7 +860,7 @@ export default function SettingsPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between p-3 bg-timber-dark/5 rounded">
+          <div className="flex items-center justify-between p-3 bg-panel-850/5 rounded">
             <div className="flex items-center gap-3">
               <Shield className="w-4 h-4 text-muted-500" />
               <span>Особистість</span>

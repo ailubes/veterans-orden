@@ -198,7 +198,7 @@ export default function AdminChallengesPage() {
         <button
           onClick={() => setFilter({})}
           className={`px-3 py-1.5 text-xs font-bold transition-colors ${
-            !filter.status ? 'bg-timber-dark text-canvas' : 'bg-panel-900 border border-line/30'
+            !filter.status ? 'bg-panel-850 text-canvas' : 'bg-panel-900 border border-line/30'
           }`}
         >
           Усі
@@ -209,7 +209,7 @@ export default function AdminChallengesPage() {
             onClick={() => setFilter({ ...filter, status })}
             className={`px-3 py-1.5 text-xs font-bold transition-colors ${
               filter.status === status
-                ? 'bg-timber-dark text-canvas'
+                ? 'bg-panel-850 text-canvas'
                 : 'bg-panel-900 border border-line/30 hover:border-line'
             }`}
           >
@@ -251,10 +251,10 @@ export default function AdminChallengesPage() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 text-xs mb-3">
-                    <span className="px-2 py-1 bg-timber-dark/10">
+                    <span className="px-2 py-1 bg-panel-850/10">
                       {CHALLENGE_TYPE_LABELS[challenge.type].uk}
                     </span>
-                    <span className="px-2 py-1 bg-timber-dark/10">
+                    <span className="px-2 py-1 bg-panel-850/10">
                       {challenge.goalTarget} {CHALLENGE_GOAL_TYPE_LABELS[challenge.goalType].uk.toLowerCase()}
                     </span>
                     {challenge.isCompetitive && (
@@ -323,7 +323,7 @@ export default function AdminChallengesPage() {
                     const isLoading = actionLoading === challenge.id;
 
                     return (
-                      <tr key={challenge.id} className="border-b border-line/20 hover:bg-timber-dark/5">
+                      <tr key={challenge.id} className="border-b border-line/20 hover:bg-panel-850/5">
                         <td className="p-4 max-w-xs">
                           <div className="flex items-center gap-2">
                             <GoalIcon size={18} className="text-muted-500 flex-shrink-0" />
@@ -339,7 +339,7 @@ export default function AdminChallengesPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                          <span className="px-2 py-1 bg-panel-850/10 text-xs">
                             {CHALLENGE_TYPE_LABELS[challenge.type].uk}
                           </span>
                         </td>
@@ -365,7 +365,7 @@ export default function AdminChallengesPage() {
                           <div className="flex items-center gap-1">
                             <Link
                               href={`/admin/challenges/${challenge.id}`}
-                              className="p-2 hover:bg-timber-dark/10 rounded"
+                              className="p-2 hover:bg-panel-850/10 rounded"
                               title="Переглянути"
                             >
                               <Eye size={16} />
@@ -374,7 +374,7 @@ export default function AdminChallengesPage() {
                               <>
                                 <Link
                                   href={`/admin/challenges/${challenge.id}/edit`}
-                                  className="p-2 hover:bg-timber-dark/10 rounded"
+                                  className="p-2 hover:bg-panel-850/10 rounded"
                                   title="Редагувати"
                                 >
                                   <Edit2 size={16} />

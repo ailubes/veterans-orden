@@ -197,7 +197,7 @@ export default async function AdminTasksPage() {
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs mb-3">
-                  <span className="px-2 py-1 bg-timber-dark/10">
+                  <span className="px-2 py-1 bg-panel-850/10">
                     {typeLabels[task.type as keyof typeof typeLabels] || task.type}
                   </span>
                   <span
@@ -223,7 +223,7 @@ export default async function AdminTasksPage() {
                   </Link>
                   <Link
                     href={`/admin/tasks/${task.id}/edit`}
-                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-panel-850/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -254,7 +254,7 @@ export default async function AdminTasksPage() {
                 </thead>
                 <tbody>
                   {tasks.map((task) => (
-                    <tr key={task.id} className="border-b border-line/20 hover:bg-timber-dark/5">
+                    <tr key={task.id} className="border-b border-line/20 hover:bg-panel-850/5">
                       <td className="p-4 max-w-xs">
                         <div className="font-bold">{task.title}</div>
                         {(() => {
@@ -280,7 +280,7 @@ export default async function AdminTasksPage() {
                         })()}
                       </td>
                       <td className="p-4">
-                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                        <span className="px-2 py-1 bg-panel-850/10 text-xs">
                           {typeLabels[task.type as keyof typeof typeLabels] || task.type}
                         </span>
                       </td>
@@ -318,14 +318,14 @@ export default async function AdminTasksPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/admin/tasks/${task.id}`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Переглянути"
                           >
                             <Eye size={16} />
                           </Link>
                           <Link
                             href={`/admin/tasks/${task.id}/edit`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Редагувати"
                           >
                             <Edit2 size={16} />

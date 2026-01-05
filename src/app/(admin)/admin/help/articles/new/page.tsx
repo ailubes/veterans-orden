@@ -183,7 +183,7 @@ export default function NewArticlePage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/help/articles"
-            className="p-2 hover:bg-timber-dark/10 transition-colors"
+            className="p-2 hover:bg-panel-850/10 transition-colors"
           >
             <ArrowLeft size={24} />
           </Link>
@@ -196,7 +196,7 @@ export default function NewArticlePage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowPreview(!showPreview)}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold"
+            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
           >
             <Eye size={18} />
             {showPreview ? 'Редагувати' : 'Попередній перегляд'}
@@ -205,7 +205,7 @@ export default function NewArticlePage() {
           <button
             onClick={() => handleSubmit(false)}
             disabled={submitting}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold disabled:opacity-50"
           >
             <Save size={18} />
             Зберегти чернетку
@@ -433,7 +433,7 @@ export default function NewArticlePage() {
                 {keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="flex items-center gap-1 px-3 py-1 bg-timber-dark/10 border border-line text-sm"
+                    className="flex items-center gap-1 px-3 py-1 bg-panel-850/10 border border-line text-sm"
                   >
                     {keyword}
                     <button

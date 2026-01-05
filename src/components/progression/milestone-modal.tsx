@@ -50,7 +50,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
 
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-timber-dark/60 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-panel-850/60 z-50 flex items-center justify-center p-4"
         onClick={handleCelebrate}
       >
         {/* Modal */}
@@ -88,7 +88,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
             </h2>
 
             {/* Message */}
-            <p className="font-mono text-lg text-timber-dark/90 mb-8">
+            <p className="font-mono text-lg text-text-100/90 mb-8">
               {milestone.message}
             </p>
 
@@ -103,7 +103,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
                 font-mono text-base font-semibold
                 border-2 border-bronze
                 transition-all duration-200
-                hover:bg-timber-dark hover:border-line
+                hover:bg-panel-850 hover:border-line
                 disabled:opacity-50 disabled:cursor-not-allowed
               "
             >
@@ -111,7 +111,7 @@ export default function MilestoneModal({ milestone, onCelebrate }: MilestoneModa
             </button>
 
             {/* Hint */}
-            <p className="font-mono text-xs text-timber-dark/60 mt-4">
+            <p className="font-mono text-xs text-text-100/60 mt-4">
               Натисніть будь-де, щоб продовжити
             </p>
           </div>

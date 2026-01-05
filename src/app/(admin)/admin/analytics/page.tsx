@@ -102,7 +102,7 @@ export default async function AdminAnalyticsPage() {
 
       {/* Main Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
-        <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
+        <div className="bg-panel-850 text-canvas p-4 sm:p-6 relative">
           <div className="joint joint-tl" />
           <div className="flex items-start justify-between">
             <div>
@@ -226,7 +226,7 @@ export default async function AdminAnalyticsPage() {
                         {oblast.member_count || 0}
                       </span>
                     </div>
-                    <div className="h-2 bg-timber-dark/10">
+                    <div className="h-2 bg-panel-850/10">
                       <div
                         className="h-full bg-bronze"
                         style={{
@@ -269,7 +269,7 @@ export default async function AdminAnalyticsPage() {
                       {count} ({percentage.toFixed(1)}%)
                     </span>
                   </div>
-                  <div className="h-3 bg-timber-dark/10">
+                  <div className="h-3 bg-panel-850/10">
                     <div
                       className={`h-full ${
                         tier === 'free' ? 'bg-gray-400' : 'bg-bronze'
@@ -285,7 +285,7 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       {/* Goal Progress */}
-      <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
+      <div className="bg-panel-850 text-canvas p-4 sm:p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />

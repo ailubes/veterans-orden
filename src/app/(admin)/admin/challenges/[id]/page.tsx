@@ -222,7 +222,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
       </Link>
 
       {/* Header */}
-      <div className="bg-timber-dark text-canvas p-6 relative mb-6">
+      <div className="bg-panel-850 text-canvas p-6 relative mb-6">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -365,7 +365,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                   </thead>
                   <tbody>
                     {participants.map((participant, index) => (
-                      <tr key={participant.id} className="border-b border-line/10 hover:bg-timber-dark/5">
+                      <tr key={participant.id} className="border-b border-line/10 hover:bg-panel-850/5">
                         <td className="p-3">
                           {participant.rank ? getMedalIcon(participant.rank) : index + 1}
                         </td>
@@ -379,7 +379,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                         </td>
                         <td className="p-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-24 h-2 bg-timber-dark/20 rounded-full overflow-hidden">
+                            <div className="w-24 h-2 bg-panel-850/20 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-bronze"
                                 style={{ width: `${Math.min((participant.progress / challenge.goalTarget) * 100, 100)}%` }}
@@ -396,7 +396,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                               Виконано
                             </span>
                           ) : (
-                            <span className="px-2 py-1 text-xs bg-timber-dark/10">
+                            <span className="px-2 py-1 text-xs bg-panel-850/10">
                               В процесі
                             </span>
                           )}
@@ -429,7 +429,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
 
               <div className="space-y-2">
                 {leaderboard.slice(0, 5).map((entry) => (
-                  <div key={entry.rank} className="flex items-center gap-2 p-2 bg-timber-dark/5">
+                  <div key={entry.rank} className="flex items-center gap-2 p-2 bg-panel-850/5">
                     {getMedalIcon(entry.rank)}
                     <div className="flex-1 min-w-0">
                       <p className="font-bold text-sm truncate">
@@ -444,7 +444,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
           )}
 
           {/* Challenge Info */}
-          <div className="bg-timber-dark text-canvas p-4 relative">
+          <div className="bg-panel-850 text-canvas p-4 relative">
             <div className="joint joint-tl" />
 
             <h3 className="font-syne font-bold mb-4">Деталі</h3>

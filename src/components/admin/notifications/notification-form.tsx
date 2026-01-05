@@ -183,7 +183,7 @@ export function NotificationForm({
                 className={`px-3 py-2 text-sm font-bold border-2 transition-colors ${
                   type === t.value
                     ? `${t.color} border-line`
-                    : 'bg-timber-dark/5 border-line/30 hover:border-line'
+                    : 'bg-panel-850/5 border-line/30 hover:border-line'
                 }`}
               >
                 {t.label}

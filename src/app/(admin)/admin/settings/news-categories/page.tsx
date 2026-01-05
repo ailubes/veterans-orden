@@ -335,7 +335,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-4 py-2 bg-timber-dark text-white font-bold font-mono uppercase tracking-wider text-sm transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
+              className="px-4 py-2 bg-panel-850 text-white font-bold font-mono uppercase tracking-wider text-sm transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)] disabled:opacity-50 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               <Save className="w-4 h-4 inline mr-2" />
               Зберегти
@@ -355,7 +355,7 @@ function CategoryCard({ category, onUpdate, onToggleActive, saving }: CategoryCa
           <div className="flex gap-3">
             <button
               onClick={() => setEditing(true)}
-              className="px-4 py-2 bg-timber-dark text-white font-bold font-mono uppercase tracking-wider text-sm transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)]"
+              className="px-4 py-2 bg-panel-850 text-white font-bold font-mono uppercase tracking-wider text-sm transition-transform hover:translate-x-1 hover:-translate-y-1 hover:shadow-[-4px_4px_0_var(--accent)]"
             >
               Редагувати
             </button>

@@ -80,7 +80,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
+      <div className="bg-panel-850 text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -91,7 +91,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
           <div className="flex-1">
             <h1 className="font-syne text-3xl font-bold mb-3">{article.title}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 bg-timber-dark/20 text-xs font-bold">
+              <span className="px-3 py-1 bg-panel-850/20 text-xs font-bold">
                 {categoryLabels[article.category] || article.category}
               </span>
               <span

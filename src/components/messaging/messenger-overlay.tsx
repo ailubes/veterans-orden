@@ -41,7 +41,7 @@ export function MessengerOverlay() {
       {/* Backdrop - only when expanded */}
       {isExpanded && (
         <div
-          className="absolute inset-0 bg-timber-dark/40 backdrop-blur-sm pointer-events-auto"
+          className="absolute inset-0 bg-panel-850/40 backdrop-blur-sm pointer-events-auto"
           onClick={closeMessenger}
         />
       )}
@@ -59,7 +59,7 @@ export function MessengerOverlay() {
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-3 py-2.5 border-b-2 border-line bg-timber-dark text-canvas shrink-0">
+        <div className="flex items-center justify-between px-3 py-2.5 border-b-2 border-line bg-panel-850 text-canvas shrink-0">
           <div className="flex items-center gap-2 min-w-0">
             {activeView !== 'list' && (
               <button

@@ -14,7 +14,7 @@ export function StatsStrip() {
     <div
       className="
         col-span-full
-        bg-timber-beam text-grain
+        bg-bronze text-grain
         py-12 px-4
         sm:py-14 sm:px-8
         md:py-16 md:px-12

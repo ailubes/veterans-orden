@@ -110,14 +110,14 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
               {isCurrentTier ? (
                 <button
                   disabled
-                  className="w-full py-2 bg-timber-dark/10 text-muted-500 text-sm font-bold cursor-not-allowed"
+                  className="w-full py-2 bg-panel-850/10 text-muted-500 text-sm font-bold cursor-not-allowed"
                 >
                   АКТИВНИЙ ПЛАН
                 </button>
               ) : isDowngrade ? (
                 <button
                   disabled
-                  className="w-full py-2 bg-timber-dark/10 text-muted-500 text-sm font-bold cursor-not-allowed"
+                  className="w-full py-2 bg-panel-850/10 text-muted-500 text-sm font-bold cursor-not-allowed"
                 >
                   ЗНИЖЕННЯ НЕДОСТУПНЕ
                 </button>

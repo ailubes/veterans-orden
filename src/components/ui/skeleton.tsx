@@ -10,7 +10,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse bg-timber-beam/20 rounded',
+        'animate-pulse bg-bronze/20 rounded',
         className
       )}
     />

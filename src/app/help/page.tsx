@@ -75,7 +75,7 @@ export default function HelpHomePage() {
         {/* Decorative element */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-bronze/5 rounded-full blur-3xl -z-10" />
 
-        <h2 className="font-syne text-3xl font-bold mb-4 text-timber-dark">
+        <h2 className="font-syne text-3xl font-bold mb-4 text-text-100">
           Ласкаво просимо до Центру допомоги!
         </h2>
         <p className="text-lg text-muted-500 mb-6">
@@ -89,7 +89,7 @@ export default function HelpHomePage() {
               <Rocket className="text-bronze" size={24} />
             </div>
             <div>
-              <p className="font-bold text-timber-dark">Швидкий старт</p>
+              <p className="font-bold text-text-100">Швидкий старт</p>
               <p className="text-sm text-muted-500">Перші кроки на платформі</p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function HelpHomePage() {
               <Zap className="text-bronze" size={24} />
             </div>
             <div>
-              <p className="font-bold text-timber-dark">Функції</p>
+              <p className="font-bold text-text-100">Функції</p>
               <p className="text-sm text-muted-500">Детальні інструкції</p>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function HelpHomePage() {
               <HelpCircle className="text-bronze" size={24} />
             </div>
             <div>
-              <p className="font-bold text-timber-dark">FAQ</p>
+              <p className="font-bold text-text-100">FAQ</p>
               <p className="text-sm text-muted-500">Відповіді на питання</p>
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function HelpHomePage() {
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
-            <div className="divide-y-2 divide-timber-dark/20">
+            <div className="divide-y-2 divide-line/20">
               {recentArticles.slice(0, 5).map((article: any) => (
                 <Link
                   key={article.id}

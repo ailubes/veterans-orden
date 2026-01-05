@@ -119,9 +119,9 @@ export default function RoleManagementTab({
 
   function getRoleBadgeColor(role: UserRole): string {
     if (role === 'super_admin') return 'bg-bronze text-canvas';
-    if (role === 'admin') return 'bg-timber-dark text-canvas';
-    if (role === 'regional_leader') return 'bg-timber-beam text-canvas';
-    return 'bg-panel-900 text-timber-dark border border-line rounded-lg';
+    if (role === 'admin') return 'bg-panel-850 text-canvas';
+    if (role === 'regional_leader') return 'bg-bronze text-canvas';
+    return 'bg-panel-900 text-text-100 border border-line rounded-lg';
   }
 
   if (loading) {
@@ -208,7 +208,7 @@ export default function RoleManagementTab({
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-500 mb-3">
                   {user.oblast?.name && (
-                    <span className="px-2 py-1 bg-timber-dark/10">{user.oblast.name}</span>
+                    <span className="px-2 py-1 bg-panel-850/10">{user.oblast.name}</span>
                   )}
                   <span>Рефералів: {user.referral_count || 0}</span>
                 </div>
@@ -257,7 +257,7 @@ export default function RoleManagementTab({
                 </TableRow>
               ) : (
                 users.map((user) => (
-                  <TableRow key={user.id} className="border-b border-timber-beam/30">
+                  <TableRow key={user.id} className="border-b border-bronze/30">
                     <TableCell className="font-medium">
                       {user.first_name} {user.last_name}
                     </TableCell>

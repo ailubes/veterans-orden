@@ -180,7 +180,7 @@ export default function AdminProductsPage() {
       ) : (
         <div className="bg-white border border-line rounded-lg overflow-hidden">
           <table className="w-full">
-            <thead className="bg-timber-dark text-canvas">
+            <thead className="bg-panel-850 text-canvas">
               <tr>
                 <th className="text-left p-4 font-bold">Товар</th>
                 <th className="text-left p-4 font-bold">Тип</th>
@@ -197,7 +197,7 @@ export default function AdminProductsPage() {
                 return (
                   <tr
                     key={product.id}
-                    className="border-b border-line/10 last:border-0 hover:bg-timber-dark/5"
+                    className="border-b border-line/10 last:border-0 hover:bg-panel-850/5"
                   >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
@@ -208,7 +208,7 @@ export default function AdminProductsPage() {
                             className="w-12 h-12 object-cover"
                           />
                         ) : (
-                          <div className="w-12 h-12 bg-timber-dark/10 flex items-center justify-center">
+                          <div className="w-12 h-12 bg-panel-850/10 flex items-center justify-center">
                             <Package size={20} className="text-muted-500" />
                           </div>
                         )}
@@ -243,14 +243,14 @@ export default function AdminProductsPage() {
                         <Link
                           href={`/dashboard/marketplace/${product.slug}`}
                           target="_blank"
-                          className="p-2 hover:bg-timber-dark/10 transition-colors"
+                          className="p-2 hover:bg-panel-850/10 transition-colors"
                           title="Переглянути"
                         >
                           <Eye size={18} />
                         </Link>
                         <Link
                           href={`/admin/marketplace/products/${product.id}/edit`}
-                          className="p-2 hover:bg-timber-dark/10 transition-colors"
+                          className="p-2 hover:bg-panel-850/10 transition-colors"
                           title="Редагувати"
                         >
                           <Edit size={18} />

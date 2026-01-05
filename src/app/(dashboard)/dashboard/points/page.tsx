@@ -112,7 +112,7 @@ export default function PointsPage() {
       </div>
 
       {/* Balance Card */}
-      <div className="bg-timber-dark text-canvas p-6 relative mb-8">
+      <div className="bg-panel-850 text-canvas p-6 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -183,7 +183,7 @@ export default function PointsPage() {
             </p>
           </div>
 
-          <div className="h-3 bg-timber-dark/20 relative overflow-hidden">
+          <div className="h-3 bg-panel-850/20 relative overflow-hidden">
             <div
               className="h-full bg-bronze transition-all duration-500"
               style={{ width: `${Math.min(progress, 100)}%` }}
@@ -215,7 +215,7 @@ export default function PointsPage() {
               return (
                 <div
                   key={transaction.id}
-                  className="flex items-center gap-3 p-3 bg-timber-dark/5 hover:bg-timber-dark/10 transition-colors"
+                  className="flex items-center gap-3 p-3 bg-panel-850/5 hover:bg-panel-850/10 transition-colors"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm mb-1">{typeLabel}</p>
@@ -256,7 +256,7 @@ export default function PointsPage() {
         )}
 
         {history.pagination.hasMore && (
-          <button className="w-full mt-4 py-3 bg-timber-dark/5 hover:bg-timber-dark/10 transition-colors font-bold text-sm flex items-center justify-center gap-2">
+          <button className="w-full mt-4 py-3 bg-panel-850/5 hover:bg-panel-850/10 transition-colors font-bold text-sm flex items-center justify-center gap-2">
             Завантажити більше
             <ChevronRight size={16} />
           </button>

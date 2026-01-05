@@ -101,7 +101,7 @@ export default async function AdminNewsPage() {
               </thead>
               <tbody>
                 {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-line/20 hover:bg-timber-dark/5">
+                  <tr key={article.id} className="border-b border-line/20 hover:bg-panel-850/5">
                     <td className="p-4">
                       <div className="font-bold">{article.title}</div>
                       <div className="text-xs text-muted-500 line-clamp-1">
@@ -109,7 +109,7 @@ export default async function AdminNewsPage() {
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                      <span className="px-2 py-1 bg-panel-850/10 text-xs">
                         {categoryLabels[article.category as keyof typeof categoryLabels] || article.category}
                       </span>
                     </td>
@@ -141,7 +141,7 @@ export default async function AdminNewsPage() {
                         {article.status === 'published' && article.slug && (
                           <Link
                             href={`/news/${article.slug}`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Переглянути на сайті"
                             target="_blank"
                           >
@@ -150,14 +150,14 @@ export default async function AdminNewsPage() {
                         )}
                         <Link
                           href={`/admin/news/${article.id}`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
+                          className="p-2 hover:bg-panel-850/10 rounded"
                           title="Переглянути"
                         >
                           <Eye size={16} />
                         </Link>
                         <Link
                           href={`/admin/news/${article.id}/edit`}
-                          className="p-2 hover:bg-timber-dark/10 rounded"
+                          className="p-2 hover:bg-panel-850/10 rounded"
                           title="Редагувати"
                         >
                           <Edit2 size={16} />

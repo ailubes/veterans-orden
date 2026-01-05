@@ -52,7 +52,7 @@ export default async function LeaderboardPage() {
 
       {/* User Stats */}
       {profile && (
-        <div className="bg-timber-dark text-canvas p-6 relative mb-8">
+        <div className="bg-panel-850 text-canvas p-6 relative mb-8">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -96,7 +96,7 @@ export default async function LeaderboardPage() {
                   className={`flex items-center gap-3 p-3 ${
                     member.id === profile?.id
                       ? 'bg-bronze/10 border border-bronze'
-                      : 'bg-timber-dark/5'
+                      : 'bg-panel-850/5'
                   }`}
                 >
                   {getMedalIcon(index)}
@@ -143,7 +143,7 @@ export default async function LeaderboardPage() {
                   className={`flex items-center gap-3 p-3 ${
                     member.id === profile?.id
                       ? 'bg-bronze/10 border border-bronze'
-                      : 'bg-timber-dark/5'
+                      : 'bg-panel-850/5'
                   }`}
                 >
                   {getMedalIcon(index)}
@@ -189,7 +189,7 @@ export default async function LeaderboardPage() {
               className={`p-3 text-center ${
                 (profile?.level || 1) >= lvl.level
                   ? 'bg-bronze/10 border border-bronze'
-                  : 'bg-timber-dark/5'
+                  : 'bg-panel-850/5'
               }`}
             >
               <p className="font-syne text-2xl font-bold">{lvl.level}</p>

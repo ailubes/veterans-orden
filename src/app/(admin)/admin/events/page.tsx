@@ -101,7 +101,7 @@ export default async function AdminEventsPage() {
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-500 mb-3">
                   <span className="font-mono">{formatDate(event.start_date)}</span>
                   <span>{formatTime(event.start_date)}</span>
-                  <span className="px-2 py-1 bg-timber-dark/10">
+                  <span className="px-2 py-1 bg-panel-850/10">
                     {event.is_online ? 'Онлайн' : 'Офлайн'}
                   </span>
                   <span>{event.going_count || 0} / {event.max_attendees || '∞'}</span>
@@ -115,7 +115,7 @@ export default async function AdminEventsPage() {
                   </Link>
                   <Link
                     href={`/admin/events/${event.id}/edit`}
-                    className="p-2 border border-line rounded-lg hover:bg-timber-dark/10"
+                    className="p-2 border border-line rounded-lg hover:bg-panel-850/10"
                   >
                     <Edit2 size={16} />
                   </Link>
@@ -145,7 +145,7 @@ export default async function AdminEventsPage() {
                 </thead>
                 <tbody>
                   {events.map((event) => (
-                    <tr key={event.id} className="border-b border-line/20 hover:bg-timber-dark/5">
+                    <tr key={event.id} className="border-b border-line/20 hover:bg-panel-850/5">
                       <td className="p-4">
                         <div className="font-bold">{event.title}</div>
                         <div className="text-xs text-muted-500">
@@ -161,7 +161,7 @@ export default async function AdminEventsPage() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                        <span className="px-2 py-1 bg-panel-850/10 text-xs">
                           {event.is_online ? 'Онлайн' : 'Офлайн'}
                         </span>
                       </td>
@@ -185,14 +185,14 @@ export default async function AdminEventsPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             href={`/admin/events/${event.id}`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Переглянути"
                           >
                             <Eye size={16} />
                           </Link>
                           <Link
                             href={`/admin/events/${event.id}/edit`}
-                            className="p-2 hover:bg-timber-dark/10 rounded"
+                            className="p-2 hover:bg-panel-850/10 rounded"
                             title="Редагувати"
                           >
                             <Edit2 size={16} />

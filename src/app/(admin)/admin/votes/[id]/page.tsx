@@ -122,7 +122,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
       </div>
 
       {/* Header Card */}
-      <div className="bg-timber-dark text-canvas border border-line rounded-lg p-6 mb-6 relative">
+      <div className="bg-panel-850 text-canvas border border-line rounded-lg p-6 mb-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -133,7 +133,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
           <div className="flex-1">
             <h1 className="font-syne text-3xl font-bold mb-3">{vote.question}</h1>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 bg-panel-900 text-timber-dark text-xs font-bold">
+              <span className="px-3 py-1 bg-panel-900 text-text-100 text-xs font-bold">
                 {typeLabels[vote.vote_type] || vote.vote_type}
               </span>
               <span
@@ -237,7 +237,7 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                         </span>
                       </div>
                     </div>
-                    <div className="w-full bg-timber-dark/10 h-3">
+                    <div className="w-full bg-panel-850/10 h-3">
                       <div
                         className={`h-3 ${
                           index === 0

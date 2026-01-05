@@ -56,7 +56,7 @@ export function RichTextEditor({
       TiptapLink.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-[--accent] underline hover:text-[--timber-dark]',
+          class: 'text-[--accent] underline hover:text-[--text-100]',
           rel: 'noopener noreferrer',
           target: '_blank',
         },
@@ -198,9 +198,9 @@ export function RichTextEditor({
   const isNearLimit = charCount > maxLength * 0.9;
 
   return (
-    <div className="border-2 border-[--timber-dark] rounded-lg overflow-hidden bg-white">
+    <div className="border-2 border-[--text-100] rounded-lg overflow-hidden bg-white">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 p-2 bg-[--timber-dark]/5 border-b-2 border-[--timber-dark]">
+      <div className="flex flex-wrap items-center gap-1 p-2 bg-[--text-100]/5 border-b-2 border-[--text-100]">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           isActive={editor.isActive('bold')}
@@ -346,9 +346,9 @@ function ToolbarButton({
       disabled={disabled}
       title={title}
       className={`
-        p-2 rounded hover:bg-[--timber-dark]/10 transition-colors
+        p-2 rounded hover:bg-[--text-100]/10 transition-colors
         disabled:opacity-50 disabled:cursor-not-allowed
-        ${isActive ? 'bg-[--timber-dark]/20 text-[--timber-dark]' : 'text-gray-700'}
+        ${isActive ? 'bg-[--text-100]/20 text-[--text-100]' : 'text-gray-700'}
       `}
     >
       {children}

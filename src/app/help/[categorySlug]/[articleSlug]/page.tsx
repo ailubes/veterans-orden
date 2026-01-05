@@ -160,14 +160,14 @@ export default function ArticleDetailPage() {
           <div className="flex gap-3 mt-6">
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold text-sm"
+              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold text-sm"
             >
               <Share2 size={16} />
               Поділитися
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-timber-dark/10 transition-colors font-bold text-sm"
+              className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold text-sm"
             >
               <Printer size={16} />
               Друк
@@ -181,7 +181,7 @@ export default function ArticleDetailPage() {
         )}
 
         {/* Article Content */}
-        <div className="bg-white border border-line rounded-lg p-8 relative prose prose-timber max-w-none">
+        <div className="bg-white border border-line rounded-lg p-8 relative prose prose-invert max-w-none">
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 

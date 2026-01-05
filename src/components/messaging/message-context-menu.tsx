@@ -81,7 +81,7 @@ export function MessageContextMenu({
     <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         {children || (
-          <button className="p-1 hover:bg-timber-light rounded transition-colors">
+          <button className="p-1 hover:bg-panel-850 rounded transition-colors">
             <MoreHorizontal className="w-4 h-4" />
           </button>
         )}
@@ -234,7 +234,7 @@ export function MessageActionsBar({
         <button
           key={r.emoji}
           onClick={() => onReaction(r.emoji)}
-          className="p-1 hover:bg-timber-light rounded text-sm transition-colors"
+          className="p-1 hover:bg-panel-850 rounded text-sm transition-colors"
           title={r.label}
         >
           {r.emoji}
@@ -244,7 +244,7 @@ export function MessageActionsBar({
       {/* Quick reply button */}
       <button
         onClick={onReply}
-        className="p-1 hover:bg-timber-light rounded transition-colors"
+        className="p-1 hover:bg-panel-850 rounded transition-colors"
         title="Відповісти"
       >
         <Reply className="w-4 h-4" />

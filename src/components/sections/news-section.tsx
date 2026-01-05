@@ -49,7 +49,7 @@ export function NewsSection({ news = sampleNews }: NewsSectionProps) {
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: '40px',
-          borderBottom: '2px solid var(--timber-dark)',
+          borderBottom: '2px solid var(--panel-850)',
           paddingBottom: '20px',
         }}
       >
@@ -92,7 +92,7 @@ export function NewsSection({ news = sampleNews }: NewsSectionProps) {
       >
         <div
           style={{
-            background: 'var(--timber-dark)',
+            background: 'var(--panel-850)',
             color: 'var(--grain)',
             padding: '40px',
             display: 'flex',
@@ -189,7 +189,7 @@ export function NewsSection({ news = sampleNews }: NewsSectionProps) {
                 alignItems: 'center',
                 gap: '10px',
                 marginTop: '15px',
-                color: 'var(--timber-dark)',
+                color: 'var(--panel-850)',
                 textDecoration: 'none',
                 fontWeight: 700,
                 fontSize: '14px',

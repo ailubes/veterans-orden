@@ -57,7 +57,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
     <div
       style={{
         backgroundColor: 'var(--canvas)',
-        color: 'var(--timber-dark)',
+        color: 'var(--panel-850)',
         fontFamily: "'Space Mono', monospace",
         minHeight: '100vh',
       }}
@@ -80,7 +80,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
             href="/news"
             style={{
               fontSize: '12px',
-              color: 'var(--timber-dark)',
+              color: 'var(--panel-850)',
               opacity: 0.6,
               textDecoration: 'none',
               display: 'inline-flex',

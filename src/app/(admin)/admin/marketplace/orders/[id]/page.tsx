@@ -116,13 +116,13 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
       {/* Header */}
       <Link
         href="/admin/marketplace/orders"
-        className="inline-flex items-center gap-2 text-muted-500 hover:text-timber-dark mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-500 hover:text-text-100 mb-6 transition-colors"
       >
         <ArrowLeft size={20} />
         Повернутися до замовлень
       </Link>
 
-      <div className="bg-timber-dark text-canvas p-6 mb-6">
+      <div className="bg-panel-850 text-canvas p-6 mb-6">
         <h1 className="font-syne text-3xl font-bold mb-2">
           Замовлення #{order.orderNumber}
         </h1>
@@ -227,7 +227,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
         {/* Sidebar - Management */}
         <div className="lg:col-span-1 space-y-6">
           {/* Order Summary */}
-          <div className="bg-timber-dark text-canvas p-6">
+          <div className="bg-panel-850 text-canvas p-6">
             <h2 className="font-syne text-xl font-bold mb-4">Разом</h2>
             <div className="space-y-3">
               <div className="flex justify-between">

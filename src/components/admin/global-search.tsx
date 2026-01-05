@@ -121,7 +121,7 @@ export function GlobalSearch() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] bg-timber-dark/80 animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] bg-panel-850/80 animate-in fade-in">
       {/* Search Dialog */}
       <div
         className="w-full max-w-2xl bg-panel-900 border-4 border-bronze shadow-2xl animate-in slide-in-from-top-4"
@@ -139,7 +139,7 @@ export function GlobalSearch() {
             className="flex-1 bg-transparent font-mono text-lg focus:outline-none placeholder:text-muted-500/50"
             autoFocus
           />
-          <kbd className="px-2 py-1 bg-timber-dark/10 text-xs font-mono font-bold">
+          <kbd className="px-2 py-1 bg-panel-850/10 text-xs font-mono font-bold">
             ESC
           </kbd>
         </div>
@@ -180,7 +180,7 @@ export function GlobalSearch() {
                     className={`w-full flex items-center gap-4 p-4 border-b border-line/10 transition-colors text-left ${
                       isSelected
                         ? 'bg-bronze/10 border-l-4 border-l-accent'
-                        : 'hover:bg-timber-dark/5 border-l-4 border-l-transparent'
+                        : 'hover:bg-panel-850/5 border-l-4 border-l-transparent'
                     }`}
                   >
                     {/* Icon */}
@@ -188,7 +188,7 @@ export function GlobalSearch() {
                       className={`w-10 h-10 rounded-full flex items-center justify-center ${
                         isSelected
                           ? 'bg-bronze text-canvas'
-                          : 'bg-timber-dark/10 text-timber-dark'
+                          : 'bg-panel-850/10 text-text-100'
                       }`}
                     >
                       <Icon className="w-5 h-5" />
@@ -249,7 +249,7 @@ export function GlobalSearch() {
                         router.push(link.url);
                         setIsOpen(false);
                       }}
-                      className="flex items-center gap-3 p-3 border border-line rounded-lg hover:bg-timber-dark hover:text-canvas transition-colors text-left"
+                      className="flex items-center gap-3 p-3 border border-line rounded-lg hover:bg-panel-850 hover:text-canvas transition-colors text-left"
                     >
                       <Icon className="w-5 h-5" />
                       <span className="font-bold text-sm">{link.label}</span>
@@ -262,19 +262,19 @@ export function GlobalSearch() {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-3 border-t-2 border-line bg-timber-dark/5">
+        <div className="flex items-center justify-between px-4 py-3 border-t-2 border-line bg-panel-850/5">
           <div className="flex items-center gap-4 text-xs text-muted-500">
             <div className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-timber-dark/10 font-mono font-bold">
+              <kbd className="px-1.5 py-0.5 bg-panel-850/10 font-mono font-bold">
                 ↑
               </kbd>
-              <kbd className="px-1.5 py-0.5 bg-timber-dark/10 font-mono font-bold">
+              <kbd className="px-1.5 py-0.5 bg-panel-850/10 font-mono font-bold">
                 ↓
               </kbd>
               <span>навігація</span>
             </div>
             <div className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 bg-timber-dark/10 font-mono font-bold">
+              <kbd className="px-1.5 py-0.5 bg-panel-850/10 font-mono font-bold">
                 ↵
               </kbd>
               <span>відкрити</span>
@@ -286,7 +286,7 @@ export function GlobalSearch() {
               setQuery('');
               setResults([]);
             }}
-            className="text-xs text-muted-500 hover:text-timber-dark"
+            className="text-xs text-muted-500 hover:text-text-100"
           >
             Закрити
           </button>

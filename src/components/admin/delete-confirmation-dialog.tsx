@@ -50,7 +50,7 @@ export function DeleteConfirmationDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-timber-dark/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-panel-850/60 backdrop-blur-sm"
         onClick={!isDeleting ? onClose : undefined}
       />
 
@@ -66,7 +66,7 @@ export function DeleteConfirmationDialog({
         {!isDeleting && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-timber-dark/10 transition-colors"
+            className="absolute top-4 right-4 p-2 hover:bg-panel-850/10 transition-colors"
             aria-label="Закрити"
           >
             <X size={20} />
@@ -100,7 +100,7 @@ export function DeleteConfirmationDialog({
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="flex-1 px-6 py-3 bg-panel-900 text-timber-dark font-bold border border-line rounded-lg hover:bg-timber-dark hover:text-canvas disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 px-6 py-3 bg-panel-900 text-text-100 font-bold border border-line rounded-lg hover:bg-panel-850 hover:text-canvas disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {cancelText}
             </button>

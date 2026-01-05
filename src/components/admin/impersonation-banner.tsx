@@ -141,7 +141,7 @@ export default function ImpersonationBanner() {
       </div>
 
       {/* Warning stripe */}
-      <div className="h-1 bg-gradient-to-r from-canvas via-timber-beam to-canvas animate-pulse" />
+      <div className="h-1 bg-gradient-to-r from-canvas via-bronze to-canvas animate-pulse" />
     </div>
   );
 }

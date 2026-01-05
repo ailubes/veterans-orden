@@ -114,10 +114,10 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
         <div className="animate-pulse space-y-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex gap-3">
-              <div className="w-8 h-8 bg-timber-dark/10 rounded-full" />
+              <div className="w-8 h-8 bg-panel-850/10 rounded-full" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-timber-dark/10 w-3/4" />
-                <div className="h-3 bg-timber-dark/10 w-1/2" />
+                <div className="h-4 bg-panel-850/10 w-3/4" />
+                <div className="h-3 bg-panel-850/10 w-1/2" />
               </div>
             </div>
           ))}
@@ -174,15 +174,15 @@ export function MemberActivityTimeline({ memberId }: MemberActivityTimelineProps
           <div key={date}>
             {/* Date Header */}
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-px flex-1 bg-timber-dark/20" />
+              <div className="h-px flex-1 bg-panel-850/20" />
               <p className="text-xs font-bold text-muted-500 uppercase">{date}</p>
-              <div className="h-px flex-1 bg-timber-dark/20" />
+              <div className="h-px flex-1 bg-panel-850/20" />
             </div>
 
             {/* Activities for this date */}
             <div className="space-y-4 relative">
               {/* Vertical timeline line */}
-              <div className="absolute left-4 top-0 bottom-0 w-px bg-timber-dark/20" />
+              <div className="absolute left-4 top-0 bottom-0 w-px bg-panel-850/20" />
 
               {dateActivities.map((activity) => {
                 const Icon = ACTIVITY_ICONS[activity.type];

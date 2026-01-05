@@ -10,7 +10,7 @@ export default function NotFound() {
     <div
       style={{
         backgroundColor: 'var(--canvas)',
-        color: 'var(--timber-dark)',
+        color: 'var(--panel-850)',
         fontFamily: "'Space Mono', monospace",
         minHeight: '100vh',
       }}
@@ -43,7 +43,7 @@ export default function NotFound() {
               fontWeight: 800,
               lineHeight: 1,
               marginBottom: '40px',
-              color: 'var(--timber-dark)',
+              color: 'var(--panel-850)',
             }}
           >
             <span>4</span>

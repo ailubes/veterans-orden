@@ -73,7 +73,7 @@ export default async function ReferralsPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <div className="w-10 h-10 bg-timber-dark text-canvas flex items-center justify-center font-syne font-bold mb-3">
+            <div className="w-10 h-10 bg-panel-850 text-canvas flex items-center justify-center font-syne font-bold mb-3">
               1
             </div>
             <h3 className="font-syne font-bold mb-2">Поділіться посиланням</h3>
@@ -82,7 +82,7 @@ export default async function ReferralsPage() {
             </p>
           </div>
           <div>
-            <div className="w-10 h-10 bg-timber-dark text-canvas flex items-center justify-center font-syne font-bold mb-3">
+            <div className="w-10 h-10 bg-panel-850 text-canvas flex items-center justify-center font-syne font-bold mb-3">
               2
             </div>
             <h3 className="font-syne font-bold mb-2">Друг реєструється</h3>
@@ -92,7 +92,7 @@ export default async function ReferralsPage() {
             </p>
           </div>
           <div>
-            <div className="w-10 h-10 bg-timber-dark text-canvas flex items-center justify-center font-syne font-bold mb-3">
+            <div className="w-10 h-10 bg-panel-850 text-canvas flex items-center justify-center font-syne font-bold mb-3">
               3
             </div>
             <h3 className="font-syne font-bold mb-2">Отримуйте бали</h3>

@@ -92,8 +92,8 @@ export function TaskAnalytics() {
       <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-timber-dark/10 w-1/3" />
-          <div className="h-40 bg-timber-dark/10" />
+          <div className="h-6 bg-panel-850/10 w-1/3" />
+          <div className="h-40 bg-panel-850/10" />
         </div>
       </div>
     );
@@ -186,7 +186,7 @@ export function TaskAnalytics() {
                 }}
               >
                 {day.count > 0 && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-timber-dark text-canvas text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-panel-850 text-canvas text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                     {day.count} завд.
                     <br />
                     {formatDateShort(day.date)}
@@ -225,11 +225,11 @@ export function TaskAnalytics() {
                     index === 0 ? 'bg-yellow-500 text-white' :
                     index === 1 ? 'bg-gray-300 text-gray-700' :
                     index === 2 ? 'bg-orange-400 text-white' :
-                    'bg-timber-dark/10 text-muted-500'
+                    'bg-panel-850/10 text-muted-500'
                   }`}>
                     {index + 1}
                   </span>
-                  <div className="w-8 h-8 rounded-full bg-timber-dark/10 overflow-hidden flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-panel-850/10 overflow-hidden flex items-center justify-center">
                     {performer.avatarUrl ? (
                       <img src={performer.avatarUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -281,7 +281,7 @@ export function TaskAnalytics() {
                     <span className="text-sm">{status.label}</span>
                     <span className="font-mono text-sm font-bold">{count}</span>
                   </div>
-                  <div className="h-2 bg-timber-dark/10">
+                  <div className="h-2 bg-panel-850/10">
                     <div
                       className={`h-full ${status.color}`}
                       style={{ width: `${percentage}%` }}
@@ -311,7 +311,7 @@ export function TaskAnalytics() {
                     <span className="text-sm">{priorityLabels[priority]}</span>
                     <span className="font-mono text-sm font-bold">{count}</span>
                   </div>
-                  <div className="h-2 bg-timber-dark/10">
+                  <div className="h-2 bg-panel-850/10">
                     <div
                       className={`h-full ${priorityColors[priority]}`}
                       style={{ width: `${percentage}%` }}
@@ -325,7 +325,7 @@ export function TaskAnalytics() {
       </div>
 
       {/* Submissions Stats */}
-      <div className="bg-timber-dark text-canvas p-4 sm:p-6 relative">
+      <div className="bg-panel-850 text-canvas p-4 sm:p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 

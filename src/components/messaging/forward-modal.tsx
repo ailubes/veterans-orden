@@ -149,7 +149,7 @@ export function ForwardModal({
                   onClick={() => toggleConversation(conv.id)}
                   className={cn(
                     'w-full flex items-center gap-3 p-2 rounded-lg transition-colors',
-                    isSelected ? 'bg-bronze/20' : 'hover:bg-timber-light/50'
+                    isSelected ? 'bg-bronze/20' : 'hover:bg-panel-850/50'
                   )}
                 >
                   {/* Avatar */}
@@ -216,7 +216,7 @@ export function ForwardModal({
         <div className="flex items-center justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm text-muted-500 hover:text-timber-dark transition-colors"
+            className="px-4 py-2 text-sm text-muted-500 hover:text-text-100 transition-colors"
           >
             Скасувати
           </button>
@@ -227,7 +227,7 @@ export function ForwardModal({
               'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
               selectedConversations.size > 0 && !loading
                 ? 'bg-bronze text-canvas hover:bg-bronze/90'
-                : 'bg-timber-light text-muted-500 cursor-not-allowed'
+                : 'bg-panel-850 text-muted-500 cursor-not-allowed'
             )}
           >
             {loading ? (

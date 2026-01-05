@@ -121,7 +121,7 @@ export default function OblastsManagementTab() {
                     <h3 className="font-bold">{oblast.name}</h3>
                     <p className="text-xs text-muted-500 font-mono">{oblast.code}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-timber-dark/10 text-sm font-bold">
+                  <span className="inline-flex items-center gap-1 px-2 py-1 bg-panel-850/10 text-sm font-bold">
                     <Users className="w-4 h-4" />
                     {oblast.member_count}
                   </span>
@@ -135,7 +135,7 @@ export default function OblastsManagementTab() {
                       {oblast.regional_leaders.map((leader) => (
                         <span
                           key={leader.id}
-                          className="text-xs border border-timber-beam/30 px-2 py-1"
+                          className="text-xs border border-bronze/30 px-2 py-1"
                         >
                           {leader.first_name} {leader.last_name}
                         </span>
@@ -170,7 +170,7 @@ export default function OblastsManagementTab() {
               oblasts
                 .sort((a, b) => b.member_count - a.member_count)
                 .map((oblast) => (
-                  <TableRow key={oblast.id} className="border-b border-timber-beam/30">
+                  <TableRow key={oblast.id} className="border-b border-bronze/30">
                     <TableCell className="font-mono text-sm text-muted-500">
                       {oblast.code}
                     </TableCell>
@@ -189,7 +189,7 @@ export default function OblastsManagementTab() {
                           {oblast.regional_leaders.map((leader) => (
                             <div
                               key={leader.id}
-                              className="text-sm border border-timber-beam/30 px-2 py-1 inline-block mr-1 mb-1"
+                              className="text-sm border border-bronze/30 px-2 py-1 inline-block mr-1 mb-1"
                             >
                               {leader.first_name} {leader.last_name}
                             </div>
@@ -205,7 +205,7 @@ export default function OblastsManagementTab() {
       </div>
 
       {/* Info Note */}
-      <div className="mt-6 p-4 border-2 border-timber-beam bg-panel-900/50">
+      <div className="mt-6 p-4 border-2 border-bronze bg-panel-900/50">
         <p className="text-sm text-muted-500">
           <strong>Примітка:</strong> Області є фіксованими адміністративними одиницями України.
           Редагування назв областей наразі не підтримується. Регіональні лідери призначаються

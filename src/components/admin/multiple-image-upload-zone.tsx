@@ -183,7 +183,7 @@ export function MultipleImageUploadZone({
   return (
     <div className={`space-y-4 ${className}`}>
       <div className="flex items-center justify-between">
-        <label className="block text-sm font-medium text-[--timber-dark]">{label}</label>
+        <label className="block text-sm font-medium text-[--text-100]">{label}</label>
         <span className="text-sm text-gray-500">
           {value.length} / {maxImages}
         </span>
@@ -194,7 +194,7 @@ export function MultipleImageUploadZone({
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {value.map((url, index) => (
             <div key={`${url}-${index}`} className="relative group">
-              <div className="relative h-40 bg-gray-100 border-2 border-[--timber-dark] overflow-hidden">
+              <div className="relative h-40 bg-gray-100 border-2 border-[--text-100] overflow-hidden">
                 <Image
                   src={url}
                   alt={`Gallery image ${index + 1}`}
@@ -233,14 +233,14 @@ export function MultipleImageUploadZone({
             relative h-48 border-2 border-dashed rounded-lg
             flex flex-col items-center justify-center
             transition-all cursor-pointer
-            ${isDragging ? 'border-[--accent] bg-[--accent]/5' : 'border-[--timber-dark]/30 hover:border-[--accent]'}
+            ${isDragging ? 'border-[--accent] bg-[--accent]/5' : 'border-[--text-100]/30 hover:border-[--accent]'}
             ${isUploading ? 'pointer-events-none' : ''}
           `}
         >
           {isUploading ? (
             <div className="text-center">
               <Loader2 className="w-12 h-12 text-[--accent] animate-spin mx-auto mb-4" />
-              <p className="text-[--timber] font-medium">Завантаження...</p>
+              <p className="text-[--muted-500] font-medium">Завантаження...</p>
               <div className="mt-4 w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[--accent] transition-all duration-300"
@@ -251,8 +251,8 @@ export function MultipleImageUploadZone({
             </div>
           ) : (
             <>
-              <Upload className="w-12 h-12 text-[--timber-dark]/40 mb-4" />
-              <p className="text-[--timber-dark] font-medium mb-1">
+              <Upload className="w-12 h-12 text-[--text-100]/40 mb-4" />
+              <p className="text-[--text-100] font-medium mb-1">
                 Перетягніть зображення сюди
               </p>
               <p className="text-sm text-gray-500">або клацніть, щоб вибрати файли</p>

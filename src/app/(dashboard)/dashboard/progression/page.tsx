@@ -141,14 +141,14 @@ export default function ProgressionPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse space-y-8">
-          <div className="h-32 bg-timber-dark/10 rounded" />
+          <div className="h-32 bg-panel-850/10 rounded" />
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
-              <div className="h-40 bg-timber-dark/10 rounded" />
-              <div className="h-40 bg-timber-dark/10 rounded" />
+              <div className="h-40 bg-panel-850/10 rounded" />
+              <div className="h-40 bg-panel-850/10 rounded" />
             </div>
             <div className="space-y-4">
-              <div className="h-60 bg-timber-dark/10 rounded" />
+              <div className="h-60 bg-panel-850/10 rounded" />
             </div>
           </div>
         </div>
@@ -175,10 +175,10 @@ export default function ProgressionPage() {
         <div className="flex items-start gap-4 mb-6">
           <Trophy className="w-16 h-16 text-bronze flex-shrink-0" />
           <div>
-            <h1 className="font-syne text-4xl font-bold text-timber-dark mb-2">
+            <h1 className="font-syne text-4xl font-bold text-text-100 mb-2">
               Ваш шлях у Мережі
             </h1>
-            <p className="font-mono text-lg text-timber-dark/80">
+            <p className="font-mono text-lg text-text-100/80">
               Відстежуйте свій прогрес та досягнення
             </p>
           </div>
@@ -192,11 +192,11 @@ export default function ProgressionPage() {
                 <span className="font-syne text-3xl font-bold text-bronze">
                   {data.currentRole.displayName}
                 </span>
-                <span className="font-mono text-sm text-timber-dark/60">
+                <span className="font-mono text-sm text-text-100/60">
                   Рівень {data.currentRole.level}
                 </span>
               </div>
-              <p className="font-mono text-sm text-timber-dark/80">
+              <p className="font-mono text-sm text-text-100/80">
                 {data.currentRole.description}
               </p>
             </div>
@@ -205,14 +205,14 @@ export default function ProgressionPage() {
             {data.progress?.nextRole && (
               <div className="min-w-[200px]">
                 <div className="flex justify-between items-baseline mb-2">
-                  <span className="font-mono text-xs text-timber-dark/60">
+                  <span className="font-mono text-xs text-text-100/60">
                     До наступного рівня
                   </span>
-                  <span className="font-mono text-sm font-semibold text-timber-dark">
+                  <span className="font-mono text-sm font-semibold text-text-100">
                     {data.progress.progressPercent}%
                   </span>
                 </div>
-                <div className="h-2 bg-timber-dark/10 rounded-full overflow-hidden">
+                <div className="h-2 bg-panel-850/10 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-bronze rounded-full transition-all duration-500"
                     style={{ width: `${data.progress.progressPercent}%` }}
@@ -230,8 +230,8 @@ export default function ProgressionPage() {
           {/* Current Tasks */}
           <section>
             <div className="flex items-center gap-2 mb-4">
-              <Target className="w-6 h-6 text-timber-dark" />
-              <h2 className="font-syne text-2xl font-bold text-timber-dark">
+              <Target className="w-6 h-6 text-text-100" />
+              <h2 className="font-syne text-2xl font-bold text-text-100">
                 Поточні завдання
               </h2>
             </div>
@@ -296,8 +296,8 @@ export default function ProgressionPage() {
           {data.achievements.length > 0 && (
             <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Trophy className="w-5 h-5 text-timber-dark" />
-                <h3 className="font-syne text-lg font-bold text-timber-dark">
+                <Trophy className="w-5 h-5 text-text-100" />
+                <h3 className="font-syne text-lg font-bold text-text-100">
                   Останні досягнення
                 </h3>
               </div>
@@ -310,17 +310,17 @@ export default function ProgressionPage() {
                     className="
                       w-full text-left
                       flex items-center gap-3 p-3
-                      border border-line/20 bg-timber-dark/5
-                      hover:bg-timber-dark/10
+                      border border-line/20 bg-panel-850/5
+                      hover:bg-panel-850/10
                       transition-colors
                     "
                   >
                     <Trophy className="w-5 h-5 text-bronze flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <div className="font-mono text-sm font-semibold text-timber-dark truncate">
+                      <div className="font-mono text-sm font-semibold text-text-100 truncate">
                         {achievement.title}
                       </div>
-                      <div className="font-mono text-xs text-timber-dark/60">
+                      <div className="font-mono text-xs text-text-100/60">
                         {new Date(achievement.earnedAt).toLocaleDateString('uk-UA')}
                       </div>
                     </div>
@@ -335,7 +335,7 @@ export default function ProgressionPage() {
             <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-bronze" />
-                <h3 className="font-syne text-lg font-bold text-timber-dark">
+                <h3 className="font-syne text-lg font-bold text-text-100">
                   Наступний рівень
                 </h3>
               </div>
@@ -344,21 +344,21 @@ export default function ProgressionPage() {
                 <div className="font-syne text-2xl font-bold text-bronze mb-1">
                   {data.progress.nextRoleLabel}
                 </div>
-                <div className="font-mono text-xs text-timber-dark/60">
+                <div className="font-mono text-xs text-text-100/60">
                   Рівень {data.progress.nextRoleLevel}
                 </div>
               </div>
 
               {data.newPrivileges.length > 0 && (
                 <>
-                  <h4 className="font-mono text-sm font-semibold text-timber-dark mb-3">
+                  <h4 className="font-mono text-sm font-semibold text-text-100 mb-3">
                     Нові можливості:
                   </h4>
                   <ul className="space-y-2">
                     {data.newPrivileges.map((priv) => (
                       <li
                         key={priv}
-                        className="flex items-start gap-2 font-mono text-sm text-timber-dark/80"
+                        className="flex items-start gap-2 font-mono text-sm text-text-100/80"
                       >
                         <span className="text-bronze">✨</span>
                         {PRIVILEGE_LABELS[priv] || priv}

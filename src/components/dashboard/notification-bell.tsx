@@ -46,8 +46,8 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
 
   const recentNotifications = notifications.slice(0, 5);
 
-  const textColor = variant === 'dark' ? 'text-canvas' : 'text-timber-dark';
-  const hoverBg = variant === 'dark' ? 'hover:bg-panel-900/10' : 'hover:bg-timber-dark/10';
+  const textColor = variant === 'dark' ? 'text-canvas' : 'text-text-100';
+  const hoverBg = variant === 'dark' ? 'hover:bg-panel-900/10' : 'hover:bg-panel-850/10';
 
   const handleNotificationClick = (notification: Notification) => {
     setSelectedNotification(notification);
@@ -108,7 +108,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
                 <p className="text-sm text-muted-500">Немає сповіщень</p>
               </div>
             ) : (
-              <div className="divide-y divide-timber-dark/5">
+              <div className="divide-y divide-line/5">
                 {recentNotifications.map((notification) => (
                   <NotificationItem
                     key={notification.id}
@@ -123,7 +123,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
           </div>
 
           {/* Footer */}
-          <DropdownMenuSeparator className="bg-timber-dark/10" />
+          <DropdownMenuSeparator className="bg-panel-850/10" />
           <Link
             href="/dashboard/notifications"
             className="block p-3 text-center text-sm font-medium text-bronze hover:bg-bronze/5 transition-colors"
@@ -155,7 +155,7 @@ export function NotificationBell({ variant = 'dark', className = '' }: Notificat
               </DialogHeader>
 
               <div className="mt-2">
-                <p className="text-sm text-timber-dark whitespace-pre-wrap">
+                <p className="text-sm text-text-100 whitespace-pre-wrap">
                   {selectedNotification.message}
                 </p>
 

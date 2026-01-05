@@ -20,8 +20,8 @@ export default function AdminMarketplacePage() {
           className="bg-white border border-line rounded-lg p-8 hover:border-bronze transition-colors group"
         >
           <div className="flex items-start gap-4">
-            <div className="p-4 bg-timber-dark/10 group-hover:bg-bronze/10 transition-colors">
-              <Package size={32} className="text-timber-dark group-hover:text-bronze transition-colors" />
+            <div className="p-4 bg-panel-850/10 group-hover:bg-bronze/10 transition-colors">
+              <Package size={32} className="text-text-100 group-hover:text-bronze transition-colors" />
             </div>
             <div className="flex-1">
               <h2 className="font-syne text-2xl font-bold mb-2 group-hover:text-bronze transition-colors">
@@ -43,8 +43,8 @@ export default function AdminMarketplacePage() {
           className="bg-white border border-line rounded-lg p-8 hover:border-bronze transition-colors group"
         >
           <div className="flex items-start gap-4">
-            <div className="p-4 bg-timber-dark/10 group-hover:bg-bronze/10 transition-colors">
-              <ShoppingCart size={32} className="text-timber-dark group-hover:text-bronze transition-colors" />
+            <div className="p-4 bg-panel-850/10 group-hover:bg-bronze/10 transition-colors">
+              <ShoppingCart size={32} className="text-text-100 group-hover:text-bronze transition-colors" />
             </div>
             <div className="flex-1">
               <h2 className="font-syne text-2xl font-bold mb-2 group-hover:text-bronze transition-colors">
@@ -62,7 +62,7 @@ export default function AdminMarketplacePage() {
       </div>
 
       {/* Info Section */}
-      <div className="mt-8 bg-timber-dark/5 border border-line rounded-lg/20 p-6">
+      <div className="mt-8 bg-panel-850/5 border border-line rounded-lg/20 p-6">
         <h3 className="font-syne text-lg font-bold mb-3">Швидкі підказки</h3>
         <ul className="space-y-2 text-sm text-muted-500">
           <li className="flex items-start gap-2">

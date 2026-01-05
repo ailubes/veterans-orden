@@ -106,7 +106,7 @@ export function NotificationHistory() {
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className="p-4 border-b border-line/20 last:border-b-0 hover:bg-timber-dark/5 transition-colors"
+            className="p-4 border-b border-line/20 last:border-b-0 hover:bg-panel-850/5 transition-colors"
           >
             {/* Header */}
             <div className="flex items-start justify-between gap-3 mb-2">

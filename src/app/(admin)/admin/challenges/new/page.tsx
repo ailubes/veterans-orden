@@ -300,7 +300,7 @@ export default function NewChallengePage() {
         </div>
 
         {/* Summary */}
-        <div className="bg-timber-dark text-canvas p-4 relative">
+        <div className="bg-panel-850 text-canvas p-4 relative">
           <div className="joint joint-tl" />
           <p className="label text-bronze mb-2">ПІДСУМОК</p>
           <p className="text-sm">
