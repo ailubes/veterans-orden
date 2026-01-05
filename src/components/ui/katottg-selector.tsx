@@ -203,23 +203,23 @@ export function KatottgSelector({
   return (
     <div className="w-full">
       {label && (
-        <label className="block font-mono text-xs uppercase tracking-wider text-timber-dark mb-2">
+        <label className="block font-mono text-xs uppercase tracking-wider text-muted-500 mb-2">
           <MapPin className="w-3 h-3 inline mr-1" />
-          {label} {required && <span className="text-red-600">*</span>}
+          {label} {required && <span className="text-red-400">*</span>}
         </label>
       )}
 
       {/* Selected Location Display */}
       {selectedDetails && (
-        <div className="mb-3 p-3 bg-green-50 border border-green-200">
+        <div className="mb-3 p-3 bg-bronze/10 border border-bronze/30 rounded-lg">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-green-600">✓</span>
-                <span className="font-medium">
+                <span className="text-bronze">✓</span>
+                <span className="font-medium text-text-100">
                   {CATEGORY_ICONS[selectedDetails.category]} {selectedDetails.name}
                 </span>
-                <span className="text-xs px-1.5 py-0.5 bg-green-100 rounded">
+                <span className="text-xs px-1.5 py-0.5 bg-bronze/20 text-bronze rounded">
                   {CATEGORY_LABELS[selectedDetails.category]}
                 </span>
               </div>
@@ -245,7 +245,7 @@ export function KatottgSelector({
               <button
                 type="button"
                 onClick={handleClear}
-                className="text-muted-500 hover:text-timber-dark p-1"
+                className="text-muted-500 hover:text-text-100 p-1 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -271,7 +271,7 @@ export function KatottgSelector({
               }}
               placeholder="Почніть вводити назву міста або села..."
               disabled={disabled}
-              className={`w-full pl-10 pr-10 py-3 bg-panel-900 border-2 font-mono text-sm focus:outline-none transition-colors ${
+              className={`w-full pl-10 pr-10 py-3 bg-panel-850 border rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:outline-none transition-colors ${
                 error
                   ? 'border-bronze focus:border-bronze'
                   : 'border-line focus:border-bronze'
@@ -284,7 +284,7 @@ export function KatottgSelector({
               <button
                 type="button"
                 onClick={handleClear}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-timber-dark/10 rounded"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-panel-850 rounded transition-colors"
               >
                 <X className="w-4 h-4 text-muted-500" />
               </button>
@@ -303,7 +303,7 @@ export function KatottgSelector({
                 <div>
                   {Object.entries(groupedResults).map(([oblast, items]) => (
                     <div key={oblast}>
-                      <div className="px-3 py-2 bg-timber-dark/5 text-xs font-bold text-muted-500 uppercase tracking-wider sticky top-0">
+                      <div className="px-3 py-2 bg-panel-850 text-xs font-bold text-muted-500 uppercase tracking-wider sticky top-0">
                         {oblast}
                       </div>
                       {items.map((result) => (
@@ -311,7 +311,7 @@ export function KatottgSelector({
                           key={result.code}
                           type="button"
                           onClick={() => handleSelect(result)}
-                          className="w-full px-4 py-3 text-left hover:bg-timber-dark/5 border-b border-line/10 last:border-b-0 transition-colors"
+                          className="w-full px-4 py-3 text-left hover:bg-panel-850 border-b border-line/30 last:border-b-0 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start gap-2">
                             <span className="text-lg flex-shrink-0">
@@ -319,8 +319,8 @@ export function KatottgSelector({
                             </span>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-medium">{result.name}</span>
-                                <span className="text-xs px-1.5 py-0.5 bg-timber-dark/10 rounded">
+                                <span className="font-medium text-text-100">{result.name}</span>
+                                <span className="text-xs px-1.5 py-0.5 bg-panel-850 text-muted-500 rounded">
                                   {CATEGORY_LABELS[result.category]}
                                 </span>
                               </div>
