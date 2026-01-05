@@ -120,13 +120,9 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
 
   if (loading) {
     return (
-      <div className={`border-2 border-timber-dark p-6 bg-canvas card-with-joints ${className}`}>
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-        <div className="joint joint-bl" />
-        <div className="joint joint-br" />
+      <div className={`border border-line p-6 bg-panel-900 rounded-lg ${className}`}>
         <div className="flex items-center justify-center min-h-[200px]">
-          <Loader2 className="w-8 h-8 animate-spin text-accent" />
+          <Loader2 className="w-8 h-8 animate-spin text-bronze" />
         </div>
       </div>
     );
@@ -134,14 +130,10 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
 
   if (!progress) {
     return (
-      <div className={`border-2 border-timber-dark p-6 bg-canvas card-with-joints ${className}`}>
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-        <div className="joint joint-bl" />
-        <div className="joint joint-br" />
+      <div className={`border border-line p-6 bg-panel-900 rounded-lg ${className}`}>
         <div className="text-center py-4">
-          <p className="text-amber-600 font-medium mb-2">Дані про прогрес недоступні</p>
-          <p className="text-sm text-timber-beam">
+          <p className="text-amber-500 font-medium mb-2">Дані про прогрес недоступні</p>
+          <p className="text-sm text-muted-500">
             Система прогресу ролей налаштовується. Спробуйте пізніше.
           </p>
         </div>
@@ -154,16 +146,11 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
   );
 
   return (
-    <div className={`border-2 border-timber-dark p-6 bg-canvas card-with-joints ${className}`}>
-      <div className="joint joint-tl" />
-      <div className="joint joint-tr" />
-      <div className="joint joint-bl" />
-      <div className="joint joint-br" />
-
+    <div className={`border border-line p-6 bg-panel-900 rounded-lg ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="font-syne font-bold text-lg">Ваш рівень у Мережі</h3>
-        <TrendingUp className="w-5 h-5 text-accent" />
+        <h3 className="font-syne font-bold text-lg text-text-100">Ваш рівень у Мережі</h3>
+        <TrendingUp className="w-5 h-5 text-bronze" />
       </div>
 
       {/* Current Role */}
@@ -171,25 +158,25 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
         <div className="flex items-center gap-3 mb-2">
           <RoleBadge membershipRole={progress.currentRole} size="lg" />
         </div>
-        <p className="text-sm text-timber-beam">
+        <p className="text-sm text-muted-500">
           {MEMBERSHIP_ROLES[progress.currentRole]?.description}
         </p>
       </div>
 
       {/* Stats Summary */}
       {stats && (
-        <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-timber-dark/5 border border-timber-dark">
+        <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-panel-850 border border-line rounded">
           <div className="text-center">
-            <div className="text-2xl font-bold text-timber-dark">
+            <div className="text-2xl font-bold text-text-100">
               {stats.directReferrals.total}
             </div>
-            <div className="text-xs text-timber-beam">Прямих рефералів</div>
+            <div className="text-xs text-muted-500">Прямих рефералів</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-timber-dark">
+            <div className="text-2xl font-bold text-text-100">
               {stats.totalTreeCount}
             </div>
-            <div className="text-xs text-timber-beam">Всього у дереві</div>
+            <div className="text-xs text-muted-500">Всього у дереві</div>
           </div>
         </div>
       )}
@@ -198,18 +185,18 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
       {progress.nextRole && (
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-sm font-medium">Наступний рівень:</span>
+            <span className="text-sm font-medium text-text-100">Наступний рівень:</span>
             <RoleBadge membershipRole={progress.nextRole} size="sm" />
           </div>
 
           {/* Progress Bar */}
-          <div className="relative h-3 bg-timber-dark/10 rounded-full overflow-hidden mb-4">
+          <div className="relative h-3 bg-panel-850 rounded-full overflow-hidden mb-4">
             <div
-              className="absolute inset-y-0 left-0 bg-accent transition-all duration-500"
+              className="absolute inset-y-0 left-0 bg-bronze transition-all duration-500"
               style={{ width: `${progress.progressPercent}%` }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[10px] font-bold text-timber-dark">
+              <span className="text-[10px] font-bold text-text-100">
                 {progress.progressPercent}%
               </span>
             </div>
@@ -220,16 +207,16 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
             {progress.requirements.map((req, index) => (
               <div
                 key={index}
-                className={`flex items-center gap-2 text-sm p-2 border ${
+                className={`flex items-center gap-2 text-sm p-2 border rounded ${
                   req.isMet
-                    ? 'bg-green-50 border-green-200 text-green-700'
-                    : 'bg-canvas border-timber-dark/20'
+                    ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                    : 'bg-panel-850 border-line text-text-200'
                 }`}
               >
                 {req.isMet ? (
-                  <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
                 ) : (
-                  <X className="w-4 h-4 text-timber-beam flex-shrink-0" />
+                  <X className="w-4 h-4 text-muted-500 flex-shrink-0" />
                 )}
                 <span className="flex-1">{req.label}</span>
                 <span className="font-mono text-xs">
@@ -241,10 +228,10 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
 
           {/* New Privileges Preview */}
           {newPrivileges.length > 0 && (
-            <div className="mt-4 p-3 bg-accent/10 border border-accent">
+            <div className="mt-4 p-3 bg-bronze/10 border border-bronze/30 rounded">
               <div className="flex items-center gap-2 mb-2">
-                <Gift className="w-4 h-4 text-accent" />
-                <span className="text-sm font-medium text-accent">
+                <Gift className="w-4 h-4 text-bronze" />
+                <span className="text-sm font-medium text-bronze">
                   Нові привілеї:
                 </span>
               </div>
@@ -252,7 +239,7 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
                 {newPrivileges.map((privilege) => (
                   <span
                     key={privilege}
-                    className="text-xs bg-canvas px-2 py-0.5 border border-accent/30"
+                    className="text-xs bg-panel-850 text-text-200 px-2 py-0.5 border border-line rounded"
                   >
                     {PRIVILEGE_LABELS[privilege as keyof typeof PRIVILEGE_LABELS] || privilege}
                   </span>
@@ -265,10 +252,10 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
 
       {/* Max Level Message */}
       {!progress.nextRole && (
-        <div className="mb-6 p-4 bg-amber-50 border-2 border-amber-400 text-center">
-          <Sparkles className="w-8 h-8 text-amber-500 mx-auto mb-2" />
-          <p className="font-bold text-amber-800">Ви досягли найвищого рівня!</p>
-          <p className="text-sm text-amber-700">
+        <div className="mb-6 p-4 bg-bronze/10 border border-bronze/30 text-center rounded">
+          <Sparkles className="w-8 h-8 text-bronze mx-auto mb-2" />
+          <p className="font-bold text-text-100">Ви досягли найвищого рівня!</p>
+          <p className="text-sm text-muted-500">
             Дякуємо за вашу відданість Мережі Вільних Людей.
           </p>
         </div>
@@ -278,10 +265,7 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
       {progress.nextRole && (
         <Link
           href="/dashboard/progression"
-          className="
-            w-full btn flex items-center justify-center gap-2
-            btn-primary
-          "
+          className="w-full flex items-center justify-center gap-2 bg-bronze text-bg-950 px-6 py-3 font-bold text-sm hover:bg-bronze/90 transition-colors rounded"
         >
           <TrendingUp className="w-4 h-4" />
           {progress.isEligible ? 'Підвищити рівень' : 'Переглянути завдання'}

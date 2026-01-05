@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Calendar, MapPin, Users, Ticket, Clock, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, Users, Ticket, Clock, ArrowRight, Loader2 } from 'lucide-react';
 import { pointsToUAH } from '@/lib/points/constants';
 import { formatDateTimeWithLocal } from '@/lib/utils';
 
@@ -74,9 +74,12 @@ export default function MarketplaceEventsPage() {
     return (
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="font-syne text-3xl font-bold">Квитки на події</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// КВИТКИ</p>
+          <h1 className="font-syne text-3xl font-bold text-text-100">Квитки на події</h1>
         </div>
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="animate-spin text-bronze" size={32} />
+        </div>
       </div>
     );
   }
@@ -85,22 +88,23 @@ export default function MarketplaceEventsPage() {
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-syne text-3xl font-bold mb-2">Квитки на події</h1>
-        <p className="text-timber-beam">Придбайте квитки на платні події за бали</p>
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// КВИТКИ</p>
+        <h1 className="font-syne text-3xl font-bold text-text-100 mb-2">Квитки на події</h1>
+        <p className="text-muted-500">Придбайте квитки на платні події за бали</p>
       </div>
 
       {/* Events Grid */}
       {error ? (
-        <div className="bg-red-50 border-2 border-red-600 p-4 text-red-600">
+        <div className="bg-red-500/10 border border-red-500 p-4 text-red-400 rounded-lg">
           {error}
         </div>
       ) : events.length === 0 ? (
-        <div className="text-center py-12 bg-white border-2 border-timber-dark">
-          <Calendar className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam mb-2">Наразі немає платних подій</p>
+        <div className="text-center py-12 bg-panel-900 border border-line rounded-lg">
+          <Calendar className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500 mb-2">Наразі немає платних подій</p>
           <Link
             href="/dashboard/events"
-            className="text-accent hover:underline inline-flex items-center gap-2 mt-4"
+            className="text-bronze hover:underline inline-flex items-center gap-2 mt-4"
           >
             Переглянути всі події
             <ArrowRight size={16} />
@@ -116,7 +120,7 @@ export default function MarketplaceEventsPage() {
             return (
               <div
                 key={event.id}
-                className="bg-white border-2 border-timber-dark overflow-hidden hover:shadow-lg transition-shadow"
+                className="bg-panel-900 border border-line rounded-lg overflow-hidden hover:border-bronze/50 transition-colors"
               >
                 {/* Event Image */}
                 {event.imageUrl ? (
@@ -128,19 +132,19 @@ export default function MarketplaceEventsPage() {
                     />
                   </div>
                 ) : (
-                  <div className="h-48 bg-timber-dark/10 flex items-center justify-center">
-                    <Calendar size={48} className="text-timber-beam" />
+                  <div className="h-48 bg-panel-850 flex items-center justify-center">
+                    <Calendar size={48} className="text-muted-500" />
                   </div>
                 )}
 
                 <div className="p-6">
                   {/* Title */}
-                  <h3 className="font-syne text-xl font-bold mb-2 line-clamp-2">
+                  <h3 className="font-syne text-xl font-bold text-text-100 mb-2 line-clamp-2">
                     {event.title}
                   </h3>
 
                   {/* Date & Time - shows both Kyiv and local time */}
-                  <div className="flex items-center gap-2 text-sm text-timber-beam mb-3">
+                  <div className="flex items-center gap-2 text-sm text-muted-500 mb-3">
                     <Clock size={16} />
                     <span>
                       {formatDateTimeWithLocal(event.startDate)}
@@ -148,7 +152,7 @@ export default function MarketplaceEventsPage() {
                   </div>
 
                   {/* Location */}
-                  <div className="flex items-center gap-2 text-sm text-timber-beam mb-4">
+                  <div className="flex items-center gap-2 text-sm text-muted-500 mb-4">
                     <MapPin size={16} />
                     <span>
                       {event.isOnline
@@ -159,46 +163,46 @@ export default function MarketplaceEventsPage() {
 
                   {/* Description */}
                   {event.description && (
-                    <p className="text-sm text-timber-beam mb-4 line-clamp-2">
+                    <p className="text-sm text-muted-500 mb-4 line-clamp-2">
                       {event.description}
                     </p>
                   )}
 
                   {/* Attendees / Tickets */}
                   <div className="flex items-center gap-2 text-sm mb-4">
-                    <Users size={16} className="text-timber-beam" />
-                    <span className="text-timber-beam">
+                    <Users size={16} className="text-muted-500" />
+                    <span className="text-muted-500">
                       {event.goingCount} йде
                     </span>
                     {event.ticketQuantity && (
-                      <span className="text-timber-beam">
+                      <span className="text-muted-500">
                         • {remaining} квитків
                       </span>
                     )}
                   </div>
 
                   {/* Price */}
-                  <div className="border-t-2 border-timber-dark/10 pt-4 mb-4">
+                  <div className="border-t border-line pt-4 mb-4">
                     <div className="flex items-baseline justify-between">
                       <div>
-                        <p className="font-syne text-2xl font-bold text-accent">
+                        <p className="font-syne text-2xl font-bold text-bronze">
                           {event.ticketPricePoints}
                         </p>
-                        <p className="text-xs text-timber-beam">
+                        <p className="text-xs text-muted-500">
                           ≈ {uahValue.toFixed(0)} грн
                         </p>
                       </div>
-                      <Ticket size={24} className="text-timber-beam" />
+                      <Ticket size={24} className="text-muted-500" />
                     </div>
                   </div>
 
                   {/* Action Button */}
                   <Link
                     href={`/dashboard/events/${event.id}`}
-                    className={`w-full py-3 px-4 font-bold text-center transition-colors flex items-center justify-center gap-2 ${
+                    className={`w-full py-3 px-4 font-bold text-center transition-colors flex items-center justify-center gap-2 rounded ${
                       soldOut
-                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                        : 'bg-accent text-canvas hover:bg-accent/90'
+                        ? 'bg-panel-850 text-muted-500 cursor-not-allowed'
+                        : 'bg-bronze text-bg-950 hover:bg-bronze/90'
                     }`}
                   >
                     {soldOut ? 'Квитки розпродані' : 'Придбати квиток'}

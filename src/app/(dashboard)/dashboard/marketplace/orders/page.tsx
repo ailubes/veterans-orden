@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Package, Clock, CheckCircle, XCircle, Truck } from 'lucide-react';
+import { Package, Clock, CheckCircle, XCircle, Truck, Loader2 } from 'lucide-react';
 import { pointsToUAH } from '@/lib/points/constants';
 import type { OrderWithItems, OrderStatus } from '@/lib/marketplace/types';
 
@@ -44,17 +44,17 @@ export default function OrdersPage() {
     switch (status) {
       case 'pending':
       case 'confirmed':
-        return <Clock className="text-yellow-600" size={20} />;
+        return <Clock className="text-yellow-400" size={20} />;
       case 'processing':
       case 'shipped':
-        return <Truck className="text-blue-600" size={20} />;
+        return <Truck className="text-blue-400" size={20} />;
       case 'delivered':
-        return <CheckCircle className="text-green-600" size={20} />;
+        return <CheckCircle className="text-green-400" size={20} />;
       case 'cancelled':
       case 'refunded':
-        return <XCircle className="text-red-600" size={20} />;
+        return <XCircle className="text-red-400" size={20} />;
       default:
-        return <Package className="text-timber-beam" size={20} />;
+        return <Package className="text-muted-500" size={20} />;
     }
   };
 
@@ -83,17 +83,17 @@ export default function OrdersPage() {
     switch (status) {
       case 'pending':
       case 'confirmed':
-        return 'text-yellow-600 bg-yellow-600/10';
+        return 'text-yellow-400 bg-yellow-500/10';
       case 'processing':
       case 'shipped':
-        return 'text-blue-600 bg-blue-600/10';
+        return 'text-blue-400 bg-blue-500/10';
       case 'delivered':
-        return 'text-green-600 bg-green-600/10';
+        return 'text-green-400 bg-green-500/10';
       case 'cancelled':
       case 'refunded':
-        return 'text-red-600 bg-red-600/10';
+        return 'text-red-400 bg-red-500/10';
       default:
-        return 'text-timber-beam bg-timber-dark/10';
+        return 'text-muted-500 bg-panel-850';
     }
   };
 
@@ -101,10 +101,12 @@ export default function OrdersPage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <p className="label mb-2">ЗАМОВЛЕННЯ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Мої замовлення</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// ЗАМОВЛЕННЯ</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Мої замовлення</h1>
         </div>
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="animate-spin text-bronze" size={32} />
+        </div>
       </div>
     );
   }
@@ -113,10 +115,10 @@ export default function OrdersPage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <p className="label mb-2">ЗАМОВЛЕННЯ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Мої замовлення</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// ЗАМОВЛЕННЯ</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Мої замовлення</h1>
         </div>
-        <div className="text-center py-12 text-red-600">{error}</div>
+        <div className="text-center py-12 bg-red-500/10 border border-red-500 text-red-400 rounded-lg">{error}</div>
       </div>
     );
   }
@@ -125,18 +127,18 @@ export default function OrdersPage() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <p className="label mb-2">ЗАМОВЛЕННЯ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold mb-4">Мої замовлення</h1>
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// ЗАМОВЛЕННЯ</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100 mb-4">Мої замовлення</h1>
         <div className="flex gap-4">
           <Link
             href="/dashboard/marketplace"
-            className="inline-flex items-center gap-2 bg-timber-dark text-canvas px-4 py-2 font-bold hover:bg-timber-dark/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-panel-850 text-text-100 px-4 py-2 font-bold hover:bg-panel-900 transition-colors rounded"
           >
             Перейти до магазину
           </Link>
           <Link
             href="/dashboard/marketplace/checkout"
-            className="inline-flex items-center gap-2 bg-accent text-canvas px-4 py-2 font-bold hover:bg-accent/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-bronze text-bg-950 px-4 py-2 font-bold hover:bg-bronze/90 transition-colors rounded"
           >
             Кошик
           </Link>
@@ -145,13 +147,12 @@ export default function OrdersPage() {
 
       {/* Orders List */}
       {orders.length === 0 ? (
-        <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint joint-tl" />
-          <Package className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam mb-6">У вас ще немає замовлень</p>
+        <div className="text-center py-12 bg-panel-900 border border-line rounded-lg">
+          <Package className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500 mb-6">У вас ще немає замовлень</p>
           <Link
             href="/dashboard/marketplace"
-            className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-bronze text-bg-950 px-6 py-3 font-bold hover:bg-bronze/90 transition-colors rounded"
           >
             Перейти до магазину
           </Link>
@@ -165,26 +166,21 @@ export default function OrdersPage() {
               <Link
                 key={order.id}
                 href={`/dashboard/marketplace/orders/${order.id}`}
-                className="block bg-canvas border-2 border-timber-dark p-6 relative hover:border-accent transition-colors"
+                className="block bg-panel-900 border border-line p-6 rounded-lg hover:border-bronze/50 transition-colors"
               >
-                <div className="joint joint-tl" />
-                <div className="joint joint-tr" />
-                <div className="joint joint-bl" />
-                <div className="joint joint-br" />
-
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <p className="font-syne text-xl font-bold">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      <p className="font-syne text-xl font-bold text-text-100">
                         Замовлення #{order.orderNumber}
                       </p>
-                      <div className={`px-3 py-1 text-xs font-bold flex items-center gap-1 ${getStatusColor(order.status)}`}>
+                      <div className={`px-3 py-1 text-xs font-bold flex items-center gap-1 rounded ${getStatusColor(order.status)}`}>
                         {getStatusIcon(order.status)}
                         {getStatusLabel(order.status)}
                       </div>
                     </div>
 
-                    <p className="text-sm text-timber-beam mb-3">
+                    <p className="text-sm text-muted-500 mb-3">
                       {new Date(order.createdAt).toLocaleDateString('uk-UA', {
                         day: 'numeric',
                         month: 'long',
@@ -198,13 +194,13 @@ export default function OrdersPage() {
                       {order.items.slice(0, 3).map((item) => (
                         <span
                           key={item.id}
-                          className="text-sm bg-timber-dark/5 px-2 py-1"
+                          className="text-sm bg-panel-850 text-text-200 px-2 py-1 rounded"
                         >
                           {item.productName} × {item.quantity}
                         </span>
                       ))}
                       {order.items.length > 3 && (
-                        <span className="text-sm text-timber-beam px-2 py-1">
+                        <span className="text-sm text-muted-500 px-2 py-1">
                           +{order.items.length - 3} ще
                         </span>
                       )}
@@ -212,13 +208,13 @@ export default function OrdersPage() {
                   </div>
 
                   <div className="text-right">
-                    <p className="font-syne text-2xl font-bold text-accent mb-1">
+                    <p className="font-syne text-2xl font-bold text-bronze mb-1">
                       {order.totalPoints}
                     </p>
-                    <p className="text-sm text-timber-beam">
+                    <p className="text-sm text-muted-500">
                       балів (≈ {uahValue.toFixed(0)} грн)
                     </p>
-                    <p className="text-xs text-timber-beam mt-2">
+                    <p className="text-xs text-muted-500 mt-2">
                       {order.items.length} {order.items.length === 1 ? 'товар' : 'товарів'}
                     </p>
                   </div>
@@ -226,22 +222,22 @@ export default function OrdersPage() {
 
                 {/* Shipping Info */}
                 {order.requiresShipping && (
-                  <div className="mt-4 pt-4 border-t border-timber-dark/20">
-                    <p className="text-sm text-timber-beam">
+                  <div className="mt-4 pt-4 border-t border-line">
+                    <p className="text-sm text-muted-500">
                       {order.novaPoshtaBranch ? (
                         <>
-                          <strong>Доставка:</strong> Нова Пошта,{' '}
+                          <strong className="text-text-200">Доставка:</strong> Нова Пошта,{' '}
                           {order.novaPoshtaCity}, {order.novaPoshtaBranch}
                         </>
                       ) : (
                         <>
-                          <strong>Доставка:</strong> За адресою
+                          <strong className="text-text-200">Доставка:</strong> За адресою
                         </>
                       )}
                     </p>
                     {order.trackingNumber && (
-                      <p className="text-sm text-timber-beam mt-1">
-                        <strong>ТТН:</strong> {order.trackingNumber}
+                      <p className="text-sm text-muted-500 mt-1">
+                        <strong className="text-text-200">ТТН:</strong> {order.trackingNumber}
                       </p>
                     )}
                   </div>

@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     const { data: profile, error } = await supabase
       .from('users')
       .select('id, first_name, last_name, avatar_url, email, membership_role, staff_role')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (error || !profile) {

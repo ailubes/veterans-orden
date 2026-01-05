@@ -6,8 +6,9 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { ThemeToggleCompact } from '@/components/ui/theme-toggle';
 import { LanguageSwitcherCompact } from '@/components/ui/language-switcher';
-import { HeavyCta } from '@/components/ui/heavy-cta';
 import { Scaffold } from './skeleton-grid';
+import { AuthNav } from './auth-nav';
+import { MobileAuthNav } from './mobile-auth-nav';
 
 interface NavItem {
   href: string;
@@ -141,14 +142,7 @@ export function NavigationNew() {
           <div className="nav-controls col-span-3">
             <LanguageSwitcherCompact />
             <ThemeToggleCompact />
-            <HeavyCta
-              href="/join"
-              variant="primary"
-              size="sm"
-              className="nav-cta"
-            >
-              ПРИЄДНАТИСЯ
-            </HeavyCta>
+            <AuthNav />
           </div>
 
           {/* Mobile Menu Button */}
@@ -204,15 +198,7 @@ export function NavigationNew() {
             <ThemeToggleCompact />
           </div>
 
-          <HeavyCta
-            href="/join"
-            variant="primary"
-            size="lg"
-            fullWidth
-            onClick={() => setIsMenuOpen(false)}
-          >
-            ПРИЄДНАТИСЯ
-          </HeavyCta>
+          <MobileAuthNav onClose={() => setIsMenuOpen(false)} />
         </div>
       </div>
     </>

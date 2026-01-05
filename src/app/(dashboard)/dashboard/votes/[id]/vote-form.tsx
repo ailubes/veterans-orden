@@ -55,24 +55,24 @@ export function VoteForm({ voteId, options }: VoteFormProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="font-syne text-xl font-bold">Оберіть варіант</h2>
+      <h2 className="font-syne text-xl font-bold text-text-100">Оберіть варіант</h2>
 
       <div className="space-y-3">
         {options.map((option) => (
           <label
             key={option.id}
-            className={`block p-4 border-2 cursor-pointer transition-all ${
+            className={`block p-4 border rounded-lg cursor-pointer transition-all ${
               selectedOption === option.id
-                ? 'border-accent bg-accent/5'
-                : 'border-timber-dark/30 hover:border-timber-dark'
+                ? 'border-bronze bg-bronze/5'
+                : 'border-line hover:border-bronze/50'
             }`}
           >
             <div className="flex items-start gap-4">
               <div
-                className={`w-6 h-6 flex-shrink-0 border-2 flex items-center justify-center ${
+                className={`w-6 h-6 flex-shrink-0 border-2 rounded flex items-center justify-center ${
                   selectedOption === option.id
-                    ? 'border-accent bg-accent text-white'
-                    : 'border-timber-dark/50'
+                    ? 'border-bronze bg-bronze text-bg-950'
+                    : 'border-muted-500'
                 }`}
               >
                 {selectedOption === option.id && <Check size={14} />}
@@ -86,9 +86,9 @@ export function VoteForm({ voteId, options }: VoteFormProps) {
                   onChange={() => setSelectedOption(option.id)}
                   className="sr-only"
                 />
-                <span className="font-bold">{option.text}</span>
+                <span className="font-bold text-text-100">{option.text}</span>
                 {option.description && (
-                  <p className="text-sm text-timber-beam mt-1">
+                  <p className="text-sm text-muted-500 mt-1">
                     {option.description}
                   </p>
                 )}
@@ -99,20 +99,20 @@ export function VoteForm({ voteId, options }: VoteFormProps) {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
+        <div className="bg-red-500/10 border border-red-500/30 p-3 text-red-400 text-sm rounded">
           {error}
         </div>
       )}
 
-      <div className="pt-4 border-t border-timber-dark/20">
+      <div className="pt-4 border-t border-line">
         <button
           onClick={handleSubmit}
           disabled={loading || !selectedOption}
-          className="btn w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-bronze text-bg-950 px-6 py-3 font-bold text-sm hover:bg-bronze/90 transition-colors rounded disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'ОБРОБКА...' : 'ПРОГОЛОСУВАТИ →'}
         </button>
-        <p className="text-xs text-timber-beam mt-3 text-center">
+        <p className="text-xs text-muted-500 mt-3 text-center">
           Голос є анонімним і не може бути змінений після відправки
         </p>
       </div>

@@ -107,7 +107,7 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
       const { data: adminProfile } = await supabase
         .from('users')
         .select('role, id')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (

@@ -10,13 +10,23 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-  			// Theme colors from config
+  			// Dark theme colors (matching frontpage)
+  			'bg-950': '#0f1011',
+  			'panel-900': '#141618',
+  			'panel-850': '#1a1d20',
+  			'text-100': '#e7e7e7',
+  			'text-200': '#b9bcc2',
+  			'muted-500': '#8b8f96',
+  			bronze: '#b5793a',
+  			'bronze-2': '#8c5a25',
+  			line: 'rgba(255, 255, 255, 0.10)',
+  			// Legacy theme colors (for compatibility)
   			canvas: '#e8e6e1',
   			'timber-dark': '#1a1a1a',
   			'timber-beam': '#3a3a3a',
   			accent: {
-  				DEFAULT: '#8b6f47',
-  				foreground: '#e8e6e1'
+  				DEFAULT: '#b5793a',
+  				foreground: '#e7e7e7'
   			},
   			grain: '#e8e6e1',
   			joint: '#1a1816',

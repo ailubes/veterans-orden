@@ -302,6 +302,187 @@ export const userSexEnum = pgEnum('user_sex', [
 ]);
 
 // ===========================================
+// VETERAN-SPECIFIC ENUMS (Order of Veterans)
+// ===========================================
+
+// Veteran membership role (participation-based, not referral-based)
+export const veteranMembershipRoleEnum = pgEnum('veteran_membership_role', [
+  'applicant',         // Applied, not yet reviewed
+  'community_member',  // Спільнота - open membership
+  'order_candidate',   // Орден - nominated, in trial period
+  'order_member',      // Орден - full member after initiation
+  'veteran_emeritus',  // Honorary status for distinguished service
+]);
+
+// Ukrainian military ranks
+export const militaryRankEnum = pgEnum('military_rank', [
+  'soldier',           // Солдат
+  'senior_soldier',    // Старший солдат
+  'junior_sergeant',   // Молодший сержант
+  'sergeant',          // Сержант
+  'senior_sergeant',   // Старший сержант
+  'master_sergeant',   // Головний сержант
+  'staff_sergeant',    // Штаб-сержант
+  'chief_sergeant',    // Майстер-сержант
+  'junior_lieutenant', // Молодший лейтенант
+  'lieutenant',        // Лейтенант
+  'senior_lieutenant', // Старший лейтенант
+  'captain',           // Капітан
+  'major',             // Майор
+  'lieutenant_colonel',// Підполковник
+  'colonel',           // Полковник
+  'brigadier_general', // Бригадний генерал
+  'major_general',     // Генерал-майор
+  'lieutenant_general',// Генерал-лейтенант
+  'general',           // Генерал
+  'general_army',      // Генерал армії України
+]);
+
+// Ukrainian military branches
+export const militaryBranchEnum = pgEnum('military_branch', [
+  'zsu',   // Збройні Сили України
+  'ngu',   // Національна гвардія
+  'dpsu',  // Державна прикордонна служба
+  'ssu',   // Служба безпеки
+  'gur',   // Головне управління розвідки
+  'other', // Інші формування
+]);
+
+// Organizational role types
+export const orgRoleTypeEnum = pgEnum('org_role_type', [
+  'honor_court_judge',      // Суддя Суду Честі
+  'honor_court_head',       // Голова Суду Честі
+  'komandant',              // Комендант комендатури
+  'council_thinker',        // Член Колегії Мислителів
+  'president',              // Президент
+  'vice_president',         // Віце-президент
+  'secretary_general',      // Генеральний секретар
+  'treasurer',              // Скарбник
+  'business_mentor',        // Бізнес-ментор
+  'news_editor_veteran',    // Редактор новин
+  'mental_support_coord',   // Координатор псих. підтримки
+  'members_admin',          // Адміністратор членства
+  'legal_advisor',          // Юридичний консультант
+  'events_coordinator',     // Координатор заходів
+  'regional_coordinator',   // Регіональний координатор
+]);
+
+// Organizational role scope
+export const orgRoleScopeEnum = pgEnum('org_role_scope', [
+  'national',  // Національний рівень
+  'regional',  // Регіональний рівень
+  'local',     // Місцевий рівень
+]);
+
+// Honor Court case types
+export const honorCaseTypeEnum = pgEnum('honor_case_type', [
+  'dispute',      // Суперечка між членами
+  'violation',    // Порушення Кодексу Честі
+  'reputation',   // Захист репутації
+  'appeal',       // Апеляція на рішення
+  'complaint',    // Скарга на дії члена/керівництва
+]);
+
+// Honor Court case status
+export const honorCaseStatusEnum = pgEnum('honor_case_status', [
+  'submitted',      // Подано
+  'under_review',   // На розгляді
+  'accepted',       // Прийнято до розгляду
+  'mediation',      // Медіація
+  'hearing',        // Слухання
+  'deliberation',   // Нарада суддів
+  'resolved',       // Вирішено
+  'closed',         // Закрито
+  'appealed',       // Оскаржено
+  'rejected',       // Відхилено
+]);
+
+// Sanction types
+export const sanctionTypeEnum = pgEnum('sanction_type', [
+  'warning',      // Попередження
+  'reprimand',    // Догана
+  'suspension',   // Тимчасове призупинення
+  'demotion',     // Пониження статусу
+  'expulsion',    // Виключення
+  'restoration',  // Відновлення честі
+  'none',         // Без санкцій
+]);
+
+// Business expertise areas
+export const businessExpertiseEnum = pgEnum('business_expertise', [
+  'startup',
+  'ecommerce',
+  'manufacturing',
+  'services',
+  'agriculture',
+  'it',
+  'finance',
+  'marketing',
+  'legal',
+  'hr',
+  'logistics',
+  'construction',
+  'hospitality',
+  'education',
+  'healthcare',
+  'retail',
+  'real_estate',
+  'consulting',
+  'media',
+  'other',
+]);
+
+// Business stage
+export const businessStageEnum = pgEnum('business_stage', [
+  'idea',
+  'planning',
+  'started',
+  'growing',
+  'scaling',
+  'mature',
+]);
+
+// Mentorship request status
+export const mentorshipRequestStatusEnum = pgEnum('mentorship_request_status', [
+  'pending',
+  'matched',
+  'accepted',
+  'rejected',
+  'cancelled',
+  'completed',
+]);
+
+// Mentorship session status
+export const mentorshipSessionStatusEnum = pgEnum('mentorship_session_status', [
+  'scheduled',
+  'confirmed',
+  'in_progress',
+  'completed',
+  'cancelled',
+  'no_show',
+]);
+
+// Participation activity types
+export const participationActivityTypeEnum = pgEnum('participation_activity_type', [
+  'event_attendance',
+  'event_organization',
+  'task_completion',
+  'vote_cast',
+  'mentorship_session',
+  'mentorship_given',
+  'volunteer_hours',
+  'council_meeting',
+  'training_completion',
+  'content_creation',
+  'recruitment',
+  'fundraising',
+  'community_service',
+  'honor_court_service',
+  'leadership_role',
+  'other',
+]);
+
+// ===========================================
 // TABLES
 // ===========================================
 
@@ -390,7 +571,7 @@ export const groups = pgTable('groups', {
 // ----- USERS (Members) -----
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
-  clerkId: varchar('clerk_id', { length: 255 }).notNull().unique(), // Now stores Supabase Auth user id
+  authId: uuid('auth_id').notNull().unique(), // Supabase Auth user id (references auth.users.id)
   email: varchar('email', { length: 255 }).notNull(),
   phone: varchar('phone', { length: 20 }),
   firstName: varchar('first_name', { length: 100 }).notNull(),
@@ -409,6 +590,14 @@ export const users = pgTable('users', {
   staffRole: staffRoleEnum('staff_role').default('none'),
   roleAdvancedAt: timestamp('role_advanced_at'),
   totalReferralCount: integer('total_referral_count').default(0),
+
+  // Veteran-Specific Fields (Order of Veterans)
+  veteranRole: veteranMembershipRoleEnum('veteran_role').default('applicant'),
+  membershipType: varchar('membership_type', { length: 20 }).default('community'), // 'community' or 'order'
+  nominatedById: uuid('nominated_by_id'),
+  initiationDate: timestamp('initiation_date'),
+  trialStartDate: timestamp('trial_start_date'),
+  trialEndDate: timestamp('trial_end_date'),
 
   // Verification
   isEmailVerified: boolean('is_email_verified').default(false),
@@ -466,7 +655,7 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
   lastActiveAt: timestamp('last_active_at'),
 }, (table) => ({
-  clerkIdIdx: uniqueIndex('users_clerk_id_idx').on(table.clerkId),
+  authIdIdx: uniqueIndex('users_auth_id_idx').on(table.authId),
   emailIdx: index('users_email_idx').on(table.email),
   referralCodeIdx: uniqueIndex('users_referral_code_idx').on(table.referralCode),
   oblastIdx: index('users_oblast_idx').on(table.oblastId),
@@ -589,12 +778,21 @@ export const votes = pgTable('votes', {
   // Attachments
   attachments: jsonb('attachments').default([]),
 
+  // Election-specific fields (Order of Veterans)
+  isElection: boolean('is_election').default(false),
+  positionType: orgRoleTypeEnum('position_type'),
+  commanderyScope: uuid('commandery_scope').references(() => commanderies.id),
+  useMilitaryTiebreaker: boolean('use_military_tiebreaker').default(true),
+  minCandidates: integer('min_candidates').default(1),
+  maxWinners: integer('max_winners').default(1),
+
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
   statusIdx: index('votes_status_idx').on(table.status),
   endDateIdx: index('votes_end_date_idx').on(table.endDate),
   scopeIdx: index('votes_scope_idx').on(table.scope),
+  electionIdx: index('votes_election_idx').on(table.isElection),
 }));
 
 // ----- VOTE OPTIONS -----
@@ -1355,6 +1553,722 @@ export const advancementRequests = pgTable('advancement_requests', {
 }));
 
 // ===========================================
+// VETERAN-SPECIFIC TABLES (Order of Veterans)
+// ===========================================
+
+// ----- MILITARY SERVICE -----
+export const militaryService = pgTable('military_service', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  // Service details
+  rank: militaryRankEnum('rank').notNull(),
+  branch: militaryBranchEnum('branch').default('zsu'),
+  unitName: varchar('unit_name', { length: 255 }),
+  unitType: varchar('unit_type', { length: 100 }),
+  serviceStart: timestamp('service_start').notNull(),
+  serviceEnd: timestamp('service_end'),
+  isCurrentService: boolean('is_current_service').default(false),
+
+  // Combat experience
+  combatExperience: boolean('combat_experience').default(false),
+  combatDetails: text('combat_details'),
+  combatDeployments: jsonb('combat_deployments').default([]), // Array of { location, start, end, operation }
+
+  // Awards and decorations
+  awards: jsonb('awards').default([]), // Array of { name, date, citation }
+
+  // Verification
+  verified: boolean('verified').default(false),
+  verifiedBy: uuid('verified_by').references(() => users.id),
+  verifiedAt: timestamp('verified_at'),
+  verificationMethod: varchar('verification_method', { length: 50 }),
+  documentsUrl: text('documents_url'),
+  notes: text('notes'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  userIdx: index('military_service_user_idx').on(table.userId),
+  rankIdx: index('military_service_rank_idx').on(table.rank),
+  branchIdx: index('military_service_branch_idx').on(table.branch),
+  verifiedIdx: index('military_service_verified_idx').on(table.verified),
+}));
+
+// ----- USER ORGANIZATIONAL ROLES -----
+export const userOrgRoles = pgTable('user_org_roles', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  roleType: orgRoleTypeEnum('role_type').notNull(),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id), // NULL for national roles
+  scope: orgRoleScopeEnum('scope').default('national'),
+
+  // Appointment
+  appointedBy: uuid('appointed_by').references(() => users.id),
+  appointedAt: timestamp('appointed_at').defaultNow(),
+  termStart: timestamp('term_start').notNull(),
+  termEnd: timestamp('term_end'), // NULL for indefinite
+  isActive: boolean('is_active').default(true),
+
+  // Election reference (if elected)
+  electionId: uuid('election_id').references(() => votes.id),
+
+  notes: text('notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  userIdx: index('user_org_roles_user_idx').on(table.userId),
+  roleTypeIdx: index('user_org_roles_type_idx').on(table.roleType),
+  commanderyIdx: index('user_org_roles_commandery_idx').on(table.commanderyId),
+  activeIdx: index('user_org_roles_active_idx').on(table.isActive),
+}));
+
+// ----- ORGANIZATIONAL ROLE LABELS -----
+export const orgRoleLabels = pgTable('org_role_labels', {
+  roleType: varchar('role_type', { length: 50 }).primaryKey(),
+  nameUk: varchar('name_uk', { length: 100 }).notNull(),
+  nameEn: varchar('name_en', { length: 100 }),
+  descriptionUk: text('description_uk'),
+  descriptionEn: text('description_en'),
+  permissionsJson: jsonb('permissions_json').default([]),
+  displayOrder: integer('display_order').default(0),
+});
+
+// ----- HONOR COURT CASES -----
+export const honorCourtCases = pgTable('honor_court_cases', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  caseNumber: varchar('case_number', { length: 20 }).notNull().unique(),
+
+  // Case type and status
+  caseType: honorCaseTypeEnum('case_type').notNull(),
+  status: honorCaseStatusEnum('status').default('submitted'),
+  priority: varchar('priority', { length: 20 }).default('normal'),
+
+  // Parties involved
+  complainantId: uuid('complainant_id').references(() => users.id),
+  respondentId: uuid('respondent_id').references(() => users.id),
+
+  // Case details
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  facts: text('facts'),
+  evidence: jsonb('evidence').default([]),
+
+  // Assignment
+  assignedJudges: jsonb('assigned_judges').default([]),
+  leadJudgeId: uuid('lead_judge_id').references(() => users.id),
+
+  // Related cases
+  parentCaseId: uuid('parent_case_id'),
+  relatedCases: jsonb('related_cases').default([]),
+
+  // Timeline
+  submittedAt: timestamp('submitted_at').defaultNow(),
+  acceptedAt: timestamp('accepted_at'),
+  hearingDate: timestamp('hearing_date'),
+  hearingLocation: text('hearing_location'),
+  resolvedAt: timestamp('resolved_at'),
+
+  // Decision
+  decision: text('decision'),
+  decisionSummary: varchar('decision_summary', { length: 500 }),
+  sanctionType: sanctionTypeEnum('sanction_type'),
+  sanctionDetails: text('sanction_details'),
+  sanctionDurationDays: integer('sanction_duration_days'),
+
+  // Voting
+  votesFor: integer('votes_for').default(0),
+  votesAgainst: integer('votes_against').default(0),
+  votesAbstain: integer('votes_abstain').default(0),
+
+  // Visibility
+  isPublic: boolean('is_public').default(false),
+  anonymized: boolean('anonymized').default(false),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdBy: uuid('created_by').references(() => users.id),
+}, (table) => ({
+  statusIdx: index('honor_cases_status_idx').on(table.status),
+  typeIdx: index('honor_cases_type_idx').on(table.caseType),
+  complainantIdx: index('honor_cases_complainant_idx').on(table.complainantId),
+  respondentIdx: index('honor_cases_respondent_idx').on(table.respondentId),
+  leadJudgeIdx: index('honor_cases_lead_judge_idx').on(table.leadJudgeId),
+  caseNumberIdx: index('honor_cases_number_idx').on(table.caseNumber),
+}));
+
+// ----- HONOR COURT NOTES -----
+export const honorCourtNotes = pgTable('honor_court_notes', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  caseId: uuid('case_id').references(() => honorCourtCases.id, { onDelete: 'cascade' }).notNull(),
+  authorId: uuid('author_id').references(() => users.id).notNull(),
+
+  content: text('content').notNull(),
+  noteType: varchar('note_type', { length: 50 }).default('general'),
+  isInternal: boolean('is_internal').default(false),
+  attachments: jsonb('attachments').default([]),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  caseIdx: index('honor_notes_case_idx').on(table.caseId),
+  authorIdx: index('honor_notes_author_idx').on(table.authorId),
+}));
+
+// ----- HONOR COURT PARTICIPANTS -----
+export const honorCourtParticipants = pgTable('honor_court_participants', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  caseId: uuid('case_id').references(() => honorCourtCases.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id').references(() => users.id),
+
+  role: varchar('role', { length: 50 }).notNull(), // witness, representative, expert
+  party: varchar('party', { length: 20 }), // complainant, respondent, neutral
+
+  externalName: varchar('external_name', { length: 255 }),
+  externalContact: text('external_contact'),
+
+  invitedAt: timestamp('invited_at').defaultNow(),
+  confirmedAt: timestamp('confirmed_at'),
+  declinedAt: timestamp('declined_at'),
+  notes: text('notes'),
+}, (table) => ({
+  caseIdx: index('honor_participants_case_idx').on(table.caseId),
+  userIdx: index('honor_participants_user_idx').on(table.userId),
+}));
+
+// ----- BUSINESS MENTORS -----
+export const businessMentors = pgTable('business_mentors', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull().unique(),
+
+  // Profile
+  bio: text('bio'),
+  headline: varchar('headline', { length: 255 }),
+  expertise: jsonb('expertise').notNull(), // Array of business_expertise values
+  experienceYears: integer('experience_years'),
+
+  // Business background
+  companyName: varchar('company_name', { length: 255 }),
+  companyRole: varchar('company_role', { length: 100 }),
+  companyWebsite: text('company_website'),
+  linkedinUrl: text('linkedin_url'),
+  portfolioUrl: text('portfolio_url'),
+
+  // Availability
+  isActive: boolean('is_active').default(true),
+  maxMentees: integer('max_mentees').default(3),
+  currentMenteesCount: integer('current_mentees_count').default(0),
+  preferredFormat: varchar('preferred_format', { length: 50 }).default('both'),
+  preferredLanguage: varchar('preferred_language', { length: 5 }).default('uk'),
+  preferredSessionDuration: integer('preferred_session_duration').default(60),
+
+  // Location
+  availableCities: jsonb('available_cities').default([]),
+  canTravel: boolean('can_travel').default(false),
+
+  // Stats
+  totalSessions: integer('total_sessions').default(0),
+  totalMentees: integer('total_mentees').default(0),
+  totalHours: integer('total_hours').default(0),
+  ratingSum: integer('rating_sum').default(0),
+  ratingCount: integer('rating_count').default(0),
+
+  // Verification
+  verified: boolean('verified').default(false),
+  verifiedBy: uuid('verified_by').references(() => users.id),
+  verifiedAt: timestamp('verified_at'),
+  verificationNotes: text('verification_notes'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  userIdx: index('business_mentors_user_idx').on(table.userId),
+  activeIdx: index('business_mentors_active_idx').on(table.isActive),
+  verifiedIdx: index('business_mentors_verified_idx').on(table.verified),
+}));
+
+// ----- MENTOR AVAILABILITY -----
+export const mentorAvailability = pgTable('mentor_availability', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  mentorId: uuid('mentor_id').references(() => businessMentors.id, { onDelete: 'cascade' }).notNull(),
+
+  dayOfWeek: integer('day_of_week').notNull(), // 0=Sunday, 6=Saturday
+  startTime: varchar('start_time', { length: 10 }).notNull(), // HH:MM format
+  endTime: varchar('end_time', { length: 10 }).notNull(),
+  timezone: varchar('timezone', { length: 50 }).default('Europe/Kyiv'),
+
+  isOnline: boolean('is_online').default(true),
+  location: text('location'),
+  isActive: boolean('is_active').default(true),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  mentorIdx: index('mentor_availability_mentor_idx').on(table.mentorId),
+  dayIdx: index('mentor_availability_day_idx').on(table.dayOfWeek),
+}));
+
+// ----- MENTORSHIP REQUESTS -----
+export const mentorshipRequests = pgTable('mentorship_requests', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  menteeId: uuid('mentee_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  // What they're looking for
+  preferredExpertise: jsonb('preferred_expertise').notNull(),
+  preferredFormat: varchar('preferred_format', { length: 50 }).default('both'),
+
+  // Business info
+  businessStage: businessStageEnum('business_stage'),
+  businessName: varchar('business_name', { length: 255 }),
+  businessDescription: text('business_description'),
+  industry: varchar('industry', { length: 100 }),
+  goals: text('goals').notNull(),
+  challenges: text('challenges'),
+  timeline: varchar('timeline', { length: 100 }),
+
+  // Matching
+  status: mentorshipRequestStatusEnum('status').default('pending'),
+  matchedMentorId: uuid('matched_mentor_id').references(() => businessMentors.id),
+  matchedAt: timestamp('matched_at'),
+  matchScore: integer('match_score'),
+  matchNotes: text('match_notes'),
+
+  // Response
+  acceptedAt: timestamp('accepted_at'),
+  rejectedAt: timestamp('rejected_at'),
+  rejectionReason: text('rejection_reason'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  menteeIdx: index('mentorship_requests_mentee_idx').on(table.menteeId),
+  statusIdx: index('mentorship_requests_status_idx').on(table.status),
+  mentorIdx: index('mentorship_requests_mentor_idx').on(table.matchedMentorId),
+}));
+
+// ----- MENTORSHIPS -----
+export const mentorships = pgTable('mentorships', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  mentorId: uuid('mentor_id').references(() => businessMentors.id, { onDelete: 'cascade' }).notNull(),
+  menteeId: uuid('mentee_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  requestId: uuid('request_id').references(() => mentorshipRequests.id),
+
+  // Status
+  status: varchar('status', { length: 20 }).default('active'), // active, paused, completed, terminated
+
+  // Dates
+  startedAt: timestamp('started_at').defaultNow(),
+  pausedAt: timestamp('paused_at'),
+  endedAt: timestamp('ended_at'),
+  expectedEndDate: timestamp('expected_end_date'),
+
+  // Goals and notes
+  goals: jsonb('goals').default([]),
+  initialAssessment: text('initial_assessment'),
+  finalSummary: text('final_summary'),
+
+  // Progress
+  sessionsCompleted: integer('sessions_completed').default(0),
+  nextSessionDate: timestamp('next_session_date'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  mentorIdx: index('mentorships_mentor_idx').on(table.mentorId),
+  menteeIdx: index('mentorships_mentee_idx').on(table.menteeId),
+  statusIdx: index('mentorships_status_idx').on(table.status),
+}));
+
+// ----- MENTORSHIP SESSIONS -----
+export const mentorshipSessions = pgTable('mentorship_sessions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  mentorshipId: uuid('mentorship_id').references(() => mentorships.id, { onDelete: 'cascade' }).notNull(),
+
+  // Scheduling
+  scheduledDate: timestamp('scheduled_date').notNull(),
+  durationMinutes: integer('duration_minutes').default(60),
+  actualDurationMinutes: integer('actual_duration_minutes'),
+
+  // Location
+  isOnline: boolean('is_online').default(true),
+  meetingUrl: text('meeting_url'),
+  location: text('location'),
+
+  // Status
+  status: mentorshipSessionStatusEnum('status').default('scheduled'),
+  completedAt: timestamp('completed_at'),
+  cancelledAt: timestamp('cancelled_at'),
+  cancellationReason: text('cancellation_reason'),
+  cancelledBy: uuid('cancelled_by').references(() => users.id),
+
+  // Content
+  agenda: text('agenda'),
+  notes: text('notes'),
+  mentorPrivateNotes: text('mentor_private_notes'),
+  actionItems: jsonb('action_items').default([]),
+
+  // Feedback
+  menteeRating: integer('mentee_rating'),
+  menteeFeedback: text('mentee_feedback'),
+  mentorRating: integer('mentor_rating'),
+  mentorFeedback: text('mentor_feedback'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  mentorshipIdx: index('sessions_mentorship_idx').on(table.mentorshipId),
+  dateIdx: index('sessions_date_idx').on(table.scheduledDate),
+  statusIdx: index('sessions_status_idx').on(table.status),
+}));
+
+// ----- MENTEE PROGRESS -----
+export const menteeProgress = pgTable('mentee_progress', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  mentorshipId: uuid('mentorship_id').references(() => mentorships.id, { onDelete: 'cascade' }).notNull(),
+
+  milestoneType: varchar('milestone_type', { length: 50 }).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+
+  targetDate: timestamp('target_date'),
+  completedAt: timestamp('completed_at'),
+  evidenceUrl: text('evidence_url'),
+  evidenceDescription: text('evidence_description'),
+
+  verifiedByMentor: boolean('verified_by_mentor').default(false),
+  mentorNotes: text('mentor_notes'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  mentorshipIdx: index('progress_mentorship_idx').on(table.mentorshipId),
+  completedIdx: index('progress_completed_idx').on(table.completedAt),
+}));
+
+// ----- BUSINESS COUNCILS -----
+export const businessCouncils = pgTable('business_councils', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 100 }).notNull().unique(),
+
+  // Scope
+  scope: orgRoleScopeEnum('scope').default('national'),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id),
+
+  // Description
+  description: text('description'),
+  mission: text('mission'),
+  focusAreas: jsonb('focus_areas').default([]),
+
+  // Leadership
+  headId: uuid('head_id').references(() => users.id),
+  deputyHeadId: uuid('deputy_head_id').references(() => users.id),
+  secretaryId: uuid('secretary_id').references(() => users.id),
+
+  // Status
+  isActive: boolean('is_active').default(true),
+  foundedAt: timestamp('founded_at').defaultNow(),
+
+  // Stats
+  memberCount: integer('member_count').default(0),
+  activeInitiatives: integer('active_initiatives').default(0),
+
+  // Meetings
+  meetingFrequency: varchar('meeting_frequency', { length: 50 }),
+  nextMeetingDate: timestamp('next_meeting_date'),
+  meetingLocation: text('meeting_location'),
+  meetingUrl: text('meeting_url'),
+
+  // Contact
+  email: varchar('email', { length: 255 }),
+  phone: varchar('phone', { length: 20 }),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  scopeIdx: index('councils_scope_idx').on(table.scope),
+  commanderyIdx: index('councils_commandery_idx').on(table.commanderyId),
+  activeIdx: index('councils_active_idx').on(table.isActive),
+  slugIdx: uniqueIndex('councils_slug_idx').on(table.slug),
+}));
+
+// ----- BUSINESS COUNCIL MEMBERS -----
+export const businessCouncilMembers = pgTable('business_council_members', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  councilId: uuid('council_id').references(() => businessCouncils.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  role: varchar('role', { length: 50 }).default('member'),
+  expertise: jsonb('expertise').default([]),
+  contributionAreas: text('contribution_areas'),
+
+  joinedAt: timestamp('joined_at').defaultNow(),
+  leftAt: timestamp('left_at'),
+  isActive: boolean('is_active').default(true),
+
+  notes: text('notes'),
+  achievements: text('achievements'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  councilIdx: index('council_members_council_idx').on(table.councilId),
+  userIdx: index('council_members_user_idx').on(table.userId),
+  activeIdx: index('council_members_active_idx').on(table.isActive),
+}));
+
+// ----- BUSINESS COUNCIL MEETINGS -----
+export const businessCouncilMeetings = pgTable('business_council_meetings', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  councilId: uuid('council_id').references(() => businessCouncils.id, { onDelete: 'cascade' }).notNull(),
+
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  meetingNumber: integer('meeting_number'),
+
+  scheduledDate: timestamp('scheduled_date').notNull(),
+  durationMinutes: integer('duration_minutes').default(90),
+  actualStart: timestamp('actual_start'),
+  actualEnd: timestamp('actual_end'),
+
+  isOnline: boolean('is_online').default(true),
+  meetingUrl: text('meeting_url'),
+  location: text('location'),
+
+  agenda: text('agenda'),
+  minutes: text('minutes'),
+  keyDecisions: jsonb('key_decisions').default([]),
+
+  expectedAttendees: jsonb('expected_attendees').default([]),
+  actualAttendees: jsonb('actual_attendees').default([]),
+
+  status: varchar('status', { length: 20 }).default('scheduled'),
+  cancelledReason: text('cancelled_reason'),
+
+  actionItems: jsonb('action_items').default([]),
+  nextMeetingTopics: text('next_meeting_topics'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdBy: uuid('created_by').references(() => users.id),
+}, (table) => ({
+  councilIdx: index('council_meetings_council_idx').on(table.councilId),
+  dateIdx: index('council_meetings_date_idx').on(table.scheduledDate),
+  statusIdx: index('council_meetings_status_idx').on(table.status),
+}));
+
+// ----- COUNCIL INITIATIVES -----
+export const councilInitiatives = pgTable('council_initiatives', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  councilId: uuid('council_id').references(() => businessCouncils.id, { onDelete: 'cascade' }).notNull(),
+
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  objectives: text('objectives'),
+
+  focusArea: varchar('focus_area', { length: 50 }),
+  initiativeType: varchar('initiative_type', { length: 50 }),
+
+  leadId: uuid('lead_id').references(() => users.id),
+  teamMembers: jsonb('team_members').default([]),
+
+  startDate: timestamp('start_date'),
+  targetEndDate: timestamp('target_end_date'),
+  actualEndDate: timestamp('actual_end_date'),
+
+  status: varchar('status', { length: 20 }).default('planning'),
+
+  targetParticipants: integer('target_participants'),
+  actualParticipants: integer('actual_participants'),
+  budget: integer('budget'),
+  spent: integer('spent'),
+
+  outcomes: text('outcomes'),
+  lessonsLearned: text('lessons_learned'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  councilIdx: index('initiatives_council_idx').on(table.councilId),
+  statusIdx: index('initiatives_status_idx').on(table.status),
+  leadIdx: index('initiatives_lead_idx').on(table.leadId),
+}));
+
+// ----- PARTICIPATION RECORDS -----
+export const participationRecords = pgTable('participation_records', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+
+  activityType: participationActivityTypeEnum('activity_type').notNull(),
+  activityId: uuid('activity_id'),
+  activityTable: varchar('activity_table', { length: 50 }),
+
+  title: varchar('title', { length: 255 }),
+  description: text('description'),
+
+  pointsEarned: integer('points_earned').default(0),
+  hoursContributed: integer('hours_contributed'),
+  impactScore: integer('impact_score'),
+
+  verified: boolean('verified').default(false),
+  verifiedBy: uuid('verified_by').references(() => users.id),
+  verifiedAt: timestamp('verified_at'),
+  verificationMethod: varchar('verification_method', { length: 50 }),
+
+  evidenceUrl: text('evidence_url'),
+  evidenceNotes: text('evidence_notes'),
+
+  commanderyId: uuid('commandery_id').references(() => commanderies.id),
+  activityDate: timestamp('activity_date').notNull(),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  createdBy: uuid('created_by').references(() => users.id),
+}, (table) => ({
+  userIdx: index('participation_user_idx').on(table.userId),
+  typeIdx: index('participation_type_idx').on(table.activityType),
+  dateIdx: index('participation_date_idx').on(table.activityDate),
+  verifiedIdx: index('participation_verified_idx').on(table.verified),
+  commanderyIdx: index('participation_commandery_idx').on(table.commanderyId),
+}));
+
+// ----- PARTICIPATION STATS -----
+export const participationStats = pgTable('participation_stats', {
+  userId: uuid('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+
+  // Activity counts
+  totalEventsAttended: integer('total_events_attended').default(0),
+  totalEventsOrganized: integer('total_events_organized').default(0),
+  totalTasksCompleted: integer('total_tasks_completed').default(0),
+  totalVotesCast: integer('total_votes_cast').default(0),
+  totalMentorshipSessions: integer('total_mentorship_sessions').default(0),
+  totalMentorshipGiven: integer('total_mentorship_given').default(0),
+  totalVolunteerActivities: integer('total_volunteer_activities').default(0),
+  totalCouncilMeetings: integer('total_council_meetings').default(0),
+  totalTrainingsCompleted: integer('total_trainings_completed').default(0),
+
+  // Time metrics
+  totalHoursVolunteered: integer('total_hours_volunteered').default(0),
+  totalMentorshipHours: integer('total_mentorship_hours').default(0),
+
+  // Points
+  totalParticipationPoints: integer('total_participation_points').default(0),
+  currentYearPoints: integer('current_year_points').default(0),
+  pointsThisMonth: integer('points_this_month').default(0),
+
+  // Streaks
+  currentActivityStreak: integer('current_activity_streak').default(0),
+  longestActivityStreak: integer('longest_activity_streak').default(0),
+  lastActivityDate: timestamp('last_activity_date'),
+
+  // Rankings
+  yearlyRank: integer('yearly_rank'),
+  overallRank: integer('overall_rank'),
+  commanderyRank: integer('commandery_rank'),
+
+  // Level
+  participationLevel: integer('participation_level').default(1),
+  nextLevelPoints: integer('next_level_points'),
+
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  lastCalculatedAt: timestamp('last_calculated_at').defaultNow(),
+});
+
+// ----- PARTICIPATION MILESTONES -----
+export const participationMilestones = pgTable('participation_milestones', {
+  id: varchar('id', { length: 50 }).primaryKey(),
+  nameUk: varchar('name_uk', { length: 100 }).notNull(),
+  nameEn: varchar('name_en', { length: 100 }),
+  descriptionUk: text('description_uk'),
+  descriptionEn: text('description_en'),
+
+  activityType: participationActivityTypeEnum('activity_type'),
+  requiredCount: integer('required_count'),
+  requiredPoints: integer('required_points'),
+  requiredHours: integer('required_hours'),
+
+  pointsReward: integer('points_reward').default(0),
+  badgeId: varchar('badge_id', { length: 50 }).references(() => badges.id),
+
+  icon: varchar('icon', { length: 50 }),
+  displayOrder: integer('display_order').default(0),
+  isActive: boolean('is_active').default(true),
+});
+
+// ----- USER MILESTONES -----
+export const userMilestones = pgTable('user_milestones', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  milestoneId: varchar('milestone_id', { length: 50 }).references(() => participationMilestones.id).notNull(),
+
+  achievedAt: timestamp('achieved_at').defaultNow().notNull(),
+  pointsAwarded: integer('points_awarded').default(0),
+}, (table) => ({
+  userIdx: index('user_milestones_user_idx').on(table.userId),
+  milestoneIdx: index('user_milestones_milestone_idx').on(table.milestoneId),
+  uniqueMilestone: uniqueIndex('user_milestones_unique').on(table.userId, table.milestoneId),
+}));
+
+// ----- ELECTION CANDIDATES -----
+export const electionCandidates = pgTable('election_candidates', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  voteId: uuid('vote_id').references(() => votes.id, { onDelete: 'cascade' }).notNull(),
+  candidateId: uuid('candidate_id').references(() => users.id).notNull(),
+  optionId: uuid('option_id').references(() => voteOptions.id),
+
+  // Candidate profile
+  platformStatement: text('platform_statement'),
+  qualifications: text('qualifications'),
+  endorsements: jsonb('endorsements').default([]),
+
+  // Military info for tiebreaker
+  highestMilitaryRank: militaryRankEnum('highest_military_rank'),
+  totalServiceYears: integer('total_service_years'),
+  combatExperience: boolean('combat_experience').default(false),
+  rankNumeric: integer('rank_numeric'),
+
+  // Nomination
+  nominatedBy: uuid('nominated_by').references(() => users.id),
+  nominatedAt: timestamp('nominated_at').defaultNow(),
+  acceptedNomination: boolean('accepted_nomination').default(false),
+  acceptedAt: timestamp('accepted_at'),
+  declinedReason: text('declined_reason'),
+
+  // Results
+  finalVoteCount: integer('final_vote_count').default(0),
+  finalPercentage: integer('final_percentage'),
+  finalRank: integer('final_rank'),
+  isElected: boolean('is_elected').default(false),
+  tiedWith: jsonb('tied_with').default([]),
+  wonByTiebreaker: boolean('won_by_tiebreaker').default(false),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  voteIdx: index('election_candidates_vote_idx').on(table.voteId),
+  candidateIdx: index('election_candidates_user_idx').on(table.candidateId),
+  rankIdx: index('election_candidates_rank_idx').on(table.finalRank),
+  electedIdx: index('election_candidates_elected_idx').on(table.isElected),
+}));
+
+// ----- ELECTION NOMINATIONS -----
+export const electionNominations = pgTable('election_nominations', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  voteId: uuid('vote_id').references(() => votes.id, { onDelete: 'cascade' }).notNull(),
+  nomineeId: uuid('nominee_id').references(() => users.id).notNull(),
+  nominatorId: uuid('nominator_id').references(() => users.id),
+
+  isSelfNomination: boolean('is_self_nomination').default(false),
+  nominationStatement: text('nomination_statement'),
+  endorsementStatement: text('endorsement_statement'),
+
+  status: varchar('status', { length: 20 }).default('pending'),
+  responseAt: timestamp('response_at'),
+  responseNotes: text('response_notes'),
+
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => ({
+  voteIdx: index('election_nominations_vote_idx').on(table.voteId),
+  nomineeIdx: index('election_nominations_nominee_idx').on(table.nomineeId),
+  statusIdx: index('election_nominations_status_idx').on(table.status),
+}));
+
+// ===========================================
 // RELATIONS
 // ===========================================
 
@@ -1704,5 +2618,303 @@ export const advancementRequestsRelations = relations(advancementRequests, ({ on
   reviewer: one(users, {
     fields: [advancementRequests.reviewedBy],
     references: [users.id],
+  }),
+}));
+
+// ===========================================
+// VETERAN-SPECIFIC RELATIONS (Order of Veterans)
+// ===========================================
+
+// ----- MILITARY SERVICE RELATIONS -----
+export const militaryServiceRelations = relations(militaryService, ({ one }) => ({
+  user: one(users, {
+    fields: [militaryService.userId],
+    references: [users.id],
+  }),
+  verifiedByUser: one(users, {
+    fields: [militaryService.verifiedBy],
+    references: [users.id],
+    relationName: 'militaryServiceVerifier',
+  }),
+}));
+
+// ----- USER ORG ROLES RELATIONS -----
+export const userOrgRolesRelations = relations(userOrgRoles, ({ one }) => ({
+  user: one(users, {
+    fields: [userOrgRoles.userId],
+    references: [users.id],
+  }),
+  commandery: one(commanderies, {
+    fields: [userOrgRoles.commanderyId],
+    references: [commanderies.id],
+  }),
+  appointedByUser: one(users, {
+    fields: [userOrgRoles.appointedBy],
+    references: [users.id],
+    relationName: 'orgRoleAppointer',
+  }),
+  election: one(votes, {
+    fields: [userOrgRoles.electionId],
+    references: [votes.id],
+  }),
+}));
+
+// ----- HONOR COURT RELATIONS -----
+export const honorCourtCasesRelations = relations(honorCourtCases, ({ one, many }) => ({
+  complainant: one(users, {
+    fields: [honorCourtCases.complainantId],
+    references: [users.id],
+    relationName: 'honorCaseComplainant',
+  }),
+  respondent: one(users, {
+    fields: [honorCourtCases.respondentId],
+    references: [users.id],
+    relationName: 'honorCaseRespondent',
+  }),
+  leadJudge: one(users, {
+    fields: [honorCourtCases.leadJudgeId],
+    references: [users.id],
+    relationName: 'honorCaseLeadJudge',
+  }),
+  createdByUser: one(users, {
+    fields: [honorCourtCases.createdBy],
+    references: [users.id],
+  }),
+  notes: many(honorCourtNotes),
+  participants: many(honorCourtParticipants),
+}));
+
+export const honorCourtNotesRelations = relations(honorCourtNotes, ({ one }) => ({
+  case: one(honorCourtCases, {
+    fields: [honorCourtNotes.caseId],
+    references: [honorCourtCases.id],
+  }),
+  author: one(users, {
+    fields: [honorCourtNotes.authorId],
+    references: [users.id],
+  }),
+}));
+
+export const honorCourtParticipantsRelations = relations(honorCourtParticipants, ({ one }) => ({
+  case: one(honorCourtCases, {
+    fields: [honorCourtParticipants.caseId],
+    references: [honorCourtCases.id],
+  }),
+  user: one(users, {
+    fields: [honorCourtParticipants.userId],
+    references: [users.id],
+  }),
+}));
+
+// ----- BUSINESS MENTOR RELATIONS -----
+export const businessMentorsRelations = relations(businessMentors, ({ one, many }) => ({
+  user: one(users, {
+    fields: [businessMentors.userId],
+    references: [users.id],
+  }),
+  verifiedByUser: one(users, {
+    fields: [businessMentors.verifiedBy],
+    references: [users.id],
+    relationName: 'mentorVerifier',
+  }),
+  availability: many(mentorAvailability),
+  mentorships: many(mentorships),
+  requests: many(mentorshipRequests),
+}));
+
+export const mentorAvailabilityRelations = relations(mentorAvailability, ({ one }) => ({
+  mentor: one(businessMentors, {
+    fields: [mentorAvailability.mentorId],
+    references: [businessMentors.id],
+  }),
+}));
+
+export const mentorshipRequestsRelations = relations(mentorshipRequests, ({ one }) => ({
+  mentee: one(users, {
+    fields: [mentorshipRequests.menteeId],
+    references: [users.id],
+  }),
+  matchedMentor: one(businessMentors, {
+    fields: [mentorshipRequests.matchedMentorId],
+    references: [businessMentors.id],
+  }),
+}));
+
+export const mentorshipsRelations = relations(mentorships, ({ one, many }) => ({
+  mentor: one(businessMentors, {
+    fields: [mentorships.mentorId],
+    references: [businessMentors.id],
+  }),
+  mentee: one(users, {
+    fields: [mentorships.menteeId],
+    references: [users.id],
+  }),
+  request: one(mentorshipRequests, {
+    fields: [mentorships.requestId],
+    references: [mentorshipRequests.id],
+  }),
+  sessions: many(mentorshipSessions),
+  progress: many(menteeProgress),
+}));
+
+export const mentorshipSessionsRelations = relations(mentorshipSessions, ({ one }) => ({
+  mentorship: one(mentorships, {
+    fields: [mentorshipSessions.mentorshipId],
+    references: [mentorships.id],
+  }),
+  cancelledByUser: one(users, {
+    fields: [mentorshipSessions.cancelledBy],
+    references: [users.id],
+  }),
+}));
+
+export const menteeProgressRelations = relations(menteeProgress, ({ one }) => ({
+  mentorship: one(mentorships, {
+    fields: [menteeProgress.mentorshipId],
+    references: [mentorships.id],
+  }),
+}));
+
+// ----- BUSINESS COUNCIL RELATIONS -----
+export const businessCouncilsRelations = relations(businessCouncils, ({ one, many }) => ({
+  commandery: one(commanderies, {
+    fields: [businessCouncils.commanderyId],
+    references: [commanderies.id],
+  }),
+  head: one(users, {
+    fields: [businessCouncils.headId],
+    references: [users.id],
+    relationName: 'councilHead',
+  }),
+  deputyHead: one(users, {
+    fields: [businessCouncils.deputyHeadId],
+    references: [users.id],
+    relationName: 'councilDeputy',
+  }),
+  secretary: one(users, {
+    fields: [businessCouncils.secretaryId],
+    references: [users.id],
+    relationName: 'councilSecretary',
+  }),
+  members: many(businessCouncilMembers),
+  meetings: many(businessCouncilMeetings),
+  initiatives: many(councilInitiatives),
+}));
+
+export const businessCouncilMembersRelations = relations(businessCouncilMembers, ({ one }) => ({
+  council: one(businessCouncils, {
+    fields: [businessCouncilMembers.councilId],
+    references: [businessCouncils.id],
+  }),
+  user: one(users, {
+    fields: [businessCouncilMembers.userId],
+    references: [users.id],
+  }),
+}));
+
+export const businessCouncilMeetingsRelations = relations(businessCouncilMeetings, ({ one }) => ({
+  council: one(businessCouncils, {
+    fields: [businessCouncilMeetings.councilId],
+    references: [businessCouncils.id],
+  }),
+  createdByUser: one(users, {
+    fields: [businessCouncilMeetings.createdBy],
+    references: [users.id],
+  }),
+}));
+
+export const councilInitiativesRelations = relations(councilInitiatives, ({ one }) => ({
+  council: one(businessCouncils, {
+    fields: [councilInitiatives.councilId],
+    references: [businessCouncils.id],
+  }),
+  lead: one(users, {
+    fields: [councilInitiatives.leadId],
+    references: [users.id],
+  }),
+}));
+
+// ----- PARTICIPATION RELATIONS -----
+export const participationRecordsRelations = relations(participationRecords, ({ one }) => ({
+  user: one(users, {
+    fields: [participationRecords.userId],
+    references: [users.id],
+  }),
+  verifiedByUser: one(users, {
+    fields: [participationRecords.verifiedBy],
+    references: [users.id],
+    relationName: 'participationVerifier',
+  }),
+  commandery: one(commanderies, {
+    fields: [participationRecords.commanderyId],
+    references: [commanderies.id],
+  }),
+  createdByUser: one(users, {
+    fields: [participationRecords.createdBy],
+    references: [users.id],
+    relationName: 'participationCreator',
+  }),
+}));
+
+export const participationStatsRelations = relations(participationStats, ({ one }) => ({
+  user: one(users, {
+    fields: [participationStats.userId],
+    references: [users.id],
+  }),
+}));
+
+export const participationMilestonesRelations = relations(participationMilestones, ({ one, many }) => ({
+  badge: one(badges, {
+    fields: [participationMilestones.badgeId],
+    references: [badges.id],
+  }),
+  userMilestones: many(userMilestones),
+}));
+
+export const userMilestonesRelations = relations(userMilestones, ({ one }) => ({
+  user: one(users, {
+    fields: [userMilestones.userId],
+    references: [users.id],
+  }),
+  milestone: one(participationMilestones, {
+    fields: [userMilestones.milestoneId],
+    references: [participationMilestones.id],
+  }),
+}));
+
+// ----- ELECTION RELATIONS -----
+export const electionCandidatesRelations = relations(electionCandidates, ({ one }) => ({
+  vote: one(votes, {
+    fields: [electionCandidates.voteId],
+    references: [votes.id],
+  }),
+  candidate: one(users, {
+    fields: [electionCandidates.candidateId],
+    references: [users.id],
+  }),
+  option: one(voteOptions, {
+    fields: [electionCandidates.optionId],
+    references: [voteOptions.id],
+  }),
+  nominatedByUser: one(users, {
+    fields: [electionCandidates.nominatedBy],
+    references: [users.id],
+    relationName: 'electionNominator',
+  }),
+}));
+
+export const electionNominationsRelations = relations(electionNominations, ({ one }) => ({
+  vote: one(votes, {
+    fields: [electionNominations.voteId],
+    references: [votes.id],
+  }),
+  nominee: one(users, {
+    fields: [electionNominations.nomineeId],
+    references: [users.id],
+  }),
+  nominator: one(users, {
+    fields: [electionNominations.nominatorId],
+    references: [users.id],
+    relationName: 'nominatedBy',
   }),
 }));

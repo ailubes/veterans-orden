@@ -13,7 +13,7 @@ export default async function ReferralsPage() {
   const { data: profile } = await supabase
     .from('users')
     .select('id, referral_code, referral_count, points')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Fetch referrals (users who were referred by this user)

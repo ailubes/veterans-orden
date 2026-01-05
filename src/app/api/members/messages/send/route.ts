@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         oblast_id,
         status
       `)
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (profileError || !profile) {

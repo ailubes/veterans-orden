@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Trash2, ShoppingCart, CreditCard, MapPin, Loader2 } from 'lucide-react';
+import { ArrowLeft, Trash2, ShoppingCart, CreditCard, MapPin, Loader2, Check } from 'lucide-react';
 import { pointsToUAH } from '@/lib/points/constants';
 
 interface CartItem {
@@ -141,16 +141,15 @@ export default function CheckoutPage() {
   if (success) {
     return (
       <div className="max-w-4xl mx-auto text-center py-12">
-        <div className="bg-green-50 border-2 border-green-600 p-8 relative">
-          <div className="joint border-green-600" style={{ top: '-3px', left: '-3px' }} />
-          <div className="joint border-green-600" style={{ top: '-3px', right: '-3px' }} />
-          <h2 className="font-syne text-2xl font-bold text-green-600 mb-4">
+        <div className="bg-green-500/10 border border-green-500 p-8 rounded-lg">
+          <Check className="w-12 h-12 mx-auto mb-4 text-green-400" />
+          <h2 className="font-syne text-2xl font-bold text-green-400 mb-4">
             Замовлення створено!
           </h2>
-          <p className="text-timber-beam mb-4">
+          <p className="text-muted-500 mb-4">
             Перенаправляємо вас на сторінку замовлення...
           </p>
-          <Loader2 className="animate-spin mx-auto text-green-600" size={32} />
+          <Loader2 className="animate-spin mx-auto text-green-400" size={32} />
         </div>
       </div>
     );
@@ -160,17 +159,16 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <p className="label mb-2">КОШИК</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Оформлення замовлення</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// КОШИК</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Оформлення замовлення</h1>
         </div>
 
-        <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint joint-tl" />
-          <ShoppingCart className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam mb-6">Ваш кошик порожній</p>
+        <div className="text-center py-12 bg-panel-900 border border-line rounded-lg">
+          <ShoppingCart className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500 mb-6">Ваш кошик порожній</p>
           <Link
             href="/dashboard/marketplace"
-            className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold hover:bg-accent/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-bronze text-bg-950 px-6 py-3 font-bold hover:bg-bronze/90 transition-colors rounded"
           >
             Перейти до магазину
           </Link>
@@ -184,15 +182,15 @@ export default function CheckoutPage() {
       {/* Header */}
       <Link
         href="/dashboard/marketplace"
-        className="inline-flex items-center gap-2 text-timber-beam hover:text-timber-dark mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-500 hover:text-bronze mb-6 transition-colors"
       >
         <ArrowLeft size={20} />
         Повернутися до магазину
       </Link>
 
       <div className="mb-8">
-        <p className="label mb-2">КОШИК</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">Оформлення замовлення</h1>
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// КОШИК</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Оформлення замовлення</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -205,37 +203,34 @@ export default function CheckoutPage() {
             return (
               <div
                 key={item.productId}
-                className="bg-canvas border-2 border-timber-dark p-4 relative"
+                className="bg-panel-900 border border-line p-4 rounded-lg"
               >
-                <div className="joint joint-tl" />
-                <div className="joint joint-tr" />
-
                 <div className="flex gap-4">
                   {item.product.imageUrl && (
                     <img
                       src={item.product.imageUrl}
                       alt={item.product.nameUk}
-                      className="w-20 h-20 object-cover"
+                      className="w-20 h-20 object-cover rounded"
                     />
                   )}
 
                   <div className="flex-1">
-                    <h3 className="font-bold mb-1">{item.product.nameUk}</h3>
-                    <p className="text-sm text-timber-beam mb-2">
+                    <h3 className="font-bold text-text-100 mb-1">{item.product.nameUk}</h3>
+                    <p className="text-sm text-muted-500 mb-2">
                       {item.product.pricePoints} балів × {item.quantity}
                     </p>
 
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                        className="w-8 h-8 bg-timber-dark/10 hover:bg-timber-dark/20 font-bold transition-colors"
+                        className="w-8 h-8 bg-panel-850 hover:bg-panel-900 font-bold transition-colors text-text-100 rounded"
                       >
                         −
                       </button>
-                      <span className="w-12 text-center font-bold">{item.quantity}</span>
+                      <span className="w-12 text-center font-bold text-text-100">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                        className="w-8 h-8 bg-timber-dark/10 hover:bg-timber-dark/20 font-bold transition-colors"
+                        className="w-8 h-8 bg-panel-850 hover:bg-panel-900 font-bold transition-colors text-text-100 rounded"
                       >
                         +
                       </button>
@@ -243,11 +238,11 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="text-right">
-                    <p className="font-syne text-xl font-bold text-accent mb-1">{itemTotal}</p>
-                    <p className="text-xs text-timber-beam mb-3">≈ {itemUah.toFixed(0)} грн</p>
+                    <p className="font-syne text-xl font-bold text-bronze mb-1">{itemTotal}</p>
+                    <p className="text-xs text-muted-500 mb-3">≈ {itemUah.toFixed(0)} грн</p>
                     <button
                       onClick={() => removeFromCart(item.productId)}
-                      className="text-red-600 hover:text-red-700 transition-colors"
+                      className="text-red-400 hover:text-red-300 transition-colors"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -259,46 +254,43 @@ export default function CheckoutPage() {
 
           {/* Shipping Form */}
           {requiresShipping && (
-            <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint joint-tl" />
-              <div className="joint joint-tr" />
-
+            <div className="bg-panel-900 border border-line p-6 rounded-lg">
               <div className="flex items-center gap-2 mb-4">
-                <MapPin className="text-accent" size={20} />
-                <h2 className="font-syne text-xl font-bold">Доставка</h2>
+                <MapPin className="text-bronze" size={20} />
+                <h2 className="font-syne text-xl font-bold text-text-100">Доставка</h2>
               </div>
 
               <div className="mb-4">
-                <label className="flex items-center gap-2 mb-2">
+                <label className="flex items-center gap-2 mb-2 cursor-pointer">
                   <input
                     type="radio"
                     checked={shippingMethod === 'novaposhta'}
                     onChange={() => setShippingMethod('novaposhta')}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-bronze"
                   />
-                  <span className="font-bold">Нова Пошта</span>
+                  <span className="font-bold text-text-100">Нова Пошта</span>
                 </label>
 
                 {shippingMethod === 'novaposhta' && (
                   <div className="ml-6 space-y-3">
                     <div>
-                      <label className="block text-sm mb-1">Місто *</label>
+                      <label className="block text-sm text-text-200 mb-1">Місто *</label>
                       <input
                         type="text"
                         value={novaPoshtaCity}
                         onChange={(e) => setNovaPoshtaCity(e.target.value)}
                         placeholder="Київ"
-                        className="w-full border-2 border-timber-dark px-3 py-2"
+                        className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Відділення *</label>
+                      <label className="block text-sm text-text-200 mb-1">Відділення *</label>
                       <input
                         type="text"
                         value={novaPoshtaBranch}
                         onChange={(e) => setNovaPoshtaBranch(e.target.value)}
                         placeholder="Відділення №1"
-                        className="w-full border-2 border-timber-dark px-3 py-2"
+                        className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                       />
                     </div>
                   </div>
@@ -306,74 +298,74 @@ export default function CheckoutPage() {
               </div>
 
               <div>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
                     checked={shippingMethod === 'address'}
                     onChange={() => setShippingMethod('address')}
-                    className="w-4 h-4"
+                    className="w-4 h-4 accent-bronze"
                   />
-                  <span className="font-bold">Кур'єром за адресою</span>
+                  <span className="font-bold text-text-100">Кур'єром за адресою</span>
                 </label>
 
                 {shippingMethod === 'address' && (
                   <div className="ml-6 mt-3 space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-sm mb-1">Повне ім'я *</label>
+                        <label className="block text-sm text-text-200 mb-1">Повне ім'я *</label>
                         <input
                           type="text"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="w-full border-2 border-timber-dark px-3 py-2"
+                          className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-1">Телефон *</label>
+                        <label className="block text-sm text-text-200 mb-1">Телефон *</label>
                         <input
                           type="tel"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="+380..."
-                          className="w-full border-2 border-timber-dark px-3 py-2"
+                          className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Вулиця, будинок, квартира *</label>
+                      <label className="block text-sm text-text-200 mb-1">Вулиця, будинок, квартира *</label>
                       <input
                         type="text"
                         value={street}
                         onChange={(e) => setStreet(e.target.value)}
-                        className="w-full border-2 border-timber-dark px-3 py-2"
+                        className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-sm mb-1">Місто *</label>
+                        <label className="block text-sm text-text-200 mb-1">Місто *</label>
                         <input
                           type="text"
                           value={city}
                           onChange={(e) => setCity(e.target.value)}
-                          className="w-full border-2 border-timber-dark px-3 py-2"
+                          className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-1">Область *</label>
+                        <label className="block text-sm text-text-200 mb-1">Область *</label>
                         <input
                           type="text"
                           value={oblast}
                           onChange={(e) => setOblast(e.target.value)}
-                          className="w-full border-2 border-timber-dark px-3 py-2"
+                          className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-1">Індекс</label>
+                        <label className="block text-sm text-text-200 mb-1">Індекс</label>
                         <input
                           type="text"
                           value={postalCode}
                           onChange={(e) => setPostalCode(e.target.value)}
-                          className="w-full border-2 border-timber-dark px-3 py-2"
+                          className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
                         />
                       </div>
                     </div>
@@ -384,27 +376,23 @@ export default function CheckoutPage() {
           )}
 
           {/* Notes */}
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint joint-tl" />
-            <label className="block font-bold mb-2">Коментар до замовлення</label>
+          <div className="bg-panel-900 border border-line p-6 rounded-lg">
+            <label className="block font-bold text-text-100 mb-2">Коментар до замовлення</label>
             <textarea
               value={customerNotes}
               onChange={(e) => setCustomerNotes(e.target.value)}
               placeholder="Додаткові побажання..."
               rows={3}
-              className="w-full border-2 border-timber-dark px-3 py-2"
+              className="w-full border border-line bg-panel-850 px-3 py-2 text-text-100 rounded focus:border-bronze focus:outline-none"
             />
           </div>
         </div>
 
         {/* Order Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-timber-dark text-canvas p-6 relative sticky top-4">
-            <div className="joint border-accent" style={{ top: '-3px', left: '-3px' }} />
-            <div className="joint border-accent" style={{ top: '-3px', right: '-3px' }} />
-
+          <div className="bg-bronze text-bg-950 p-6 rounded-lg sticky top-4">
             <div className="flex items-center gap-2 mb-4">
-              <CreditCard className="text-accent" size={20} />
+              <CreditCard size={20} />
               <h2 className="font-syne text-xl font-bold">Разом</h2>
             </div>
 
@@ -415,13 +403,13 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-xl">
                 <span className="opacity-80">До сплати:</span>
-                <span className="font-syne font-bold text-accent">{totalPoints}</span>
+                <span className="font-syne font-bold">{totalPoints}</span>
               </div>
-              <p className="text-sm opacity-60">балів (≈ {totalUah.toFixed(0)} грн)</p>
+              <p className="text-sm opacity-70">балів (≈ {totalUah.toFixed(0)} грн)</p>
             </div>
 
             {error && (
-              <div className="bg-red-600/20 border border-red-600 p-3 mb-4 text-sm">
+              <div className="bg-red-600/20 border border-red-600 p-3 mb-4 text-sm text-red-100 rounded">
                 {error}
               </div>
             )}
@@ -429,7 +417,7 @@ export default function CheckoutPage() {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full bg-accent text-timber-dark px-6 py-4 font-bold hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-bg-950 text-bronze px-6 py-4 font-bold hover:bg-bg-950/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded"
             >
               {loading ? (
                 <>
@@ -444,7 +432,7 @@ export default function CheckoutPage() {
               )}
             </button>
 
-            <p className="text-xs opacity-60 mt-4 text-center">
+            <p className="text-xs opacity-70 mt-4 text-center">
               Натискаючи кнопку, ви погоджуєтеся з умовами обміну балів
             </p>
           </div>

@@ -24,8 +24,8 @@ export default async function VotesPage() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <p className="label mb-2">ГОЛОСУВАННЯ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// ГОЛОСУВАННЯ</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
           Прийняття рішень
         </h1>
       </div>

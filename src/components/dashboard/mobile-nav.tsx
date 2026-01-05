@@ -79,7 +79,7 @@ export function MobileNav() {
         const { data } = await supabase
           .from('users')
           .select('first_name, last_name, email, avatar_url, staff_role, membership_role')
-          .eq('clerk_id', user.id)
+          .eq('auth_id', user.id)
           .single();
 
         if (data) {

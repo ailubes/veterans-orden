@@ -57,7 +57,7 @@ export function Sidebar() {
         const { data: profile } = await supabase
           .from('users')
           .select('staff_role, membership_role')
-          .eq('clerk_id', user.id)
+          .eq('auth_id', user.id)
           .single();
 
         if (profile) {
@@ -82,11 +82,11 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 bg-timber-dark text-canvas min-h-screen">
+    <aside className="hidden lg:flex flex-col w-64 bg-panel-900 text-text-100 min-h-screen border-r border-line">
       {/* Logo */}
-      <div className="p-6 border-b border-canvas/10">
+      <div className="p-6 border-b border-line">
         <Link href="/" className="flex items-center gap-3">
-          <Logo size={40} className="text-canvas" />
+          <Logo size={40} className="text-bronze" />
           <span className="font-syne font-bold text-lg tracking-tight">МЕРЕЖА</span>
         </Link>
       </div>
@@ -102,10 +102,10 @@ export function Sidebar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors ${
+                  className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors rounded ${
                     isActive
-                      ? 'bg-accent text-canvas'
-                      : 'hover:bg-canvas/10'
+                      ? 'bg-bronze text-bg-950'
+                      : 'hover:bg-panel-850'
                   }`}
                 >
                   <Icon size={18} />
@@ -119,12 +119,12 @@ export function Sidebar() {
           <li>
             <button
               onClick={toggleMessenger}
-              className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors hover:bg-canvas/10 w-full relative"
+              className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors hover:bg-panel-850 rounded w-full relative"
             >
               <MessageCircle size={18} />
               ЧАТИ
               {totalUnread > 0 && (
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-bronze text-bg-950 text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                   {totalUnread > 99 ? '99+' : totalUnread}
                 </span>
               )}
@@ -133,13 +133,13 @@ export function Sidebar() {
 
           {/* Admin Link - only visible to admins */}
           {isAdmin && (
-            <li className="pt-4 mt-4 border-t border-canvas/10">
+            <li className="pt-4 mt-4 border-t border-line">
               <Link
                 href="/admin"
-                className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors ${
+                className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors rounded ${
                   pathname.startsWith('/admin')
-                    ? 'bg-accent text-canvas'
-                    : 'hover:bg-canvas/10'
+                    ? 'bg-bronze text-bg-950'
+                    : 'hover:bg-panel-850'
                 }`}
               >
                 <Shield size={18} />
@@ -151,10 +151,10 @@ export function Sidebar() {
       </nav>
 
       {/* Sign Out */}
-      <div className="p-4 border-t border-canvas/10">
+      <div className="p-4 border-t border-line">
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider hover:bg-canvas/10 w-full transition-colors"
+          className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider hover:bg-panel-850 rounded w-full transition-colors"
         >
           <LogOut size={18} />
           ВИЙТИ

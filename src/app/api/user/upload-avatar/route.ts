@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const { data: userProfile } = await supabase
       .from('users')
       .select('id')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!userProfile) {
@@ -120,7 +120,7 @@ export async function PATCH(request: NextRequest) {
     const { error: updateError } = await supabase
       .from('users')
       .update({ avatar_url: avatarUrl, updated_at: new Date().toISOString() })
-      .eq('clerk_id', user.id);
+      .eq('auth_id', user.id);
 
     if (updateError) {
       console.error('[Avatar Upload API] Update error:', updateError);

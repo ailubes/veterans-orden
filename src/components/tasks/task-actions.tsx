@@ -44,7 +44,7 @@ export function ClaimButton({ taskId }: ClaimButtonProps) {
     <button
       onClick={handleClaim}
       disabled={loading}
-      className="btn btn-outline text-sm flex-shrink-0 disabled:opacity-50"
+      className="px-4 py-2 border border-bronze text-bronze text-sm font-bold flex-shrink-0 disabled:opacity-50 hover:bg-bronze hover:text-bg-950 transition-colors rounded"
     >
       {loading ? 'ОБРОБКА...' : 'ВЗЯТИ →'}
     </button>
@@ -250,7 +250,7 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
       <button
         onClick={handleComplete}
         disabled={loading}
-        className="btn text-sm disabled:opacity-50 flex-shrink-0"
+        className="bg-bronze text-bg-950 px-4 py-2 font-bold text-sm disabled:opacity-50 flex-shrink-0 hover:bg-bronze/90 transition-colors rounded"
       >
         {loading ? 'ОБРОБКА...' : `ЗАВЕРШИТИ (+${points})`}
       </button>
@@ -259,15 +259,15 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
         setShowModal(open);
         if (!open) resetModal();
       }}>
-        <DialogContent className="bg-canvas border-2 border-timber-dark max-w-md">
+        <DialogContent className="bg-panel-900 border border-line max-w-md rounded-lg">
           <DialogHeader>
-            <DialogTitle className="font-syne text-lg">
+            <DialogTitle className="font-syne text-lg text-text-100">
               Підтвердження виконання
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
-            <p className="text-sm text-timber-beam">
+            <p className="text-sm text-muted-500">
               Завантажте скріншот або надайте посилання як підтвердження виконання завдання.
             </p>
 
@@ -276,10 +276,10 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
               <button
                 type="button"
                 onClick={() => setProofType('image')}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 border rounded transition-colors ${
                   proofType === 'image'
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-timber-dark/20 hover:border-timber-dark/40'
+                    ? 'border-bronze bg-bronze/10 text-bronze'
+                    : 'border-line hover:border-bronze/50 text-text-200'
                 }`}
               >
                 <Image size={18} />
@@ -288,10 +288,10 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
               <button
                 type="button"
                 onClick={() => setProofType('url')}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 border-2 transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 border rounded transition-colors ${
                   proofType === 'url'
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-timber-dark/20 hover:border-timber-dark/40'
+                    ? 'border-bronze bg-bronze/10 text-bronze'
+                    : 'border-line hover:border-bronze/50 text-text-200'
                 }`}
               >
                 <LinkIcon size={18} />
@@ -302,21 +302,21 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
             {/* Image Upload */}
             {proofType === 'image' && (
               <div>
-                <label className="block text-sm font-bold mb-2">
+                <label className="block text-sm font-bold text-text-100 mb-2">
                   Скріншот підтвердження
                 </label>
 
                 {compressing ? (
-                  <div className="w-full py-8 border-2 border-dashed border-accent/40 flex flex-col items-center gap-2">
-                    <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-                    <span className="text-sm text-timber-beam">Стиснення зображення...</span>
+                  <div className="w-full py-8 border border-dashed border-bronze/40 flex flex-col items-center gap-2 rounded">
+                    <div className="w-8 h-8 border-2 border-bronze border-t-transparent rounded-full animate-spin" />
+                    <span className="text-sm text-muted-500">Стиснення зображення...</span>
                   </div>
                 ) : previewUrl ? (
                   <div className="relative">
                     <img
                       src={previewUrl}
                       alt="Preview"
-                      className="w-full max-h-48 object-contain border-2 border-timber-dark"
+                      className="w-full max-h-48 object-contain border border-line rounded"
                     />
                     <button
                       type="button"
@@ -327,11 +327,11 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
                     </button>
                     {/* Show compression info */}
                     {originalSize > 0 && proofImage && (
-                      <div className="mt-2 text-xs text-timber-beam flex items-center justify-between">
+                      <div className="mt-2 text-xs text-muted-500 flex items-center justify-between">
                         <span>
                           Оригінал: {formatFileSize(originalSize)}
                         </span>
-                        <span className="text-green-600 font-bold">
+                        <span className="text-green-400 font-bold">
                           Стиснуто: {formatFileSize(proofImage.size)}
                         </span>
                       </div>
@@ -343,24 +343,24 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
                     onClick={() => fileInputRef.current?.click()}
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
-                    className="w-full py-8 border-2 border-dashed border-timber-dark/40 hover:border-accent transition-colors flex flex-col items-center gap-3 cursor-pointer"
+                    className="w-full py-8 border border-dashed border-line hover:border-bronze transition-colors flex flex-col items-center gap-3 cursor-pointer rounded"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex flex-col items-center">
-                        <Upload size={28} className="text-timber-beam" />
-                        <span className="text-xs text-timber-beam mt-1">Вибрати</span>
+                        <Upload size={28} className="text-muted-500" />
+                        <span className="text-xs text-muted-500 mt-1">Вибрати</span>
                       </div>
-                      <div className="h-10 border-l border-timber-dark/20" />
+                      <div className="h-10 border-l border-line" />
                       <div className="flex flex-col items-center">
-                        <Clipboard size={28} className="text-accent" />
-                        <span className="text-xs text-accent mt-1 font-bold">Ctrl+V</span>
+                        <Clipboard size={28} className="text-bronze" />
+                        <span className="text-xs text-bronze mt-1 font-bold">Ctrl+V</span>
                       </div>
                     </div>
                     <div className="text-center">
-                      <span className="text-sm text-timber-beam block">
+                      <span className="text-sm text-muted-500 block">
                         Натисніть, перетягніть або вставте скріншот
                       </span>
-                      <span className="text-xs text-timber-beam/60">
+                      <span className="text-xs text-muted-500/60">
                         JPG, PNG до 10MB (буде стиснуто до ~100KB)
                       </span>
                     </div>
@@ -380,7 +380,7 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
             {/* URL Input */}
             {proofType === 'url' && (
               <div>
-                <label className="block text-sm font-bold mb-2">
+                <label className="block text-sm font-bold text-text-100 mb-2">
                   Посилання на підтвердження
                 </label>
                 <input
@@ -388,14 +388,14 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
                   value={proofUrl}
                   onChange={(e) => setProofUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-4 py-3 border-2 border-timber-dark bg-canvas font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-3 border border-line bg-panel-850 text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
                 />
               </div>
             )}
 
             {/* Error Message */}
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 p-3 border border-red-200">
+              <p className="text-sm text-red-400 bg-red-500/10 p-3 border border-red-500/30 rounded">
                 {error}
               </p>
             )}
@@ -405,7 +405,7 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="flex-1 btn btn-outline"
+                className="flex-1 px-4 py-2 border border-line text-text-100 font-bold text-sm hover:bg-panel-850 transition-colors rounded"
                 disabled={loading || compressing}
               >
                 СКАСУВАТИ
@@ -414,11 +414,11 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || compressing || (proofType === 'url' && !proofUrl) || (proofType === 'image' && !proofImage)}
-                className="flex-1 btn disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 bg-bronze text-bg-950 px-4 py-2 font-bold text-sm disabled:opacity-50 flex items-center justify-center gap-2 hover:bg-bronze/90 transition-colors rounded"
               >
                 {loading ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-canvas border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-bg-950 border-t-transparent rounded-full animate-spin" />
                     НАДСИЛАННЯ...
                   </>
                 ) : (
@@ -430,7 +430,7 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
               </button>
             </div>
 
-            <p className="text-xs text-timber-beam/60 text-center">
+            <p className="text-xs text-muted-500/60 text-center">
               Після перевірки адміністратором вам буде нараховано +{points} балів
             </p>
           </div>

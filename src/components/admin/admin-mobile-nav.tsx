@@ -20,6 +20,7 @@ import {
   ShoppingBag,
   BookOpen,
   Target,
+  PanelTop,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -32,6 +33,7 @@ const navItems = [
   { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
   { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
+  { href: '/admin/pages', icon: PanelTop, label: 'СТОРІНКИ' },
   { href: '/admin/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
   { href: '/admin/help', icon: BookOpen, label: 'ДОВІДКА' },
   { href: '/admin/notifications', icon: Bell, label: 'СПОВІЩЕННЯ' },
@@ -54,9 +56,9 @@ export function AdminMobileNav() {
   return (
     <div className="lg:hidden">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-timber-dark text-canvas">
+      <header className="flex items-center justify-between p-4 bg-panel-900 text-text-100 border-b border-line">
         <Link href="/admin" className="flex items-center gap-3">
-          <Logo size={32} className="text-accent" />
+          <Logo size={32} className="text-bronze" />
           <div>
             <span className="font-syne font-bold tracking-tight">АДМІН</span>
           </div>
@@ -73,13 +75,13 @@ export function AdminMobileNav() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <nav className="fixed inset-0 top-[60px] bg-timber-dark text-canvas z-50 overflow-y-auto">
+        <nav className="fixed inset-0 top-[60px] bg-panel-900 text-text-100 z-50 overflow-y-auto">
           {/* Back to dashboard */}
-          <div className="p-4 border-b border-canvas/10">
+          <div className="p-4 border-b border-line">
             <Link
               href="/dashboard"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 text-sm opacity-60 hover:opacity-100 transition-opacity"
+              className="flex items-center gap-2 text-sm text-muted-500 hover:text-text-100 transition-colors"
             >
               <ArrowLeft size={16} />
               До кабінету
@@ -100,10 +102,10 @@ export function AdminMobileNav() {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider transition-colors ${
+                    className={`flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider transition-colors rounded ${
                       isActive
-                        ? 'bg-accent text-canvas'
-                        : 'hover:bg-canvas/10'
+                        ? 'bg-bronze text-bg-950'
+                        : 'hover:bg-panel-850'
                     }`}
                   >
                     <Icon size={20} />
@@ -115,10 +117,10 @@ export function AdminMobileNav() {
           </ul>
 
           {/* Sign out */}
-          <div className="p-4 border-t border-canvas/10">
+          <div className="p-4 border-t border-line">
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider hover:bg-canvas/10 w-full transition-colors"
+              className="flex items-center gap-3 px-4 py-4 text-sm font-bold tracking-wider hover:bg-panel-850 w-full transition-colors rounded"
             >
               <LogOut size={20} />
               ВИЙТИ

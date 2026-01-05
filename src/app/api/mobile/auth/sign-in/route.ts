@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     const { data: profile } = await supabase
       .from('users')
       .select('id, role, first_name, last_name, status, membership_tier')
-      .eq('clerk_id', data.user.id)
+      .eq('auth_id', data.user.id)
       .single();
 
     // Check if user has 2FA enabled

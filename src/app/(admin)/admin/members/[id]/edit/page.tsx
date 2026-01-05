@@ -94,7 +94,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
       const { data: adminProfile } = await supabase
         .from('users')
         .select('role, id')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (!adminProfile || !['admin', 'super_admin', 'regional_leader'].includes(adminProfile.role)) {
@@ -184,7 +184,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
       const { data: adminData } = await supabase
         .from('users')
         .select('id')
-        .eq('clerk_id', authUser?.id)
+        .eq('auth_id', authUser?.id)
         .single();
 
       // Check if location is being changed
@@ -295,8 +295,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line p-8 text-center rounded-lg">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -305,9 +305,9 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
   if (error && !member) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-red-600 font-bold mb-4">{error}</p>
-          <Link href="/admin/members" className="btn">
+        <div className="bg-panel-900 border border-line p-8 text-center rounded-lg">
+          <p className="text-red-400 font-bold mb-4">{error}</p>
+          <Link href="/admin/members" className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors rounded">
             НАЗАД ДО СПИСКУ
           </Link>
         </div>
@@ -326,7 +326,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
       <div className="mb-6">
         <Link
           href={`/admin/members/${member.id}`}
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО ПРОФІЛЮ
@@ -335,127 +335,117 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
       {/* Header */}
       <div className="mb-6">
-        <p className="label text-accent mb-2">РЕДАГУВАННЯ ЧЛЕНА</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+        <p className="mono text-bronze text-xs tracking-widest mb-2">РЕДАГУВАННЯ ЧЛЕНА</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
           {member.first_name} {member.last_name}
         </h1>
       </div>
 
       {/* Error message */}
       {error && (
-        <div className="bg-red-100 border-2 border-red-600 p-4 mb-6">
-          <p className="text-red-600 font-bold">{error}</p>
+        <div className="bg-red-500/10 border border-red-500 p-4 mb-6 rounded-lg">
+          <p className="text-red-400 font-bold">{error}</p>
         </div>
       )}
 
       {/* Edit Form */}
       <form onSubmit={handleSubmit}>
         {/* Personal Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ОСОБИСТА ІНФОРМАЦІЯ</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">ОСОБИСТА ІНФОРМАЦІЯ</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Ім&apos;я <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Ім&apos;я <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={member.first_name}
                 onChange={(e) => setMember({ ...member, first_name: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Прізвище <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Прізвище <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={member.last_name}
                 onChange={(e) => setMember({ ...member, last_name: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">По-батькові</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">По-батькові</label>
               <input
                 type="text"
                 value={member.patronymic || ''}
                 onChange={(e) => setMember({ ...member, patronymic: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Email <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Email <span className="text-red-400">*</span>
               </label>
               <input
                 type="email"
                 value={member.email}
                 onChange={(e) => setMember({ ...member, email: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Телефон</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Телефон</label>
               <input
                 type="tel"
                 value={member.phone || ''}
                 onChange={(e) => setMember({ ...member, phone: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Дата народження</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Дата народження</label>
               <input
                 type="date"
                 value={member.date_of_birth || ''}
                 onChange={(e) => setMember({ ...member, date_of_birth: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
           </div>
         </div>
 
         {/* Location */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4 flex items-center gap-2">
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4 flex items-center gap-2">
             <MapPin className="w-4 h-4" />
             МІСЦЕЗНАХОДЖЕННЯ (KATOTTG)
           </p>
 
           {/* Admin can always change location */}
-          <div className="bg-blue-50 border border-blue-200 p-3 mb-4 rounded text-sm text-blue-800">
+          <div className="bg-blue-500/10 border border-blue-500 p-3 mb-4 rounded text-sm text-blue-400">
             <p className="font-medium">Адміністративна зміна локації</p>
-            <p className="text-xs mt-1">
+            <p className="text-xs mt-1 opacity-80">
               Зміни локації, здійснені адміністратором, логуються як &quot;admin_override&quot;.
             </p>
           </div>
 
           {/* Current location display */}
           {katottgDetails && (
-            <div className="mb-4 p-3 bg-timber-dark/5 rounded">
-              <div className="text-sm font-medium">{katottgDetails.name}</div>
-              <div className="text-xs text-timber-beam flex flex-wrap items-center gap-1 mt-1">
+            <div className="mb-4 p-3 bg-panel-850 rounded">
+              <div className="text-sm font-medium text-text-100">{katottgDetails.name}</div>
+              <div className="text-xs text-muted-500 flex flex-wrap items-center gap-1 mt-1">
                 {katottgDetails.oblastName && (
                   <span>{katottgDetails.oblastName}</span>
                 )}
@@ -486,16 +476,16 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
           {/* Legacy location fields (hidden, kept for backwards compatibility) */}
           <details className="mt-4">
-            <summary className="text-xs text-timber-beam cursor-pointer hover:text-timber-dark">
+            <summary className="text-xs text-muted-500 cursor-pointer hover:text-text-100">
               Застарілі поля локації (для сумісності)
             </summary>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-timber-dark/10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-line">
               <div>
-                <label className="block text-xs font-bold mb-2 text-timber-beam">Область (застаріле)</label>
+                <label className="block text-xs font-bold mb-2 text-muted-500">Область (застаріле)</label>
                 <select
                   value={member.oblast_id || ''}
                   onChange={(e) => setMember({ ...member, oblast_id: e.target.value })}
-                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark/50 font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
                 >
                   <option value="">Оберіть область</option>
                   {oblasts.map((oblast) => (
@@ -507,12 +497,12 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold mb-2 text-timber-beam">Місто (застаріле)</label>
+                <label className="block text-xs font-bold mb-2 text-muted-500">Місто (застаріле)</label>
                 <input
                   type="text"
                   value={member.city || ''}
                   onChange={(e) => setMember({ ...member, city: e.target.value })}
-                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark/50 font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
                 />
               </div>
             </div>
@@ -520,18 +510,13 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         </div>
 
         {/* Role & Status */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">РОЛЬ ТА СТАТУС</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">РОЛЬ ТА СТАТУС</p>
 
           {!canEditRole && (
-            <div className="bg-yellow-100 border-2 border-yellow-600 p-3 mb-4 flex items-start gap-2">
-              <AlertTriangle size={18} className="text-yellow-600 mt-0.5" />
-              <p className="text-xs text-yellow-800">
+            <div className="bg-yellow-500/10 border border-yellow-500 p-3 mb-4 flex items-start gap-2 rounded">
+              <AlertTriangle size={18} className="text-yellow-400 mt-0.5" />
+              <p className="text-xs text-yellow-400">
                 У вас немає прав для зміни ролі цього користувача
               </p>
             </div>
@@ -539,12 +524,12 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">Роль</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Роль</label>
               <select
                 value={member.role}
                 onChange={(e) => setMember({ ...member, role: e.target.value })}
                 disabled={!canEditRole}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded"
               >
                 <option value="free_viewer">Спостерігач</option>
                 <option value="prospect">Потенційний член</option>
@@ -558,19 +543,19 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                 )}
               </select>
               {canEditRole && (
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Зміна ролі впливає на права доступу
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Статус</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Статус</label>
               <select
                 value={member.status}
                 onChange={(e) => setMember({ ...member, status: e.target.value })}
                 disabled={isRegionalLeader}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded"
               >
                 <option value="pending">На перевірці</option>
                 <option value="active">Активний</option>
@@ -582,13 +567,8 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         </div>
 
         {/* Verification */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ВЕРИФІКАЦІЯ</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">ВЕРИФІКАЦІЯ</p>
 
           <div className="space-y-3">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -596,9 +576,9 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                 type="checkbox"
                 checked={member.is_email_verified}
                 onChange={(e) => setMember({ ...member, is_email_verified: e.target.checked })}
-                className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
+                className="w-5 h-5 border border-line bg-panel-850 accent-bronze rounded"
               />
-              <span className="text-sm font-bold">Email підтверджено</span>
+              <span className="text-sm font-bold text-text-100">Email підтверджено</span>
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer">
@@ -606,9 +586,9 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                 type="checkbox"
                 checked={member.is_phone_verified}
                 onChange={(e) => setMember({ ...member, is_phone_verified: e.target.checked })}
-                className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
+                className="w-5 h-5 border border-line bg-panel-850 accent-bronze rounded"
               />
-              <span className="text-sm font-bold">Телефон підтверджено</span>
+              <span className="text-sm font-bold text-text-100">Телефон підтверджено</span>
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer">
@@ -616,33 +596,28 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                 type="checkbox"
                 checked={member.is_identity_verified}
                 onChange={(e) => setMember({ ...member, is_identity_verified: e.target.checked })}
-                className="w-5 h-5 border-2 border-timber-dark focus:ring-accent"
+                className="w-5 h-5 border border-line bg-panel-850 accent-bronze rounded"
                 disabled={isRegionalLeader}
               />
-              <span className="text-sm font-bold">
+              <span className="text-sm font-bold text-text-100">
                 Особу підтверджено
-                {isRegionalLeader && <span className="text-timber-beam ml-2">(лише для адмінів)</span>}
+                {isRegionalLeader && <span className="text-muted-500 ml-2">(лише для адмінів)</span>}
               </span>
             </label>
           </div>
         </div>
 
         {/* Membership */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ЧЛЕНСТВО</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">ЧЛЕНСТВО</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">План членства</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">План членства</label>
               <select
                 value={member.membership_tier}
                 onChange={(e) => setMember({ ...member, membership_tier: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               >
                 <option value="free">Безкоштовний</option>
                 <option value="basic_49">Базовий (49 грн)</option>
@@ -653,12 +628,12 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Оплачено до</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Оплачено до</label>
               <input
                 type="date"
                 value={member.membership_paid_until || ''}
                 onChange={(e) => setMember({ ...member, membership_paid_until: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
           </div>
@@ -666,23 +641,18 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
         {/* Points Adjustment */}
         {!isRegionalLeader && (
-          <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative">
-            <div className="joint joint-tl" />
-            <div className="joint joint-tr" />
-            <div className="joint joint-bl" />
-            <div className="joint joint-br" />
+          <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+            <p className="mono text-bronze text-xs tracking-widest mb-4">КОРИГУВАННЯ БАЛІВ</p>
 
-            <p className="label text-accent mb-4">КОРИГУВАННЯ БАЛІВ</p>
-
-            <div className="bg-yellow-50 border-2 border-yellow-600 p-3 mb-4">
-              <p className="text-xs text-yellow-800">
+            <div className="bg-yellow-500/10 border border-yellow-500 p-3 mb-4 rounded">
+              <p className="text-xs text-yellow-400">
                 Поточні бали: <strong>{member.points || 0}</strong>
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-bold mb-2">
+                <label className="block text-sm font-bold text-text-100 mb-2">
                   Зміна балів (±)
                 </label>
                 <input
@@ -691,15 +661,15 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                   onChange={(e) => setPointsAdjustment(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
                   onBlur={(e) => { if (e.target.value === '') setPointsAdjustment(0); }}
                   placeholder="0"
-                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
                 />
-                <p className="text-xs text-timber-beam mt-1">
+                <p className="text-xs text-muted-500 mt-1">
                   Нові бали: {(member.points || 0) + pointsAdjustment}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-2">
+                <label className="block text-sm font-bold text-text-100 mb-2">
                   Причина коригування
                 </label>
                 <textarea
@@ -707,13 +677,13 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
                   onChange={(e) => setPointsReason(e.target.value)}
                   placeholder="Обов'язкова причина, якщо змінюєте бали"
                   rows={3}
-                  className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none resize-none"
+                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none resize-none rounded"
                 />
               </div>
             </div>
 
             {pointsAdjustment !== 0 && !pointsReason.trim() && (
-              <p className="text-xs text-red-600 mt-2">
+              <p className="text-xs text-red-400 mt-2">
                 Причина коригування обов&apos;язкова при зміні балів
               </p>
             )}
@@ -725,7 +695,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
           <button
             type="submit"
             disabled={saving || (pointsAdjustment !== 0 && !pointsReason.trim())}
-            className="btn flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded"
           >
             <Save size={18} />
             {saving ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ ЗМІНИ'}
@@ -733,7 +703,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
           <Link
             href={`/admin/members/${member.id}`}
-            className="btn btn-outline"
+            className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
           >
             СКАСУВАТИ
           </Link>

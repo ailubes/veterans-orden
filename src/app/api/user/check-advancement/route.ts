@@ -25,7 +25,7 @@ export async function POST() {
         membershipRole: users.membershipRole,
       })
       .from(users)
-      .where(eq(users.clerkId, authUser.id))
+      .where(eq(users.authId, authUser.id))
       .limit(1);
 
     if (!dbUser || dbUser.length === 0) {

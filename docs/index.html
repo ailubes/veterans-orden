@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="uk" data-lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Орден Ветеранів | Офіційний сайт</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Brand / Industrial palette (matched to your bronze logo vibe) */
+      --bg-950: #0f1011;
+      --panel-900: #141618;
+      --panel-850: #1a1d20;
+      --text-100: #e7e7e7;
+      --muted-500: #8b8f96;
+
+      --bronze: #b5793a;      /* main accent */
+      --bronze-2: #8c5a25;    /* deeper accent */
+      --steel: #7d7d7d;
+      --line: rgba(255,255,255,0.10);
+
+      --rebar-pattern: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.06),
+        rgba(255,255,255,0.06) 2px,
+        transparent 2px,
+        transparent 10px
+      );
+
+      --radius: 14px;
+      --shadow: 50px 50px 100px rgba(0,0,0,0.55);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg-950);
+      color: var(--text-100);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.45;
+    }
+
+    /* Concrete texture overlay (subtle) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      opacity: 0.045;
+      pointer-events: none;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Layout grid */
+    .scaffold {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      min-height: 100vh;
+      padding: 2rem;
+      gap: 1.6rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Rebar rail */
+    .rebar-vertical {
+      grid-column: 2 / 3;
+      width: 8px;
+      height: 100%;
+      background: var(--steel);
+      position: relative;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.45);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .rebar-vertical::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--rebar-pattern);
+      opacity: 0.55;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: clamp(3.2rem, 10vw, 7.8rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 0.86;
+      letter-spacing: -0.05em;
+      grid-column: 3 / 13;
+      margin-top: 3.5rem;
+    }
+
+    .mono {
+      font-family: 'IBM Plex Mono', monospace;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      color: var(--muted-500);
+    }
+
+    /* Nav */
+    nav {
+      grid-column: 1 / 13;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      min-width: 260px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      gap: 0.12rem;
+    }
+
+    .brand-title strong {
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      font-size: 0.95rem;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-100);
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-left: 0.9rem;
+      position: relative;
+      opacity: 0.92;
+      white-space: nowrap;
+    }
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--bronze);
+      transition: width 0.25s ease;
+    }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:hover { opacity: 1; }
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+      margin-left: 0.6rem;
+    }
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      color: var(--text-100);
+      padding: 0.55rem 0.75rem;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      font-family: 'IBM Plex Mono', monospace;
+      opacity: 0.85;
+    }
+    .lang-btn.active {
+      background: rgba(181,121,58,0.18);
+      color: var(--text-100);
+      opacity: 1;
+    }
+
+    /* Hero monolith */
+    .monolith {
+      grid-column: 4 / 11;
+      background: linear-gradient(180deg, var(--panel-900), var(--panel-850));
+      padding: 3.2rem;
+      position: relative;
+      border-left: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      transform: skewY(-2deg);
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .monolith:hover { transform: skewY(0deg) translateY(-10px); }
+
+    .monolith::before {
+      content: attr(data-tag);
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bronze);
+      color: #0f1011;
+      padding: 6px 12px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      border-radius: 999px;
+      font-weight: 900;
+    }
+
+    .hero-subtitle {
+      font-size: 1.08rem;
+      color: #b9bcc2;
+      max-width: 58ch;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-title-2 {
+      font-size: 2.25rem;
+      margin-bottom: 1.1rem;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+
+    /* CTA */
+    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .heavy-cta {
+      display: inline-block;
+      padding: 1.05rem 1.55rem;
+      background: transparent;
+      border: 2px solid var(--text-100);
+      color: var(--text-100);
+      text-decoration: none;
+      font-weight: 900;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      transition: 0.25s;
+      letter-spacing: 0.06em;
+      border-radius: 12px;
+    }
+    .heavy-cta:hover { background: var(--text-100); color: var(--bg-950); }
+
+    .heavy-cta.primary {
+      border-color: var(--bronze);
+      background: rgba(181,121,58,0.12);
+    }
+    .heavy-cta.primary:hover {
+      background: var(--bronze);
+      color: #0f1011;
+    }
+
+    /* Stats */
+    .stats-container {
+      grid-column: 3 / 12;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: -1.2rem;
+      z-index: 10;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      padding: 1.6rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-top: 4px solid var(--steel);
+      transition: all 0.25s ease;
+      border-radius: var(--radius);
+      backdrop-filter: blur(4px);
+    }
+    .stat-card:hover { border-top-color: var(--bronze); background: rgba(255,255,255,0.05); }
+    .stat-value { font-size: 2.6rem; font-weight: 900; display: block; margin-top: 0.4rem; }
+
+    /* Sections */
+    .section {
+      grid-column: 3 / 12;
+      margin-top: 2.4rem;
+      border-top: 1px solid var(--line);
+      padding-top: 2.2rem;
+    }
+    .section h2 {
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+    }
+    .section p { color: #b9bcc2; max-width: 80ch; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--rebar-pattern);
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .card h3 { font-size: 1.05rem; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .card p { color: #b9bcc2; font-size: 0.95rem; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.03);
+      margin-top: 0.9rem;
+      color: #cfd2d6;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      grid-column: 3 / 11;
+      margin: 3.5rem 0 1rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Animations */
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { animation: reveal 0.9s forwards cubic-bezier(0.16, 1, 0.3, 1); opacity: 0; }
+
+    /* Mobile */
+    @media (max-width: 980px) {
+      .scaffold { padding: 1rem; gap: 1rem; }
+      .rebar-vertical { display: none; }
+      h1 { grid-column: 1 / 13; margin-top: 2rem; }
+      .monolith { grid-column: 1 / 13; padding: 2rem; transform: none; }
+      .stats-container { grid-column: 1 / 13; grid-template-columns: 1fr; }
+      .section { grid-column: 1 / 13; }
+      .cards { grid-template-columns: 1fr; }
+      .footer { grid-column: 1 / 13; }
+      .nav-link { margin-left: 0; }
+      .brand { min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scaffold">
+    <!-- NAV -->
+    <nav>
+      <div class="brand">
+        <!-- Replace src with your deployed path. Example: /assets/logo-veterans-orden.png -->
+        <img src="logo-veterans-orden.png" alt="Орден Ветеранів — логотип" />
+        <div class="brand-title">
+          <strong data-i18n="brand.name">ОРДЕН ВЕТЕРАНІВ</strong>
+          <span class="mono" data-i18n="brand.tag">// БРАТЕРСТВО ЧЕСТІ ТА ДІЇ</span>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <a href="#about" class="nav-link" data-i18n="nav.about">ПРО НАС</a>
+        <a href="#directions" class="nav-link" data-i18n="nav.directions">НАПРЯМИ</a>
+        <a href="#events" class="nav-link" data-i18n="nav.events">ПОДІЇ</a>
+        <a href="#documents" class="nav-link" data-i18n="nav.documents">ДОКУМЕНТИ</a>
+        <a href="#contact" class="nav-link" data-i18n="nav.contact">КОНТАКТИ</a>
+
+        <a href="#support" class="heavy-cta primary" style="padding:0.7rem 1.1rem; font-size:0.75rem;" data-i18n="nav.support">ПІДТРИМАТИ</a>
+
+        <div class="lang-switch" aria-label="Language switch">
+          <button class="lang-btn active" id="btn-uk" type="button">UA</button>
+          <button class="lang-btn" id="btn-en" type="button">EN</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="rebar-vertical"></div>
+
+    <!-- BIG TITLE -->
+    <h1 class="reveal" style="opacity:1;">
+      <span data-i18n="hero.h1a">МІЦНІСТЬ</span><br>
+      <span style="color: var(--steel);" data-i18n="hero.h1b">ПОЗА</span><br>
+      <span data-i18n="hero.h1c">НАПРУГОЮ</span>
+    </h1>
+
+    <!-- HERO MONOLITH -->
+    <section class="monolith reveal" id="top" data-tag="UNIT-OV-UA" style="animation-delay: 0.12s; opacity:1;">
+      <p class="mono" style="margin-bottom: 1rem;" data-i18n="hero.kicker">// ОПЕРАЦІЙНА ФІЛОСОФІЯ</p>
+
+      <h2 class="hero-title-2" data-i18n="hero.title">
+        Ми створюємо внутрішню структуру для тих, хто стояв на передньому краї історії.
+      </h2>
+
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        Як арматура в бетоні, ветеранський дух — невидима сила, що тримає країну. Ми робимо так, щоб ця структура не тріскалась: підтримка, захист прав, адаптація, спільнота та дія.
+      </p>
+
+      <div class="cta-row">
+        <a href="#join" class="heavy-cta primary" data-i18n="cta.join">ПРИЄДНАТИСЯ</a>
+        <a href="#support" class="heavy-cta" data-i18n="cta.support">ПІДТРИМАТИ</a>
+        <a href="#help" class="heavy-cta" data-i18n="cta.getHelp">ПОТРІБНА ДОПОМОГА</a>
+      </div>
+
+      <div class="pill" style="margin-top: 1.2rem;">
+        <span data-i18n="hero.pillLeft">Тріада управління:</span>
+        <span data-i18n="hero.pillRight">Президент · Віце-президент · Колегія Мислителів</span>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-container reveal" style="animation-delay: 0.28s; opacity:1;">
+      <div class="stat-card">
+        <span class="mono" data-i18n="stats.s1k">НАПРЯМИ_ПІДТРИМКИ</span>
+        <span class="stat-value" data-i18n="stats.s1v">06</span>
+        <p style="font-size: 0.85rem; color: var(--muted-500);" data-i18n="stats.s1d">адаптація, право, психологія, наставництво, спільнота, адвокація</p>
+      </div>
+
+      <div class="stat-card" style="border-top-color: var(--bronze);">
+        <span class="mono" data-i18n="stats.s2k">ПОРЯДОК_ВСЕРЕДИНІ</span>
+        <span class="stat-value" data-i18n="stats.s2v">СУД</span>
+        <p style="font-size: 0.85rem; color: var(--muted-500);" data-i18n="stats.s2d">Суд Честі — механізм вирішення спорів і захисту репутації</p>
+      </div>
+
+      <div class="stat-card">
+        <span class="mono" data-i18n="stats.s3k">ПРИНЦИП</span>
+        <span class="stat-value" data-i18n="stats.s3v">ЧЕСТЬ</span>
+        <p style="font-size: 0.85rem; color: var(--muted-500);" data-i18n="stats.s3d">законність, дисципліна, братерство, відповідальність</p>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section reveal" id="about" style="animation-delay: 0.38s; opacity:1;">
+      <p class="mono" data-i18n="about.kicker">// ХТО МИ</p>
+      <h2 data-i18n="about.title">Орден Ветеранів — структура, яка живе довго</h2>
+      <p data-i18n="about.body">
+        Ми будуємо спільноту підтримки та елітне ядро Ордену. В основі — честь, дисципліна і взаємодопомога.
+        Управління здійснюється через Тріаду, а внутрішні спори вирішуються Судом Честі.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h3 data-i18n="about.c1t">СПІЛЬНОТА</h3>
+          <p data-i18n="about.c1d">
+            Відкрите громадське крило: участь у подіях, підтримка ініціатив, волонтерство, навчання, взаємодопомога.
+          </p>
+          <div class="pill"><span data-i18n="about.c1p">Вступ: заява + символ організації</span></div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="about.c2t">ОРДЕН</h3>
+          <p data-i18n="about.c2d">
+            Дисципліноване ядро: операційна дія, координація, безпека, підтримка спільноти, виконання місій.
+          </p>
+          <div class="pill"><span data-i18n="about.c2p">Вступ: запрошення + випробування + посвята</span></div>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="about.c3t">СУД ЧЕСТІ</h3>
+          <p data-i18n="about.c3d">
+            Внутрішній арбітраж: примирення, дисциплінарні рішення, захист честі та репутації, порядок замість хаосу.
+          </p>
+          <div class="pill"><span data-i18n="about.c3p">Принцип: “спочатку діалог”</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIRECTIONS -->
+    <section class="section reveal" id="directions" style="animation-delay: 0.48s; opacity:1;">
+      <p class="mono" data-i18n="dir.kicker">// НАПРЯМИ РОБОТИ</p>
+      <h2 data-i18n="dir.title">Що ми робимо</h2>
+      <p data-i18n="dir.body">
+        Сайт показує напрямки, програми, партнерів і конкретні способи долучитися. Нижче — базова структура, яку легко масштабувати.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h3 data-i18n="dir.d1t">АДАПТАЦІЯ</h3>
+          <p data-i18n="dir.d1d">Підтримка переходу до цивільного життя, наставництво, спільнота контактів, супровід.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dir.d2t">ПРАВОВИЙ ЗАХИСТ</h3>
+          <p data-i18n="dir.d2d">Консультації, звернення, супровід кейсів, захист прав ветеранів і родин.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dir.d3t">ПСИХОЛОГІЧНА ПІДТРИМКА</h3>
+          <p data-i18n="dir.d3d">Скринінг, перенаправлення до фахівців, групи підтримки, кризові контакти.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dir.d4t">ОСВІТА & НАСТАВНИЦТВО</h3>
+          <p data-i18n="dir.d4d">Навчальні події, тренінги, розвиток лідерів, робота “мислителів”.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dir.d5t">ГРОМАДЯНСЬКІ КАМПАНІЇ</h3>
+          <p data-i18n="dir.d5d">Адвокація, публічні звернення, комунікаційні кампанії, контроль виконання рішень.</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="dir.d6t">ВЗАЄМОДОПОМОГА</h3>
+          <p data-i18n="dir.d6d">Підтримка побратимів, волонтерські місії, координація ресурсів, партнерства.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section class="section reveal" id="events" style="animation-delay: 0.58s; opacity:1;">
+      <p class="mono" data-i18n="ev.kicker">// ПОДІЇ</p>
+      <h2 data-i18n="ev.title">Календар та зустрічі</h2>
+      <p data-i18n="ev.body">
+        Тут буде календар подій, реєстрація та онлайн-підключення (Zoom/Meet). Для MVP — список найближчих подій та форма участі.
+      </p>
+      <div class="pill"><span data-i18n="ev.pill">MVP: список + RSVP · Phase 2: повний календар</span></div>
+    </section>
+
+    <!-- JOIN / SUPPORT / HELP -->
+    <section class="section reveal" id="join" style="animation-delay: 0.68s; opacity:1;">
+      <p class="mono">// CTA</p>
+      <h2 data-i18n="join.title">Долучайся до Ордену Ветеранів</h2>
+      <p data-i18n="join.body">
+        Є два шляхи: Спільнота (відкрита) та Орден (за запрошенням). Обери формат участі — і ми зв’яжемось з тобою.
+      </p>
+      <div class="cta-row" style="margin-top: 1.1rem;">
+        <a class="heavy-cta primary" href="#contact" data-i18n="join.cta1">ПОДАТИ ЗАЯВУ (СПІЛЬНОТА)</a>
+        <a class="heavy-cta" href="#contact" data-i18n="join.cta2">ЗАПИТ НА ЗАПРОШЕННЯ (ОРДЕН)</a>
+      </div>
+    </section>
+
+    <section class="section reveal" id="support" style="animation-delay: 0.78s; opacity:1;">
+      <p class="mono" data-i18n="sup.kicker">// ПІДТРИМКА</p>
+      <h2 data-i18n="sup.title">Підтримати діяльність</h2>
+      <p data-i18n="sup.body">
+        На цьому місці буде інтеграція донатів (Stripe/WayForPay/Fondy), звіти та прозорі цілі зборів.
+      </p>
+      <div class="cta-row" style="margin-top: 1.1rem;">
+        <a class="heavy-cta primary" href="#" data-i18n="sup.cta1">ЗРОБИТИ ВНЕСОК</a>
+        <a class="heavy-cta" href="#documents" data-i18n="sup.cta2">ПЕРЕГЛЯНУТИ ДОКУМЕНТИ</a>
+      </div>
+      <div class="pill"><span data-i18n="sup.pill">Донати: MVP кнопка · Phase 2: підписка/кабінет</span></div>
+    </section>
+
+    <section class="section reveal" id="help" style="animation-delay: 0.88s; opacity:1;">
+      <p class="mono" data-i18n="help.kicker">// ДОПОМОГА</p>
+      <h2 data-i18n="help.title">Потрібна допомога?</h2>
+      <p data-i18n="help.body">
+        Залиш заявку — ми відповімо та зорієнтуємо: адаптація, правовий захист, психологічна підтримка або перенаправлення до партнерів.
+      </p>
+      <div class="cta-row" style="margin-top: 1.1rem;">
+        <a class="heavy-cta primary" href="#contact" data-i18n="help.cta1">ЗАЛИШИТИ ЗАЯВКУ</a>
+        <a class="heavy-cta" href="#contact" data-i18n="help.cta2">КОНТАКТИ</a>
+      </div>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section class="section reveal" id="documents" style="animation-delay: 0.98s; opacity:1;">
+      <p class="mono" data-i18n="doc.kicker">// ДОКУМЕНТИ</p>
+      <h2 data-i18n="doc.title">Статут, неприбутковість, звіти</h2>
+      <p data-i18n="doc.body">
+        Тут розміщуються офіційні документи: статут, рішення про неприбутковість, політики, звіти та реквізити.
+      </p>
+      <div class="cards">
+        <div class="card">
+          <h3 data-i18n="doc.d1t">СТАТУТ</h3>
+          <p data-i18n="doc.d1d">Офіційний установчий документ організації (PDF).</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="doc.d2t">НЕПРИБУТКОВІСТЬ</h3>
+          <p data-i18n="doc.d2d">Підтвердження включення до Реєстру неприбуткових установ та організацій (PDF).</p>
+        </div>
+        <div class="card">
+          <h3 data-i18n="doc.d3t">ЗВІТНІСТЬ</h3>
+          <p data-i18n="doc.d3d">Публічні звіти, прозорість, цілі зборів (за наявності).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section reveal" id="contact" style="animation-delay: 1.08s; opacity:1;">
+      <p class="mono" data-i18n="con.kicker">// КОНТАКТИ</p>
+      <h2 data-i18n="con.title">Зв’язатися з нами</h2>
+      <p data-i18n="con.body">
+        Додайте тут: email, телефон, місто базування, посилання на соцмережі. Для заявки/приєднання — форма (Name, Contact, Topic, Message).
+      </p>
+      <div class="pill"><span data-i18n="con.pill">MVP: контакти + форма · Phase 2: особистий кабінет</span></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer mono reveal" style="animation-delay: 1.18s; opacity:1;">
+      <span data-i18n="footer.left">© 2026 ОРДЕН ВЕТЕРАНІВ</span>
+      <span data-i18n="footer.mid">УКРАЇНА · ДІЯЛЬНІСТЬ У МЕЖАХ ЗАКОНУ</span>
+      <span style="color: var(--bronze);" data-i18n="footer.right">ЗМІЦНЮЄМО МАЙБУТНЄ</span>
+    </footer>
+  </div>
+
+  <script>
+    // ===== i18n dictionary =====
+    const I18N = {
+      uk: {
+        "brand.name": "ОРДЕН ВЕТЕРАНІВ",
+        "brand.tag": "// БРАТЕРСТВО ЧЕСТІ ТА ДІЇ",
+
+        "nav.about": "ПРО НАС",
+        "nav.directions": "НАПРЯМИ",
+        "nav.events": "ПОДІЇ",
+        "nav.documents": "ДОКУМЕНТИ",
+        "nav.contact": "КОНТАКТИ",
+        "nav.support": "ПІДТРИМАТИ",
+
+        "hero.h1a": "МІЦНІСТЬ",
+        "hero.h1b": "ПОЗА",
+        "hero.h1c": "НАПРУГОЮ",
+        "hero.kicker": "// ОПЕРАЦІЙНА ФІЛОСОФІЯ",
+        "hero.title": "Ми створюємо внутрішню структуру для тих, хто стояв на передньому краї історії.",
+        "hero.subtitle": "Як арматура в бетоні, ветеранський дух — невидима сила, що тримає країну. Ми робимо так, щоб ця структура не тріскалась: підтримка, захист прав, адаптація, спільнота та дія.",
+        "hero.pillLeft": "Тріада управління:",
+        "hero.pillRight": "Президент · Віце-президент · Колегія Мислителів",
+
+        "cta.join": "ПРИЄДНАТИСЯ",
+        "cta.support": "ПІДТРИМАТИ",
+        "cta.getHelp": "ПОТРІБНА ДОПОМОГА",
+
+        "stats.s1k": "НАПРЯМИ_ПІДТРИМКИ",
+        "stats.s1v": "06",
+        "stats.s1d": "адаптація, право, психологія, наставництво, спільнота, адвокація",
+        "stats.s2k": "ПОРЯДОК_ВСЕРЕДИНІ",
+        "stats.s2v": "СУД",
+        "stats.s2d": "Суд Честі — механізм вирішення спорів і захисту репутації",
+        "stats.s3k": "ПРИНЦИП",
+        "stats.s3v": "ЧЕСТЬ",
+        "stats.s3d": "законність, дисципліна, братерство, відповідальність",
+
+        "about.kicker": "// ХТО МИ",
+        "about.title": "Орден Ветеранів — структура, яка живе довго",
+        "about.body": "Ми будуємо спільноту підтримки та елітне ядро Ордену. В основі — честь, дисципліна і взаємодопомога. Управління здійснюється через Тріаду, а внутрішні спори вирішуються Судом Честі.",
+        "about.c1t": "СПІЛЬНОТА",
+        "about.c1d": "Відкрите громадське крило: участь у подіях, підтримка ініціатив, волонтерство, навчання, взаємодопомога.",
+        "about.c1p": "Вступ: заява + символ організації",
+        "about.c2t": "ОРДЕН",
+        "about.c2d": "Дисципліноване ядро: операційна дія, координація, безпека, підтримка спільноти, виконання місій.",
+        "about.c2p": "Вступ: запрошення + випробування + посвята",
+        "about.c3t": "СУД ЧЕСТІ",
+        "about.c3d": "Внутрішній арбітраж: примирення, дисциплінарні рішення, захист честі та репутації, порядок замість хаосу.",
+        "about.c3p": "Принцип: “спочатку діалог”",
+
+        "dir.kicker": "// НАПРЯМИ РОБОТИ",
+        "dir.title": "Що ми робимо",
+        "dir.body": "Сайт показує напрямки, програми, партнерів і конкретні способи долучитися. Нижче — базова структура, яку легко масштабувати.",
+        "dir.d1t": "АДАПТАЦІЯ",
+        "dir.d1d": "Підтримка переходу до цивільного життя, наставництво, спільнота контактів, супровід.",
+        "dir.d2t": "ПРАВОВИЙ ЗАХИСТ",
+        "dir.d2d": "Консультації, звернення, супровід кейсів, захист прав ветеранів і родин.",
+        "dir.d3t": "ПСИХОЛОГІЧНА ПІДТРИМКА",
+        "dir.d3d": "Скринінг, перенаправлення до фахівців, групи підтримки, кризові контакти.",
+        "dir.d4t": "ОСВІТА & НАСТАВНИЦТВО",
+        "dir.d4d": "Навчальні події, тренінги, розвиток лідерів, робота “мислителів”.",
+        "dir.d5t": "ГРОМАДЯНСЬКІ КАМПАНІЇ",
+        "dir.d5d": "Адвокація, публічні звернення, комунікаційні кампанії, контроль виконання рішень.",
+        "dir.d6t": "ВЗАЄМОДОПОМОГА",
+        "dir.d6d": "Підтримка побратимів, волонтерські місії, координація ресурсів, партнерства.",
+
+        "ev.kicker": "// ПОДІЇ",
+        "ev.title": "Календар та зустрічі",
+        "ev.body": "Тут буде календар подій, реєстрація та онлайн-підключення (Zoom/Meet). Для MVP — список найближчих подій та форма участі.",
+        "ev.pill": "MVP: список + RSVP · Phase 2: повний календар",
+
+        "join.title": "Долучайся до Ордену Ветеранів",
+        "join.body": "Є два шляхи: Спільнота (відкрита) та Орден (за запрошенням). Обери формат участі — і ми зв’яжемось з тобою.",
+        "join.cta1": "ПОДАТИ ЗАЯВУ (СПІЛЬНОТА)",
+        "join.cta2": "ЗАПИТ НА ЗАПРОШЕННЯ (ОРДЕН)",
+
+        "sup.kicker": "// ПІДТРИМКА",
+        "sup.title": "Підтримати діяльність",
+        "sup.body": "На цьому місці буде інтеграція донатів (Stripe/WayForPay/Fondy), звіти та прозорі цілі зборів.",
+        "sup.cta1": "ЗРОБИТИ ВНЕСОК",
+        "sup.cta2": "ПЕРЕГЛЯНУТИ ДОКУМЕНТИ",
+        "sup.pill": "Донати: MVP кнопка · Phase 2: підписка/кабінет",
+
+        "help.kicker": "// ДОПОМОГА",
+        "help.title": "Потрібна допомога?",
+        "help.body": "Залиш заявку — ми відповімо та зорієнтуємо: адаптація, правовий захист, психологічна підтримка або перенаправлення до партнерів.",
+        "help.cta1": "ЗАЛИШИТИ ЗАЯВКУ",
+        "help.cta2": "КОНТАКТИ",
+
+        "doc.kicker": "// ДОКУМЕНТИ",
+        "doc.title": "Статут, неприбутковість, звіти",
+        "doc.body": "Тут розміщуються офіційні документи: статут, рішення про неприбутковість, політики, звіти та реквізити.",
+        "doc.d1t": "СТАТУТ",
+        "doc.d1d": "Офіційний установчий документ організації (PDF).",
+        "doc.d2t": "НЕПРИБУТКОВІСТЬ",
+        "doc.d2d": "Підтвердження включення до Реєстру неприбуткових установ та організацій (PDF).",
+        "doc.d3t": "ЗВІТНІСТЬ",
+        "doc.d3d": "Публічні звіти, прозорість, цілі зборів (за наявності).",
+
+        "con.kicker": "// КОНТАКТИ",
+        "con.title": "Зв’язатися з нами",
+        "con.body": "Додайте тут: email, телефон, місто базування, посилання на соцмережі. Для заявки/приєднання — форма (Name, Contact, Topic, Message).",
+        "con.pill": "MVP: контакти + форма · Phase 2: особистий кабінет",
+
+        "footer.left": "© 2026 ОРДЕН ВЕТЕРАНІВ",
+        "footer.mid": "УКРАЇНА · ДІЯЛЬНІСТЬ У МЕЖАХ ЗАКОНУ",
+        "footer.right": "ЗМІЦНЮЄМО МАЙБУТНЄ"
+      },
+
+      en: {
+        "brand.name": "ORDER OF VETERANS",
+        "brand.tag": "// BROTHERHOOD OF HONOR & ACTION",
+
+        "nav.about": "ABOUT",
+        "nav.directions": "PROGRAMS",
+        "nav.events": "EVENTS",
+        "nav.documents": "DOCUMENTS",
+        "nav.contact": "CONTACT",
+        "nav.support": "SUPPORT",
+
+        "hero.h1a": "STRENGTH",
+        "hero.h1b": "BEYOND",
+        "hero.h1c": "TENSION",
+        "hero.kicker": "// OPERATIONAL PHILOSOPHY",
+        "hero.title": "We build internal structure for those who stood at the front line of history.",
+        "hero.subtitle": "Like rebar inside concrete, a veteran’s spirit is the invisible force that keeps a nation upright. We help that structure never crack: support, legal defense, adaptation, community, and action.",
+        "hero.pillLeft": "Leadership triad:",
+        "hero.pillRight": "President · Vice President · Council of Thinkers",
+
+        "cta.join": "JOIN",
+        "cta.support": "SUPPORT",
+        "cta.getHelp": "NEED HELP",
+
+        "stats.s1k": "SUPPORT_STREAMS",
+        "stats.s1v": "06",
+        "stats.s1d": "adaptation, legal defense, mental health, mentorship, community, advocacy",
+        "stats.s2k": "INTERNAL_ORDER",
+        "stats.s2v": "COURT",
+        "stats.s2d": "Honor Court — dispute resolution and reputation protection",
+        "stats.s3k": "PRINCIPLE",
+        "stats.s3v": "HONOR",
+        "stats.s3d": "legality, discipline, brotherhood, responsibility",
+
+        "about.kicker": "// WHO WE ARE",
+        "about.title": "Order of Veterans — a structure built to last",
+        "about.body": "We build a support community and an elite core. The foundation is honor, discipline, and mutual aid. Leadership is balanced through a triad, and disputes are resolved by the Honor Court.",
+        "about.c1t": "COMMUNITY",
+        "about.c1d": "Open civic wing: events, initiatives, volunteering, learning, mutual support.",
+        "about.c1p": "Entry: application + symbol of affiliation",
+        "about.c2t": "THE ORDER",
+        "about.c2d": "Disciplined core: operational action, coordination, safety, missions, support for the community.",
+        "about.c2p": "Entry: invitation + probation + initiation",
+        "about.c3t": "HONOR COURT",
+        "about.c3d": "Internal arbitration: mediation, discipline, reputation protection — order instead of chaos.",
+        "about.c3p": "Principle: “dialogue first”",
+
+        "dir.kicker": "// PROGRAMS",
+        "dir.title": "What we do",
+        "dir.body": "This site presents programs, partners, and clear ways to get involved. The structure below is built to scale.",
+        "dir.d1t": "ADAPTATION",
+        "dir.d1d": "Support for the transition to civilian life, mentorship, guidance, community network.",
+        "dir.d2t": "LEGAL DEFENSE",
+        "dir.d2d": "Consultations, petitions, case support, protection of veterans’ rights and families.",
+        "dir.d3t": "MENTAL HEALTH",
+        "dir.d3d": "Screening, referrals, support groups, crisis contacts.",
+        "dir.d4t": "EDUCATION & MENTORSHIP",
+        "dir.d4d": "Training events, leadership development, thinkers’ work and guidance.",
+        "dir.d5t": "CIVIC CAMPAIGNS",
+        "dir.d5d": "Advocacy, public campaigns, communications, accountability.",
+        "dir.d6t": "MUTUAL AID",
+        "dir.d6d": "Support for brothers & sisters, volunteer missions, resource coordination, partnerships.",
+
+        "ev.kicker": "// EVENTS",
+        "ev.title": "Calendar and meetups",
+        "ev.body": "This section will host an events calendar with RSVP and online links (Zoom/Meet). MVP: upcoming list + signup form.",
+        "ev.pill": "MVP: list + RSVP · Phase 2: full calendar",
+
+        "join.title": "Join the Order of Veterans",
+        "join.body": "There are two paths: Community (open) and the Order (by invitation). Choose your format and we’ll get back to you.",
+        "join.cta1": "APPLY (COMMUNITY)",
+        "join.cta2": "REQUEST INVITATION (ORDER)",
+
+        "sup.kicker": "// SUPPORT",
+        "sup.title": "Support our work",
+        "sup.body": "Donation integration will be placed here (Stripe/WayForPay/Fondy), along with transparent goals and reporting.",
+        "sup.cta1": "DONATE",
+        "sup.cta2": "VIEW DOCUMENTS",
+        "sup.pill": "Donations: MVP button · Phase 2: subscriptions/dashboard",
+
+        "help.kicker": "// HELP",
+        "help.title": "Need help?",
+        "help.body": "Leave a request — we will respond and route you: adaptation, legal support, mental health, or partner referrals.",
+        "help.cta1": "SUBMIT REQUEST",
+        "help.cta2": "CONTACT",
+
+        "doc.kicker": "// DOCUMENTS",
+        "doc.title": "Charter, non-profit status, reports",
+        "doc.body": "Official documents: charter, non-profit registry confirmation, policies, reports, and payment details.",
+        "doc.d1t": "CHARTER",
+        "doc.d1d": "Official founding document (PDF).",
+        "doc.d2t": "NON-PROFIT STATUS",
+        "doc.d2d": "Confirmation of registry inclusion (PDF).",
+        "doc.d3t": "REPORTING",
+        "doc.d3d": "Public reports, transparency, fundraising goals (if available).",
+
+        "con.kicker": "// CONTACT",
+        "con.title": "Contact us",
+        "con.body": "Add: email, phone, base city, social links. For join/help — a form (Name, Contact, Topic, Message).",
+        "con.pill": "MVP: contacts + form · Phase 2: member dashboard",
+
+        "footer.left": "© 2026 ORDER OF VETERANS",
+        "footer.mid": "UKRAINE · OPERATING WITHIN THE LAW",
+        "footer.right": "REINFORCING THE FUTURE"
+      }
+    };
+
+    function applyLang(lang) {
+      document.documentElement.lang = (lang === "uk" ? "uk" : "en");
+      document.documentElement.dataset.lang = lang;
+
+      document.getElementById("btn-uk").classList.toggle("active", lang === "uk");
+      document.getElementById("btn-en").classList.toggle("active", lang === "en");
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        const value = I18N?.[lang]?.[key];
+        if (typeof value === "string") el.textContent = value;
+      });
+
+      // Optional: update title
+      document.title = (lang === "uk") ? "Орден Ветеранів | Офіційний сайт" : "Order of Veterans | Official Website";
+      // Optional: update hero tag
+      const monolith = document.querySelector(".monolith");
+      if (monolith) monolith.setAttribute("data-tag", (lang === "uk") ? "UNIT-OV-UA" : "UNIT-OV-EN");
+    }
+
+    // Persist language
+    const saved = localStorage.getItem("ov_lang");
+    const initial = saved === "en" ? "en" : "uk";
+    applyLang(initial);
+
+    document.getElementById("btn-uk").addEventListener("click", () => {
+      localStorage.setItem("ov_lang", "uk");
+      applyLang("uk");
+    });
+    document.getElementById("btn-en").addEventListener("click", () => {
+      localStorage.setItem("ov_lang", "en");
+      applyLang("en");
+    });
+
+    // Subtle shadow movement (industrial “tension” feel)
+    document.addEventListener('mousemove', (e) => {
+      const monolith = document.querySelector('.monolith');
+      if (!monolith) return;
+      const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+      const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+      monolith.style.boxShadow = `${50 + moveX}px ${50 + moveY}px 100px rgba(0,0,0,0.55)`;
+    });
+  </script>
+</body>
+</html>

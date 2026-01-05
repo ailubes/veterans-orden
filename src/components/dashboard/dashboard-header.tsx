@@ -80,7 +80,7 @@ export function DashboardHeader() {
         const { data } = await supabase
           .from('users')
           .select('first_name, last_name, email, avatar_url, sex, role')
-          .eq('clerk_id', user.id)
+          .eq('auth_id', user.id)
           .single();
 
         if (data) {
@@ -109,12 +109,12 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="hidden lg:flex items-center justify-end gap-1 sm:gap-2 px-4 lg:px-8 py-3 lg:py-4 border-b border-timber-dark/10">
+    <header className="hidden lg:flex items-center justify-end gap-1 sm:gap-2 px-4 lg:px-8 py-3 lg:py-4 border-b border-line">
       {/* Extended Menu (Grip) */}
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <button
-            className="p-2 rounded-lg transition-colors text-timber-beam hover:bg-timber-dark/5 hover:text-timber-dark"
+            className="p-2 rounded-lg transition-colors text-muted-500 hover:bg-panel-850 hover:text-text-100"
             aria-label="Меню"
           >
             <Grip className="w-5 h-5" />
@@ -122,11 +122,11 @@ export function DashboardHeader() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-64 sm:w-72 max-h-[80vh] overflow-y-auto p-0 bg-canvas border-2 border-timber-dark"
+          className="w-64 sm:w-72 max-h-[80vh] overflow-y-auto p-0 bg-panel-900 border border-line"
           sideOffset={8}
         >
-          <DropdownMenuLabel className="px-4 py-3 border-b border-timber-dark/10">
-            <span className="font-syne font-bold text-sm">МЕНЮ</span>
+          <DropdownMenuLabel className="px-4 py-3 border-b border-line">
+            <span className="font-syne font-bold text-sm text-text-100">МЕНЮ</span>
           </DropdownMenuLabel>
 
           <div className="py-2">
@@ -141,8 +141,8 @@ export function DashboardHeader() {
                     onClick={() => setMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer ${
                       isActive
-                        ? 'bg-accent/10 text-accent'
-                        : 'hover:bg-timber-dark/5'
+                        ? 'bg-bronze/20 text-bronze'
+                        : 'text-text-100 hover:bg-panel-850'
                     }`}
                   >
                     <Icon size={18} />
@@ -156,7 +156,7 @@ export function DashboardHeader() {
           {/* Admin Link */}
           {isAdmin && (
             <>
-              <DropdownMenuSeparator className="bg-timber-dark/10" />
+              <DropdownMenuSeparator className="bg-line" />
               <div className="py-2">
                 <DropdownMenuItem asChild>
                   <Link
@@ -164,8 +164,8 @@ export function DashboardHeader() {
                     onClick={() => setMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer ${
                       pathname.startsWith('/admin')
-                        ? 'bg-accent/10 text-accent'
-                        : 'hover:bg-timber-dark/5'
+                        ? 'bg-bronze/20 text-bronze'
+                        : 'text-text-100 hover:bg-panel-850'
                     }`}
                   >
                     <Shield size={18} />
@@ -181,25 +181,25 @@ export function DashboardHeader() {
       {/* Messenger */}
       <button
         onClick={toggleMessenger}
-        className="relative p-2 rounded-lg transition-colors text-timber-beam hover:bg-timber-dark/5 hover:text-timber-dark"
+        className="relative p-2 rounded-lg transition-colors text-muted-500 hover:bg-panel-850 hover:text-text-100"
         aria-label="Повідомлення"
       >
         <MessagesSquare className="w-5 h-5" />
         {totalUnread > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-white bg-orange-500 rounded-full px-1">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold text-bg-950 bg-bronze rounded-full px-1">
             {totalUnread > 99 ? '99+' : totalUnread}
           </span>
         )}
       </button>
 
       {/* Notifications */}
-      <NotificationBell variant="light" />
+      <NotificationBell variant="dark" />
 
       {/* User Profile */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className="flex items-center gap-1.5 p-1.5 rounded-lg transition-colors hover:bg-timber-dark/5"
+            className="flex items-center gap-1.5 p-1.5 rounded-lg transition-colors hover:bg-panel-850"
             aria-label="Профіль"
           >
             {/* Avatar */}
@@ -218,20 +218,20 @@ export function DashboardHeader() {
                 fallbackInitials={getInitials()}
               />
             )}
-            <ChevronDown className="w-4 h-4 text-timber-beam" />
+            <ChevronDown className="w-4 h-4 text-muted-500" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 p-0 bg-canvas border-2 border-timber-dark"
+          className="w-56 p-0 bg-panel-900 border border-line"
           sideOffset={8}
         >
           {/* User Info */}
-          <div className="px-4 py-3 border-b border-timber-dark/10">
-            <p className="font-syne font-bold text-sm truncate">
+          <div className="px-4 py-3 border-b border-line">
+            <p className="font-syne font-bold text-sm truncate text-text-100">
               {profile?.first_name} {profile?.last_name}
             </p>
-            <p className="text-xs text-timber-beam truncate">
+            <p className="text-xs text-muted-500 truncate">
               {profile?.email}
             </p>
           </div>
@@ -240,7 +240,7 @@ export function DashboardHeader() {
             <DropdownMenuItem asChild>
               <Link
                 href="/dashboard/settings"
-                className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-timber-dark/5"
+                className="flex items-center gap-3 px-4 py-2 cursor-pointer text-text-100 hover:bg-panel-850"
               >
                 <User size={16} />
                 <span className="text-sm">Мій профіль</span>
@@ -250,7 +250,7 @@ export function DashboardHeader() {
             <DropdownMenuItem asChild>
               <Link
                 href="/dashboard/settings"
-                className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-timber-dark/5"
+                className="flex items-center gap-3 px-4 py-2 cursor-pointer text-text-100 hover:bg-panel-850"
               >
                 <Settings size={16} />
                 <span className="text-sm">Налаштування</span>
@@ -258,12 +258,12 @@ export function DashboardHeader() {
             </DropdownMenuItem>
           </div>
 
-          <DropdownMenuSeparator className="bg-timber-dark/10" />
+          <DropdownMenuSeparator className="bg-line" />
 
           <div className="py-2">
             <DropdownMenuItem
               onClick={handleSignOut}
-              className="flex items-center gap-3 px-4 py-2 cursor-pointer text-red-600 hover:bg-red-50"
+              className="flex items-center gap-3 px-4 py-2 cursor-pointer text-red-500 hover:bg-red-500/10"
             >
               <LogOut size={16} />
               <span className="text-sm">Вийти</span>

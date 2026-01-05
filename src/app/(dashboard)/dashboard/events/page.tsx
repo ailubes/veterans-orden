@@ -21,7 +21,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
   const { data: profile } = await supabase
     .from('users')
     .select('id, oblast_id')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Fetch oblasts for filter
@@ -79,8 +79,8 @@ export default async function EventsPage({ searchParams }: PageProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <p className="label mb-2">ПОДІЇ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// ПОДІЇ</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
             {showPast ? 'Минулі події' : 'Найближчі події'}
           </h1>
         </div>
@@ -100,14 +100,14 @@ export default async function EventsPage({ searchParams }: PageProps) {
         {showPast ? (
           <Link
             href="/dashboard/events"
-            className="text-sm text-timber-beam hover:text-accent"
+            className="text-sm text-muted-500 hover:text-bronze transition-colors"
           >
             ← Переглянути найближчі події
           </Link>
         ) : (
           <Link
             href="/dashboard/events?past=true"
-            className="text-sm text-timber-beam hover:text-accent"
+            className="text-sm text-muted-500 hover:text-bronze transition-colors"
           >
             Переглянути минулі події →
           </Link>

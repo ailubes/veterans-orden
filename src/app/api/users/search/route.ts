@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const { data: currentUser } = await auth.supabase
       .from('users')
       .select('id')
-      .eq('clerk_id', auth.user.id)
+      .eq('auth_id', auth.user.id)
       .single();
 
     if (!currentUser) {

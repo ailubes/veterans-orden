@@ -24,7 +24,7 @@ export async function GET() {
     const { data: dbUser, error: userError } = await supabase
       .from('users')
       .select('id, membership_role, staff_role, role_advanced_at, referral_code, total_referral_count')
-      .eq('clerk_id', authUser.id)
+      .eq('auth_id', authUser.id)
       .single();
 
     console.log('[RoleProgress] DB user lookup result:', { dbUser, userError });

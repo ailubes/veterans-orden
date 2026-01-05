@@ -133,7 +133,7 @@ export default function OnboardingPage() {
 
       // Create user profile in database
       const { error: insertError, data: newUser } = await supabase.from('users').insert({
-        clerk_id: user.id,
+        auth_id: user.id,
         email: user.email,
         first_name: firstName.trim(),
         last_name: lastName.trim(),

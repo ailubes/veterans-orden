@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   const { data: profile } = await supabase
     .from('users')
     .select('*, oblast:oblasts(name)')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Fetch upcoming events count
@@ -129,7 +129,7 @@ export default async function DashboardPage() {
     const { data: recentReferrals } = await supabase
       .from('users')
       .select('first_name, created_at')
-      .eq('referred_by', profile.id)
+      .eq('referred_by_id', profile.id)
       .order('created_at', { ascending: false })
       .limit(3);
 
@@ -158,8 +158,8 @@ export default async function DashboardPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <p className="label mb-2">ОСОБИСТИЙ КАБІНЕТ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// ОСОБИСТИЙ КАБІНЕТ</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
           Вітаємо, {firstName}!
         </h1>
       </div>
@@ -195,22 +195,17 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Referral Card */}
-        <div className="bg-timber-dark text-canvas p-6 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ЗАПРОШУЙ ДРУЗІВ</p>
-          <h2 className="font-syne text-2xl font-bold mb-4">
+        <div className="bg-panel-900 border border-line p-6 relative rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">// ЗАПРОШУЙ ДРУЗІВ</p>
+          <h2 className="font-syne text-2xl font-bold text-text-100 mb-4">
             Розширюй Мережу!
           </h2>
-          <p className="text-sm opacity-80 mb-6">
+          <p className="text-sm text-muted-500 mb-6">
             Запрошуй друзів та отримуй бали за кожного нового члена. Разом ми сильніші!
           </p>
           <Link
             href="/dashboard/referrals"
-            className="inline-flex items-center gap-2 bg-accent text-canvas px-6 py-3 font-bold text-sm hover:bg-accent/90 transition-colors"
+            className="inline-flex items-center gap-2 bg-bronze text-bg-950 px-6 py-3 font-bold text-sm hover:bg-bronze/90 transition-colors rounded"
           >
             ОТРИМАТИ ПОСИЛАННЯ →
           </Link>
@@ -226,11 +221,8 @@ export default async function DashboardPage() {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-
-        <p className="label text-accent mb-4">ОСТАННЯ АКТИВНІСТЬ</p>
+      <div className="bg-panel-900 border border-line p-6 relative rounded-lg">
+        <p className="mono text-bronze text-xs tracking-widest mb-4">// ОСТАННЯ АКТИВНІСТЬ</p>
 
         {recentActivities.length > 0 ? (
           <div className="space-y-4">
@@ -246,21 +238,21 @@ export default async function DashboardPage() {
                 vote: 'text-blue-500 bg-blue-500/10',
                 event: 'text-green-500 bg-green-500/10',
                 task: 'text-purple-500 bg-purple-500/10',
-                referral: 'text-orange-500 bg-orange-500/10',
+                referral: 'text-bronze bg-bronze/10',
               };
 
               return (
                 <div key={index} className="flex items-start gap-4">
-                  <div className={`w-10 h-10 flex items-center justify-center flex-shrink-0 ${colorMap[activity.type]}`}>
+                  <div className={`w-10 h-10 flex items-center justify-center flex-shrink-0 rounded ${colorMap[activity.type]}`}>
                     <Icon size={20} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm">{activity.title}</p>
-                    <p className="text-sm text-timber-beam truncate">
+                    <p className="font-bold text-sm text-text-100">{activity.title}</p>
+                    <p className="text-sm text-muted-500 truncate">
                       {activity.description}
                     </p>
                   </div>
-                  <span className="text-xs text-timber-beam flex-shrink-0">
+                  <span className="text-xs text-muted-500 flex-shrink-0">
                     {formatDateShort(activity.timestamp)}
                   </span>
                 </div>
@@ -268,7 +260,7 @@ export default async function DashboardPage() {
             })}
           </div>
         ) : (
-          <div className="text-center py-12 text-timber-beam">
+          <div className="text-center py-12 text-muted-500">
             <p className="text-sm">Поки що немає активності</p>
             <p className="text-xs mt-2 opacity-60">
               Ваша активність у Мережі буде відображатися тут

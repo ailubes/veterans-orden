@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   const { data: profile } = await supabase
     .from('users')
     .select('first_name, last_name, phone, date_of_birth, katottg_code')
-    .eq('clerk_id', user.id)
+    .eq('auth_id', user.id)
     .single();
 
   const completionStatus = checkProfileCompletion(profile as unknown as UserProfile);
@@ -37,7 +37,7 @@ export default async function DashboardLayout({
 
   return (
     <MessengerWrapper>
-      <div className="min-h-screen bg-canvas">
+      <div className="min-h-screen bg-bg-950 text-text-100">
         <GrainOverlay />
         <div className="flex">
           <Sidebar />

@@ -43,7 +43,7 @@ export default function NewsCategoriesPage() {
       const { data: userProfile } = await supabase
         .from('users')
         .select('role')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (!userProfile || userProfile.role !== 'super_admin') {

@@ -17,7 +17,7 @@ export default async function OnboardingLayout({
   const { data: userProfile } = await supabase
     .from('users')
     .select('id, role, status')
-    .eq('clerk_id', user.id)
+    .eq('auth_id', user.id)
     .single();
 
   // If user profile exists and is active, they've completed onboarding

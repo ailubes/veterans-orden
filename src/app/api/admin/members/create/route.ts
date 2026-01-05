@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
     const { data: newMember, error: insertError } = await supabaseAdmin
       .from('users')
       .insert({
-        clerk_id: authUser.user.id,
+        auth_id: authUser.user.id,
         first_name,
         last_name,
         patronymic: patronymic || null,

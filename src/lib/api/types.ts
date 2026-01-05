@@ -75,7 +75,7 @@ export type MembershipTier =
 
 export interface User {
   id: string;
-  clerk_id: string;
+  auth_id: string;
   email: string;
   first_name: string;
   last_name: string;

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
         oblast:oblasts(id, name, code)
       `
       )
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (dbError && dbError.code !== 'PGRST116') {
@@ -71,7 +71,7 @@ export async function PATCH(request: Request) {
         oblast_id: oblastId,
         updated_at: new Date().toISOString(),
       })
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .select()
       .single();
 

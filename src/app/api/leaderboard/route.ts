@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       const { data: profile } = await supabase
         .from('users')
         .select('id, first_name, last_name, avatar_url, points')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
       currentUserProfile = profile;
     }

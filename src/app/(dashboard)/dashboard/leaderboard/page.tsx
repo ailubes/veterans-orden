@@ -11,7 +11,7 @@ export default async function LeaderboardPage() {
   const { data: profile } = await supabase
     .from('users')
     .select('id, points, level, referral_count')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Fetch top users by points

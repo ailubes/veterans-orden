@@ -56,12 +56,11 @@ export function UserTaskStats() {
 
   if (loading) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-6 relative animate-pulse">
-        <div className="joint joint-tl" />
-        <div className="h-6 bg-timber-dark/10 w-1/3 mb-4" />
+      <div className="bg-panel-900 border border-line p-6 rounded-lg animate-pulse">
+        <div className="h-6 bg-panel-850 w-1/3 mb-4 rounded" />
         <div className="grid grid-cols-4 gap-4">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-20 bg-timber-dark/10" />
+            <div key={i} className="h-20 bg-panel-850 rounded" />
           ))}
         </div>
       </div>
@@ -73,20 +72,15 @@ export function UserTaskStats() {
   }
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-      <div className="joint joint-tl" />
-      <div className="joint joint-tr" />
-      <div className="joint joint-bl" />
-      <div className="joint joint-br" />
-
+    <div className="bg-panel-900 border border-line p-6 rounded-lg">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <p className="label text-accent mb-1">МОЯ СТАТИСТИКА</p>
-          <h2 className="font-syne text-xl font-bold">Прогрес у завданнях</h2>
+          <p className="mono text-bronze text-xs tracking-widest mb-1">// МОЯ СТАТИСТИКА</p>
+          <h2 className="font-syne text-xl font-bold text-text-100">Прогрес у завданнях</h2>
         </div>
         <Link
           href="/dashboard/tasks"
-          className="text-sm text-accent hover:underline flex items-center gap-1"
+          className="text-sm text-bronze hover:text-text-100 flex items-center gap-1 transition-colors"
         >
           Всі завдання
           <ArrowRight size={14} />
@@ -95,59 +89,59 @@ export function UserTaskStats() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-timber-dark/5 p-4 text-center">
+        <div className="bg-panel-850 border border-line p-4 text-center rounded">
           <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-2">
             <CheckSquare className="text-green-500" size={20} />
           </div>
-          <p className="font-syne text-2xl font-bold">{stats.taskStats.completed}</p>
-          <p className="text-xs text-timber-beam">Виконано</p>
+          <p className="font-syne text-2xl font-bold text-text-100">{stats.taskStats.completed}</p>
+          <p className="text-xs text-muted-500">Виконано</p>
         </div>
 
-        <div className="bg-timber-dark/5 p-4 text-center">
+        <div className="bg-panel-850 border border-line p-4 text-center rounded">
           <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-2">
             <Clock className="text-yellow-500" size={20} />
           </div>
-          <p className="font-syne text-2xl font-bold">{stats.taskStats.inProgress}</p>
-          <p className="text-xs text-timber-beam">В роботі</p>
+          <p className="font-syne text-2xl font-bold text-text-100">{stats.taskStats.inProgress}</p>
+          <p className="text-xs text-muted-500">В роботі</p>
         </div>
 
-        <div className="bg-timber-dark/5 p-4 text-center">
-          <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
-            <Star className="text-accent" size={20} />
+        <div className="bg-panel-850 border border-line p-4 text-center rounded">
+          <div className="w-10 h-10 rounded-full bg-bronze/10 flex items-center justify-center mx-auto mb-2">
+            <Star className="text-bronze" size={20} />
           </div>
-          <p className="font-syne text-2xl font-bold">{stats.pointsStats.total}</p>
-          <p className="text-xs text-timber-beam">Балів</p>
+          <p className="font-syne text-2xl font-bold text-text-100">{stats.pointsStats.total}</p>
+          <p className="text-xs text-muted-500">Балів</p>
         </div>
 
-        <div className="bg-timber-dark/5 p-4 text-center">
+        <div className="bg-panel-850 border border-line p-4 text-center rounded">
           <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-2">
             <Trophy className="text-purple-500" size={20} />
           </div>
-          <p className="font-syne text-2xl font-bold">#{stats.rank.position}</p>
-          <p className="text-xs text-timber-beam">Рейтинг</p>
+          <p className="font-syne text-2xl font-bold text-text-100">#{stats.rank.position}</p>
+          <p className="text-xs text-muted-500">Рейтинг</p>
         </div>
       </div>
 
       {/* Activity Summary */}
-      <div className="flex items-center justify-between pt-4 border-t border-timber-dark/10">
+      <div className="flex items-center justify-between pt-4 border-t border-line">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <TrendingUp size={16} className="text-green-500" />
-            <span className="text-sm">
-              <strong>{stats.activity.completedThisWeek}</strong> за тиждень
+            <span className="text-sm text-text-200">
+              <strong className="text-text-100">{stats.activity.completedThisWeek}</strong> за тиждень
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <TrendingUp size={16} className="text-accent" />
-            <span className="text-sm">
-              <strong>{stats.activity.completedThisMonth}</strong> за місяць
+            <TrendingUp size={16} className="text-bronze" />
+            <span className="text-sm text-text-200">
+              <strong className="text-text-100">{stats.activity.completedThisMonth}</strong> за місяць
             </span>
           </div>
         </div>
 
         {stats.rank.totalParticipants > 0 && (
           <div className="text-right">
-            <p className="text-xs text-timber-beam">
+            <p className="text-xs text-muted-500">
               Топ {stats.rank.percentile}% з {stats.rank.totalParticipants} учасників
             </p>
           </div>
@@ -156,15 +150,15 @@ export function UserTaskStats() {
 
       {/* Recent Completed */}
       {stats.activity.recentCompleted.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-timber-dark/10">
-          <p className="text-xs text-timber-beam mb-3">ОСТАННІ ВИКОНАНІ</p>
+        <div className="mt-6 pt-4 border-t border-line">
+          <p className="text-xs text-muted-500 mb-3">ОСТАННІ ВИКОНАНІ</p>
           <div className="space-y-2">
             {stats.activity.recentCompleted.slice(0, 3).map(task => (
               <div key={task.id} className="flex items-center justify-between">
-                <span className="text-sm truncate flex-1 mr-4">{task.title}</span>
+                <span className="text-sm text-text-200 truncate flex-1 mr-4">{task.title}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-accent font-bold">+{task.points}</span>
-                  <span className="text-xs text-timber-beam">
+                  <span className="text-xs text-bronze font-bold">+{task.points}</span>
+                  <span className="text-xs text-muted-500">
                     {formatDateShort(task.completedAt)}
                   </span>
                 </div>

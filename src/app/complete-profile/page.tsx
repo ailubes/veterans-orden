@@ -48,7 +48,7 @@ export default function CompleteProfilePage() {
       const { data: profile } = await supabase
         .from('users')
         .select('*')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (profile) {
@@ -121,7 +121,7 @@ export default function CompleteProfilePage() {
       const { data: userProfile } = await supabase
         .from('users')
         .select('id, katottg_code')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (!userProfile) {
@@ -182,7 +182,7 @@ export default function CompleteProfilePage() {
       const { error: updateError } = await supabase
         .from('users')
         .update(updateData)
-        .eq('clerk_id', user.id);
+        .eq('auth_id', user.id);
 
       if (updateError) {
         throw updateError;

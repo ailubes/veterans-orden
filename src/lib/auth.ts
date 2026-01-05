@@ -24,7 +24,7 @@ export async function requireRole(allowedRoles: string[]) {
   const { data: member } = await supabase
     .from('users')
     .select('role')
-    .eq('clerk_id', user.id)
+    .eq('auth_id', user.id)
     .single();
 
   if (!member || !allowedRoles.includes(member.role)) {
@@ -42,7 +42,7 @@ export async function getMember() {
   const { data: member } = await supabase
     .from('users')
     .select('*')
-    .eq('clerk_id', user.id)
+    .eq('auth_id', user.id)
     .single();
 
   return member;

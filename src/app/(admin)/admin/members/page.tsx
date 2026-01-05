@@ -103,15 +103,15 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <p className="label text-accent mb-2">АДМІНІСТРУВАННЯ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// АДМІНІСТРУВАННЯ</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
             Члени Мережі
           </h1>
         </div>
         <div className="flex gap-2">
           <Link
             href="/admin/members/export"
-            className="btn btn-outline flex items-center gap-2"
+            className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center gap-2 rounded"
           >
             <Download size={18} />
             ЕКСПОРТ
@@ -119,13 +119,13 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           {isStaffAdmin(adminProfile.staff_role) && (
             <Link
               href="/admin/members/import"
-              className="btn btn-outline flex items-center gap-2"
+              className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center gap-2 rounded"
             >
               <Upload size={18} />
               ІМПОРТ
             </Link>
           )}
-          <Link href="/admin/members/new" className="btn flex items-center gap-2">
+          <Link href="/admin/members/new" className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex items-center gap-2 rounded">
             <Plus size={18} />
             ДОДАТИ
           </Link>
@@ -134,35 +134,32 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label mb-1">ВСЬОГО</p>
-          <p className="font-syne text-3xl font-bold">{totalCount || 0}</p>
+        <div className="bg-panel-900 border border-line p-4 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-1">ВСЬОГО</p>
+          <p className="font-syne text-3xl font-bold text-text-100">{totalCount || 0}</p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label mb-1">АКТИВНИХ</p>
-          <p className="font-syne text-3xl font-bold text-green-600">
+        <div className="bg-panel-900 border border-line p-4 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-1">АКТИВНИХ</p>
+          <p className="font-syne text-3xl font-bold text-green-400">
             {activeCount || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label mb-1">НА ПЕРЕВІРЦІ</p>
-          <p className="font-syne text-3xl font-bold text-yellow-600">
+        <div className="bg-panel-900 border border-line p-4 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-1">НА ПЕРЕВІРЦІ</p>
+          <p className="font-syne text-3xl font-bold text-yellow-400">
             {pendingCount || 0}
           </p>
         </div>
-        <div className="bg-canvas border-2 border-timber-dark p-4">
-          <p className="label mb-1">ПРИЗУПИНЕНО</p>
-          <p className="font-syne text-3xl font-bold text-red-600">
+        <div className="bg-panel-900 border border-line p-4 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-1">ПРИЗУПИНЕНО</p>
+          <p className="font-syne text-3xl font-bold text-red-400">
             {suspendedCount || 0}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-
+      <div className="bg-panel-900 border border-line p-4 mb-6 rounded-lg">
         <form method="GET" className="flex flex-wrap gap-2 sm:gap-4">
           <div className="w-full sm:flex-1 sm:min-w-[200px]">
             <input
@@ -170,13 +167,13 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
               name="search"
               defaultValue={search}
               placeholder="Пошук за ім'ям або email..."
-              className="w-full px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+              className="w-full px-3 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
             />
           </div>
           <select
             name="role"
             defaultValue={roleFilter}
-            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
           >
             <option value="">Всі ролі</option>
             <option value="free_viewer">Спостерігач</option>
@@ -191,7 +188,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           <select
             name="status"
             defaultValue={statusFilter}
-            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
           >
             <option value="">Всі статуси</option>
             <option value="pending">На перевірці</option>
@@ -202,7 +199,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           <select
             name="tier"
             defaultValue={tierFilter}
-            className="flex-1 min-w-[130px] px-3 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="flex-1 min-w-[130px] px-3 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
           >
             <option value="">Всі плани</option>
             <option value="free">Безкоштовний</option>
@@ -212,11 +209,11 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             <option value="patron_500">Патрон (500 грн)</option>
           </select>
           <div className="flex gap-2 w-full sm:w-auto">
-            <button type="submit" className="btn btn-sm flex-1 sm:flex-none">
+            <button type="submit" className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex-1 sm:flex-none rounded">
               ФІЛЬТР
             </button>
             {(search || roleFilter || statusFilter || tierFilter) && (
-              <Link href="/admin/members" className="btn btn-outline btn-sm flex-1 sm:flex-none">
+              <Link href="/admin/members" className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex-1 sm:flex-none text-center rounded">
                 СКИНУТИ
               </Link>
             )}
@@ -234,7 +231,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-          <p className="text-sm text-timber-beam text-center sm:text-left">
+          <p className="text-sm text-muted-500 text-center sm:text-left">
             Показано {offset + 1}-{Math.min(offset + limit, filteredCount || 0)}{' '}
             з {filteredCount || 0} записів
           </p>
@@ -246,7 +243,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                 }${roleFilter ? `&role=${roleFilter}` : ''}${
                   statusFilter ? `&status=${statusFilter}` : ''
                 }${tierFilter ? `&tier=${tierFilter}` : ''}`}
-                className="px-4 py-2 border-2 border-timber-dark text-sm font-bold hover:bg-timber-dark hover:text-canvas"
+                className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
               >
                 ← НАЗАД
               </Link>
@@ -258,7 +255,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                 }${roleFilter ? `&role=${roleFilter}` : ''}${
                   statusFilter ? `&status=${statusFilter}` : ''
                 }${tierFilter ? `&tier=${tierFilter}` : ''}`}
-                className="px-4 py-2 border-2 border-timber-dark text-sm font-bold hover:bg-timber-dark hover:text-canvas"
+                className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
               >
                 ДАЛІ →
               </Link>

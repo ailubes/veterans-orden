@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const { data: profile } = await supabase
       .from('users')
       .select('id')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!profile) {

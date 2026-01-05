@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { PageLayout, PageHeader, PageContent } from '@/components/layout/page-layout';
 import { Scaffold } from '@/components/layout/skeleton-grid';
 import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
@@ -53,6 +54,12 @@ export default function JoinPage() {
         <p>
           Заповніть заявку — і ми запропонуємо найкращий формат участі.
         </p>
+        <p className="text-bronze mt-4">
+          Уже знаєте, що хочете?{' '}
+          <Link href="/sign-up" className="underline hover:no-underline font-bold">
+            Зареєструватися зараз
+          </Link>
+        </p>
       </PageContent>
 
       {/* CTAs */}
@@ -60,8 +67,8 @@ export default function JoinPage() {
         <Scaffold>
           <div className="col-span-8 col-start-3" style={{ textAlign: 'center' }}>
             <CtaGroup align="center">
-              <HeavyCta href="#join-form" variant="primary" size="lg">
-                ПОДАТИ ЗАЯВКУ
+              <HeavyCta href="/sign-up" variant="primary" size="lg">
+                ЗАРЕЄСТРУВАТИСЯ
               </HeavyCta>
               <HeavyCta href="/join/procedure" variant="outline" size="lg">
                 ПРОЦЕДУРА ВСТУПУ

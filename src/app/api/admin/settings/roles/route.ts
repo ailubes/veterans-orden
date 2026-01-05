@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     // Fetch users with elevated roles
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, clerk_id, first_name, last_name, email, role, referral_count, oblast:oblasts(name)')
+      .select('id, auth_id, first_name, last_name, email, role, referral_count, oblast:oblasts(name)')
       .in('role', ['group_leader', 'regional_leader', 'admin', 'super_admin'])
       .order('role', { ascending: false })
       .order('last_name', { ascending: true });

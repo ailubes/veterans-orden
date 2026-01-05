@@ -51,7 +51,7 @@ export {
 
 export interface AdminProfile {
   id: string;
-  clerk_id: string;
+  auth_id: string;
   staff_role: StaffRole;
   membership_role: MembershipRole;
   email: string;
@@ -107,8 +107,8 @@ export async function getAdminProfile(): Promise<AdminProfile | null> {
 
   const { data: profile } = await supabase
     .from('users')
-    .select('id, clerk_id, staff_role, membership_role, role, email, first_name, last_name')
-    .eq('clerk_id', user.id)
+    .select('id, auth_id, staff_role, membership_role, role, email, first_name, last_name')
+    .eq('auth_id', user.id)
     .single();
 
   if (!profile) {
@@ -125,7 +125,7 @@ export async function getAdminProfile(): Promise<AdminProfile | null> {
 
   return {
     id: profile.id,
-    clerk_id: profile.clerk_id,
+    auth_id: profile.auth_id,
     staff_role: staffRole,
     membership_role: membershipRole,
     email: profile.email,
@@ -154,8 +154,8 @@ export async function getAdminProfileFromRequest(
 
   const { data: profile } = await auth.supabase
     .from('users')
-    .select('id, clerk_id, staff_role, membership_role, role, email, first_name, last_name')
-    .eq('clerk_id', auth.user.id)
+    .select('id, auth_id, staff_role, membership_role, role, email, first_name, last_name')
+    .eq('auth_id', auth.user.id)
     .single();
 
   if (!profile) {
@@ -177,7 +177,7 @@ export async function getAdminProfileFromRequest(
 
   const adminProfile: AdminProfile = {
     id: profile.id,
-    clerk_id: profile.clerk_id,
+    auth_id: profile.auth_id,
     staff_role: staffRole,
     membership_role: membershipRole,
     email: profile.email,

@@ -63,7 +63,7 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
       const { data: adminProfile } = await supabase
         .from('users')
         .select('role, id')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       if (!adminProfile || !['admin', 'super_admin'].includes(adminProfile.role)) {

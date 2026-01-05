@@ -27,7 +27,7 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
     <>
       {/* Active Votes */}
       <div className="mb-12">
-        <h2 className="font-syne text-xl font-bold mb-4 flex items-center gap-2">
+        <h2 className="font-syne text-xl font-bold text-text-100 mb-4 flex items-center gap-2">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           Активні голосування
         </h2>
@@ -38,33 +38,30 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
               {activeVotes.map((vote) => (
                 <div
                   key={vote.id}
-                  className="bg-canvas border-2 border-timber-dark p-6 relative hover:border-accent transition-colors"
+                  className="bg-panel-900 border border-line p-6 rounded-lg hover:border-bronze/50 transition-colors"
                 >
-                  <div className="joint joint-tl" />
-                  <div className="joint joint-tr" />
-
                   <div className="flex flex-col md:flex-row md:items-start gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="px-2 py-1 bg-accent/10 text-accent text-xs font-bold">
+                        <span className="px-2 py-1 bg-bronze/10 text-bronze text-xs font-bold rounded">
                           {vote.scope === 'national' ? 'НАЦІОНАЛЬНЕ' :
                            vote.scope === 'regional' ? 'РЕГІОНАЛЬНЕ' : 'ГРУПОВЕ'}
                         </span>
-                        <span className="px-2 py-1 bg-timber-dark/10 text-xs">
+                        <span className="px-2 py-1 bg-panel-850 text-muted-500 text-xs rounded">
                           {vote.type === 'binary' ? 'Так/Ні' :
                            vote.type === 'multiple_choice' ? 'Вибір' :
                            vote.type === 'ranked' ? 'Рейтинговий' : 'Схвалення'}
                         </span>
                       </div>
 
-                      <h3 className="font-syne text-xl font-bold mb-2">
+                      <h3 className="font-syne text-xl font-bold text-text-100 mb-2">
                         {vote.title}
                       </h3>
-                      <p className="text-sm text-timber-beam mb-4 line-clamp-2">
+                      <p className="text-sm text-muted-500 mb-4 line-clamp-2">
                         {vote.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-4 text-xs text-timber-beam">
+                      <div className="flex flex-wrap gap-4 text-xs text-muted-500">
                         <span className="flex items-center gap-1">
                           <Clock size={14} />
                           Залишилось: {formatTimeLeft(vote.end_date)}
@@ -77,7 +74,10 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
                     </div>
 
                     <div className="flex-shrink-0">
-                      <Link href={`/dashboard/votes/${vote.id}`} className="btn text-sm">
+                      <Link
+                        href={`/dashboard/votes/${vote.id}`}
+                        className="inline-flex items-center gap-2 bg-bronze text-bg-950 px-4 py-2 font-bold text-sm hover:bg-bronze/90 transition-colors rounded"
+                      >
                         ГОЛОСУВАТИ →
                       </Link>
                     </div>
@@ -86,11 +86,9 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
               ))}
             </div>
           ) : (
-            <div className="bg-canvas border-2 border-timber-dark p-8 relative text-center">
-              <div className="joint joint-tl" />
-
-              <Vote className="w-10 h-10 mx-auto mb-3 text-timber-beam" />
-              <p className="text-sm text-timber-beam">
+            <div className="bg-panel-900 border border-line p-8 rounded-lg text-center">
+              <Vote className="w-10 h-10 mx-auto mb-3 text-muted-500" />
+              <p className="text-sm text-muted-500">
                 Наразі немає активних голосувань
               </p>
             </div>
@@ -100,8 +98,8 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
 
       {/* Closed Votes */}
       <div>
-        <h2 className="font-syne text-xl font-bold mb-4 flex items-center gap-2">
-          <CheckCircle size={18} className="text-timber-beam" />
+        <h2 className="font-syne text-xl font-bold text-text-100 mb-4 flex items-center gap-2">
+          <CheckCircle size={18} className="text-muted-500" />
           Завершені голосування
         </h2>
 
@@ -110,17 +108,17 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
             {closedVotes.map((vote) => (
               <div
                 key={vote.id}
-                className="bg-canvas border-2 border-timber-dark/50 p-4 relative opacity-75 hover:opacity-100 transition-opacity"
+                className="bg-panel-900 border border-line/50 p-4 rounded-lg opacity-75 hover:opacity-100 transition-opacity"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-bold">{vote.title}</h3>
-                    <p className="text-xs text-timber-beam">
+                    <h3 className="font-bold text-text-100">{vote.title}</h3>
+                    <p className="text-xs text-muted-500">
                       Завершено {formatDate(vote.end_date)} •{' '}
                       {vote.total_votes || 0} голосів
                     </p>
                   </div>
-                  <Link href={`/dashboard/votes/${vote.id}`} className="text-xs text-accent hover:underline">
+                  <Link href={`/dashboard/votes/${vote.id}`} className="text-xs text-bronze hover:underline">
                     Результати →
                   </Link>
                 </div>
@@ -128,8 +126,8 @@ export default function VotesList({ activeVotes, closedVotes }: VotesListProps) 
             ))}
           </div>
         ) : (
-          <div className="bg-canvas border-2 border-timber-dark/50 p-6 text-center">
-            <p className="text-sm text-timber-beam">
+          <div className="bg-panel-900 border border-line/50 p-6 rounded-lg text-center">
+            <p className="text-sm text-muted-500">
               Історія голосувань порожня
             </p>
           </div>

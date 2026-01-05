@@ -26,7 +26,7 @@ export async function GET(
     const { data: profile } = await supabase
       .from('users')
       .select('id')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!profile) {
@@ -269,7 +269,7 @@ export async function POST(
     const { data: profile } = await supabase
       .from('users')
       .select('id, first_name, last_name, avatar_url, sex, membership_role')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!profile) {

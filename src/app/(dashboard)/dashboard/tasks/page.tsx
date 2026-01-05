@@ -20,7 +20,7 @@ export default async function TasksPage({ searchParams }: PageProps) {
   const { data: profile } = await supabase
     .from('users')
     .select('id, points')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Build open tasks query with filters
@@ -66,8 +66,8 @@ export default async function TasksPage({ searchParams }: PageProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <p className="label mb-2">ЗАВДАННЯ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// ЗАВДАННЯ</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
             Мої завдання
           </h1>
         </div>

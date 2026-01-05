@@ -24,7 +24,7 @@ export default async function AdminLayout({
   const { data: profile } = await supabase
     .from('users')
     .select('role')
-    .eq('clerk_id', user.id)
+    .eq('auth_id', user.id)
     .single();
 
   const adminRoles = ['admin', 'super_admin', 'regional_leader'];
@@ -33,7 +33,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="min-h-screen bg-bg-950 text-text-100">
       <GrainOverlay />
       {/* Impersonation Banner - shows when admin is impersonating a user */}
       <ImpersonationBanner />

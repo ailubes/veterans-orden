@@ -48,7 +48,7 @@ export default function MembersExportPage() {
       const { data: adminProfile } = await supabase
         .from('users')
         .select('role')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       // Only super_admin can export

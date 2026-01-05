@@ -22,7 +22,7 @@ export default async function EventDetailPage({ params }: PageProps) {
   const { data: profile } = await supabase
     .from('users')
     .select('id')
-    .eq('clerk_id', user?.id)
+    .eq('auth_id', user?.id)
     .single();
 
   // Get event details
@@ -69,26 +69,26 @@ export default async function EventDetailPage({ params }: PageProps) {
       {/* Back Link */}
       <Link
         href="/dashboard/events"
-        className="inline-flex items-center gap-2 text-timber-beam hover:text-timber-dark mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-muted-500 hover:text-bronze mb-6 transition-colors"
       >
         <ArrowLeft size={20} />
         Повернутися до подій
       </Link>
 
       {/* Event Header */}
-      <div className="bg-timber-dark text-canvas p-6 mb-6">
+      <div className="bg-bronze text-bg-950 p-6 mb-6 rounded-lg">
         {event.image_url && (
           <div className="mb-4 -mx-6 -mt-6">
             <img
               src={event.image_url}
               alt={event.title}
-              className="w-full h-64 object-cover"
+              className="w-full h-64 object-cover rounded-t-lg"
             />
           </div>
         )}
 
         <div className="flex items-start gap-3 mb-2">
-          <Calendar size={24} className="text-accent mt-1 flex-shrink-0" />
+          <Calendar size={24} className="mt-1 flex-shrink-0" />
           <div>
             <h1 className="font-syne text-3xl font-bold mb-2">{event.title}</h1>
             <div className="flex flex-wrap gap-4 text-sm opacity-80">
@@ -115,30 +115,30 @@ export default async function EventDetailPage({ params }: PageProps) {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Description */}
-          <div className="bg-white border-2 border-timber-dark p-6">
-            <h2 className="font-syne text-xl font-bold mb-4">Про подію</h2>
-            <div className="prose prose-sm max-w-none">
+          <div className="bg-panel-900 border border-line p-6 rounded-lg">
+            <h2 className="font-syne text-xl font-bold text-text-100 mb-4">Про подію</h2>
+            <div className="prose prose-sm max-w-none prose-invert">
               {event.description ? (
-                <p className="whitespace-pre-wrap">{event.description}</p>
+                <p className="whitespace-pre-wrap text-text-200">{event.description}</p>
               ) : (
-                <p className="text-timber-beam italic">Опис не надано</p>
+                <p className="text-muted-500 italic">Опис не надано</p>
               )}
             </div>
           </div>
 
           {/* Location Details */}
           {!event.is_online && event.location && (
-            <div className="bg-white border-2 border-timber-dark p-6">
-              <h2 className="font-syne text-xl font-bold mb-4">Локація</h2>
+            <div className="bg-panel-900 border border-line p-6 rounded-lg">
+              <h2 className="font-syne text-xl font-bold text-text-100 mb-4">Локація</h2>
               <div className="space-y-2">
                 {event.location.address && (
-                  <p className="text-sm">
-                    <strong>Адреса:</strong> {event.location.address}
+                  <p className="text-sm text-text-200">
+                    <strong className="text-text-100">Адреса:</strong> {event.location.address}
                   </p>
                 )}
                 {event.location.city && (
-                  <p className="text-sm">
-                    <strong>Місто:</strong> {event.location.city}
+                  <p className="text-sm text-text-200">
+                    <strong className="text-text-100">Місто:</strong> {event.location.city}
                   </p>
                 )}
               </div>
@@ -147,8 +147,8 @@ export default async function EventDetailPage({ params }: PageProps) {
 
           {/* Online Link */}
           {event.is_online && event.online_url && (
-            <div className="bg-blue-50 border-2 border-blue-600 p-6">
-              <h2 className="font-syne text-xl font-bold mb-4 text-blue-600">
+            <div className="bg-blue-500/10 border border-blue-500/30 p-6 rounded-lg">
+              <h2 className="font-syne text-xl font-bold mb-4 text-blue-400">
                 Онлайн посилання
               </h2>
               {hasTicket || !event.requires_ticket_purchase ? (
@@ -156,12 +156,12 @@ export default async function EventDetailPage({ params }: PageProps) {
                   href={event.online_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline break-all"
+                  className="text-blue-400 hover:underline break-all"
                 >
                   {event.online_url}
                 </a>
               ) : (
-                <p className="text-sm text-blue-700">
+                <p className="text-sm text-blue-300">
                   Посилання буде доступне після придбання квитка
                 </p>
               )}
@@ -169,12 +169,12 @@ export default async function EventDetailPage({ params }: PageProps) {
           )}
 
           {/* Organizer */}
-          <div className="bg-white border-2 border-timber-dark p-6">
-            <h2 className="font-syne text-xl font-bold mb-4">Організатор</h2>
+          <div className="bg-panel-900 border border-line p-6 rounded-lg">
+            <h2 className="font-syne text-xl font-bold text-text-100 mb-4">Організатор</h2>
             <div className="flex items-center gap-3">
-              <User size={40} className="text-timber-beam" />
+              <User size={40} className="text-muted-500" />
               <div>
-                <p className="font-bold">
+                <p className="font-bold text-text-100">
                   {event.users?.first_name} {event.users?.last_name}
                 </p>
               </div>
@@ -199,15 +199,15 @@ export default async function EventDetailPage({ params }: PageProps) {
                 />
               ) : (
                 /* Free Event - Show Regular RSVP */
-                <div className="bg-white border-2 border-timber-dark p-6">
-                  <h3 className="font-syne font-bold mb-4">Ваша відповідь</h3>
+                <div className="bg-panel-900 border border-line p-6 rounded-lg">
+                  <h3 className="font-syne font-bold text-text-100 mb-4">Ваша відповідь</h3>
                   {profile ? (
                     <RSVPButton
                       eventId={event.id}
                       currentStatus={userRsvp?.status || null}
                     />
                   ) : (
-                    <p className="text-sm text-timber-beam">
+                    <p className="text-sm text-muted-500">
                       Увійдіть, щоб підтвердити участь
                     </p>
                   )}
@@ -217,27 +217,27 @@ export default async function EventDetailPage({ params }: PageProps) {
           )}
 
           {/* Event Info */}
-          <div className="bg-timber-dark/5 border-2 border-timber-dark p-6">
-            <h3 className="font-syne font-bold mb-4">Деталі події</h3>
+          <div className="bg-panel-850 border border-line p-6 rounded-lg">
+            <h3 className="font-syne font-bold text-text-100 mb-4">Деталі події</h3>
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-timber-beam mb-1">Тип</p>
-                <p className="font-bold capitalize">{event.type}</p>
+                <p className="text-muted-500 mb-1">Тип</p>
+                <p className="font-bold text-text-100 capitalize">{event.type}</p>
               </div>
               <div>
-                <p className="text-timber-beam mb-1">Масштаб</p>
-                <p className="font-bold capitalize">{event.scope}</p>
+                <p className="text-muted-500 mb-1">Масштаб</p>
+                <p className="font-bold text-text-100 capitalize">{event.scope}</p>
               </div>
               {event.max_attendees && (
                 <div>
-                  <p className="text-timber-beam mb-1">Макс. учасників</p>
-                  <p className="font-bold">{event.max_attendees}</p>
+                  <p className="text-muted-500 mb-1">Макс. учасників</p>
+                  <p className="font-bold text-text-100">{event.max_attendees}</p>
                 </div>
               )}
               {event.rsvp_deadline && (
                 <div>
-                  <p className="text-timber-beam mb-1">Дедлайн реєстрації</p>
-                  <p className="font-bold">
+                  <p className="text-muted-500 mb-1">Дедлайн реєстрації</p>
+                  <p className="font-bold text-text-100">
                     {formatDateTimeWithLocal(event.rsvp_deadline)}
                   </p>
                 </div>
@@ -246,21 +246,21 @@ export default async function EventDetailPage({ params }: PageProps) {
           </div>
 
           {/* Attendance Stats */}
-          <div className="bg-white border-2 border-timber-dark p-6">
-            <h3 className="font-syne font-bold mb-4">Статистика</h3>
+          <div className="bg-panel-900 border border-line p-6 rounded-lg">
+            <h3 className="font-syne font-bold text-text-100 mb-4">Статистика</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-timber-beam">Йде:</span>
-                <span className="font-bold text-green-600">{event.going_count}</span>
+                <span className="text-muted-500">Йде:</span>
+                <span className="font-bold text-green-400">{event.going_count}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-timber-beam">Можливо:</span>
-                <span className="font-bold text-yellow-600">{event.maybe_count}</span>
+                <span className="text-muted-500">Можливо:</span>
+                <span className="font-bold text-yellow-400">{event.maybe_count}</span>
               </div>
               {event.requires_ticket_purchase && (
-                <div className="flex justify-between pt-2 border-t border-timber-dark/10">
-                  <span className="text-timber-beam">Квитків продано:</span>
-                  <span className="font-bold text-accent">{ticketsSold}</span>
+                <div className="flex justify-between pt-2 border-t border-line">
+                  <span className="text-muted-500">Квитків продано:</span>
+                  <span className="font-bold text-bronze">{ticketsSold}</span>
                 </div>
               )}
             </div>

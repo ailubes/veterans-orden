@@ -31,7 +31,7 @@ export function EventFilters({ oblasts, userOblastId }: EventFiltersProps) {
     <select
       value={currentFilter}
       onChange={(e) => handleFilterChange(e.target.value)}
-      className="px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none cursor-pointer"
+      className="px-4 py-2 bg-panel-900 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none cursor-pointer rounded"
     >
       <option value="all">Всі регіони</option>
       <option value="online">Онлайн</option>

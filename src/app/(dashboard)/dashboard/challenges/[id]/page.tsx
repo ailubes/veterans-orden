@@ -133,7 +133,6 @@ export default function ChallengeDetailPage({ params }: PageProps) {
   }
 
   function formatDate(dateStr: string): string {
-    // Use formatDateTimeWithLocal to show both Kyiv and local time
     return formatDateTimeWithLocal(dateStr, { showDate: true, showYear: true });
   }
 
@@ -141,13 +140,13 @@ export default function ChallengeDetailPage({ params }: PageProps) {
     if (rank === 1) return <Trophy className="text-yellow-500" size={20} />;
     if (rank === 2) return <Medal className="text-gray-400" size={20} />;
     if (rank === 3) return <Medal className="text-amber-600" size={20} />;
-    return <span className="w-5 h-5 flex items-center justify-center font-bold text-timber-beam text-sm">{rank}</span>;
+    return <span className="w-5 h-5 flex items-center justify-center font-bold text-muted-500 text-sm">{rank}</span>;
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="animate-spin text-accent" size={48} />
+        <Loader2 className="animate-spin text-bronze" size={48} />
       </div>
     );
   }
@@ -157,17 +156,17 @@ export default function ChallengeDetailPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto">
         <Link
           href="/dashboard/challenges"
-          className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-8"
+          className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-8"
         >
           <ArrowLeft size={16} />
           До списку челенджів
         </Link>
 
-        <div className="bg-canvas border-2 border-timber-dark p-12 text-center">
+        <div className="bg-panel-900 border border-line p-12 text-center rounded-lg">
           <X className="w-12 h-12 mx-auto mb-4 text-red-500" />
-          <h2 className="font-syne text-xl font-bold mb-2">{error || 'Челендж не знайдено'}</h2>
-          <Link href="/dashboard/challenges" className="text-accent hover:underline text-sm">
-            &larr; Повернутися до списку
+          <h2 className="font-syne text-xl font-bold text-text-100 mb-2">{error || 'Челендж не знайдено'}</h2>
+          <Link href="/dashboard/challenges" className="text-bronze hover:underline text-sm">
+            ← Повернутися до списку
           </Link>
         </div>
       </div>
@@ -185,37 +184,34 @@ export default function ChallengeDetailPage({ params }: PageProps) {
       {/* Back link */}
       <Link
         href="/dashboard/challenges"
-        className="inline-flex items-center gap-2 text-sm text-timber-beam hover:text-accent mb-8"
+        className="inline-flex items-center gap-2 text-sm text-muted-500 hover:text-bronze mb-8"
       >
         <ArrowLeft size={16} />
         До списку челенджів
       </Link>
 
       {/* Header */}
-      <div className="bg-timber-dark text-canvas p-6 relative mb-6">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-
+      <div className="bg-bronze text-bg-950 p-6 mb-6 rounded-lg">
         <div className="flex items-start gap-4">
-          <div className="p-3 bg-accent/20 text-accent rounded">
+          <div className="p-3 bg-bg-950/20 text-bg-950 rounded">
             <GoalIcon size={32} />
           </div>
 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="px-2 py-0.5 text-xs font-bold bg-canvas/20">
+              <span className="px-2 py-0.5 text-xs font-bold bg-bg-950/20 rounded">
                 {CHALLENGE_TYPE_LABELS[challenge.type].uk}
               </span>
-              <span className={`px-2 py-0.5 text-xs ${
-                challenge.status === 'active' ? 'bg-green-500' :
-                challenge.status === 'upcoming' ? 'bg-blue-500' :
-                challenge.status === 'completed' ? 'bg-gray-500' :
-                'bg-red-500'
+              <span className={`px-2 py-0.5 text-xs font-bold text-white rounded ${
+                challenge.status === 'active' ? 'bg-green-600' :
+                challenge.status === 'upcoming' ? 'bg-blue-600' :
+                challenge.status === 'completed' ? 'bg-gray-600' :
+                'bg-red-600'
               }`}>
                 {CHALLENGE_STATUS_LABELS[challenge.status].uk}
               </span>
               {challenge.isCompetitive && (
-                <span className="px-2 py-0.5 text-xs font-bold bg-orange-500">
+                <span className="px-2 py-0.5 text-xs font-bold bg-orange-600 text-white rounded">
                   <Trophy size={10} className="inline mr-1" />
                   Топ-{challenge.maxWinners}
                 </span>
@@ -237,7 +233,7 @@ export default function ChallengeDetailPage({ params }: PageProps) {
                 <Users size={14} />
                 {challenge.participantCount} учасників
               </span>
-              <span className="flex items-center gap-1 text-accent font-bold">
+              <span className="flex items-center gap-1 font-bold">
                 <Star size={14} />
                 +{challenge.points} балів
               </span>
@@ -251,30 +247,28 @@ export default function ChallengeDetailPage({ params }: PageProps) {
         <div className="lg:col-span-2 space-y-6">
           {/* Progress Card */}
           {challenge.userJoined && (
-            <div className="bg-canvas border-2 border-accent p-6 relative">
-              <div className="joint joint-tl" />
-
-              <p className="label text-accent mb-4">ВАШ ПРОГРЕС</p>
+            <div className="bg-panel-900 border-2 border-bronze p-6 rounded-lg">
+              <p className="mono text-bronze text-xs tracking-widest mb-4">ВАШ ПРОГРЕС</p>
 
               <div className="flex items-center justify-between mb-2">
-                <span className="font-syne text-3xl font-bold">
+                <span className="font-syne text-3xl font-bold text-text-100">
                   {challenge.userProgress} / {challenge.goalTarget}
                 </span>
-                <span className="font-syne text-2xl font-bold text-accent">
+                <span className="font-syne text-2xl font-bold text-bronze">
                   {progressPercent}%
                 </span>
               </div>
 
-              <div className="h-4 bg-timber-dark/20 rounded-full overflow-hidden mb-4">
+              <div className="h-4 bg-panel-850 rounded-full overflow-hidden mb-4">
                 <div
-                  className="h-full bg-accent transition-all duration-500"
+                  className="h-full bg-bronze transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
 
-              <p className="text-sm text-timber-beam">
+              <p className="text-sm text-muted-500">
                 {challenge.userCompleted ? (
-                  <span className="flex items-center gap-2 text-green-600 font-bold">
+                  <span className="flex items-center gap-2 text-green-400 font-bold">
                     <Check size={16} />
                     Ви успішно виконали цей челендж!
                   </span>
@@ -287,8 +281,8 @@ export default function ChallengeDetailPage({ params }: PageProps) {
               </p>
 
               {challenge.status === 'active' && !challenge.userCompleted && (
-                <div className="mt-4 pt-4 border-t border-timber-dark/20">
-                  <p className="text-xs text-timber-beam flex items-center gap-1">
+                <div className="mt-4 pt-4 border-t border-line">
+                  <p className="text-xs text-muted-500 flex items-center gap-1">
                     <Clock size={12} />
                     Залишилось: {formatTimeRemaining(challenge.endDate)}
                   </p>
@@ -298,50 +292,48 @@ export default function ChallengeDetailPage({ params }: PageProps) {
           )}
 
           {/* Goal Info Card */}
-          <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-            <div className="joint joint-tl" />
-
-            <h2 className="font-syne text-xl font-bold mb-4">Умови челенджу</h2>
+          <div className="bg-panel-900 border border-line p-6 rounded-lg">
+            <h2 className="font-syne text-xl font-bold text-text-100 mb-4">Умови челенджу</h2>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 bg-timber-dark/5">
-                <Target className="text-accent" size={20} />
+              <div className="flex items-center gap-3 p-3 bg-panel-850 rounded">
+                <Target className="text-bronze" size={20} />
                 <div>
-                  <p className="font-bold">Мета</p>
-                  <p className="text-sm text-timber-beam">
+                  <p className="font-bold text-text-100">Мета</p>
+                  <p className="text-sm text-muted-500">
                     {challenge.goalTarget}{' '}
                     {CHALLENGE_GOAL_TYPE_LABELS[challenge.goalType].uk.toLowerCase()}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-timber-dark/5">
-                <Star className="text-accent" size={20} />
+              <div className="flex items-center gap-3 p-3 bg-panel-850 rounded">
+                <Star className="text-bronze" size={20} />
                 <div>
-                  <p className="font-bold">Нагорода</p>
-                  <p className="text-sm text-timber-beam">
+                  <p className="font-bold text-text-100">Нагорода</p>
+                  <p className="text-sm text-muted-500">
                     +{challenge.points} балів
                     {challenge.isCompetitive && ` (топ-${challenge.maxWinners} отримують бонус)`}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 bg-timber-dark/5">
-                <Clock className="text-accent" size={20} />
+              <div className="flex items-center gap-3 p-3 bg-panel-850 rounded">
+                <Clock className="text-bronze" size={20} />
                 <div>
-                  <p className="font-bold">Термін</p>
-                  <p className="text-sm text-timber-beam">
+                  <p className="font-bold text-text-100">Термін</p>
+                  <p className="text-sm text-muted-500">
                     {formatDate(challenge.startDate)} — {formatDate(challenge.endDate)}
                   </p>
                 </div>
               </div>
 
               {challenge.isCompetitive && (
-                <div className="flex items-center gap-3 p-3 bg-orange-500/10 border border-orange-500">
-                  <Trophy className="text-orange-600" size={20} />
+                <div className="flex items-center gap-3 p-3 bg-orange-500/10 border border-orange-500 rounded">
+                  <Trophy className="text-orange-500" size={20} />
                   <div>
-                    <p className="font-bold text-orange-600">Змагання!</p>
-                    <p className="text-sm text-timber-beam">
+                    <p className="font-bold text-orange-400">Змагання!</p>
+                    <p className="text-sm text-muted-500">
                       Топ-{challenge.maxWinners} учасників отримають додаткові бали
                     </p>
                   </div>
@@ -351,12 +343,12 @@ export default function ChallengeDetailPage({ params }: PageProps) {
 
             {/* Join/Leave Button */}
             {challenge.status === 'active' && (
-              <div className="mt-6 pt-4 border-t border-timber-dark/20">
+              <div className="mt-6 pt-4 border-t border-line">
                 {challenge.userJoined ? (
                   <button
                     onClick={handleLeave}
                     disabled={actionLoading}
-                    className="w-full py-3 text-sm font-bold border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-colors disabled:opacity-50"
+                    className="w-full py-3 text-sm font-bold border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition-colors disabled:opacity-50 rounded"
                   >
                     {actionLoading ? (
                       <Loader2 className="animate-spin mx-auto" size={16} />
@@ -368,7 +360,7 @@ export default function ChallengeDetailPage({ params }: PageProps) {
                   <button
                     onClick={handleJoin}
                     disabled={actionLoading}
-                    className="w-full py-3 text-sm font-bold bg-accent text-canvas hover:bg-accent/90 transition-colors disabled:opacity-50"
+                    className="w-full py-3 text-sm font-bold bg-bronze text-bg-950 hover:bg-bronze/90 transition-colors disabled:opacity-50 rounded"
                   >
                     {actionLoading ? (
                       <Loader2 className="animate-spin mx-auto" size={16} />
@@ -386,12 +378,10 @@ export default function ChallengeDetailPage({ params }: PageProps) {
         <div className="space-y-6">
           {/* Leaderboard */}
           {challenge.isCompetitive && (
-            <div className="bg-canvas border-2 border-timber-dark p-6 relative">
-              <div className="joint joint-tl" />
-
+            <div className="bg-panel-900 border border-line p-6 rounded-lg">
               <div className="flex items-center gap-2 mb-4">
-                <Trophy className="text-accent" size={20} />
-                <h2 className="font-syne text-lg font-bold">Лідерборд</h2>
+                <Trophy className="text-bronze" size={20} />
+                <h2 className="font-syne text-lg font-bold text-text-100">Лідерборд</h2>
               </div>
 
               {leaderboard.length > 0 ? (
@@ -399,21 +389,21 @@ export default function ChallengeDetailPage({ params }: PageProps) {
                   {leaderboard.map((entry) => (
                     <div
                       key={entry.rank}
-                      className={`flex items-center gap-3 p-2 ${
+                      className={`flex items-center gap-3 p-2 rounded ${
                         entry.isCurrentUser
-                          ? 'bg-accent/10 border border-accent'
-                          : 'bg-timber-dark/5'
+                          ? 'bg-bronze/10 border border-bronze'
+                          : 'bg-panel-850'
                       }`}
                     >
                       {getMedalIcon(entry.rank)}
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-sm truncate">
+                        <p className="font-bold text-sm text-text-100 truncate">
                           {entry.firstName} {entry.lastName?.charAt(0)}.
                           {entry.isCurrentUser && ' (ви)'}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-syne font-bold text-accent text-sm">
+                        <p className="font-syne font-bold text-bronze text-sm">
                           {entry.progress}
                         </p>
                       </div>
@@ -421,7 +411,7 @@ export default function ChallengeDetailPage({ params }: PageProps) {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-timber-beam text-center py-4">
+                <p className="text-sm text-muted-500 text-center py-4">
                   Поки немає учасників
                 </p>
               )}
@@ -429,20 +419,18 @@ export default function ChallengeDetailPage({ params }: PageProps) {
           )}
 
           {/* Quick Stats */}
-          <div className="bg-timber-dark text-canvas p-4 relative">
-            <div className="joint joint-tl" />
-
+          <div className="bg-bronze text-bg-950 p-4 rounded-lg">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs opacity-60">Учасників</span>
+                <span className="text-xs opacity-70">Учасників</span>
                 <span className="font-syne font-bold">{challenge.participantCount}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs opacity-60">Тип</span>
+                <span className="text-xs opacity-70">Тип</span>
                 <span className="font-bold text-xs">{CHALLENGE_TYPE_LABELS[challenge.type].uk}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs opacity-60">Ціль</span>
+                <span className="text-xs opacity-70">Ціль</span>
                 <span className="font-bold text-xs">{CHALLENGE_GOAL_TYPE_LABELS[challenge.goalType].uk}</span>
               </div>
             </div>

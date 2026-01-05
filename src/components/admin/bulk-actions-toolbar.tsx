@@ -58,23 +58,23 @@ export function BulkActionsToolbar({
 
   return (
     <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4">
-      <div className="bg-timber-dark text-canvas border-4 border-accent shadow-2xl">
+      <div className="bg-panel-900 text-text-100 border border-bronze shadow-2xl rounded-lg">
         <div className="flex items-center gap-6 px-6 py-4">
           {/* Selection info */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center font-bold">
+            <div className="w-8 h-8 bg-bronze text-bg-950 rounded-full flex items-center justify-center font-bold">
               {selectedCount}
             </div>
             <div>
               <p className="font-syne font-bold text-sm">
                 Обрано {selectedCount} з {totalCount}
               </p>
-              <p className="text-xs opacity-75">Виберіть дію нижче</p>
+              <p className="text-xs text-muted-500">Виберіть дію нижче</p>
             </div>
           </div>
 
           {/* Divider */}
-          <div className="h-10 w-px bg-canvas/30" />
+          <div className="h-10 w-px bg-line" />
 
           {/* Actions */}
           <div className="flex items-center gap-2">
@@ -83,10 +83,10 @@ export function BulkActionsToolbar({
                 key={action.id}
                 onClick={() => handleAction(action)}
                 disabled={executing}
-                className={`flex items-center gap-2 px-4 py-2 font-bold text-sm border-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                className={`flex items-center gap-2 px-4 py-2 font-bold text-sm border transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded ${
                   action.variant === 'destructive'
                     ? 'border-red-500 bg-red-500 text-white hover:bg-red-600'
-                    : 'border-canvas bg-canvas text-timber-dark hover:bg-canvas/90'
+                    : 'border-bronze bg-bronze text-bg-950 hover:bg-bronze/90'
                 }`}
               >
                 {executing && currentAction === action.id ? (
@@ -103,7 +103,7 @@ export function BulkActionsToolbar({
           <button
             onClick={onClear}
             disabled={executing}
-            className="ml-2 p-2 hover:bg-canvas/10 rounded transition-colors disabled:opacity-50"
+            className="ml-2 p-2 hover:bg-panel-850 rounded transition-colors disabled:opacity-50"
             title="Скасувати вибір"
           >
             <X className="w-5 h-5" />
@@ -112,8 +112,8 @@ export function BulkActionsToolbar({
 
         {/* Progress bar (when executing) */}
         {executing && (
-          <div className="h-1 bg-canvas/10 relative overflow-hidden">
-            <div className="absolute inset-0 bg-accent animate-pulse" />
+          <div className="h-1 bg-panel-850 relative overflow-hidden rounded-b-lg">
+            <div className="absolute inset-0 bg-bronze animate-pulse" />
           </div>
         )}
       </div>

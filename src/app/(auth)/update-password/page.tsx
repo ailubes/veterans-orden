@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Lock, Check } from 'lucide-react';
+import { HeavyCta } from '@/components/ui/heavy-cta';
 
 export default function UpdatePasswordPage() {
   const router = useRouter();
@@ -56,22 +57,17 @@ export default function UpdatePasswordPage() {
 
   if (success) {
     return (
-      <div className="bg-canvas border-2 border-timber-dark p-8 relative">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-        <div className="joint joint-bl" />
-        <div className="joint joint-br" />
-
+      <div className="bg-panel-900 border border-line rounded-lg p-8">
         <div className="text-center">
-          <div className="w-16 h-16 bg-green-500 text-white flex items-center justify-center mx-auto mb-6 rounded-full">
+          <div className="w-16 h-16 bg-bronze text-bg-950 flex items-center justify-center mx-auto mb-6 rounded-full">
             <Check size={32} />
           </div>
 
-          <h1 className="font-syne font-bold text-2xl mb-4">
+          <h1 className="font-inter font-black text-2xl mb-4 text-text-100">
             Пароль оновлено!
           </h1>
 
-          <p className="text-timber-beam">
+          <p className="text-muted-500">
             Перенаправляємо до кабінету...
           </p>
         </div>
@@ -80,33 +76,30 @@ export default function UpdatePasswordPage() {
   }
 
   return (
-    <div className="bg-canvas border-2 border-timber-dark p-8 relative">
-      <div className="joint joint-tl" />
-      <div className="joint joint-tr" />
-      <div className="joint joint-bl" />
-      <div className="joint joint-br" />
-
+    <div className="bg-panel-900 border border-line rounded-lg p-8">
       <div className="text-center mb-6">
-        <div className="w-12 h-12 bg-timber-dark text-canvas flex items-center justify-center mx-auto mb-4">
+        <div className="w-12 h-12 bg-panel-850 border border-line text-bronze flex items-center justify-center mx-auto mb-4 rounded-lg">
           <Lock size={24} />
         </div>
 
-        <h1 className="font-syne font-bold text-2xl mb-2">
+        <h1 className="font-inter font-black text-2xl mb-2 text-text-100">
           Новий пароль
         </h1>
-        <p className="text-sm text-timber-beam">
+        <p className="text-sm text-muted-500">
           Введіть новий пароль для вашого акаунту
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label block mb-2">НОВИЙ ПАРОЛЬ</label>
+          <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+            Новий пароль
+          </label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
             placeholder="Мінімум 8 символів"
             minLength={8}
             required
@@ -114,30 +107,34 @@ export default function UpdatePasswordPage() {
         </div>
 
         <div>
-          <label className="label block mb-2">ПІДТВЕРДІТЬ ПАРОЛЬ</label>
+          <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
+            Підтвердіть пароль
+          </label>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+            className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors"
             placeholder="Повторіть пароль"
             required
           />
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
             {error}
           </div>
         )}
 
-        <button
+        <HeavyCta
           type="submit"
+          variant="primary"
+          size="lg"
+          fullWidth
           disabled={loading}
-          className="btn w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ НОВИЙ ПАРОЛЬ →'}
-        </button>
+          {loading ? 'ЗБЕРЕЖЕННЯ...' : 'ЗБЕРЕГТИ НОВИЙ ПАРОЛЬ'}
+        </HeavyCta>
       </form>
     </div>
   );

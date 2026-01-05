@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const { data: currentProfile } = await supabase
       .from('users')
       .select('id')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     // Search users by name

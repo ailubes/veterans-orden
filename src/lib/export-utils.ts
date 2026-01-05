@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -6,17 +6,51 @@ import autoTable from 'jspdf-autotable';
  * Export data to Excel file
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function exportToExcel(data: any[], filename: string, sheetName: string = 'Data') {
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+export async function exportToExcel(data: any[], filename: string, sheetName: string = 'Data') {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet(sheetName);
 
-  // Auto-size columns
-  const maxWidth = data.reduce((w, r) => Math.max(w, ...Object.values(r).map(v => String(v).length)), 10);
-  const cols = Object.keys(data[0] || {}).map(() => ({ wch: Math.min(maxWidth, 30) }));
-  worksheet['!cols'] = cols;
+  if (data.length === 0) return;
 
-  XLSX.writeFile(workbook, `${filename}.xlsx`);
+  // Add headers
+  const headers = Object.keys(data[0]);
+  worksheet.addRow(headers);
+
+  // Style header row
+  const headerRow = worksheet.getRow(1);
+  headerRow.font = { bold: true };
+  headerRow.fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFD4A574' }, // Bronze accent color
+  };
+
+  // Add data rows
+  data.forEach(item => {
+    worksheet.addRow(headers.map(key => item[key]));
+  });
+
+  // Auto-fit columns
+  worksheet.columns.forEach(column => {
+    let maxLength = 10;
+    column.eachCell?.({ includeEmpty: true }, cell => {
+      const cellLength = cell.value ? String(cell.value).length : 0;
+      maxLength = Math.max(maxLength, Math.min(cellLength, 50));
+    });
+    column.width = maxLength + 2;
+  });
+
+  // Generate and download
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${filename}.xlsx`;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
 }
 
 /**
@@ -73,7 +107,7 @@ export function exportToPDF(
  * Export members data with formatted fields
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function exportMembersData(members: any[], format: 'excel' | 'pdf') {
+export async function exportMembersData(members: any[], format: 'excel' | 'pdf') {
   const formattedData = members.map(m => ({
     'Ім\'я': m.first_name,
     'Прізвище': m.last_name,
@@ -89,7 +123,7 @@ export function exportMembersData(members: any[], format: 'excel' | 'pdf') {
   const filename = `members-export-${new Date().toISOString().split('T')[0]}`;
 
   if (format === 'excel') {
-    exportToExcel(formattedData, filename, 'Члени');
+    await exportToExcel(formattedData, filename, 'Члени');
   } else {
     exportToPDF(formattedData, filename, 'Мережа Вільних Людей - Експорт Членів');
   }
@@ -99,7 +133,7 @@ export function exportMembersData(members: any[], format: 'excel' | 'pdf') {
  * Export analytics data
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function exportAnalyticsData(data: any, format: 'excel' | 'pdf') {
+export async function exportAnalyticsData(data: any, format: 'excel' | 'pdf') {
   const formattedData = [{
     'Всього членів': data.totalMembers || 0,
     'Активних': data.activeMembers || 0,
@@ -116,7 +150,7 @@ export function exportAnalyticsData(data: any, format: 'excel' | 'pdf') {
   const filename = `analytics-export-${new Date().toISOString().split('T')[0]}`;
 
   if (format === 'excel') {
-    exportToExcel(formattedData, filename, 'Аналітика');
+    await exportToExcel(formattedData, filename, 'Аналітика');
   } else {
     exportToPDF(formattedData, filename, 'Мережа Вільних Людей - Аналітика');
   }

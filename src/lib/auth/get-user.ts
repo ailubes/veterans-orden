@@ -86,7 +86,7 @@ export async function getAuthenticatedUserWithProfile(request: Request | NextReq
   const { data: profile, error: profileError } = await authResult.supabase
     .from('users')
     .select('*')
-    .eq('clerk_id', authResult.user.id)
+    .eq('auth_id', authResult.user.id)
     .single();
 
   if (profileError && profileError.code !== 'PGRST116') {

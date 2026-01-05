@@ -79,7 +79,7 @@ export default function NewMemberPage() {
       const { data: adminProfile } = await supabase
         .from('users')
         .select('role')
-        .eq('clerk_id', user.id)
+        .eq('auth_id', user.id)
         .single();
 
       // Only super_admin can create new members
@@ -168,8 +168,8 @@ export default function NewMemberPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 text-center">
-          <p className="text-timber-beam">Завантаження...</p>
+        <div className="bg-panel-900 border border-line p-8 text-center rounded-lg">
+          <p className="text-muted-500">Завантаження...</p>
         </div>
       </div>
     );
@@ -179,47 +179,42 @@ export default function NewMemberPage() {
   if (createdMember) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="bg-canvas border-2 border-timber-dark p-8 relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
+        <div className="bg-panel-900 border border-line p-8 rounded-lg">
           <div className="text-center mb-6">
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <Check size={32} className="text-white" />
             </div>
-            <h2 className="font-syne text-2xl font-bold mb-2">
+            <h2 className="font-syne text-2xl font-bold text-text-100 mb-2">
               Члена створено успішно!
             </h2>
-            <p className="text-timber-beam">
+            <p className="text-muted-500">
               {createdMember.first_name} {createdMember.last_name}
             </p>
           </div>
 
-          <div className="bg-timber-dark/5 border-2 border-timber-dark p-4 mb-6">
-            <p className="label text-accent mb-3">ДАНІ ДЛЯ ВХОДУ</p>
+          <div className="bg-panel-850 border border-line p-4 mb-6 rounded-lg">
+            <p className="mono text-bronze text-xs tracking-widest mb-3">ДАНІ ДЛЯ ВХОДУ</p>
 
             <div className="space-y-3">
               <div>
-                <p className="text-xs text-timber-beam mb-1">Email</p>
-                <p className="font-mono text-sm bg-canvas p-2 border border-timber-dark/20">
+                <p className="text-xs text-muted-500 mb-1">Email</p>
+                <p className="font-mono text-sm bg-panel-900 p-2 border border-line text-text-100 rounded">
                   {createdMember.email}
                 </p>
               </div>
 
               <div>
-                <p className="text-xs text-timber-beam mb-1">Пароль</p>
+                <p className="text-xs text-muted-500 mb-1">Пароль</p>
                 <div className="flex items-center gap-2">
-                  <p className="font-mono text-sm bg-canvas p-2 border border-timber-dark/20 flex-1">
+                  <p className="font-mono text-sm bg-panel-900 p-2 border border-line text-text-100 flex-1 rounded">
                     {showPassword ? createdMember.password : '••••••••••••'}
                   </p>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="p-2 border-2 border-timber-dark hover:bg-timber-dark/10 transition-colors"
+                    className="p-2 border border-line hover:bg-panel-850 transition-colors rounded"
                   >
-                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    {showPassword ? <EyeOff size={18} className="text-text-100" /> : <Eye size={18} className="text-text-100" />}
                   </button>
                 </div>
               </div>
@@ -227,7 +222,7 @@ export default function NewMemberPage() {
 
             <button
               onClick={copyCredentials}
-              className="mt-4 w-full btn btn-outline flex items-center justify-center gap-2"
+              className="mt-4 w-full px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center justify-center gap-2 rounded"
             >
               {copied ? (
                 <>
@@ -243,14 +238,14 @@ export default function NewMemberPage() {
             </button>
           </div>
 
-          <p className="text-xs text-timber-beam text-center mb-6">
+          <p className="text-xs text-muted-500 text-center mb-6">
             Надішліть ці дані користувачу. Він зможе змінити пароль після входу.
           </p>
 
           <div className="flex gap-4">
             <Link
               href={`/admin/members/${createdMember.id}`}
-              className="btn flex-1 text-center"
+              className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex-1 text-center rounded"
             >
               ПЕРЕГЛЯНУТИ ПРОФІЛЬ
             </Link>
@@ -273,7 +268,7 @@ export default function NewMemberPage() {
                   points: 0,
                 });
               }}
-              className="btn btn-outline"
+              className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
             >
               СТВОРИТИ ЩЕ
             </button>
@@ -289,7 +284,7 @@ export default function NewMemberPage() {
       <div className="mb-6">
         <Link
           href="/admin/members"
-          className="inline-flex items-center gap-2 text-sm font-bold text-timber-beam hover:text-accent transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-bold text-muted-500 hover:text-bronze transition-colors"
         >
           <ArrowLeft size={16} />
           НАЗАД ДО СПИСКУ
@@ -298,122 +293,112 @@ export default function NewMemberPage() {
 
       {/* Header */}
       <div className="mb-6">
-        <p className="label text-accent mb-2">АДМІНІСТРУВАННЯ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold flex items-center gap-3">
+        <p className="mono text-bronze text-xs tracking-widest mb-2">АДМІНІСТРУВАННЯ</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100 flex items-center gap-3">
           <UserPlus size={32} />
           Новий член
         </h1>
-        <p className="text-timber-beam mt-2">
+        <p className="text-muted-500 mt-2">
           Створення нового члена мережі вручну (тільки для супер-адмінів)
         </p>
       </div>
 
       {/* Error message */}
       {error && (
-        <div className="bg-red-100 border-2 border-red-600 p-4 mb-6">
-          <p className="text-red-600 font-bold">{error}</p>
+        <div className="bg-red-500/10 border border-red-500 p-4 mb-6 rounded-lg">
+          <p className="text-red-400 font-bold">{error}</p>
         </div>
       )}
 
       {/* Form */}
       <form onSubmit={handleSubmit}>
         {/* Personal Info */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ОСОБИСТА ІНФОРМАЦІЯ</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">ОСОБИСТА ІНФОРМАЦІЯ</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Ім&apos;я <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Ім&apos;я <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={member.first_name}
                 onChange={(e) => setMember({ ...member, first_name: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Прізвище <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Прізвище <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
                 value={member.last_name}
                 onChange={(e) => setMember({ ...member, last_name: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">По-батькові</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">По-батькові</label>
               <input
                 type="text"
                 value={member.patronymic}
                 onChange={(e) => setMember({ ...member, patronymic: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">
-                Email <span className="text-red-600">*</span>
+              <label className="block text-sm font-bold text-text-100 mb-2">
+                Email <span className="text-red-400">*</span>
               </label>
               <input
                 type="email"
                 value={member.email}
                 onChange={(e) => setMember({ ...member, email: e.target.value })}
                 required
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Телефон</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Телефон</label>
               <input
                 type="tel"
                 value={member.phone}
                 onChange={(e) => setMember({ ...member, phone: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Дата народження</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Дата народження</label>
               <input
                 type="date"
                 value={member.date_of_birth}
                 onChange={(e) => setMember({ ...member, date_of_birth: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
           </div>
         </div>
 
         {/* Location */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">МІСЦЕЗНАХОДЖЕННЯ</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">МІСЦЕЗНАХОДЖЕННЯ</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">Область</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Область</label>
               <select
                 value={member.oblast_id}
                 onChange={(e) => setMember({ ...member, oblast_id: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               >
                 <option value="">Оберіть область</option>
                 {oblasts.map((oblast) => (
@@ -425,33 +410,28 @@ export default function NewMemberPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Місто</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Місто</label>
               <input
                 type="text"
                 value={member.city}
                 onChange={(e) => setMember({ ...member, city: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
           </div>
         </div>
 
         {/* Role & Status */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">РОЛЬ ТА СТАТУС</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">РОЛЬ ТА СТАТУС</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">Роль</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Роль</label>
               <select
                 value={member.role}
                 onChange={(e) => setMember({ ...member, role: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               >
                 <option value="free_viewer">Спостерігач</option>
                 <option value="prospect">Потенційний член</option>
@@ -465,11 +445,11 @@ export default function NewMemberPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Статус</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Статус</label>
               <select
                 value={member.status}
                 onChange={(e) => setMember({ ...member, status: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               >
                 <option value="pending">На перевірці</option>
                 <option value="active">Активний</option>
@@ -481,21 +461,16 @@ export default function NewMemberPage() {
         </div>
 
         {/* Membership */}
-        <div className="bg-canvas border-2 border-timber-dark p-6 mb-6 relative card-with-joints">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <p className="label text-accent mb-4">ЧЛЕНСТВО</p>
+        <div className="bg-panel-900 border border-line p-6 mb-6 rounded-lg">
+          <p className="mono text-bronze text-xs tracking-widest mb-4">ЧЛЕНСТВО</p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-bold mb-2">План членства</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">План членства</label>
               <select
                 value={member.membership_tier}
                 onChange={(e) => setMember({ ...member, membership_tier: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               >
                 <option value="free">Безкоштовний</option>
                 <option value="basic_49">Базовий (49 грн)</option>
@@ -506,24 +481,24 @@ export default function NewMemberPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Оплачено до</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Оплачено до</label>
               <input
                 type="date"
                 value={member.membership_paid_until}
                 onChange={(e) => setMember({ ...member, membership_paid_until: e.target.value })}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold mb-2">Початкові бали</label>
+              <label className="block text-sm font-bold text-text-100 mb-2">Початкові бали</label>
               <input
                 type="number"
                 min="0"
                 value={member.points || ''}
                 onChange={(e) => setMember({ ...member, points: e.target.value === '' ? 0 : parseInt(e.target.value, 10) })}
                 onBlur={(e) => { if (e.target.value === '') setMember({ ...member, points: 0 }); }}
-                className="w-full px-4 py-2 bg-canvas border-2 border-timber-dark font-mono text-sm focus:border-accent focus:outline-none"
+                className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
               />
             </div>
           </div>
@@ -534,13 +509,13 @@ export default function NewMemberPage() {
           <button
             type="submit"
             disabled={saving}
-            className="btn flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded"
           >
             <Save size={18} />
             {saving ? 'СТВОРЕННЯ...' : 'СТВОРИТИ ЧЛЕНА'}
           </button>
 
-          <Link href="/admin/members" className="btn btn-outline">
+          <Link href="/admin/members" className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded">
             СКАСУВАТИ
           </Link>
         </div>

@@ -165,7 +165,7 @@ export default function SettingsPage() {
             is_identity_verified,
             oblast:oblasts(name)
           `)
-          .eq('clerk_id', authUser.id)
+          .eq('auth_id', authUser.id)
           .single();
 
         if (profile) {
@@ -401,7 +401,7 @@ export default function SettingsPage() {
       const { error: dbError } = await supabase
         .from('users')
         .update(updateData)
-        .eq('clerk_id', authUser.id);
+        .eq('auth_id', authUser.id);
 
       if (dbError) {
         setMessage(`Помилка: ${dbError.message}`);

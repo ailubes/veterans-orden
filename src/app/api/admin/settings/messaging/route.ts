@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     const { data: profile } = await supabase
       .from('users')
       .select('id, membership_role')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!profile) {
@@ -98,7 +98,7 @@ export async function PATCH(request: Request) {
     const { data: profile } = await supabase
       .from('users')
       .select('id, membership_role')
-      .eq('clerk_id', user.id)
+      .eq('auth_id', user.id)
       .single();
 
     if (!profile) {

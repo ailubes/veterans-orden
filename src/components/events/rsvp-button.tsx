@@ -60,12 +60,12 @@ export function RSVPButton({ eventId, currentStatus, onRSVPChange }: RSVPButtonP
         <button
           onClick={() => setShowOptions(!showOptions)}
           disabled={loading}
-          className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 text-sm font-bold rounded transition-colors ${
             status === 'going'
               ? 'bg-green-500 text-white'
               : status === 'maybe'
               ? 'bg-yellow-500 text-white'
-              : 'bg-gray-400 text-white'
+              : 'bg-muted-500 text-white'
           }`}
         >
           {status === 'going' && <Check size={16} />}
@@ -77,11 +77,11 @@ export function RSVPButton({ eventId, currentStatus, onRSVPChange }: RSVPButtonP
         </button>
 
         {showOptions && (
-          <div className="absolute right-0 top-full mt-2 bg-canvas border-2 border-timber-dark shadow-lg z-10 min-w-[160px]">
+          <div className="absolute right-0 top-full mt-2 bg-panel-900 border border-line shadow-lg z-10 min-w-[160px] rounded overflow-hidden">
             {status !== 'going' && (
               <button
                 onClick={() => handleRSVP('going')}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-green-50 flex items-center gap-2"
+                className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-green-500/10 flex items-center gap-2"
               >
                 <Check size={14} className="text-green-500" />
                 Йду
@@ -90,7 +90,7 @@ export function RSVPButton({ eventId, currentStatus, onRSVPChange }: RSVPButtonP
             {status !== 'maybe' && (
               <button
                 onClick={() => handleRSVP('maybe')}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-yellow-50 flex items-center gap-2"
+                className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-yellow-500/10 flex items-center gap-2"
               >
                 <HelpCircle size={14} className="text-yellow-500" />
                 Можливо
@@ -99,16 +99,16 @@ export function RSVPButton({ eventId, currentStatus, onRSVPChange }: RSVPButtonP
             {status !== 'not_going' && (
               <button
                 onClick={() => handleRSVP('not_going')}
-                className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-panel-850 flex items-center gap-2"
               >
-                <X size={14} className="text-gray-500" />
+                <X size={14} className="text-muted-500" />
                 Не йду
               </button>
             )}
-            <div className="border-t border-timber-dark/20" />
+            <div className="border-t border-line" />
             <button
               onClick={handleCancel}
-              className="w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-red-50"
+              className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-red-500/10"
             >
               Скасувати відповідь
             </button>
@@ -123,32 +123,32 @@ export function RSVPButton({ eventId, currentStatus, onRSVPChange }: RSVPButtonP
       <button
         onClick={() => setShowOptions(!showOptions)}
         disabled={loading}
-        className="btn text-sm disabled:opacity-50"
+        className="bg-bronze text-bg-950 px-4 py-2 font-bold text-sm hover:bg-bronze/90 transition-colors rounded disabled:opacity-50"
       >
         {loading ? 'ЗАВАНТАЖЕННЯ...' : 'ДОЛУЧИТИСЯ →'}
       </button>
 
       {showOptions && (
-        <div className="absolute right-0 top-full mt-2 bg-canvas border-2 border-timber-dark shadow-lg z-10 min-w-[160px]">
+        <div className="absolute right-0 top-full mt-2 bg-panel-900 border border-line shadow-lg z-10 min-w-[160px] rounded overflow-hidden">
           <button
             onClick={() => handleRSVP('going')}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-green-50 flex items-center gap-2"
+            className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-green-500/10 flex items-center gap-2"
           >
             <Check size={14} className="text-green-500" />
             Йду
           </button>
           <button
             onClick={() => handleRSVP('maybe')}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-yellow-50 flex items-center gap-2"
+            className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-yellow-500/10 flex items-center gap-2"
           >
             <HelpCircle size={14} className="text-yellow-500" />
             Можливо
           </button>
           <button
             onClick={() => handleRSVP('not_going')}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+            className="w-full px-4 py-2 text-left text-sm text-text-100 hover:bg-panel-850 flex items-center gap-2"
           >
-            <X size={14} className="text-gray-500" />
+            <X size={14} className="text-muted-500" />
             Не йду
           </button>
         </div>

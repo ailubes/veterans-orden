@@ -18,7 +18,7 @@ const priorityColors = {
   urgent: 'bg-red-500',
   high: 'bg-orange-500',
   medium: 'bg-yellow-500',
-  low: 'bg-gray-400',
+  low: 'bg-muted-500',
 };
 
 const priorityLabels = {
@@ -43,14 +43,14 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
       {/* My Tasks */}
       {myTasks && myTasks.length > 0 && (
         <div className="mb-12">
-          <h2 className="font-syne text-xl font-bold mb-4">
+          <h2 className="font-syne text-xl font-bold text-text-100 mb-4">
             В роботі ({myTasks.length})
           </h2>
           <div className="space-y-3">
             {myTasks.map((task) => (
               <div
                 key={task.id}
-                className="bg-accent/5 border-2 border-accent p-4 relative"
+                className="bg-bronze/10 border border-bronze p-4 rounded-lg"
               >
                 <div className="flex items-start gap-4">
                   <div
@@ -59,11 +59,11 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
                     }`}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold mb-1">{task.title}</h3>
-                    <div className="text-sm text-timber-beam line-clamp-2">
+                    <h3 className="font-bold text-text-100 mb-1">{task.title}</h3>
+                    <div className="text-sm text-muted-500 line-clamp-2">
                       <LinkifyText text={task.description || ''} maxUrlLength={35} />
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-timber-beam">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-muted-500">
                       {task.due_date && (
                         <span className="flex items-center gap-1">
                           <Clock size={12} />
@@ -77,7 +77,7 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
                     </div>
                   </div>
                   {task.status === 'pending_review' ? (
-                    <div className="flex-shrink-0 px-4 py-2 bg-purple-100 text-purple-700 text-sm font-bold flex items-center gap-2">
+                    <div className="flex-shrink-0 px-4 py-2 bg-purple-500/10 text-purple-400 text-sm font-bold flex items-center gap-2 rounded">
                       <Loader2 size={16} className="animate-spin" />
                       НА ПЕРЕВІРЦІ
                     </div>
@@ -97,7 +97,7 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
 
       {/* Available Tasks */}
       <div>
-        <h2 className="font-syne text-xl font-bold mb-4">
+        <h2 className="font-syne text-xl font-bold text-text-100 mb-4">
           Доступні завдання
         </h2>
 
@@ -106,10 +106,8 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
             {openTasks.map((task) => (
               <div
                 key={task.id}
-                className="bg-canvas border-2 border-timber-dark p-4 relative hover:border-accent transition-colors"
+                className="bg-panel-900 border border-line p-4 rounded-lg hover:border-bronze/50 transition-colors"
               >
-                <div className="joint joint-tl" />
-
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-2 h-2 mt-2 rounded-full flex-shrink-0 ${
@@ -118,29 +116,29 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 bg-timber-dark/10 text-xs">
+                      <span className="px-2 py-0.5 bg-panel-850 text-muted-500 text-xs rounded">
                         {typeLabels[task.type as keyof typeof typeLabels] || task.type}
                       </span>
                       <span
-                        className={`px-2 py-0.5 text-xs text-white ${
+                        className={`px-2 py-0.5 text-xs text-white rounded ${
                           priorityColors[task.priority as keyof typeof priorityColors]
                         }`}
                       >
                         {priorityLabels[task.priority as keyof typeof priorityLabels]}
                       </span>
                     </div>
-                    <h3 className="font-bold mb-1">{task.title}</h3>
-                    <div className="text-sm text-timber-beam line-clamp-2">
+                    <h3 className="font-bold text-text-100 mb-1">{task.title}</h3>
+                    <div className="text-sm text-muted-500 line-clamp-2">
                       <LinkifyText text={task.description || ''} maxUrlLength={35} />
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-timber-beam">
+                    <div className="flex items-center gap-4 mt-2 text-xs text-muted-500">
                       {task.due_date && (
                         <span className="flex items-center gap-1">
                           <Clock size={12} />
                           До {formatDate(task.due_date)}
                         </span>
                       )}
-                      <span className="flex items-center gap-1 text-accent font-bold">
+                      <span className="flex items-center gap-1 text-bronze font-bold">
                         <Star size={12} />
                         +{task.points} балів
                       </span>
@@ -152,18 +150,15 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
             ))}
           </div>
         ) : (
-          <div className="bg-canvas border-2 border-timber-dark p-12 relative text-center">
-            <div className="joint joint-tl" />
-            <div className="joint joint-tr" />
-
-            <CheckSquare className="w-12 h-12 mx-auto mb-4 text-timber-beam" />
-            <h3 className="font-syne text-xl font-bold mb-2">
+          <div className="bg-panel-900 border border-line p-12 rounded-lg text-center">
+            <CheckSquare className="w-12 h-12 mx-auto mb-4 text-muted-500" />
+            <h3 className="font-syne text-xl font-bold text-text-100 mb-2">
               Всі завдання виконані!
             </h3>
-            <p className="text-sm text-timber-beam mb-6">
+            <p className="text-sm text-muted-500 mb-6">
               Нові завдання з&apos;являться найближчим часом
             </p>
-            <Link href="/dashboard" className="text-accent hover:underline text-sm">
+            <Link href="/dashboard" className="text-bronze hover:underline text-sm">
               ← Повернутися до огляду
             </Link>
           </div>
@@ -171,18 +166,17 @@ export default function TasksList({ myTasks, openTasks, completedCount, userPoin
       </div>
 
       {/* Points Info */}
-      <div className="mt-8 bg-timber-dark text-canvas p-4 relative">
-        <div className="joint joint-tl" />
+      <div className="mt-8 bg-bronze text-bg-950 p-4 rounded-lg">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm mb-1">Ваші бали</p>
+            <p className="text-sm mb-1 opacity-80">Ваші бали</p>
             <p className="text-2xl font-syne font-bold flex items-center gap-2">
               <Star size={20} />
               {userPoints || 0}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm mb-1">Виконано завдань</p>
+            <p className="text-sm mb-1 opacity-80">Виконано завдань</p>
             <p className="text-2xl font-syne font-bold">{completedCount || 0}</p>
           </div>
         </div>

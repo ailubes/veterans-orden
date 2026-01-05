@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, Package, Download, Ticket, Star, Filter } from 'lucide-react';
+import { ShoppingBag, Package, Download, Ticket, Star, Filter, Loader2 } from 'lucide-react';
 import { pointsToUAH } from '@/lib/points/constants';
 import type { Product, ProductType } from '@/lib/marketplace/types';
 
@@ -64,11 +64,11 @@ export default function MarketplacePage() {
   const getProductIcon = (type: ProductType) => {
     switch (type) {
       case 'physical':
-        return <Package size={20} className="text-accent" />;
+        return <Package size={20} className="text-bronze" />;
       case 'digital':
-        return <Download size={20} className="text-accent" />;
+        return <Download size={20} className="text-bronze" />;
       case 'event_ticket':
-        return <Ticket size={20} className="text-accent" />;
+        return <Ticket size={20} className="text-bronze" />;
     }
   };
 
@@ -87,10 +87,12 @@ export default function MarketplacePage() {
     return (
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <p className="label mb-2">МАГАЗИН</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Маркетплейс</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// МАГАЗИН</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Маркетплейс</h1>
         </div>
-        <div className="text-center py-12 text-timber-beam">Завантаження...</div>
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="animate-spin text-bronze" size={32} />
+        </div>
       </div>
     );
   }
@@ -99,10 +101,10 @@ export default function MarketplacePage() {
     return (
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <p className="label mb-2">МАГАЗИН</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Маркетплейс</h1>
+          <p className="mono text-bronze text-xs tracking-widest mb-2">// МАГАЗИН</p>
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">Маркетплейс</h1>
         </div>
-        <div className="text-center py-12 text-red-600">{error}</div>
+        <div className="text-center py-12 bg-red-500/10 border border-red-500 text-red-400 rounded-lg">{error}</div>
       </div>
     );
   }
@@ -111,40 +113,37 @@ export default function MarketplacePage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <p className="label mb-2">МАГАЗИН</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold mb-4">Маркетплейс</h1>
-        <p className="text-timber-beam">
+        <p className="mono text-bronze text-xs tracking-widest mb-2">// МАГАЗИН</p>
+        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100 mb-4">Маркетплейс</h1>
+        <p className="text-muted-500">
           Обмінюйте бали на товари, цифрові продукти та квитки на події
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-canvas border-2 border-timber-dark p-4 mb-6 relative">
-        <div className="joint joint-tl" />
-        <div className="joint joint-tr" />
-
+      <div className="bg-panel-900 border border-line p-4 mb-6 rounded-lg">
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="text-accent" size={20} />
-          <p className="font-bold">Фільтри</p>
+          <Filter className="text-bronze" size={20} />
+          <p className="font-bold text-text-100">Фільтри</p>
         </div>
 
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => setFilterType('all')}
-            className={`px-4 py-2 font-bold text-sm transition-colors ${
+            className={`px-4 py-2 font-bold text-sm transition-colors rounded ${
               filterType === 'all'
-                ? 'bg-accent text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                ? 'bg-bronze text-bg-950'
+                : 'bg-panel-850 hover:bg-panel-850/80 text-text-200'
             }`}
           >
             Усі товари
           </button>
           <button
             onClick={() => setFilterType('physical')}
-            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 ${
+            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 rounded ${
               filterType === 'physical'
-                ? 'bg-accent text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                ? 'bg-bronze text-bg-950'
+                : 'bg-panel-850 hover:bg-panel-850/80 text-text-200'
             }`}
           >
             <Package size={16} />
@@ -152,10 +151,10 @@ export default function MarketplacePage() {
           </button>
           <button
             onClick={() => setFilterType('digital')}
-            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 ${
+            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 rounded ${
               filterType === 'digital'
-                ? 'bg-accent text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                ? 'bg-bronze text-bg-950'
+                : 'bg-panel-850 hover:bg-panel-850/80 text-text-200'
             }`}
           >
             <Download size={16} />
@@ -163,10 +162,10 @@ export default function MarketplacePage() {
           </button>
           <button
             onClick={() => setFilterType('event_ticket')}
-            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 ${
+            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 rounded ${
               filterType === 'event_ticket'
-                ? 'bg-accent text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                ? 'bg-bronze text-bg-950'
+                : 'bg-panel-850 hover:bg-panel-850/80 text-text-200'
             }`}
           >
             <Ticket size={16} />
@@ -174,10 +173,10 @@ export default function MarketplacePage() {
           </button>
           <button
             onClick={() => setShowFeaturedOnly(!showFeaturedOnly)}
-            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 ${
+            className={`px-4 py-2 font-bold text-sm transition-colors flex items-center gap-2 rounded ${
               showFeaturedOnly
-                ? 'bg-accent text-canvas'
-                : 'bg-timber-dark/10 hover:bg-timber-dark/20'
+                ? 'bg-bronze text-bg-950'
+                : 'bg-panel-850 hover:bg-panel-850/80 text-text-200'
             }`}
           >
             <Star size={16} />
@@ -188,10 +187,9 @@ export default function MarketplacePage() {
 
       {/* Products Grid */}
       {products.length === 0 ? (
-        <div className="text-center py-12 bg-canvas border-2 border-timber-dark relative">
-          <div className="joint joint-tl" />
-          <ShoppingBag className="mx-auto mb-4 text-timber-beam" size={48} />
-          <p className="text-timber-beam">Немає товарів за обраними фільтрами</p>
+        <div className="text-center py-12 bg-panel-900 border border-line rounded-lg">
+          <ShoppingBag className="mx-auto mb-4 text-muted-500" size={48} />
+          <p className="text-muted-500">Немає товарів за обраними фільтрами</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -204,16 +202,11 @@ export default function MarketplacePage() {
               <Link
                 key={product.id}
                 href={`/dashboard/marketplace/${product.slug}`}
-                className="bg-canvas border-2 border-timber-dark relative hover:border-accent transition-colors group"
+                className="bg-panel-900 border border-line rounded-lg overflow-hidden hover:border-bronze/50 transition-colors group"
               >
-                <div className="joint joint-tl" />
-                <div className="joint joint-tr" />
-                <div className="joint joint-bl" />
-                <div className="joint joint-br" />
-
                 {/* Image */}
                 {product.imageUrl ? (
-                  <div className="aspect-square bg-timber-dark/5 overflow-hidden">
+                  <div className="aspect-square bg-panel-850 overflow-hidden">
                     <img
                       src={product.imageUrl}
                       alt={product.nameUk}
@@ -221,7 +214,7 @@ export default function MarketplacePage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-square bg-timber-dark/5 flex items-center justify-center">
+                  <div className="aspect-square bg-panel-850 flex items-center justify-center">
                     {getProductIcon(product.type)}
                   </div>
                 )}
@@ -229,23 +222,23 @@ export default function MarketplacePage() {
                 <div className="p-4">
                   {/* Type & Featured Badge */}
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-xs text-timber-beam flex items-center gap-1">
+                    <span className="text-xs text-muted-500 flex items-center gap-1">
                       {getProductIcon(product.type)}
                       {getProductTypeLabel(product.type)}
                     </span>
                     {product.featured && (
-                      <Star size={14} className="text-accent fill-accent" />
+                      <Star size={14} className="text-bronze fill-bronze" />
                     )}
                   </div>
 
                   {/* Name */}
-                  <h3 className="font-syne font-bold text-lg mb-2 line-clamp-2">
+                  <h3 className="font-syne font-bold text-lg text-text-100 mb-2 line-clamp-2">
                     {product.nameUk}
                   </h3>
 
                   {/* Description */}
                   {product.descriptionUk && (
-                    <p className="text-sm text-timber-beam mb-3 line-clamp-2">
+                    <p className="text-sm text-muted-500 mb-3 line-clamp-2">
                       {stripHtml(product.descriptionUk)}
                     </p>
                   )}
@@ -253,20 +246,20 @@ export default function MarketplacePage() {
                   {/* Price & Stock */}
                   <div className="flex items-end justify-between">
                     <div>
-                      <p className="font-syne text-2xl font-bold text-accent">
+                      <p className="font-syne text-2xl font-bold text-bronze">
                         {product.pricePoints}
                       </p>
-                      <p className="text-xs text-timber-beam">
+                      <p className="text-xs text-muted-500">
                         балів (≈ {uahValue.toFixed(0)} грн)
                       </p>
                     </div>
 
                     {isOutOfStock ? (
-                      <span className="text-xs font-bold text-red-600 bg-red-600/10 px-2 py-1">
+                      <span className="text-xs font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded">
                         Немає в наявності
                       </span>
                     ) : product.stockQuantity !== null ? (
-                      <span className="text-xs text-timber-beam">
+                      <span className="text-xs text-muted-500">
                         Залишилось: {product.stockQuantity}
                       </span>
                     ) : null}

@@ -35,7 +35,7 @@ export async function POST(
         staffRole: users.staffRole,
       })
       .from(users)
-      .where(eq(users.clerkId, authUser.id))
+      .where(eq(users.authId, authUser.id))
       .limit(1);
 
     if (!dbUser || dbUser.length === 0) {
@@ -120,7 +120,7 @@ export async function GET(
         staffRole: users.staffRole,
       })
       .from(users)
-      .where(eq(users.clerkId, authUser.id))
+      .where(eq(users.authId, authUser.id))
       .limit(1);
 
     if (!dbUser || dbUser.length === 0) {
