@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import { ArrowLeft, AlertCircle, RefreshCw, Trash2 } from 'lucide-react';
-import { RichTextEditor } from '@/components/admin/rich-text-editor';
+import { BlockEditor } from '@/components/admin/block-editor';
 import { ImageUploadZone } from '@/components/admin/image-upload-zone';
 
 interface EditPageProps {
@@ -429,10 +429,10 @@ export default function EditPagePage({ params }: EditPageProps) {
         {/* Content */}
         <div className="bg-panel-900 border border-line p-6 rounded-lg">
           <p className="mono text-bronze text-xs tracking-widest mb-4">КОНТЕНТ *</p>
-          <RichTextEditor
+          <BlockEditor
             content={formData.content}
             onChange={(content) => setFormData({ ...formData, content })}
-            placeholder="Введіть контент сторінки..."
+            placeholder="Почніть писати, або натисніть / для вставки блоку..."
           />
         </div>
 

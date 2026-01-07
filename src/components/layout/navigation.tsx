@@ -1,11 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ContentAdapter } from '@/lib/content/ContentAdapter';
 
-const navLinks = ContentAdapter.getNavigation();
+// Static fallback navigation
+const staticNavLinks = ContentAdapter.getNavigation();
+
+interface NavItem {
+  href: string;
+  label: string;
+}
 
 function Logo() {
   return (
@@ -71,6 +77,27 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [navLinks, setNavLinks] = useState<NavItem[]>(staticNavLinks);
+
+  // Fetch navigation from database on mount
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      try {
+        const response = await fetch('/api/navigation');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.items && data.items.length > 0) {
+            setNavLinks(data.items);
+          }
+        }
+      } catch (error) {
+        // Silently fail, use static navigation
+        console.error('[Navigation] Failed to fetch from API:', error);
+      }
+    };
+
+    fetchNavigation();
+  }, []);
 
   return (
     <>
