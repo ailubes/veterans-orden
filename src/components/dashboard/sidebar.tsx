@@ -93,12 +93,12 @@ export function Sidebar() {
             height={40}
             className="rounded-sm"
           />
-          <span className="font-syne font-bold text-lg tracking-tight">МЕРЕЖА</span>
+          <span className="font-syne font-bold text-lg tracking-tight">ОРДЕН</span>
         </Link>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 overflow-y-auto">
+      <nav className="flex-1 p-4 overflow-y-auto flex flex-col">
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;

@@ -2179,3 +2179,165 @@ nav {
 .light body::before {
   opacity: 0.03;
 }
+
+/* ============================================================================
+   MDX CONTENT STYLES
+   ============================================================================ */
+
+.mdx-content {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-200);
+}
+
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  color: var(--text-100);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.mdx-content h1 {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-top: 0;
+}
+
+.mdx-content h2 {
+  font-size: 1.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.mdx-content h3 {
+  font-size: 1.35rem;
+}
+
+.mdx-content h4 {
+  font-size: 1.1rem;
+}
+
+.mdx-content p {
+  margin-bottom: 1.5rem;
+  max-width: 70ch;
+}
+
+.mdx-content a {
+  color: var(--bronze);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.mdx-content a:hover {
+  color: var(--text-100);
+}
+
+.mdx-content ul,
+.mdx-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.mdx-content ul {
+  list-style: none;
+}
+
+.mdx-content ul li {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.mdx-content ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  background: var(--bronze);
+}
+
+.mdx-content ol li {
+  margin-bottom: 0.5rem;
+}
+
+.mdx-content blockquote {
+  border-left: 4px solid var(--bronze);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--text-100);
+}
+
+.mdx-content code {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--panel-850);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.mdx-content pre {
+  background: var(--panel-900);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.mdx-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.mdx-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--line), transparent);
+  margin: 2rem 0;
+}
+
+.mdx-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.mdx-content th,
+.mdx-content td {
+  border: 1px solid var(--line);
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+
+.mdx-content th {
+  background: var(--panel-850);
+  font-weight: 700;
+  color: var(--text-100);
+}
+
+.mdx-content tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mdx-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.mdx-content strong {
+  font-weight: 700;
+  color: var(--text-100);
+}

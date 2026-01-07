@@ -116,12 +116,19 @@ export default function FeatureGate({
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div className="
           max-w-md w-full
-          border border-line rounded-lg bg-panel-900
-          card-with-joints
+          border-2 border-bronze/40 rounded-lg bg-panel-900
+          shadow-lg shadow-bronze/10
           p-6
           text-center
+          relative
+          overflow-hidden
         ">
-          <Lock className="w-12 h-12 text-text-100 mx-auto mb-4" />
+          {/* Locked badge */}
+          <div className="absolute top-0 left-0 right-0 bg-bronze/20 py-1.5 px-3">
+            <span className="font-mono text-xs font-bold text-bronze tracking-wider">ЗАБЛОКОВАНО</span>
+          </div>
+
+          <Lock className="w-12 h-12 text-bronze mx-auto mb-4 mt-8" />
 
           <h3 className="font-syne text-2xl font-bold text-text-100 mb-2">
             {gateInfo?.displayName || 'Функція заблокована'}

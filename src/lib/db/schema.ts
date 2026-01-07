@@ -2918,3 +2918,79 @@ export const electionNominationsRelations = relations(electionNominations, ({ on
     relationName: 'nominatedBy',
   }),
 }));
+
+// ===========================================
+// CMS PAGES
+// ===========================================
+
+export const pageStatusEnum = pgEnum('page_status', [
+  'draft',
+  'published',
+  'archived',
+]);
+
+// ----- PAGES -----
+export const pages = pgTable('pages', {
+  id: uuid('id').primaryKey().defaultRandom(),
+
+  // Basic info
+  title: varchar('title', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  label: varchar('label', { length: 100 }),
+  description: text('description'),
+
+  // Content (MDX format)
+  content: text('content').notNull().default(''),
+
+  // Featured image
+  featuredImageUrl: text('featured_image_url'),
+
+  // Hierarchy
+  parentSlug: varchar('parent_slug', { length: 255 }),
+
+  // Status
+  status: pageStatusEnum('status').default('draft').notNull(),
+
+  // Navigation
+  showInNav: boolean('show_in_nav').default(false),
+  navLabel: varchar('nav_label', { length: 100 }),
+  sortOrder: integer('sort_order').default(0),
+
+  // SEO
+  metaTitle: varchar('meta_title', { length: 70 }),
+  metaDescription: varchar('meta_description', { length: 160 }),
+
+  // Authorship
+  authorId: uuid('author_id').references(() => users.id),
+  lastEditedBy: uuid('last_edited_by').references(() => users.id),
+
+  // Timestamps
+  publishedAt: timestamp('published_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  slugIdx: uniqueIndex('pages_slug_idx').on(table.slug),
+  statusIdx: index('pages_status_idx').on(table.status),
+  parentSlugIdx: index('pages_parent_slug_idx').on(table.parentSlug),
+  showInNavIdx: index('pages_show_in_nav_idx').on(table.showInNav),
+  sortOrderIdx: index('pages_sort_order_idx').on(table.sortOrder),
+}));
+
+// ----- PAGES RELATIONS -----
+export const pagesRelations = relations(pages, ({ one }) => ({
+  author: one(users, {
+    fields: [pages.authorId],
+    references: [users.id],
+    relationName: 'pageAuthor',
+  }),
+  lastEditor: one(users, {
+    fields: [pages.lastEditedBy],
+    references: [users.id],
+    relationName: 'pageLastEditor',
+  }),
+  parent: one(pages, {
+    fields: [pages.parentSlug],
+    references: [pages.slug],
+    relationName: 'pageParent',
+  }),
+}));

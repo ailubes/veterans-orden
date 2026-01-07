@@ -141,7 +141,7 @@ export function MobileNav() {
             height={32}
             className="rounded-sm"
           />
-          <span className="font-syne font-bold text-base tracking-tight">МЕРЕЖА</span>
+          <span className="font-syne font-bold text-base tracking-tight">ОРДЕН</span>
         </Link>
 
         {/* Right Icons */}

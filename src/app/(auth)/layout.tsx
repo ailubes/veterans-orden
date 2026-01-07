@@ -1,4 +1,4 @@
-import { Logo } from '@/components/ui/logo';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AuthLayout({
@@ -11,7 +11,13 @@ export default function AuthLayout({
       <div className="w-full max-w-md">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center gap-3 mb-8 hover:opacity-80 transition-opacity">
-          <Logo size={48} className="text-bronze" />
+          <Image
+            src="/images/logo-veterans-orden.png"
+            alt="Орден Ветеранів"
+            width={48}
+            height={48}
+            className="rounded-sm"
+          />
           <span className="font-inter font-black text-2xl tracking-tight text-text-100">
             ОРДЕН
           </span>
