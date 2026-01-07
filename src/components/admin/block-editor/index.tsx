@@ -551,7 +551,30 @@ function ComponentMenuItem({ icon, label, onClick }: ComponentMenuItemProps) {
 function convertHtmlToMdx(html: string): string {
   if (!html) return '';
 
-  let mdx = html
+  let mdx = html;
+
+  // First, convert MDX component placeholders back to MDX syntax
+  // Match: <div class="mdx-component" data-component="X" data-props="Y" data-content="Z">...</div>
+  mdx = mdx.replace(/<div[^>]*class="mdx-component"[^>]*data-component="([^"]*)"[^>]*data-props="([^"]*)"(?:[^>]*data-content="([^"]*)")?[^>]*>[\s\S]*?<\/div>/gi,
+    (match, component, encodedProps, encodedContent) => {
+      const props = decodeURIComponent(encodedProps || '');
+      const content = encodedContent ? decodeURIComponent(encodedContent) : '';
+
+      if (content) {
+        // Block component with content
+        return `<${component}${props ? ' ' + props : ''}>\n${content}\n</${component}>`;
+      } else if (props) {
+        // Self-closing component with props
+        return `<${component} ${props} />`;
+      } else {
+        // Self-closing component without props
+        return `<${component} />`;
+      }
+    }
+  );
+
+  // Then convert standard HTML to markdown
+  mdx = mdx
     // Headings
     .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
     .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
@@ -584,6 +607,8 @@ function convertHtmlToMdx(html: string): string {
     .replace(/<br[^>]*\/?>/gi, '\n')
     // Clean up empty tags
     .replace(/<[^>]+><\/[^>]+>/g, '')
+    // Clean up remaining span/div wrappers
+    .replace(/<\/?(?:span|div)[^>]*>/gi, '')
     // Clean up multiple newlines
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -591,18 +616,36 @@ function convertHtmlToMdx(html: string): string {
   return mdx;
 }
 
+// MDX component patterns for detection and conversion
+const MDX_COMPONENTS = ['Callout', 'Card', 'CardGrid', 'Accordion', 'Tabs', 'Tab', 'Steps', 'Step', 'CTA', 'Video', 'Quote', 'Hero', 'Stats', 'Divider', 'LinkCard'];
+
 // Convert MDX to HTML for editor
 function convertMdxToHtml(mdx: string): string {
   if (!mdx) return '';
 
-  // Check if content contains MDX components (starts with <)
-  if (mdx.includes('<Callout') || mdx.includes('<Card') || mdx.includes('<Accordion')) {
-    // For now, wrap MDX components in a div to preserve them
-    // This is a simplified approach - a full implementation would parse and render
-    return `<div>${mdx}</div>`;
-  }
+  let html = mdx;
 
-  let html = mdx
+  // First, convert MDX components to special placeholder divs
+  // Self-closing components like <CTA ... />
+  MDX_COMPONENTS.forEach(component => {
+    // Self-closing: <Component prop="value" />
+    const selfClosingRegex = new RegExp(`<${component}([^>]*?)\\s*/>`, 'gi');
+    html = html.replace(selfClosingRegex, (match, props) => {
+      const propsStr = props.trim();
+      return `<div class="mdx-component" data-component="${component}" data-props="${encodeURIComponent(propsStr)}" contenteditable="false"><span class="mdx-component-label">${component}</span>${propsStr ? `<span class="mdx-component-props">${decodeProps(propsStr)}</span>` : ''}</div>`;
+    });
+
+    // Block components: <Component props>content</Component>
+    const blockRegex = new RegExp(`<${component}([^>]*)>([\\s\\S]*?)<\\/${component}>`, 'gi');
+    html = html.replace(blockRegex, (match, props, content) => {
+      const propsStr = (props || '').trim();
+      const contentStr = (content || '').trim();
+      return `<div class="mdx-component" data-component="${component}" data-props="${encodeURIComponent(propsStr)}" data-content="${encodeURIComponent(contentStr)}" contenteditable="false"><span class="mdx-component-label">${component}</span>${propsStr ? `<span class="mdx-component-props">${decodeProps(propsStr)}</span>` : ''}${contentStr ? `<span class="mdx-component-content">${contentStr.substring(0, 100)}${contentStr.length > 100 ? '...' : ''}</span>` : ''}</div>`;
+    });
+  });
+
+  // Then convert standard markdown to HTML
+  html = html
     // Headings
     .replace(/^### (.*)$/gm, '<h3>$1</h3>')
     .replace(/^## (.*)$/gm, '<h2>$1</h2>')
@@ -622,7 +665,7 @@ function convertMdxToHtml(mdx: string): string {
     .replace(/^---$/gm, '<hr />')
     // Blockquotes
     .replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
-    // Paragraphs - wrap remaining lines
+    // Paragraphs - wrap remaining lines (but not empty lines or already wrapped content)
     .replace(/^([^<\n].*)$/gm, '<p>$1</p>');
 
   // Wrap list items in ul
@@ -631,6 +674,16 @@ function convertMdxToHtml(mdx: string): string {
   }
 
   return html;
+}
+
+// Helper to decode props for display
+function decodeProps(props: string): string {
+  // Extract key prop values for display
+  const titleMatch = props.match(/title="([^"]*)"/);
+  const typeMatch = props.match(/type="([^"]*)"/);
+  if (titleMatch) return titleMatch[1];
+  if (typeMatch) return typeMatch[1];
+  return props.substring(0, 50);
 }
 
 export default BlockEditor;
