@@ -505,24 +505,12 @@ info@veterans-orden.org
 ];
 
 async function seedPages() {
-  console.log('🌱 Starting page migration...\n');
+  console.log('🌱 Starting page migration/update...\n');
 
   for (const page of pagesToMigrate) {
     try {
-      // Check if page already exists
-      const { data: existing } = await supabase
-        .from('pages')
-        .select('id')
-        .eq('slug', page.slug)
-        .single();
-
-      if (existing) {
-        console.log(`⏭️  Skipping "${page.slug}" (already exists)`);
-        continue;
-      }
-
-      // Insert page
-      const { error } = await supabase.from('pages').insert({
+      // Use upsert to update existing pages or insert new ones
+      const { error } = await supabase.from('pages').upsert({
         title: page.title,
         slug: page.slug,
         label: page.label || null,
@@ -536,19 +524,20 @@ async function seedPages() {
         meta_title: page.meta_title || null,
         meta_description: page.meta_description || null,
         published_at: page.status === 'published' ? new Date().toISOString() : null,
-      });
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'slug' });
 
       if (error) {
-        console.error(`❌ Error creating "${page.slug}":`, error.message);
+        console.error(`❌ Error upserting "${page.slug}":`, error.message);
       } else {
-        console.log(`✅ Created "${page.slug}"`);
+        console.log(`✅ Upserted "${page.slug}"`);
       }
     } catch (err) {
       console.error(`❌ Failed to process "${page.slug}":`, err);
     }
   }
 
-  console.log('\n✨ Migration complete!');
+  console.log('\n✨ Migration/update complete!');
 }
 
 // Run the migration
