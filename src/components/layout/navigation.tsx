@@ -5,13 +5,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ContentAdapter } from '@/lib/content/ContentAdapter';
 
-// Static fallback navigation
-const staticNavLinks = ContentAdapter.getNavigation();
-
 interface NavItem {
   href: string;
   label: string;
 }
+
+// Static fallback navigation
+const staticNavLinks: NavItem[] = ContentAdapter.getNavigation().map(item => ({
+  href: item.href,
+  label: item.label,
+}));
 
 function Logo() {
   return (

@@ -366,7 +366,7 @@ export function BlockEditor({
 
         {/* MDX Components Dropdown */}
         <div className="relative group">
-          <ToolbarButton title="Вставити компонент">
+          <ToolbarButton onClick={() => {}} title="Вставити компонент">
             <Plus className="w-4 h-4" />
           </ToolbarButton>
           <div className="absolute top-full left-0 mt-1 bg-panel-850 border border-line rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 min-w-[180px]">
@@ -572,11 +572,11 @@ function convertHtmlToMdx(html: string): string {
     .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*\/?>/gi, '![$2]($1)')
     .replace(/<img[^>]*src="([^"]*)"[^>]*\/?>/gi, '![]($1)')
     // Blockquotes
-    .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gis, (match, content) => {
+    .replace(/<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi, (match, content) => {
       return content.split('\n').map((line: string) => `> ${line.trim()}`).join('\n') + '\n\n';
     })
     // Code blocks
-    .replace(/<pre[^>]*><code[^>]*>(.*?)<\/code><\/pre>/gis, '```\n$1\n```\n\n')
+    .replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```\n\n')
     .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
     // Horizontal rule
     .replace(/<hr[^>]*\/?>/gi, '---\n\n')
@@ -616,7 +616,7 @@ function convertMdxToHtml(mdx: string): string {
     // Lists - simple approach
     .replace(/^- (.*)$/gm, '<li>$1</li>')
     // Code
-    .replace(/```([^`]+)```/gs, '<pre><code>$1</code></pre>')
+    .replace(/```([\s\S]+?)```/g, '<pre><code>$1</code></pre>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     // Horizontal rule
     .replace(/^---$/gm, '<hr />')
