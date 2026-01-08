@@ -27,13 +27,11 @@
   --steel: #7d7d7d;
   --line: rgba(255, 255, 255, 0.10);
 
-  --rebar-pattern: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.06),
-    rgba(255, 255, 255, 0.06) 2px,
-    transparent 2px,
-    transparent 10px
-  );
+  --rebar-pattern: repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.06) 2px,
+      transparent 2px,
+      transparent 10px);
 
   --radius: 14px;
   --shadow: 50px 50px 100px rgba(0, 0, 0, 0.55);
@@ -549,6 +547,7 @@ nav {
 }
 
 @media (max-width: 980px) {
+
   .section-card-grid--2,
   .section-card-grid--3,
   .section-card-grid--4 {
@@ -578,6 +577,7 @@ nav {
 }
 
 @media (max-width: 980px) {
+
   .stat-grid--2,
   .stat-grid--3,
   .stat-grid--4 {
@@ -1449,10 +1449,13 @@ nav {
 }
 
 @keyframes pulse-live {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.6;
     transform: scale(0.85);
@@ -1505,9 +1508,12 @@ nav {
 }
 
 @keyframes bounce-up {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-3px);
   }
@@ -1649,9 +1655,16 @@ nav {
 }
 
 .nav-logo-image {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.footer-logo-image {
   width: 40px;
   height: 40px;
   object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 
 .nav-logo-text {
@@ -1903,6 +1916,7 @@ nav {
     opacity: 0;
     transform: translateY(28px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2080,42 +2094,137 @@ nav {
    UTILITY CLASSES
    ============================================================================ */
 
-.col-span-full { grid-column: 1 / -1; }
-.col-span-1 { grid-column: span 1; }
-.col-span-2 { grid-column: span 2; }
-.col-span-3 { grid-column: span 3; }
-.col-span-4 { grid-column: span 4; }
-.col-span-5 { grid-column: span 5; }
-.col-span-6 { grid-column: span 6; }
-.col-span-7 { grid-column: span 7; }
-.col-span-8 { grid-column: span 8; }
-.col-span-9 { grid-column: span 9; }
-.col-span-10 { grid-column: span 10; }
-.col-span-11 { grid-column: span 11; }
-.col-span-12 { grid-column: span 12; }
+.col-span-full {
+  grid-column: 1 / -1;
+}
 
-.col-start-1 { grid-column-start: 1; }
-.col-start-2 { grid-column-start: 2; }
-.col-start-3 { grid-column-start: 3; }
-.col-start-4 { grid-column-start: 4; }
-.col-start-5 { grid-column-start: 5; }
-.col-start-6 { grid-column-start: 6; }
-.col-start-7 { grid-column-start: 7; }
-.col-start-8 { grid-column-start: 8; }
-.col-start-9 { grid-column-start: 9; }
-.col-start-10 { grid-column-start: 10; }
-.col-start-11 { grid-column-start: 11; }
-.col-start-12 { grid-column-start: 12; }
+.col-span-1 {
+  grid-column: span 1;
+}
 
-.text-primary { color: var(--text-100); }
-.text-secondary { color: var(--text-200); }
-.text-muted { color: var(--muted-500); }
-.text-bronze { color: var(--bronze); }
-.text-steel { color: var(--steel); }
+.col-span-2 {
+  grid-column: span 2;
+}
 
-.bg-base { background-color: var(--bg-950); }
-.bg-panel { background-color: var(--panel-900); }
-.bg-elevated { background-color: var(--panel-850); }
+.col-span-3 {
+  grid-column: span 3;
+}
+
+.col-span-4 {
+  grid-column: span 4;
+}
+
+.col-span-5 {
+  grid-column: span 5;
+}
+
+.col-span-6 {
+  grid-column: span 6;
+}
+
+.col-span-7 {
+  grid-column: span 7;
+}
+
+.col-span-8 {
+  grid-column: span 8;
+}
+
+.col-span-9 {
+  grid-column: span 9;
+}
+
+.col-span-10 {
+  grid-column: span 10;
+}
+
+.col-span-11 {
+  grid-column: span 11;
+}
+
+.col-span-12 {
+  grid-column: span 12;
+}
+
+.col-start-1 {
+  grid-column-start: 1;
+}
+
+.col-start-2 {
+  grid-column-start: 2;
+}
+
+.col-start-3 {
+  grid-column-start: 3;
+}
+
+.col-start-4 {
+  grid-column-start: 4;
+}
+
+.col-start-5 {
+  grid-column-start: 5;
+}
+
+.col-start-6 {
+  grid-column-start: 6;
+}
+
+.col-start-7 {
+  grid-column-start: 7;
+}
+
+.col-start-8 {
+  grid-column-start: 8;
+}
+
+.col-start-9 {
+  grid-column-start: 9;
+}
+
+.col-start-10 {
+  grid-column-start: 10;
+}
+
+.col-start-11 {
+  grid-column-start: 11;
+}
+
+.col-start-12 {
+  grid-column-start: 12;
+}
+
+.text-primary {
+  color: var(--text-100);
+}
+
+.text-secondary {
+  color: var(--text-200);
+}
+
+.text-muted {
+  color: var(--muted-500);
+}
+
+.text-bronze {
+  color: var(--bronze);
+}
+
+.text-steel {
+  color: var(--steel);
+}
+
+.bg-base {
+  background-color: var(--bg-950);
+}
+
+.bg-panel {
+  background-color: var(--panel-900);
+}
+
+.bg-elevated {
+  background-color: var(--panel-850);
+}
 
 /* ============================================================================
    SCROLLBAR
@@ -2167,13 +2276,11 @@ nav {
   --shadow: 50px 50px 100px rgba(0, 0, 0, 0.15);
   --text-inverse: #e7e7e7;
 
-  --rebar-pattern: repeating-linear-gradient(
-    45deg,
-    rgba(26, 26, 26, 0.04),
-    rgba(26, 26, 26, 0.04) 2px,
-    transparent 2px,
-    transparent 10px
-  );
+  --rebar-pattern: repeating-linear-gradient(45deg,
+      rgba(26, 26, 26, 0.04),
+      rgba(26, 26, 26, 0.04) 2px,
+      transparent 2px,
+      transparent 10px);
 }
 
 .light body::before {

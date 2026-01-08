@@ -7,6 +7,7 @@ import { FooterNew } from '@/components/layout/footer-new';
 import { HeroNew } from '@/components/sections/hero-new';
 import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
 import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
+import { ImpactSlider } from '@/components/sections/impact-slider';
 import { getFeaturedArticles } from '@/data/news';
 
 /**
@@ -42,6 +43,9 @@ export default function HomePage() {
           </div>
         </Scaffold>
       </section>
+
+      {/* Impact Slider Section */}
+      <ImpactSlider />
 
       {/* About Section - 3 Cards */}
       <section className="section">
