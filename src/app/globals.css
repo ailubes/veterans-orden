@@ -1655,14 +1655,14 @@ nav {
 }
 
 .nav-logo-image {
-  width: 72px;
-  height: 72px;
+  width: 144px;
+  height: 144px;
   object-fit: contain;
 }
 
 .footer-logo-image {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }

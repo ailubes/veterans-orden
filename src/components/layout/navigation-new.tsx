@@ -77,8 +77,8 @@ export function NavigationNew() {
             <Image
               src="/images/logo-veterans-orden.png"
               alt={tBrand('name')}
-              width={72}
-              height={72}
+              width={144}
+              height={144}
               priority
               className="nav-logo-image"
             />

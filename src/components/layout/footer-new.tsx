@@ -24,8 +24,8 @@ export function FooterNew() {
               <Image
                 src="/images/logo-veterans-orden.png"
                 alt={tBrand('name')}
-                width={40}
-                height={40}
+                width={80}
+                height={80}
                 className="footer-logo-image"
               />
               <span className="footer-brand-name">{tBrand('name')}</span>
