@@ -2493,3 +2493,47 @@ nav {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ============================================================================
+   BREADCRUMB COMPONENT
+   ============================================================================ */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumb-item {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-500);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.breadcrumb-item:hover {
+  color: var(--bronze);
+}
+
+.breadcrumb-separator {
+  color: var(--muted-500);
+  opacity: 0.5;
+  margin: 0 0.25rem;
+  flex-shrink: 0;
+}
+
+.breadcrumb-current {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-100);
+}

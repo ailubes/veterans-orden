@@ -102,7 +102,7 @@ export default function HomePage() {
               <SectionCard
                 title="АДАПТАЦІЯ"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/adaptation"
                 variant="dark"
               >
                 Підтримка переходу до цивільного життя, наставництво, спільнота контактів, супровід.
@@ -110,7 +110,7 @@ export default function HomePage() {
               <SectionCard
                 title="ПРАВОВИЙ ЗАХИСТ"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/legal-protection"
                 variant="dark"
               >
                 Консультації, звернення, супровід кейсів, захист прав ветеранів і родин.
@@ -118,7 +118,7 @@ export default function HomePage() {
               <SectionCard
                 title="ПСИХОЛОГІЧНА ПІДТРИМКА"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/psychological-support"
                 variant="dark"
               >
                 Скринінг, перенаправлення до фахівців, групи підтримки, кризові контакти.
@@ -126,7 +126,7 @@ export default function HomePage() {
               <SectionCard
                 title="ОСВІТА & НАСТАВНИЦТВО"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/education"
                 variant="dark"
               >
                 Навчальні події, тренінги, розвиток лідерів, робота "мислителів".
@@ -134,7 +134,7 @@ export default function HomePage() {
               <SectionCard
                 title="ГРОМАДЯНСЬКІ КАМПАНІЇ"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/civic-campaigns"
                 variant="dark"
               >
                 Адвокація, публічні звернення, комунікаційні кампанії, контроль виконання рішень.
@@ -142,7 +142,7 @@ export default function HomePage() {
               <SectionCard
                 title="ВЗАЄМОДОПОМОГА"
                 subtitle="// НАПРЯМ"
-                href="/directions"
+                href="/directions/mutual-aid"
                 variant="dark"
               >
                 Підтримка побратимів, волонтерські місії, координація ресурсів, партнерства.
