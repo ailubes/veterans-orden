@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
 import { Mail, ArrowLeft, Check } from 'lucide-react';
 import { HeavyCta } from '@/components/ui/heavy-cta';
 
@@ -18,17 +17,18 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      const supabase = createClient();
+      const response = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(
-        email,
-        {
-          redirectTo: `${window.location.origin}/update-password`,
-        }
-      );
+      const data = await response.json();
 
-      if (resetError) {
-        setError(resetError.message);
+      if (!response.ok) {
+        setError(data.error || 'Виникла помилка. Спробуйте ще раз.');
         return;
       }
 

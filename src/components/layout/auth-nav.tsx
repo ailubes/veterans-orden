@@ -66,20 +66,15 @@ export function AuthNav() {
     return <div className="w-24 h-9 bg-panel-850 rounded animate-pulse" />;
   }
 
-  // Logged out - show auth buttons
+  // Logged out - show only sign-in button with bronze background
   if (!user) {
     return (
-      <div className="flex items-center gap-3">
-        <Link
-          href="/sign-in"
-          className="font-mono text-xs uppercase tracking-wider text-muted-400 hover:text-bronze transition-colors"
-        >
-          УВІЙТИ
-        </Link>
-        <HeavyCta href="/sign-up" variant="primary" size="sm">
-          ПРИЄДНАТИСЯ
-        </HeavyCta>
-      </div>
+      <Link
+        href="/sign-in"
+        className="nav-signin-btn"
+      >
+        УВІЙТИ
+      </Link>
     );
   }
 

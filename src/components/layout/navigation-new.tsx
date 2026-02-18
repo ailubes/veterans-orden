@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { ThemeToggleCompact } from '@/components/ui/theme-toggle';
-import { LanguageSwitcherCompact } from '@/components/ui/language-switcher';
+import { ThemeToggleDropdown } from '@/components/ui/theme-toggle-dropdown';
+import { LanguageSwitcherDropdown } from '@/components/ui/language-switcher-dropdown';
 import { Scaffold } from './skeleton-grid';
 import { AuthNav } from './auth-nav';
 import { MobileAuthNav } from './mobile-auth-nav';
@@ -146,8 +146,8 @@ export function NavigationNew() {
 
           {/* Controls */}
           <div className="nav-controls col-span-3">
-            <LanguageSwitcherCompact />
-            <ThemeToggleCompact />
+            <LanguageSwitcherDropdown />
+            <ThemeToggleDropdown />
             <AuthNav />
           </div>
 
@@ -200,8 +200,8 @@ export function NavigationNew() {
           ))}
 
           <div className="nav-mobile-controls">
-            <LanguageSwitcherCompact />
-            <ThemeToggleCompact />
+            <LanguageSwitcherDropdown />
+            <ThemeToggleDropdown />
           </div>
 
           <MobileAuthNav onClose={() => setIsMenuOpen(false)} />

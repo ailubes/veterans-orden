@@ -37,11 +37,18 @@ export function getStoredLocale(): Locale | null {
 }
 
 /**
- * Store the locale preference in localStorage
+ * Store the locale preference in localStorage and cookie
  */
 export function setStoredLocale(locale: Locale): void {
   if (typeof window === 'undefined') return;
+
+  // Store in localStorage
   localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+
+  // Also store in cookie for server-side access with proper settings
+  const expires = new Date();
+  expires.setFullYear(expires.getFullYear() + 1);
+  document.cookie = `${LOCALE_STORAGE_KEY}=${locale}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
 }
 
 /**

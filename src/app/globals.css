@@ -260,6 +260,285 @@ nav {
 }
 
 /* ============================================================================
+   NEW LANGUAGE SWITCHER - Improved UX
+   ============================================================================ */
+
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+}
+
+.lang-switcher--compact {
+  margin-left: 0.6rem;
+}
+
+.lang-switcher-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2px;
+}
+
+.lang-switcher-indicator {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: calc(50% - 2px);
+  background: var(--bronze);
+  border-radius: 999px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lang-switcher-indicator--right {
+  transform: translateX(100%);
+}
+
+.lang-switcher-btn {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  color: var(--text-100);
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  font-family: 'IBM Plex Mono', monospace;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  min-width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-switcher-btn:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.lang-switcher-btn--active {
+  opacity: 1;
+  color: var(--text-inverse);
+}
+
+.lang-switcher-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.lang-switcher-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: currentColor;
+  animation: lang-switcher-spin 0.6s linear infinite;
+}
+
+@keyframes lang-switcher-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeleton loader */
+.lang-switcher-skeleton {
+  display: inline-flex;
+  align-items: center;
+}
+
+.lang-switcher-skeleton-pill {
+  width: 90px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  animation: lang-switcher-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes lang-switcher-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================================================
+   COMPACT SELECTOR COMPONENTS (Language & Theme) - Renamed to avoid conflict
+   ============================================================================ */
+
+.nav-selector {
+  position: relative;
+  display: inline-block !important;
+  margin-left: 0.5rem;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.nav-selector-trigger {
+  display: flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 32px;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.nav-selector-trigger:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.nav-selector-trigger--skeleton {
+  width: 60px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  animation: lang-switcher-pulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.nav-selector-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: inherit;
+  opacity: 1 !important;
+}
+
+.nav-selector-icon {
+  font-size: 0.875rem;
+  line-height: 1;
+  opacity: 1 !important;
+}
+
+.nav-selector-arrow {
+  transition: transform 0.2s ease;
+  opacity: 0.7 !important;
+  stroke: currentColor;
+}
+
+.nav-selector-arrow--open {
+  transform: rotate(180deg);
+}
+
+.nav-selector-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 140px;
+  background: var(--panel-900);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  padding: 0.25rem;
+  z-index: 1000;
+  animation: selector-fade-in 0.2s ease;
+}
+
+@keyframes selector-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-100);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.813rem;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-selector-item:hover {
+  background: rgba(181, 121, 58, 0.1);
+  color: var(--bronze);
+}
+
+.nav-selector-item--active {
+  background: rgba(181, 121, 58, 0.15);
+  color: var(--bronze);
+  font-weight: 700;
+}
+
+.nav-selector-item-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ============================================================================
+   SIGN-IN BUTTON (Bronze background)
+   ============================================================================ */
+
+.nav-signin-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.25rem;
+  background: #b5793a !important;
+  color: #0f1011 !important;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
+  box-shadow: 0 2px 8px rgba(181, 121, 58, 0.3);
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.nav-signin-btn:hover {
+  background: var(--bronze-2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(181, 121, 58, 0.4);
+}
+
+.nav-signin-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(181, 121, 58, 0.3);
+}
+
+/* ============================================================================
    MONOLITH - Hero Featured Card
    ============================================================================ */
 
