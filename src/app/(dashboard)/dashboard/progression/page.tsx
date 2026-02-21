@@ -314,49 +314,49 @@ export default function ProgressionPage() {
         })()}
       </section>
 
-      {/* Next Steps — always shown, derived from MEMBERSHIP_ROLES */}
-      {(() => {
-        const steps = NEXT_STEPS[data.currentRole.role] ?? [];
-        if (steps.length === 0) return null;
-        return (
-          <section className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-6 h-6 text-text-100" />
-              <h2 className="font-syne text-2xl font-bold text-text-100">
-                Що потрібно зробити
-              </h2>
-              <HelpTooltip pageSlug="dashboard-progression" elementId="current-tasks" position="right" />
-            </div>
-            <div className="space-y-4">
-              {steps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <div key={i} className="border-2 border-bronze/40 bg-bronze/5 card-with-joints p-6 flex flex-col sm:flex-row items-start gap-5">
-                    <div className="flex-shrink-0 w-12 h-12 bg-bronze/10 border border-bronze/30 flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-bronze" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-syne text-xl font-bold text-text-100 mb-2">{step.title}</h3>
-                      <p className="font-mono text-sm text-text-100/80 mb-4">{step.description}</p>
-                      <Link
-                        href={step.ctaUrl}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
-                      >
-                        {step.cta}
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })()}
-
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Left Column (2/3) - Tasks */}
+        {/* Left Column (2/3) - Next Steps + Tasks */}
         <div className="lg:col-span-2 space-y-8">
+          {/* Next Steps — always shown, derived from MEMBERSHIP_ROLES */}
+          {(() => {
+            const steps = NEXT_STEPS[data.currentRole.role] ?? [];
+            if (steps.length === 0) return null;
+            return (
+              <section>
+                <div className="flex items-center gap-2 mb-4">
+                  <Target className="w-6 h-6 text-text-100" />
+                  <h2 className="font-syne text-2xl font-bold text-text-100">
+                    Що потрібно зробити
+                  </h2>
+                  <HelpTooltip pageSlug="dashboard-progression" elementId="current-tasks" position="right" />
+                </div>
+                <div className="space-y-4">
+                  {steps.map((step, i) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={i} className="border-2 border-bronze/40 bg-bronze/5 card-with-joints p-6 flex flex-col sm:flex-row items-start gap-5">
+                        <div className="flex-shrink-0 w-12 h-12 bg-bronze/10 border border-bronze/30 flex items-center justify-center">
+                          <Icon className="w-6 h-6 text-bronze" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-syne text-xl font-bold text-text-100 mb-2">{step.title}</h3>
+                          <p className="font-mono text-sm text-text-100/80 mb-4">{step.description}</p>
+                          <Link
+                            href={step.ctaUrl}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
+                          >
+                            {step.cta}
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })()}
+
           {/* Current Tasks — only shown when backend tasks exist */}
           {data.incompleteTasks.length > 0 && (
             <section id="current-tasks">
