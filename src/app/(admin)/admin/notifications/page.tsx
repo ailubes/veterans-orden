@@ -28,7 +28,7 @@ export default async function AdminNotificationsPage() {
           Сповіщення
         </h1>
         <p className="text-muted-500 mt-2">
-          Надсилайте повідомлення членам мережі за різними критеріями
+          Надсилайте повідомлення членам Ордену за різними критеріями
         </p>
       </div>
 

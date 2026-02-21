@@ -54,7 +54,7 @@ async function main() {
       name_uk: 'Початок роботи',
       name_en: 'Getting Started',
       slug: 'pochatok-roboty',
-      description: 'Перші кроки у Мережі Вільних Людей',
+      description: 'Перші кроки у Ордену Ветеранів',
       icon: 'Rocket',
       order: 0,
       is_visible: true,
@@ -134,7 +134,7 @@ async function main() {
       title: 'Перші кроки після реєстрації',
       slug: 'pershi-kroky-pislia-reistratsii',
       content: `
-        <h2>Вітаємо в Мережі Вільних Людей!</h2>
+        <h2>Вітаємо в Ордену Ветеранів!</h2>
         <p>Ви успішно зареєструвалися. Ось що варто зробити далі:</p>
 
         <h3>1. Заповніть профіль</h3>
@@ -170,7 +170,7 @@ async function main() {
     },
     {
       category_id: categoryMap.get('funktsii-platformy')!,
-      title: 'Як запросити друга до Мережі',
+      title: 'Як запросити друга до Ордену',
       slug: 'yak-zaprosyty-druha',
       content: `
         <h2>Реферальна програма</h2>
@@ -722,7 +722,7 @@ async function main() {
         <h3>Крок 3: Перевірте пошту</h3>
         <ul>
           <li>Відкрийте вашу поштову скриньку</li>
-          <li>Знайдіть лист від Мережі Вільних Людей</li>
+          <li>Знайдіть лист від Ордену Ветеранів</li>
           <li>Якщо листа немає - перевірте папку "Спам"</li>
         </ul>
 

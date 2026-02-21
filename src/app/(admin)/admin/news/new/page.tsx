@@ -168,7 +168,7 @@ export default function NewNewsPage() {
               title: `Новина: ${formData.title}`,
               message: formData.excerpt
                 ? formData.excerpt.slice(0, 200) + (formData.excerpt.length > 200 ? '...' : '')
-                : 'Нова новина в Мережі',
+                : 'Нова новина в Ордені',
               type: 'info',
               scope: 'all',
             }),

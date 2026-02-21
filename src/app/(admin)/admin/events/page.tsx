@@ -219,7 +219,7 @@ export default async function AdminEventsPage() {
           <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає подій</h3>
           <p className="text-sm text-muted-500 mb-6">
-            Створіть першу подію для членів Мережі
+            Створіть першу подію для членів Ордену
           </p>
           <Link href="/admin/events/new" className="btn">
             СТВОРИТИ ПОДІЮ →

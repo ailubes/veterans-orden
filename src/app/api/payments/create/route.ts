@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     }
 
     const orderId = generateOrderId(profile.id, tierId);
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://merezha.org.ua';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ordenv.org';
 
     // Create payment record
     const { error: paymentError } = await supabase.from('payments').insert({
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     const data = createLiqPayData({
       action: 'pay',
       amount: tier.price,
-      description: `Членство в Мережі Вільних Людей: ${tier.name}`,
+      description: `Членство в Ордені Ветеранів: ${tier.name}`,
       order_id: orderId,
       result_url: `${baseUrl}/dashboard/settings?payment=success`,
       server_url: `${baseUrl}/api/payments/callback`,

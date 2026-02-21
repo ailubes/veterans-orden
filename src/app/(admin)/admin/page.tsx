@@ -125,7 +125,7 @@ export default async function AdminDashboardPage() {
             <p className="text-sm">Графік зростання</p>
             <p className="text-xs mt-2 opacity-60">
               {totalMembers && totalMembers > 0
-                ? `${totalMembers} членів у мережі`
+                ? `${totalMembers} членів в Ордені`
                 : 'Запустіть npm run seed:test для тестових даних'}
             </p>
           </div>

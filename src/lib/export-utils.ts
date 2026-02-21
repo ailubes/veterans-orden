@@ -125,7 +125,7 @@ export async function exportMembersData(members: any[], format: 'excel' | 'pdf')
   if (format === 'excel') {
     await exportToExcel(formattedData, filename, 'Члени');
   } else {
-    exportToPDF(formattedData, filename, 'Мережа Вільних Людей - Експорт Членів');
+    exportToPDF(formattedData, filename, 'Орден Ветеранів - Експорт Членів');
   }
 }
 
@@ -152,7 +152,7 @@ export async function exportAnalyticsData(data: any, format: 'excel' | 'pdf') {
   if (format === 'excel') {
     await exportToExcel(formattedData, filename, 'Аналітика');
   } else {
-    exportToPDF(formattedData, filename, 'Мережа Вільних Людей - Аналітика');
+    exportToPDF(formattedData, filename, 'Орден Ветеранів - Аналітика');
   }
 }
 

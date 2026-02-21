@@ -433,7 +433,7 @@ export default function MembershipProgressionTab({
               Рівні членства
             </h2>
             <p className="text-muted-500 text-sm">
-              8 рівнів прогресії учасників Мережі Вільних Людей
+              8 рівнів прогресії учасників Ордену Ветеранів
             </p>
           </div>
 

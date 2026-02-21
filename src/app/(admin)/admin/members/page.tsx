@@ -105,7 +105,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
         <div>
           <p className="mono text-bronze text-xs tracking-widest mb-2">// АДМІНІСТРУВАННЯ</p>
           <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
-            Члени Мережі
+            Члени Ордену
           </h1>
         </div>
         <div className="flex gap-2">

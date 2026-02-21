@@ -7,7 +7,7 @@ import {
   validateTemplateVariables,
 } from '@/lib/email-templates';
 
-const FROM_EMAIL = process.env.SMTP_FROM || 'Мережа Вільних Людей <info@freepeople.org.ua>';
+const FROM_EMAIL = process.env.SMTP_FROM || 'Орден Ветеранів <info@freepeople.org.ua>';
 
 let transporterInstance: Transporter | null = null;
 
@@ -175,12 +175,12 @@ export async function sendWelcomeEmail(
 <body>
   <div class="container">
     <div class="header">
-      <h1>Ласкаво просимо до Мережі!</h1>
+      <h1>Ласкаво просимо до Ордену!</h1>
     </div>
     <div class="content">
       <p>Привіт, <strong>${firstName} ${lastName}</strong>!</p>
 
-      <p>Вітаємо вас у <strong>Мережі Вільних Людей</strong> — спільноті, яка гуртується для справжніх змін в Україні.</p>
+      <p>Вітаємо вас у <strong>Ордену Ветеранів</strong> — спільноті, яка гуртується для справжніх змін в Україні.</p>
 
       <p>Тепер ви частина руху, де кожен голос має значення, кожна дія веде до результату.</p>
 
@@ -199,7 +199,7 @@ export async function sendWelcomeEmail(
       <p><strong>ГУРТУЄМОСЬ, ЩОБ ВПЛИВАТИ!</strong></p>
     </div>
     <div class="footer">
-      <p>Мережа Вільних Людей</p>
+      <p>Орден Ветеранів</p>
       <p>Ця адреса використовується тільки для інформаційних повідомлень.</p>
     </div>
   </div>
@@ -210,7 +210,7 @@ export async function sendWelcomeEmail(
   const text = `
 Привіт, ${firstName} ${lastName}!
 
-Вітаємо вас у Мережі Вільних Людей — спільноті, яка гуртується для справжніх змін в Україні.
+Вітаємо вас у Ордену Ветеранів — спільноті, яка гуртується для справжніх змін в Україні.
 
 Що далі?
 - Заповніть свій профіль
@@ -229,7 +229,7 @@ export async function sendWelcomeEmail(
     { firstName, lastName },
     html,
     text,
-    '🎉 Ласкаво просимо до Мережі Вільних Людей!'
+    '🎉 Ласкаво просимо до Ордену Ветеранів!'
   );
 }
 
@@ -280,7 +280,7 @@ export async function sendEventReminderEmail(
       <p>До зустрічі на події!</p>
     </div>
     <div class="footer">
-      <p>Мережа Вільних Людей</p>
+      <p>Орден Ветеранів</p>
     </div>
   </div>
 </body>
@@ -350,14 +350,14 @@ export async function sendVoteReminderEmail(
         <p><strong>Дедлайн:</strong> ${voteDeadline}</p>
       </div>
 
-      <p>Ваша думка формує майбутнє Мережі. Долучайтесь до прийняття важливих рішень!</p>
+      <p>Ваша думка формує майбутнє Ордену. Долучайтесь до прийняття важливих рішень!</p>
 
       <p style="text-align: center;">
         <a href="${voteUrl}" class="button">ПРОГОЛОСУВАТИ →</a>
       </p>
     </div>
     <div class="footer">
-      <p>Мережа Вільних Людей</p>
+      <p>Орден Ветеранів</p>
     </div>
   </div>
 </body>
@@ -373,7 +373,7 @@ ${voteTitle}
 
 Дедлайн: ${voteDeadline}
 
-Ваша думка формує майбутнє Мережі.
+Ваша думка формує майбутнє Ордену.
 
 Проголосувати: ${voteUrl}
   `;
@@ -427,7 +427,7 @@ export async function sendAdminNotificationEmail(
       </p>
     </div>
     <div class="footer">
-      <p>Мережа Вільних Людей - Адмін Система</p>
+      <p>Орден Ветеранів - Адмін Система</p>
     </div>
   </div>
 </body>
@@ -540,7 +540,7 @@ export async function sendOrderConfirmationEmail(
       <p><strong>Дякуємо за довіру!</strong></p>
     </div>
     <div class="footer">
-      <p>Мережа Вільних Людей</p>
+      <p>Орден Ветеранів</p>
       <p>Ця адреса використовується тільки для інформаційних повідомлень.</p>
     </div>
   </div>
@@ -571,7 +571,7 @@ ${itemsText}
 
 Дякуємо за довіру!
 
-Мережа Вільних Людей
+Орден Ветеранів
   `;
 
   return sendTemplatedEmail(

@@ -110,7 +110,7 @@ export async function GET(
 
   <!-- Recipient name -->
   <text x="400" y="410" font-family="Syne, sans-serif" font-size="28" font-weight="600" text-anchor="middle" fill="#2c2824">
-    ${escapeXml(dbUser.full_name || dbUser.email || 'Член Мережі')}
+    ${escapeXml(dbUser.full_name || dbUser.email || 'Член Ордену')}
   </text>
 
   <!-- Date -->

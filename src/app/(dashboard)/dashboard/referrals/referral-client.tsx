@@ -74,8 +74,8 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Приєднуйся до Мережі Вільних Людей',
-          text: 'Приєднуйся до Мережі Вільних Людей — громадянської мережі політичного впливу!',
+          title: 'Приєднуйся до Ордену Ветеранів',
+          text: 'Приєднуйся до Ордену Ветеранів — ветеранської спільноти!',
           url: referralLink,
         });
       } catch {
@@ -87,7 +87,7 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
   const handleDownloadQR = () => {
     if (canvasRef.current) {
       const link = document.createElement('a');
-      link.download = `merezha-referral-${referralCode}.png`;
+      link.download = `ordenv-referral-${referralCode}.png`;
       link.href = canvasRef.current.toDataURL();
       link.click();
     }

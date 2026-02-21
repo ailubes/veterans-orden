@@ -110,7 +110,7 @@ export default function NewEventPage() {
               title: `Нова подія: ${formData.title}`,
               message: formData.description
                 ? formData.description.slice(0, 200) + (formData.description.length > 200 ? '...' : '')
-                : 'Нова подія в Мережі',
+                : 'Нова подія в Ордені',
               type: 'info',
               scope: formData.notifyScope === 'oblast' ? 'oblast' : 'all',
               scopeValue: formData.notifyScope === 'oblast' ? formData.oblastId : null,
@@ -161,7 +161,7 @@ export default function NewEventPage() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
-                placeholder="Наприклад: Загальні збори Мережі"
+                placeholder="Наприклад: Загальні збори Ордену"
                 required
               />
             </div>

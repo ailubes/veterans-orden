@@ -4,12 +4,12 @@
  * Handles the 8-tier membership role progression system:
  * 0. Прихильник (Supporter) - Registered, no contribution
  * 1. Кандидат (Candidate) - Made contribution (49+ UAH)
- * 2. Член Мережі (Member) - 2 recruited candidates
+ * 2. Член Ордену (Member) - 2 recruited candidates
  * 3. Почесний Член (Honorary) - 2 recruits became members
- * 4. Лідер Мережі (Leader) - 8 personal + 49 total referrals
+ * 4. Лідер Ордену (Leader) - 8 personal + 49 total referrals
  * 5. Регіональний лідер (Regional) - 6 helped→leader + 400 total
  * 6. Національний лідер (National) - 4 helped→regional + 4000 total
- * 7. Провідник Мережі (Guide) - 2 helped→national + 25000 total
+ * 7. Провідник Ордену (Guide) - 2 helped→national + 25000 total
  */
 
 import { db } from '@/lib/db';

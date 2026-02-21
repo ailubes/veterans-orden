@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: `${article.title} | Мережа Вільних Людей`,
+    title: `${article.title} | Орден Ветеранів`,
     description: article.excerpt,
   };
 }

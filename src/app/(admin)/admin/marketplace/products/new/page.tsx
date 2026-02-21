@@ -219,7 +219,7 @@ export default function NewProductPage() {
         </Link>
         <h1 className="font-syne text-3xl font-bold">Новий товар</h1>
         <p className="text-muted-500 mt-2">
-          Створіть новий товар для магазину Мережі Вільних Людей
+          Створіть новий товар для магазину Ордену Ветеранів
         </p>
       </div>
 
@@ -277,7 +277,7 @@ export default function NewProductPage() {
                   value={formData.name_uk}
                   onChange={(e) => setFormData({ ...formData, name_uk: e.target.value })}
                   className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
-                  placeholder="наприклад: Картка члена Мережі"
+                  placeholder="наприклад: Картка члена Ордену"
                   required
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -406,7 +406,7 @@ export default function NewProductPage() {
                   required
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Основна ціна в балах Мережі (обов'язково)
+                  Основна ціна в балах Ордену (обов'язково)
                 </p>
               </div>
 

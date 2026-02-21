@@ -7,7 +7,7 @@ export function generate2FASecret(userEmail: string) {
   const secret = new OTPAuth.Secret({ size: 20 });
 
   const totp = new OTPAuth.TOTP({
-    issuer: 'Мережа Вільних Людей',
+    issuer: 'Орден Ветеранів',
     label: userEmail,
     algorithm: 'SHA1',
     digits: 6,
@@ -28,7 +28,7 @@ export function generate2FASecret(userEmail: string) {
 export function verify2FACode(secret: string, token: string): boolean {
   try {
     const totp = new OTPAuth.TOTP({
-      issuer: 'Мережа Вільних Людей',
+      issuer: 'Орден Ветеранів',
       algorithm: 'SHA1',
       digits: 6,
       period: 30,

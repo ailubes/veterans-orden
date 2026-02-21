@@ -553,7 +553,7 @@ export default function SettingsPage() {
             </button>
           </div>
           <p className="text-xs text-muted-500 mt-2">
-            Поділіться цим кодом з друзями, щоб запросити їх до Мережі
+            Поділіться цим кодом з друзями, щоб запросити їх до Ордену
           </p>
         </div>
 
@@ -747,7 +747,7 @@ export default function SettingsPage() {
               АДРЕСА ДОСТАВКИ
             </p>
             <p className="text-xs text-muted-500 mb-4">
-              Вкажіть адресу для отримання матеріалів Мережі
+              Вкажіть адресу для отримання матеріалів Ордену
             </p>
 
             <div className="space-y-4">
@@ -890,7 +890,7 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="font-syne text-xl font-bold">Безкоштовний план</h3>
-                <p className="text-sm text-muted-500">Базові можливості Мережі</p>
+                <p className="text-sm text-muted-500">Базові можливості Ордену</p>
               </div>
               <div className="text-right">
                 <p className="font-syne text-2xl font-bold">0 ₴</p>
@@ -921,7 +921,7 @@ export default function SettingsPage() {
             </div>
 
             <p className="text-sm text-muted-500 mb-4">
-              Дякуємо за підтримку Мережі Вільних Людей!
+              Дякуємо за підтримку Ордену Ветеранів!
             </p>
 
             <div className="border-t border-line/20 pt-6">

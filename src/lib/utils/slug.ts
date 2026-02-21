@@ -32,7 +32,7 @@ function transliterate(text: string): string {
  *
  * Examples:
  * - "Новини з України" → "novini-z-ukraini"
- * - "Мережа Вільних Людей" → "merezha-vilnikh-lyudey"
+ * - "Орден Ветеранів" → "orden-veteraniv"
  * - "2024: Рік змін!" → "2024-rik-zmin"
  */
 export function generateSlug(title: string): string {

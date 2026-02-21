@@ -283,7 +283,7 @@ export default function EventEditPage({ params }: EventEditPageProps) {
                 onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
                 rows={3}
                 className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none resize-none"
-                placeholder="Наприклад: повнолітні члени мережі з підтвердженою особою"
+                placeholder="Наприклад: повнолітні члени Ордену з підтвердженою особою"
               />
             </div>
 

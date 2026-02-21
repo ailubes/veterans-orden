@@ -4,7 +4,7 @@ export const MEMBERSHIP_TIERS = {
     id: 'basic_49',
     name: 'Базовий',
     price: 49,
-    description: 'Повноправний член Мережі',
+    description: 'Повноправний член Ордену',
     benefits: ['Голосування', 'Події', 'Завдання', 'Реферали'],
   },
   supporter_100: {
@@ -65,7 +65,7 @@ export const MEMBERSHIP_ROLES = {
   member: {
     level: 2,
     key: 'member',
-    label: 'Член Мережі',
+    label: 'Член Ордену',
     description: 'Залучив 2 кандидатів',
     color: 'green',
     icon: 'Users',
@@ -83,7 +83,7 @@ export const MEMBERSHIP_ROLES = {
   network_leader: {
     level: 4,
     key: 'network_leader',
-    label: 'Лідер Мережі',
+    label: 'Лідер Ордену',
     description: '8 особистих + 49 загальних рефералів',
     color: 'orange',
     icon: 'Crown',
@@ -110,7 +110,7 @@ export const MEMBERSHIP_ROLES = {
   network_guide: {
     level: 7,
     key: 'network_guide',
-    label: 'Провідник Мережі',
+    label: 'Провідник Ордену',
     description: '2 допомогли стати Національними + 25000 загальних',
     color: 'platinum',
     icon: 'Star',
@@ -150,12 +150,12 @@ export type StaffRole = keyof typeof STAFF_ROLES;
 export const MEMBERSHIP_ROLES_UA: Record<MembershipRole, string> = {
   supporter: 'Прихильник',
   candidate: 'Кандидат',
-  member: 'Член Мережі',
+  member: 'Член Ордену',
   honorary_member: 'Почесний Член',
-  network_leader: 'Лідер Мережі',
+  network_leader: 'Лідер Ордену',
   regional_leader: 'Регіональний лідер',
   national_leader: 'Національний лідер',
-  network_guide: 'Провідник Мережі',
+  network_guide: 'Провідник Ордену',
 };
 
 // Event types

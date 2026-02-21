@@ -277,7 +277,7 @@ export default function OnboardingPage() {
             </h1>
 
             <p className="text-muted-500 mb-8">
-              Ви успішно зареєструвались у Мережі Вільних Людей. Давайте
+              Ви успішно зареєструвались в Ордені Ветеранів. Давайте
               налаштуємо ваш профіль.
             </p>
 
@@ -504,7 +504,7 @@ export default function OnboardingPage() {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="font-bold text-text-100">Безкоштовний</h3>
-                    <p className="text-sm text-muted-500">Базова участь у мережі</p>
+                    <p className="text-sm text-muted-500">Базова участь в Ордені</p>
                     <ul className="text-xs text-muted-500 mt-2 space-y-1">
                       <li>• Доступ до голосувань</li>
                       <li>• Перегляд подій</li>
@@ -660,7 +660,7 @@ export default function OnboardingPage() {
 
             <p className="text-muted-500 mb-8">
               Ваш профіль налаштовано. Тепер ви можете користуватися всіма
-              можливостями Мережі.
+              можливостями Ордену.
             </p>
 
             <div className="space-y-3">

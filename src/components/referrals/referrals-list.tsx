@@ -47,7 +47,7 @@ export default function ReferralsList({ referrals }: ReferralsListProps) {
           <div className="text-center py-12 text-muted-500">
             <p className="text-sm">Поки що немає запрошених</p>
             <p className="text-xs mt-2 opacity-60">
-              Поділіться посиланням з друзями, щоб розширити Мережу
+              Поділіться посиланням з друзями, щоб розширити Орден
             </p>
           </div>
         )}

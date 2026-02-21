@@ -79,7 +79,7 @@ export default function EventsList({ events, userRsvps }: EventsListProps) {
             Поки що немає подій
           </h3>
           <p className="text-sm text-muted-500 mb-6">
-            Найближчі події Мережі з&apos;являться тут
+            Найближчі події Ордену з&apos;являться тут
           </p>
           <Link href="/dashboard" className="text-bronze hover:underline text-sm">
             ← Повернутися до огляду

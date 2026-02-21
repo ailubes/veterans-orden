@@ -55,7 +55,7 @@ export default function ContributePage() {
         <div className="flex items-center gap-3 mb-2">
           <Heart className="w-8 h-8 text-bronze" />
           <h1 className="font-syne text-3xl lg:text-4xl font-bold">
-            Підтримати Мережу
+            Підтримати Орден
           </h1>
         </div>
         <p className="text-muted-500">

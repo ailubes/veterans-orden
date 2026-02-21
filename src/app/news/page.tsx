@@ -16,7 +16,7 @@ export default function NewsPage() {
       <PageHeader
         subtitle="// ОСТАННІ ОНОВЛЕННЯ"
         title="НОВИНИ"
-        description="Слідкуйте за розвитком Мережі та важливими подіями у сфері захисту прав громадян."
+        description="Слідкуйте за розвитком Ордену та важливими подіями у сфері захисту прав громадян."
       />
 
       {/* Featured Article */}

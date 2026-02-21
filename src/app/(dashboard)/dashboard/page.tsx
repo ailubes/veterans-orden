@@ -5,6 +5,7 @@ import RoleProgressCard from '@/components/dashboard/role-progress-card';
 import Link from 'next/link';
 import { Vote, Calendar, CheckSquare, Users } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 
 // Map membership tier to Ukrainian display name
 const TIER_NAMES: Record<string, string> = {
@@ -138,7 +139,7 @@ export default async function DashboardPage() {
         activities.push({
           type: 'referral',
           title: 'Новий реферал',
-          description: `${r.first_name} приєднався до Мережі`,
+          description: `${r.first_name} приєднався до Ордену`,
           timestamp: r.created_at,
         });
       });
@@ -165,7 +166,10 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+      <div id="points-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8 relative">
+        <div className="absolute -top-6 right-0">
+          <HelpTooltip pageSlug="dashboard-home" elementId="points-stats" position="bottom" />
+        </div>
         <StatsCard
           label="МОЇ БАЛИ"
           value={points}
@@ -175,7 +179,7 @@ export default async function DashboardPage() {
         <StatsCard
           label="ЗАПРОШЕНО"
           value={referralCount}
-          change={referralCount > 0 ? `${referralCount} в Мережі` : 'Запросіть друзів'}
+          change={referralCount > 0 ? `${referralCount} в Ордені` : 'Запросіть друзів'}
           changeType={referralCount > 0 ? 'positive' : 'neutral'}
         />
         <StatsCard
@@ -195,10 +199,13 @@ export default async function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Referral Card */}
-        <div className="bg-panel-900 border border-line p-6 relative rounded-lg">
+        <div id="referral-card" className="bg-panel-900 border border-line p-6 relative rounded-lg">
+          <div className="absolute top-4 right-4">
+            <HelpTooltip pageSlug="dashboard-home" elementId="referral-card" position="left" />
+          </div>
           <p className="mono text-bronze text-xs tracking-widest mb-4">// ЗАПРОШУЙ ДРУЗІВ</p>
           <h2 className="font-syne text-2xl font-bold text-text-100 mb-4">
-            Розширюй Мережу!
+            Розширюй Орден!
           </h2>
           <p className="text-sm text-muted-500 mb-6">
             Запрошуй друзів та отримуй бали за кожного нового члена. Разом ми сильніші!
@@ -212,7 +219,12 @@ export default async function DashboardPage() {
         </div>
 
         {/* Role Progress */}
-        <RoleProgressCard />
+        <div id="role-progress" className="relative">
+          <div className="absolute top-4 right-4 z-10">
+            <HelpTooltip pageSlug="dashboard-home" elementId="role-progress" position="left" />
+          </div>
+          <RoleProgressCard />
+        </div>
       </div>
 
       {/* Task Progress Stats */}
@@ -263,7 +275,7 @@ export default async function DashboardPage() {
           <div className="text-center py-12 text-muted-500">
             <p className="text-sm">Поки що немає активності</p>
             <p className="text-xs mt-2 opacity-60">
-              Ваша активність у Мережі буде відображатися тут
+              Ваша активність в Ордені буде відображатися тут
             </p>
           </div>
         )}

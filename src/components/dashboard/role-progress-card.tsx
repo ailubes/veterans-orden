@@ -149,7 +149,7 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
     <div className={`border border-line p-6 bg-panel-900 rounded-lg ${className}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="font-syne font-bold text-lg text-text-100">Ваш рівень у Мережі</h3>
+        <h3 className="font-syne font-bold text-lg text-text-100">Ваш рівень в Ордені</h3>
         <TrendingUp className="w-5 h-5 text-bronze" />
       </div>
 
@@ -256,7 +256,7 @@ export default function RoleProgressCard({ className = '' }: RoleProgressCardPro
           <Sparkles className="w-8 h-8 text-bronze mx-auto mb-2" />
           <p className="font-bold text-text-100">Ви досягли найвищого рівня!</p>
           <p className="text-sm text-muted-500">
-            Дякуємо за вашу відданість Мережі Вільних Людей.
+            Дякуємо за вашу відданість Ордену Ветеранів.
           </p>
         </div>
       )}

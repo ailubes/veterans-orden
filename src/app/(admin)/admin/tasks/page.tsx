@@ -352,7 +352,7 @@ export default async function AdminTasksPage() {
           <CheckSquare className="w-12 h-12 mx-auto mb-4 text-muted-500" />
           <h3 className="font-syne text-xl font-bold mb-2">Немає завдань</h3>
           <p className="text-sm text-muted-500 mb-6">
-            Створіть перше завдання для членів Мережі
+            Створіть перше завдання для членів Ордену
           </p>
           <Link href="/admin/tasks/new" className="btn">
             СТВОРИТИ ЗАВДАННЯ →

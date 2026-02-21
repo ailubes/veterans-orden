@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Trophy, Target, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trophy, Target, Sparkles, ChevronDown, ChevronUp, ArrowRight, Users, CreditCard, Star } from 'lucide-react';
+import Link from 'next/link';
 import TaskCard from '@/components/progression/task-card';
 import RoleJourney from '@/components/progression/role-journey';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 import StreakCard from '@/components/progression/streak-card';
 import AchievementModal from '@/components/progression/achievement-modal';
 import MilestoneModal from '@/components/progression/milestone-modal';
@@ -76,6 +78,74 @@ const PRIVILEGE_LABELS: Record<string, string> = {
   task_creation: 'Створення завдань',
   council_access: 'Доступ до Ради Лідерів',
   nomination_rights: 'Право висування кандидатів',
+};
+
+// Concrete next-steps per role, shown when tasks are unavailable
+const NEXT_STEPS: Record<string, { icon: typeof CreditCard; title: string; description: string; cta: string; ctaUrl: string }[]> = {
+  supporter: [
+    {
+      icon: CreditCard,
+      title: 'Зробіть перший членський внесок',
+      description: 'Оформіть членство від 49 грн, щоб перейти на рівень «Кандидат в члени» та отримати право голосу на праймеріз.',
+      cta: 'Оформити членство',
+      ctaUrl: '/join',
+    },
+  ],
+  candidate: [
+    {
+      icon: Users,
+      title: 'Запросіть 2 кандидатів',
+      description: 'Запросіть щонайменше 2 друзів, які зареєструються та оформлять власний членський внесок — і ви станете «Членом Ордену».',
+      cta: 'Запросити друзів',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  member: [
+    {
+      icon: Users,
+      title: 'Допоможіть 2 кандидатам стати Членами',
+      description: '2 з ваших запрошених самі мають залучити по 2 кандидатів. Активно підтримуйте свою мережу, щоб досягти рівня «Почесного Члена».',
+      cta: 'Мої реферали',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  honorary_member: [
+    {
+      icon: Users,
+      title: '8 особистих та 49 загальних рефералів',
+      description: 'Залучіть 8 особистих рефералів та забезпечте зростання загальної мережі до 49 учасників — для рівня «Лідера Ордену».',
+      cta: 'Переглянути рефералів',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  network_leader: [
+    {
+      icon: Users,
+      title: '6 рефералів-Лідерів та 400 загальних',
+      description: 'Допоможіть 6 з ваших учасників досягти рівня «Лідер Ордену», а загальній мережі — зрости до 400 осіб.',
+      cta: 'Переглянути рефералів',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  regional_leader: [
+    {
+      icon: Users,
+      title: '4 рефералів-Регіональних лідерів та 4 000 загальних',
+      description: 'Допоможіть 4 учасникам досягти рівня «Регіонального лідера», а загальній мережі — зрости до 4 000 осіб.',
+      cta: 'Переглянути рефералів',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  national_leader: [
+    {
+      icon: Users,
+      title: '2 рефералів-Національних лідерів та 25 000 загальних',
+      description: 'Допоможіть 2 учасникам досягти рівня «Національного лідера», а загальній мережі — зрости до 25 000 осіб.',
+      cta: 'Переглянути рефералів',
+      ctaUrl: '/dashboard/referrals',
+    },
+  ],
+  network_guide: [],
 };
 
 export default function ProgressionPage() {
@@ -175,9 +245,12 @@ export default function ProgressionPage() {
         <div className="flex items-start gap-4 mb-6">
           <Trophy className="w-16 h-16 text-bronze flex-shrink-0" />
           <div>
-            <h1 className="font-syne text-4xl font-bold text-text-100 mb-2">
-              Ваш шлях у Мережі
-            </h1>
+            <div className="flex items-center gap-2 mb-2">
+              <h1 className="font-syne text-4xl font-bold text-text-100">
+                Ваш шлях в Ордені
+              </h1>
+              <HelpTooltip pageSlug="dashboard-progression" elementId="role-journey" position="right" />
+            </div>
             <p className="font-mono text-lg text-text-100/80">
               Відстежуйте свій прогрес та досягнення
             </p>
@@ -185,77 +258,121 @@ export default function ProgressionPage() {
         </div>
 
         {/* Current Role Badge */}
-        <div className="border-2 border-bronze bg-bronze/5 card-with-joints p-6">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <div className="flex items-baseline gap-2 mb-2">
-                <span className="font-syne text-3xl font-bold text-bronze">
-                  {data.currentRole.displayName}
-                </span>
-                <span className="font-mono text-sm text-text-100/60">
-                  Рівень {data.currentRole.level}
-                </span>
-              </div>
-              <p className="font-mono text-sm text-text-100/80">
-                {data.currentRole.description}
-              </p>
-            </div>
+        {(() => {
+          // Compute next role locally as fallback when API progress is null
+          const rolesArray = Object.values(MEMBERSHIP_ROLES).sort((a, b) => a.level - b.level);
+          const currentIdx = rolesArray.findIndex(r => r.key === data.currentRole.role);
+          const nextRoleInfo = currentIdx >= 0 && currentIdx < rolesArray.length - 1
+            ? rolesArray[currentIdx + 1]
+            : null;
+          const progress = data.progress ?? (nextRoleInfo ? {
+            nextRole: nextRoleInfo.key,
+            nextRoleLevel: nextRoleInfo.level,
+            nextRoleLabel: nextRoleInfo.label,
+            progressPercent: 0,
+            isEligible: false,
+          } : null);
 
-            {/* Progress to next role */}
-            {data.progress?.nextRole && (
-              <div className="min-w-[200px]">
-                <div className="flex justify-between items-baseline mb-2">
-                  <span className="font-mono text-xs text-text-100/60">
-                    До наступного рівня
-                  </span>
-                  <span className="font-mono text-sm font-semibold text-text-100">
-                    {data.progress.progressPercent}%
-                  </span>
+          return (
+            <div className="border-2 border-bronze bg-bronze/5 card-with-joints p-6">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="font-syne text-3xl font-bold text-bronze">
+                      {data.currentRole.displayName}
+                    </span>
+                    <span className="font-mono text-sm text-text-100/60">
+                      Рівень {data.currentRole.level}
+                    </span>
+                  </div>
+                  <p className="font-mono text-sm text-text-100/80">
+                    {data.currentRole.description}
+                  </p>
                 </div>
-                <div className="h-2 bg-panel-850/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-bronze rounded-full transition-all duration-500"
-                    style={{ width: `${data.progress.progressPercent}%` }}
-                  />
-                </div>
+
+                {progress?.nextRole && (
+                  <div className="min-w-[200px]">
+                    <div className="flex justify-between items-baseline mb-2">
+                      <span className="font-mono text-xs text-text-100/60">
+                        До: {progress.nextRoleLabel}
+                      </span>
+                      <span className="font-mono text-sm font-semibold text-text-100">
+                        {progress.progressPercent}%
+                      </span>
+                    </div>
+                    <div className="h-2 bg-panel-850/10 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-bronze rounded-full transition-all duration-500"
+                        style={{ width: `${Math.max(2, progress.progressPercent)}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          );
+        })()}
       </section>
+
+      {/* Next Steps — always shown, derived from MEMBERSHIP_ROLES */}
+      {(() => {
+        const steps = NEXT_STEPS[data.currentRole.role] ?? [];
+        if (steps.length === 0) return null;
+        return (
+          <section className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Target className="w-6 h-6 text-text-100" />
+              <h2 className="font-syne text-2xl font-bold text-text-100">
+                Що потрібно зробити
+              </h2>
+              <HelpTooltip pageSlug="dashboard-progression" elementId="current-tasks" position="right" />
+            </div>
+            <div className="space-y-4">
+              {steps.map((step, i) => {
+                const Icon = step.icon;
+                return (
+                  <div key={i} className="border-2 border-bronze/40 bg-bronze/5 card-with-joints p-6 flex flex-col sm:flex-row items-start gap-5">
+                    <div className="flex-shrink-0 w-12 h-12 bg-bronze/10 border border-bronze/30 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-bronze" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-syne text-xl font-bold text-text-100 mb-2">{step.title}</h3>
+                      <p className="font-mono text-sm text-text-100/80 mb-4">{step.description}</p>
+                      <Link
+                        href={step.ctaUrl}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
+                      >
+                        {step.cta}
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left Column (2/3) - Tasks */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Current Tasks */}
-          <section>
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="w-6 h-6 text-text-100" />
-              <h2 className="font-syne text-2xl font-bold text-text-100">
-                Поточні завдання
-              </h2>
-            </div>
-
-            {data.incompleteTasks.length > 0 ? (
+          {/* Current Tasks — only shown when backend tasks exist */}
+          {data.incompleteTasks.length > 0 && (
+            <section id="current-tasks">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="w-6 h-6 text-text-100" />
+                <h2 className="font-syne text-2xl font-bold text-text-100">
+                  Поточні завдання
+                </h2>
+              </div>
               <div className="space-y-4">
                 {data.incompleteTasks.map((task) => (
                   <TaskCard key={task.id} task={task} />
                 ))}
               </div>
-            ) : (
-              <div className="border-2 border-green-600 bg-green-50 p-8 text-center">
-                <div className="text-6xl mb-4">✅</div>
-                <h3 className="font-syne text-2xl font-bold text-green-700 mb-2">
-                  Всі завдання виконано!
-                </h3>
-                <p className="font-mono text-sm text-green-600">
-                  {data.progress?.isEligible
-                    ? 'Ви готові до наступного рівня! 🎉'
-                    : 'Чудова робота! Продовжуйте в тому ж дусі.'}
-                </p>
-              </div>
-            )}
-          </section>
+            </section>
+          )}
 
           {/* Completed Tasks (Collapsible) */}
           {data.completedTasks.length > 0 && (
@@ -330,45 +447,54 @@ export default function ProgressionPage() {
             </section>
           )}
 
-          {/* Next Level Info */}
-          {data.progress?.nextRole && (
-            <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-bronze" />
-                <h3 className="font-syne text-lg font-bold text-text-100">
-                  Наступний рівень
-                </h3>
-              </div>
+          {/* Next Level Privileges */}
+          {(() => {
+            const rolesArray = Object.values(MEMBERSHIP_ROLES).sort((a, b) => a.level - b.level);
+            const currentIdx = rolesArray.findIndex(r => r.key === data.currentRole.role);
+            const nextRoleInfo = currentIdx >= 0 && currentIdx < rolesArray.length - 1
+              ? rolesArray[currentIdx + 1]
+              : null;
+            if (!nextRoleInfo) return null;
 
-              <div className="mb-4">
-                <div className="font-syne text-2xl font-bold text-bronze mb-1">
-                  {data.progress.nextRoleLabel}
-                </div>
-                <div className="font-mono text-xs text-text-100/60">
-                  Рівень {data.progress.nextRoleLevel}
-                </div>
-              </div>
+            const currentPrivs = new Set(rolesArray[currentIdx]?.privileges ?? []);
+            const newPrivs = (nextRoleInfo.privileges as readonly string[]).filter(p => !currentPrivs.has(p as never));
 
-              {data.newPrivileges.length > 0 && (
-                <>
-                  <h4 className="font-mono text-sm font-semibold text-text-100 mb-3">
-                    Нові можливості:
-                  </h4>
-                  <ul className="space-y-2">
-                    {data.newPrivileges.map((priv) => (
-                      <li
-                        key={priv}
-                        className="flex items-start gap-2 font-mono text-sm text-text-100/80"
-                      >
-                        <span className="text-bronze">✨</span>
-                        {PRIVILEGE_LABELS[priv] || priv}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </section>
-          )}
+            return (
+              <section className="border border-line rounded-lg bg-panel-900 card-with-joints p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Sparkles className="w-5 h-5 text-bronze" />
+                  <h3 className="font-syne text-lg font-bold text-text-100">
+                    Наступний рівень
+                  </h3>
+                </div>
+
+                <div className="mb-4">
+                  <div className="font-syne text-2xl font-bold text-bronze mb-1">
+                    {nextRoleInfo.label}
+                  </div>
+                  <div className="font-mono text-xs text-text-100/60">
+                    Рівень {nextRoleInfo.level}
+                  </div>
+                </div>
+
+                {newPrivs.length > 0 && (
+                  <>
+                    <h4 className="font-mono text-sm font-semibold text-text-100 mb-3">
+                      Нові можливості:
+                    </h4>
+                    <ul className="space-y-2">
+                      {newPrivs.map((priv) => (
+                        <li key={priv} className="flex items-start gap-2 font-mono text-sm text-text-100/80">
+                          <Star className="w-4 h-4 text-bronze flex-shrink-0 mt-0.5" />
+                          {PRIVILEGE_LABELS[priv] || priv}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </section>
+            );
+          })()}
         </div>
       </div>
 

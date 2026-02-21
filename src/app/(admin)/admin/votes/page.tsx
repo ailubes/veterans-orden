@@ -231,7 +231,7 @@ export default async function AdminVotesPage() {
             Немає голосувань
           </h3>
           <p className="text-sm text-muted-500 mb-6">
-            Створіть перше голосування для членів Мережі
+            Створіть перше голосування для членів Ордену
           </p>
           <Link href="/admin/votes/new" className="btn">
             СТВОРИТИ ГОЛОСУВАННЯ →

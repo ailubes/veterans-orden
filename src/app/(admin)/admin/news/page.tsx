@@ -180,7 +180,7 @@ export default async function AdminNewsPage() {
             <FileText className="w-12 h-12 mx-auto mb-4 text-muted-500" />
             <h3 className="font-syne text-xl font-bold mb-2">Немає новин</h3>
             <p className="text-sm text-muted-500 mb-6">
-              Створіть першу новину для членів Мережі
+              Створіть першу новину для членів Ордену
             </p>
             <Link href="/admin/news/new" className="btn">
               СТВОРИТИ СТАТТЮ →

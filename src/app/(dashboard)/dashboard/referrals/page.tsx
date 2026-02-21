@@ -33,7 +33,7 @@ export default async function ReferralsPage() {
       <div className="mb-8">
         <p className="label mb-2">ЗАПРОШЕННЯ</p>
         <h1 className="font-syne text-3xl lg:text-4xl font-bold">
-          Розширюй Мережу
+          Розширюй Орден
         </h1>
       </div>
 
