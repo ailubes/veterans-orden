@@ -21,6 +21,38 @@ export interface KatottgSearchResponse {
   total: number;
 }
 
+// Map ISO 3166-2:UA codes → KATOTTG oblast code prefix (UA{XX})
+// Most match by stripping the dash; exceptions listed explicitly.
+const ISO_TO_KATOTTG_PREFIX: Record<string, string> = {
+  'UA-05': 'UA05', // Вінницька
+  'UA-07': 'UA07', // Волинська
+  'UA-09': 'UA44', // Луганська  (ISO 09 ≠ KATOTTG 44)
+  'UA-12': 'UA12', // Дніпропетровська
+  'UA-14': 'UA14', // Донецька
+  'UA-18': 'UA18', // Житомирська
+  'UA-21': 'UA21', // Закарпатська
+  'UA-23': 'UA23', // Запорізька
+  'UA-26': 'UA26', // Івано-Франківська
+  'UA-30': 'UA80', // Київ (місто)  (ISO 30 ≠ KATOTTG 80)
+  'UA-32': 'UA32', // Київська
+  'UA-35': 'UA35', // Кіровоградська
+  'UA-40': 'UA85', // Севастополь   (ISO 40 ≠ KATOTTG 85)
+  'UA-43': 'UA01', // АРК Крим      (ISO 43 ≠ KATOTTG 01)
+  'UA-46': 'UA46', // Львівська
+  'UA-48': 'UA48', // Миколаївська
+  'UA-51': 'UA51', // Одеська
+  'UA-53': 'UA53', // Полтавська
+  'UA-56': 'UA56', // Рівненська
+  'UA-59': 'UA59', // Сумська
+  'UA-61': 'UA61', // Тернопільська
+  'UA-63': 'UA63', // Харківська
+  'UA-65': 'UA65', // Херсонська
+  'UA-68': 'UA68', // Хмельницька
+  'UA-71': 'UA71', // Черкаська
+  'UA-74': 'UA74', // Чернігівська
+  'UA-77': 'UA73', // Чернівецька   (ISO 77 ≠ KATOTTG 73)
+};
+
 /**
  * GET /api/katottg/search
  * Search KATOTTG settlements using trigram similarity
@@ -28,7 +60,7 @@ export interface KatottgSearchResponse {
  *  - q: string (required, min 2 chars)
  *  - limit: number (optional, default: 20, max: 50)
  *  - category: string (optional, filter by category: M, T, C, X)
- *  - oblastCode: string (optional, filter by oblast)
+ *  - oblastCode: string (optional, ISO 3166-2 or KATOTTG code to filter by oblast)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -70,7 +102,10 @@ export async function GET(request: NextRequest) {
 
     // Filter by oblast if specified
     if (oblastCode) {
-      dbQuery = dbQuery.eq('oblast_code', oblastCode);
+      // Convert ISO 3166-2 code (e.g. "UA-32") to KATOTTG prefix (e.g. "UA32")
+      const katottgPrefix = ISO_TO_KATOTTG_PREFIX[oblastCode]
+        ?? oblastCode.replace('-', ''); // fallback: strip dash
+      dbQuery = dbQuery.ilike('oblast_code', `${katottgPrefix}%`);
     }
 
     const { data, error } = await dbQuery;
