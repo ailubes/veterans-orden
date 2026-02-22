@@ -281,14 +281,15 @@ export default function OnboardingPage() {
               налаштуємо ваш профіль.
             </p>
 
-            <HeavyCta
-              onClick={() => setStep('personal')}
-              variant="primary"
-              size="lg"
-              fullWidth
-            >
-              ПОЧАТИ <ChevronRight size={18} />
-            </HeavyCta>
+            <div className="flex justify-center">
+              <HeavyCta
+                onClick={() => setStep('personal')}
+                variant="primary"
+                size="md"
+              >
+                ПОЧАТИ <ChevronRight size={16} />
+              </HeavyCta>
+            </div>
           </div>
         )}
 
