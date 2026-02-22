@@ -297,8 +297,8 @@ export default function OnboardingPage() {
         {step === 'personal' && (
           <div>
             <div className="flex items-center justify-center gap-2 mb-4">
-              <User size={24} className="text-bronze" />
-              <h1 className="font-inter font-black text-2xl text-text-100">
+              <User size={22} className="text-bronze flex-shrink-0" />
+              <h1 className="font-inter font-black text-2xl text-text-100 leading-none">
                 Особисті дані
               </h1>
             </div>
@@ -400,8 +400,8 @@ export default function OnboardingPage() {
         {step === 'region' && (
           <div>
             <div className="flex items-center justify-center gap-2 mb-4">
-              <MapPin size={24} className="text-bronze" />
-              <h1 className="font-inter font-black text-2xl text-text-100">
+              <MapPin size={22} className="text-bronze flex-shrink-0" />
+              <h1 className="font-inter font-black text-2xl text-text-100 leading-none">
                 Ваш регіон
               </h1>
             </div>

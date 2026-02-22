@@ -724,6 +724,9 @@ nav {
 .heavy-cta__text {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .cta-group {
@@ -806,6 +809,20 @@ nav {
 .section p {
   color: var(--text-200);
   max-width: 80ch;
+}
+
+/* ============================================================================
+   COMPARISON ROW — What the Order is NOT and IS
+   ============================================================================ */
+
+.comparison-row {
+  transition: padding-left 0.2s ease, border-left 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.comparison-row:hover {
+  padding-left: 1rem;
+  border-left: 3px solid var(--bronze);
 }
 
 .section-card-grid {
