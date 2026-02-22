@@ -145,32 +145,48 @@ export default function OnboardingPage() {
         }
       }
 
-      // Create user profile in database
-      const { error: insertError, data: newUser } = await supabase.from('users').insert({
-        auth_id: user.id,
-        email: user.email,
-        first_name: firstName.trim(),
-        last_name: lastName.trim(),
-        patronymic: patronymic.trim() || null,
-        phone: phone.trim() || null,
-        date_of_birth: dateOfBirth ? new Date(dateOfBirth).toISOString() : null,
-        oblast_id: oblastId,
-        katottg_code: katottgCode,
-        city: katottgDetails?.name || null, // Store settlement name for backward compatibility
-        referral_code: referralCode,
-        referred_by_id: referrerId,
-        membership_tier: selectedTier,
-        role: selectedTier === 'free' ? 'prospect' : 'full_member',
-        status: 'active',
-        member_since: new Date().toISOString(),
-      }).select('id').single();
+      // Check if a user record already exists (created by DB trigger on signup)
+      const { data: existingProfile } = await supabase
+        .from('users')
+        .select('id, referral_code, member_since')
+        .eq('auth_id', user.id)
+        .single();
 
-      if (insertError) {
-        if (insertError.code === '23505') {
-          router.push('/dashboard');
-          return;
-        }
-        throw insertError;
+      // Keep existing referral_code / member_since if already set by the trigger
+      const finalReferralCode = existingProfile?.referral_code || referralCode;
+      const finalMemberSince = existingProfile?.member_since || new Date().toISOString();
+
+      // Upsert: INSERT on first run, UPDATE if trigger already created the row
+      const { error: upsertError, data: newUser } = await supabase
+        .from('users')
+        .upsert({
+          auth_id: user.id,
+          email: user.email,
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          patronymic: patronymic.trim() || null,
+          phone: phone.trim() || null,
+          date_of_birth: dateOfBirth ? new Date(dateOfBirth).toISOString() : null,
+          oblast_id: oblastId,
+          katottg_code: katottgCode,
+          city: katottgDetails?.name || null,
+          settlement_name: katottgDetails?.name || null,
+          hromada_name: katottgDetails?.hromadaName || null,
+          raion_name: katottgDetails?.raionName || null,
+          oblast_name_katottg: katottgDetails?.oblastName || null,
+          referral_code: finalReferralCode,
+          referred_by_id: referrerId,
+          membership_tier: selectedTier,
+          role: selectedTier === 'free' ? 'prospect' : 'full_member',
+          status: 'active',
+          member_since: finalMemberSince,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'auth_id' })
+        .select('id')
+        .single();
+
+      if (upsertError) {
+        throw upsertError;
       }
 
       // Generate progression tasks for new user
