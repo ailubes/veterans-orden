@@ -34,6 +34,8 @@ function SignInForm() {
       if (signInError) {
         if (signInError.message === 'Invalid login credentials') {
           setError('Невірна електронна пошта або пароль');
+        } else if (signInError.message === 'Email not confirmed') {
+          setError('Електронна пошта не підтверджена. Перевірте свою поштову скриньку та перейдіть за посиланням у листі.');
         } else {
           setError(signInError.message);
         }

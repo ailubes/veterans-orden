@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Mail } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { HeavyCta } from '@/components/ui/heavy-cta';
 
@@ -17,6 +17,7 @@ function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +44,7 @@ function SignUpForm() {
       }
 
       if (data.user) {
-        router.push('/onboarding');
+        setRegistered(true);
       }
     } catch {
       setError('Виникла помилка. Спробуйте ще раз.');
@@ -51,6 +52,33 @@ function SignUpForm() {
       setLoading(false);
     }
   };
+
+  if (registered) {
+    return (
+      <div className="text-center py-4">
+        <div className="flex justify-center mb-4">
+          <div className="w-16 h-16 bg-bronze/10 border border-bronze/30 rounded-full flex items-center justify-center">
+            <Mail className="w-8 h-8 text-bronze" />
+          </div>
+        </div>
+        <h2 className="font-syne text-xl font-bold text-text-100 mb-3">
+          Підтвердіть електронну пошту
+        </h2>
+        <p className="font-mono text-sm text-muted-500 mb-2">
+          Ми надіслали листа на адресу
+        </p>
+        <p className="font-mono text-sm font-bold text-bronze mb-4 break-all">
+          {email}
+        </p>
+        <p className="font-mono text-sm text-muted-500 mb-6">
+          Перейдіть за посиланням у листі, щоб підтвердити реєстрацію та увійти до акаунту.
+        </p>
+        <p className="font-mono text-xs text-muted-500/70">
+          Не отримали листа? Перевірте папку «Спам».
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
