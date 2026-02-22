@@ -21,6 +21,19 @@ export default function OnboardingPage() {
   const [patronymic, setPatronymic] = useState('');
   const [phone, setPhone] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dobDay, setDobDay] = useState('');
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobYear, setDobYear] = useState('');
+
+  const handleDobChange = (day: string, month: string, year: string) => {
+    const d = day.padStart(2, '0');
+    const m = month.padStart(2, '0');
+    if (day && month && year.length === 4) {
+      setDateOfBirth(`${year}-${m}-${d}`);
+    } else {
+      setDateOfBirth('');
+    }
+  };
 
   // Location (two-step: oblast first, then settlement)
   const [selectedOblastCode, setSelectedOblastCode] = useState('');
@@ -343,14 +356,32 @@ export default function OnboardingPage() {
 
               <div>
                 <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">ДАТА НАРОДЖЕННЯ *</label>
-                <input
-                  type="date"
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
-                  max={new Date().toISOString().split('T')[0]}
-                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
-                  required
-                />
+                <div className="grid grid-cols-3 gap-2">
+                  <input
+                    type="number"
+                    min={1} max={31}
+                    value={dobDay}
+                    onChange={(e) => { setDobDay(e.target.value); handleDobChange(e.target.value, dobMonth, dobYear); }}
+                    placeholder="ДД"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                  <input
+                    type="number"
+                    min={1} max={12}
+                    value={dobMonth}
+                    onChange={(e) => { setDobMonth(e.target.value); handleDobChange(dobDay, e.target.value, dobYear); }}
+                    placeholder="ММ"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                  <input
+                    type="number"
+                    min={1900} max={new Date().getFullYear()}
+                    value={dobYear}
+                    onChange={(e) => { setDobYear(e.target.value); handleDobChange(dobDay, dobMonth, e.target.value); }}
+                    placeholder="РРРР"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                </div>
               </div>
 
               <div>

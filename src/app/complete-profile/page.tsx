@@ -27,6 +27,19 @@ export default function CompleteProfilePage() {
     katottgCode: '' as string | null,
   });
   const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
+  const [dobDay, setDobDay] = useState('');
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobYear, setDobYear] = useState('');
+
+  const handleDobChange = (day: string, month: string, year: string) => {
+    const d = day.padStart(2, '0');
+    const m = month.padStart(2, '0');
+    if (day && month && year.length === 4) {
+      setFormData(prev => ({ ...prev, dateOfBirth: `${year}-${m}-${d}` }));
+    } else {
+      setFormData(prev => ({ ...prev, dateOfBirth: '' }));
+    }
+  };
 
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [completionPercentage, setCompletionPercentage] = useState(0);
@@ -52,48 +65,61 @@ export default function CompleteProfilePage() {
         .eq('auth_id', user.id)
         .single();
 
-      if (profile) {
-        // Check if profile is already complete
-        const status = checkProfileCompletion(profile as unknown as UserProfile);
+      if (!profile) {
+        setError('Ваш профіль не знайдено в базі даних. Зверніться до адміністратора.');
+        setLoading(false);
+        return;
+      }
 
-        if (status.isComplete) {
-          // Profile is complete, redirect to dashboard
-          router.push('/dashboard');
-          return;
-        }
+      // Check if profile is already complete
+      const status = checkProfileCompletion(profile as unknown as UserProfile);
 
-        setMissingFields(status.missingFields);
-        setCompletionPercentage(status.completionPercentage);
+      if (status.isComplete) {
+        // Profile is complete, redirect to dashboard
+        router.push('/dashboard');
+        return;
+      }
 
-        // Pre-fill form with existing data
-        setFormData({
-          firstName: profile.first_name || '',
-          lastName: profile.last_name || '',
-          patronymic: profile.patronymic || '',
-          sex: (profile.sex as UserSex) || 'not_specified',
-          phone: profile.phone || '',
-          dateOfBirth: profile.date_of_birth
-            ? new Date(profile.date_of_birth).toISOString().split('T')[0]
-            : '',
-          katottgCode: profile.katottg_code || null,
+      setMissingFields(status.missingFields);
+      setCompletionPercentage(status.completionPercentage);
+
+      // Pre-fill form with existing data
+      const existingDob = profile.date_of_birth
+        ? new Date(profile.date_of_birth).toISOString().split('T')[0]
+        : '';
+      setFormData({
+        firstName: profile.first_name || '',
+        lastName: profile.last_name || '',
+        patronymic: profile.patronymic || '',
+        sex: (profile.sex as UserSex) || 'not_specified',
+        phone: profile.phone || '',
+        dateOfBirth: existingDob,
+        katottgCode: profile.katottg_code || null,
+      });
+
+      // Pre-fill split DOB fields if exists
+      if (profile.date_of_birth) {
+        const d = new Date(profile.date_of_birth);
+        setDobDay(String(d.getUTCDate()));
+        setDobMonth(String(d.getUTCMonth() + 1));
+        setDobYear(String(d.getUTCFullYear()));
+      }
+
+      // Load KATOTTG details if code exists
+      if (profile.katottg_code) {
+        setKatottgDetails({
+          code: profile.katottg_code,
+          name: profile.settlement_name || '',
+          category: '',
+          level: 4,
+          oblastCode: null,
+          raionCode: null,
+          hromadaCode: null,
+          oblastName: profile.oblast_name_katottg || null,
+          raionName: profile.raion_name || null,
+          hromadaName: profile.hromada_name || null,
+          fullPath: '',
         });
-
-        // Load KATOTTG details if code exists
-        if (profile.katottg_code) {
-          setKatottgDetails({
-            code: profile.katottg_code,
-            name: profile.settlement_name || '',
-            category: '',
-            level: 4,
-            oblastCode: null,
-            raionCode: null,
-            hromadaCode: null,
-            oblastName: profile.oblast_name_katottg || null,
-            raionName: profile.raion_name || null,
-            hromadaName: profile.hromada_name || null,
-            fullPath: '',
-          });
-        }
       }
 
       setLoading(false);
@@ -180,13 +206,19 @@ export default function CompleteProfilePage() {
         }
       }
 
-      const { error: updateError } = await supabase
+      const { data: updatedRows, error: updateError } = await supabase
         .from('users')
         .update(updateData)
-        .eq('auth_id', user.id);
+        .eq('auth_id', user.id)
+        .select('auth_id');
 
       if (updateError) {
         throw updateError;
+      }
+
+      if (!updatedRows || updatedRows.length === 0) {
+        setError('Не вдалося зберегти профіль — запис не знайдено. Зверніться до адміністратора.');
+        return;
       }
 
       setSuccess(true);
@@ -333,13 +365,32 @@ export default function CompleteProfilePage() {
                 <label className="block mb-2 font-mono text-xs uppercase tracking-wider text-muted-500">
                   ДАТА НАРОДЖЕННЯ <span className="text-red-400">*</span>
                 </label>
-                <input
-                  type="date"
-                  value={formData.dateOfBirth}
-                  onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-                  className="w-full px-4 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 focus:border-bronze focus:outline-none transition-colors"
-                  required
-                />
+                <div className="grid grid-cols-3 gap-2">
+                  <input
+                    type="number"
+                    min={1} max={31}
+                    value={dobDay}
+                    onChange={(e) => { setDobDay(e.target.value); handleDobChange(e.target.value, dobMonth, dobYear); }}
+                    placeholder="ДД"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                  <input
+                    type="number"
+                    min={1} max={12}
+                    value={dobMonth}
+                    onChange={(e) => { setDobMonth(e.target.value); handleDobChange(dobDay, e.target.value, dobYear); }}
+                    placeholder="ММ"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                  <input
+                    type="number"
+                    min={1900} max={new Date().getFullYear()}
+                    value={dobYear}
+                    onChange={(e) => { setDobYear(e.target.value); handleDobChange(dobDay, dobMonth, e.target.value); }}
+                    placeholder="РРРР"
+                    className="w-full px-3 py-3 bg-panel-850 border border-line rounded-lg font-mono text-sm text-text-100 placeholder:text-muted-500 focus:border-bronze focus:outline-none transition-colors text-center"
+                  />
+                </div>
               </div>
 
               {/* Location (KATOTTG) */}
