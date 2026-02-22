@@ -54,7 +54,7 @@ export function AdminSidebar() {
       {/* Logo */}
       <div className="p-6 border-b border-line">
         <Link href="/" className="flex items-center gap-3">
-          <Logo size={40} className="text-bronze" />
+          <Logo size={40} />
           <div>
             <span className="font-syne font-bold text-lg tracking-tight block">
               АДМІН

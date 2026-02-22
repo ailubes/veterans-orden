@@ -58,7 +58,7 @@ export function AdminMobileNav() {
       {/* Header */}
       <header className="flex items-center justify-between p-4 bg-panel-900 text-text-100 border-b border-line">
         <Link href="/admin" className="flex items-center gap-3">
-          <Logo size={32} className="text-bronze" />
+          <Logo size={32} />
           <div>
             <span className="font-syne font-bold tracking-tight">АДМІН</span>
           </div>

@@ -269,7 +269,7 @@ export default function OnboardingPage() {
         {step === 'welcome' && (
           <div className="text-center">
             <div className="flex items-center justify-center mx-auto mb-6">
-              <Logo size={64} className="text-bronze" />
+              <Logo size={64} />
             </div>
 
             <h1 className="font-inter font-black text-2xl text-text-100 mb-4">
