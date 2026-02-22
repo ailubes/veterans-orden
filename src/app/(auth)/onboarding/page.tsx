@@ -272,7 +272,7 @@ export default function OnboardingPage() {
               <Logo size={64} />
             </div>
 
-            <h1 className="font-inter font-black text-2xl text-text-100 mb-4">
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 mt-0">
               Вітаємо!
             </h1>
 
@@ -298,7 +298,7 @@ export default function OnboardingPage() {
           <div>
             <div className="flex items-center justify-center gap-2 mb-4">
               <User size={22} className="text-bronze flex-shrink-0" />
-              <h1 className="font-inter font-black text-2xl text-text-100 leading-none">
+              <h1 className="font-inter font-black text-2xl text-text-100 leading-none mt-0">
                 Особисті дані
               </h1>
             </div>
@@ -401,7 +401,7 @@ export default function OnboardingPage() {
           <div>
             <div className="flex items-center justify-center gap-2 mb-4">
               <MapPin size={22} className="text-bronze flex-shrink-0" />
-              <h1 className="font-inter font-black text-2xl text-text-100 leading-none">
+              <h1 className="font-inter font-black text-2xl text-text-100 leading-none mt-0">
                 Ваш регіон
               </h1>
             </div>
@@ -485,7 +485,7 @@ export default function OnboardingPage() {
         {/* Step: Tier Selection */}
         {step === 'tier' && (
           <div>
-            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 text-center">
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 mt-0 text-center">
               Оберіть план членства
             </h1>
             <p className="text-center text-sm text-muted-500 mb-6">
@@ -655,7 +655,7 @@ export default function OnboardingPage() {
               <Check size={32} />
             </div>
 
-            <h1 className="font-inter font-black text-2xl text-text-100 mb-4">
+            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 mt-0">
               Ласкаво просимо!
             </h1>
 
