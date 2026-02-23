@@ -33,6 +33,18 @@ interface SystemConfig {
   payment_liqpay_sandbox_mode: boolean;
   payment_currency: string;
   payment_success_bonus_points: number;
+  // PUMB payment settings
+  payment_pumb_enabled: boolean;
+  payment_pumb_client_id: string;
+  payment_pumb_client_secret: string;
+  payment_pumb_api_url: string;
+  payment_pumb_portal_id: string;
+  payment_pumb_merchant_id: string;
+  // HUTKO payment settings
+  payment_hutko_enabled: boolean;
+  payment_hutko_merchant_id: string;
+  payment_hutko_secret_key: string;
+  payment_hutko_credit_key: string;
 }
 
 export default function SystemConfigTab({
@@ -60,6 +72,18 @@ export default function SystemConfigTab({
     payment_liqpay_sandbox_mode: true,
     payment_currency: 'UAH',
     payment_success_bonus_points: 50,
+    // PUMB
+    payment_pumb_enabled: false,
+    payment_pumb_client_id: '',
+    payment_pumb_client_secret: '',
+    payment_pumb_api_url: '',
+    payment_pumb_portal_id: '',
+    payment_pumb_merchant_id: '',
+    // HUTKO
+    payment_hutko_enabled: false,
+    payment_hutko_merchant_id: '',
+    payment_hutko_secret_key: '',
+    payment_hutko_credit_key: '',
   });
 
   const canEdit = adminProfile.role === 'super_admin';
@@ -479,6 +503,163 @@ export default function SystemConfigTab({
               <li>Для тестування використовуйте sandbox режим</li>
               <li>Після перевірки вимкніть sandbox для прийому реальних платежів</li>
             </ol>
+          </div>
+        </div>
+
+        {/* PUMB Payment Settings */}
+        <div className="space-y-4 pt-6 border-t-2 border-line">
+          <h3 className="font-syne font-bold text-lg">Налаштування платежів (PUMB PayHub2)</h3>
+          <p className="text-sm text-muted-500">
+            PUMB є альтернативним провайдером платежів. Увімкніть і заповніть облікові дані, щоб перемкнути систему на PUMB.
+            LiqPay залишається активним, поки PUMB не увімкнено.
+          </p>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="pumb_enabled"
+              checked={config.payment_pumb_enabled}
+              onCheckedChange={(checked) =>
+                setConfig({ ...config, payment_pumb_enabled: checked as boolean })
+              }
+            />
+            <Label htmlFor="pumb_enabled" className="cursor-pointer">
+              Увімкнути PUMB як активний провайдер платежів
+            </Label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="pumb_client_id">PUMB Client ID</Label>
+              <Input
+                id="pumb_client_id"
+                type="text"
+                value={config.payment_pumb_client_id}
+                onChange={(e) => setConfig({ ...config, payment_pumb_client_id: e.target.value })}
+                placeholder="client_id"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pumb_client_secret">PUMB Client Secret</Label>
+              <Input
+                id="pumb_client_secret"
+                type="password"
+                value={config.payment_pumb_client_secret}
+                onChange={(e) => setConfig({ ...config, payment_pumb_client_secret: e.target.value })}
+                placeholder="••••••••••••"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <Label htmlFor="pumb_api_url">PUMB API URL</Label>
+              <Input
+                id="pumb_api_url"
+                type="text"
+                value={config.payment_pumb_api_url}
+                onChange={(e) => setConfig({ ...config, payment_pumb_api_url: e.target.value })}
+                placeholder="https://api.pumb.ua/payhub2"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pumb_portal_id">PUMB Portal ID</Label>
+              <Input
+                id="pumb_portal_id"
+                type="text"
+                value={config.payment_pumb_portal_id}
+                onChange={(e) => setConfig({ ...config, payment_pumb_portal_id: e.target.value })}
+                placeholder="portal_id"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="pumb_merchant_id">PUMB Merchant ID</Label>
+              <Input
+                id="pumb_merchant_id"
+                type="text"
+                value={config.payment_pumb_merchant_id}
+                onChange={(e) => setConfig({ ...config, payment_pumb_merchant_id: e.target.value })}
+                placeholder="merchant_id"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 border-2 border-bronze bg-panel-900/50">
+            <p className="text-sm text-bronze">
+              ⚠️ <strong>Увага:</strong> Переконайтеся, що всі поля PUMB заповнені перед увімкненням.
+              Webhook URL для PUMB: <code className="text-xs bg-panel-850 px-1 py-0.5 rounded">/api/payments/pumb-callback</code>
+            </p>
+          </div>
+        </div>
+
+        {/* HUTKO Payment Settings */}
+        <div className="space-y-4 pt-6 border-t-2 border-line">
+          <h3 className="font-syne font-bold text-lg">Налаштування платежів (HUTKO)</h3>
+          <p className="text-sm text-muted-500">
+            HUTKO є основним провайдером платежів (Fondy-based).
+            Заповніть облікові дані та увімкніть для прийому платежів.
+          </p>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="hutko_enabled"
+              checked={config.payment_hutko_enabled}
+              onCheckedChange={(checked) =>
+                setConfig({ ...config, payment_hutko_enabled: checked as boolean })
+              }
+            />
+            <Label htmlFor="hutko_enabled" className="cursor-pointer">
+              Увімкнути HUTKO
+            </Label>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="hutko_merchant_id">Merchant ID</Label>
+              <Input
+                id="hutko_merchant_id"
+                type="number"
+                value={config.payment_hutko_merchant_id}
+                onChange={(e) => setConfig({ ...config, payment_hutko_merchant_id: e.target.value })}
+                placeholder="1702303"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+            <div>{/* spacer */}</div>
+            <div>
+              <Label htmlFor="hutko_secret_key">Ключ оплати (Payment Key)</Label>
+              <Input
+                id="hutko_secret_key"
+                type="password"
+                value={config.payment_hutko_secret_key}
+                onChange={(e) => setConfig({ ...config, payment_hutko_secret_key: e.target.value })}
+                placeholder="••••••••••••••••"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+            <div>
+              <Label htmlFor="hutko_credit_key">Кредитний ключ (Credit Key)</Label>
+              <Input
+                id="hutko_credit_key"
+                type="password"
+                value={config.payment_hutko_credit_key}
+                onChange={(e) => setConfig({ ...config, payment_hutko_credit_key: e.target.value })}
+                placeholder="••••••••••••••••"
+                className="mt-1 font-mono text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="p-4 border-2 border-bronze bg-panel-900/50">
+            <p className="text-sm text-bronze">
+              ⚠️ <strong>Увага:</strong> Callback URL для HUTKO:{' '}
+              <code className="text-xs bg-panel-850 px-1 py-0.5 rounded">/api/payments/hutko-callback</code>
+            </p>
           </div>
         </div>
 
