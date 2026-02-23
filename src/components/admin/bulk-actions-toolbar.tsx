@@ -83,10 +83,8 @@ export function BulkActionsToolbar({
                 key={action.id}
                 onClick={() => handleAction(action)}
                 disabled={executing}
-                className={`flex items-center gap-2 px-4 py-2 font-bold text-sm border transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded ${
-                  action.variant === 'destructive'
-                    ? 'border-red-500 bg-red-500 text-white hover:bg-red-600'
-                    : 'border-bronze bg-bronze text-bg-950 hover:bg-bronze/90'
+                className={`btn btn-sm flex items-center gap-2 ${
+                  action.variant === 'destructive' ? 'btn-outline' : ''
                 }`}
               >
                 {executing && currentAction === action.id ? (

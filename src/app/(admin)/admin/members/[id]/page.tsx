@@ -196,26 +196,26 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
             {canEdit && (
               <Link
                 href={`/admin/members/${member.id}/edit`}
-                className="px-4 py-2 bg-bg-950 text-bronze text-sm font-bold hover:bg-bg-950/80 transition-colors flex items-center gap-2 rounded"
+                className="btn flex items-center gap-2"
               >
                 <Edit size={16} />
                 РЕДАГУВАТИ
               </Link>
             )}
             {canSuspend && member.status !== 'suspended' && (
-              <button className="px-4 py-2 border border-red-500 text-red-500 text-sm font-bold hover:bg-red-500 hover:text-white transition-colors flex items-center gap-2 rounded">
+              <button className="btn btn-outline flex items-center gap-2">
                 <UserX size={16} />
                 ПРИЗУПИНИТИ
               </button>
             )}
             {canSuspend && member.status === 'suspended' && (
-              <button className="px-4 py-2 border border-green-500 text-green-500 text-sm font-bold hover:bg-green-500 hover:text-white transition-colors flex items-center gap-2 rounded">
+              <button className="btn btn-outline flex items-center gap-2">
                 <UserCheck size={16} />
                 ВІДНОВИТИ
               </button>
             )}
             {canImpersonate && (
-              <button className="px-4 py-2 border border-bg-950 text-bg-950 text-sm font-bold hover:bg-bg-950 hover:text-bronze transition-colors flex items-center gap-2 rounded">
+              <button className="btn btn-outline flex items-center gap-2">
                 <Shield size={16} />
                 ІМІТУВАТИ
               </button>

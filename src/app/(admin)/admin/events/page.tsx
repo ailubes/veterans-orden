@@ -123,7 +123,6 @@ export default async function AdminEventsPage() {
                   <DeleteAdminButton
                     apiPath={`/api/admin/events/${event.id}`}
                     itemTitle={event.title}
-                    variant="row"
                   />
                 </div>
               </div>

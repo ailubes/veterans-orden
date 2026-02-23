@@ -7,10 +7,9 @@ import { Trash2 } from 'lucide-react';
 interface DeleteVoteButtonProps {
   voteId: string;
   voteTitle: string;
-  variant?: 'icon' | 'row';
 }
 
-export function DeleteVoteButton({ voteId, voteTitle, variant = 'icon' }: DeleteVoteButtonProps) {
+export function DeleteVoteButton({ voteId, voteTitle }: DeleteVoteButtonProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -33,27 +32,14 @@ export function DeleteVoteButton({ voteId, voteTitle, variant = 'icon' }: Delete
     }
   };
 
-  if (variant === 'row') {
-    return (
-      <button
-        onClick={handleDelete}
-        disabled={loading}
-        className="p-2 border-2 border-red-200 text-red-500 hover:bg-red-50 disabled:opacity-50"
-        title="Видалити"
-      >
-        <Trash2 size={16} />
-      </button>
-    );
-  }
-
   return (
     <button
       onClick={handleDelete}
       disabled={loading}
-      className="p-2 hover:bg-red-50 rounded text-red-500 disabled:opacity-50"
+      className="btn btn-sm btn-outline flex items-center gap-1"
       title="Видалити"
     >
-      <Trash2 size={16} />
+      <Trash2 size={14} />
     </button>
   );
 }

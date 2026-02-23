@@ -130,7 +130,7 @@ export default async function AdminVotesPage() {
                   >
                     <Edit2 size={16} />
                   </Link>
-                  <DeleteVoteButton voteId={vote.id} voteTitle={vote.title} variant="row" />
+                  <DeleteVoteButton voteId={vote.id} voteTitle={vote.title} />
                 </div>
               </div>
             ))}

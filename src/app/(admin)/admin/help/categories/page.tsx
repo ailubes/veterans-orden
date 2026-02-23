@@ -445,7 +445,7 @@ export default function CategoriesPage() {
 
         <button
           onClick={() => openCreateModal()}
-          className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
+          className="btn flex items-center gap-2"
         >
           <Plus size={20} />
           Нова категорія
@@ -677,7 +677,7 @@ export default function CategoriesPage() {
             <div className="flex items-center justify-end gap-3 p-6 border-t-2 border-line">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
+                className="btn btn-outline"
               >
                 Скасувати
               </button>
@@ -685,7 +685,7 @@ export default function CategoriesPage() {
               <button
                 onClick={handleSubmit}
                 disabled={formSubmitting}
-                className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+                className="btn flex items-center gap-2 disabled:opacity-50"
               >
                 <Save size={18} />
                 {modalMode === 'create' ? 'Створити' : 'Зберегти'}

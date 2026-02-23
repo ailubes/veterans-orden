@@ -185,12 +185,12 @@ export default async function VoteDetailPage({ params }: VoteDetailPageProps) {
                 </Link>
               )}
               {vote.status === 'active' && (
-                <button className="btn btn-outline btn-sm flex items-center gap-2 border-bronze text-bronze hover:bg-bronze hover:text-canvas">
+                <button className="btn btn-outline btn-sm flex items-center gap-2">
                   <XCircle size={16} />
                   ЗАКРИТИ ДОСТРОКОВО
                 </button>
               )}
-              <button className="btn btn-outline-light btn-sm flex items-center gap-2">
+              <button className="btn btn-outline btn-sm flex items-center gap-2">
                 <Download size={16} />
                 ЕКСПОРТ
               </button>

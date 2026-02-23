@@ -231,7 +231,6 @@ export default async function AdminTasksPage() {
                   <DeleteAdminButton
                     apiPath={`/api/admin/tasks/${task.id}`}
                     itemTitle={task.title}
-                    variant="row"
                   />
                 </div>
               </div>

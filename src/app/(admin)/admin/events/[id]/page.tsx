@@ -168,7 +168,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                 РЕДАГУВАТИ
               </Link>
               {event.status !== 'cancelled' && (
-                <button className="btn btn-outline btn-sm flex items-center gap-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white">
+                <button className="btn btn-outline btn-sm flex items-center gap-2">
                   <XCircle size={16} />
                   СКАСУВАТИ
                 </button>

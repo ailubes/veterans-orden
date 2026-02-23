@@ -111,7 +111,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
         <div className="flex gap-2">
           <Link
             href="/admin/members/export"
-            className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center gap-2 rounded"
+            className="btn btn-outline flex items-center gap-2"
           >
             <Download size={18} />
             ЕКСПОРТ
@@ -119,13 +119,13 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
           {isStaffAdmin(adminProfile.staff_role) && (
             <Link
               href="/admin/members/import"
-              className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center gap-2 rounded"
+              className="btn btn-outline flex items-center gap-2"
             >
               <Upload size={18} />
               ІМПОРТ
             </Link>
           )}
-          <Link href="/admin/members/new" className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex items-center gap-2 rounded">
+          <Link href="/admin/members/new" className="btn flex items-center gap-2">
             <Plus size={18} />
             ДОДАТИ
           </Link>
@@ -209,11 +209,11 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
             <option value="patron_500">Патрон (500 грн)</option>
           </select>
           <div className="flex gap-2 w-full sm:w-auto">
-            <button type="submit" className="px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors flex-1 sm:flex-none rounded">
+            <button type="submit" className="btn flex-1 sm:flex-none">
               ФІЛЬТР
             </button>
             {(search || roleFilter || statusFilter || tierFilter) && (
-              <Link href="/admin/members" className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex-1 sm:flex-none text-center rounded">
+              <Link href="/admin/members" className="btn btn-outline flex-1 sm:flex-none text-center">
                 СКИНУТИ
               </Link>
             )}
@@ -243,7 +243,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                 }${roleFilter ? `&role=${roleFilter}` : ''}${
                   statusFilter ? `&status=${statusFilter}` : ''
                 }${tierFilter ? `&tier=${tierFilter}` : ''}`}
-                className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
+                className="btn btn-outline"
               >
                 ← НАЗАД
               </Link>
@@ -255,7 +255,7 @@ export default async function AdminMembersPage({ searchParams }: MembersPageProp
                 }${roleFilter ? `&role=${roleFilter}` : ''}${
                   statusFilter ? `&status=${statusFilter}` : ''
                 }${tierFilter ? `&tier=${tierFilter}` : ''}`}
-                className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
+                className="btn btn-outline"
               >
                 ДАЛІ →
               </Link>

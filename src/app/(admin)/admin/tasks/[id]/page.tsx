@@ -160,7 +160,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
                 РЕДАГУВАТИ
               </Link>
               {task.status === 'completed' && (
-                <button className="btn btn-outline btn-sm flex items-center gap-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-white">
+                <button className="btn btn-outline btn-sm flex items-center gap-2">
                   <CheckCircle size={16} />
                   ПІДТВЕРДИТИ
                 </button>

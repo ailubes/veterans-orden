@@ -290,7 +290,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                 <button
                   onClick={handleActivate}
                   disabled={actionLoading}
-                  className="btn flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                  className="btn flex items-center gap-2"
                 >
                   {actionLoading ? <Loader2 className="animate-spin" size={16} /> : <Play size={16} />}
                   АКТИВУВАТИ
@@ -302,7 +302,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                 <button
                   onClick={handleComplete}
                   disabled={actionLoading}
-                  className="btn flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                  className="btn flex items-center gap-2"
                 >
                   {actionLoading ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle size={16} />}
                   ЗАВЕРШИТИ
@@ -310,7 +310,7 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                 <button
                   onClick={handleCancel}
                   disabled={actionLoading}
-                  className="btn btn-outline flex items-center gap-2 text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
+                  className="btn btn-outline flex items-center gap-2"
                 >
                   <XCircle size={16} />
                   СКАСУВАТИ

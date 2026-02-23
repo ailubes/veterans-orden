@@ -647,6 +647,62 @@ nav {
 }
 
 /* ============================================================================
+   SYSTEM BUTTONS (.btn, .btn-sm, .btn-outline)
+   Offset-shadow style used across all dashboard/admin pages.
+   ============================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--panel-850);
+  color: var(--text-100);
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translate(4px, -4px);
+  box-shadow: -4px 4px 0 var(--bronze);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-100);
+}
+
+.btn-outline:hover {
+  border-color: var(--bronze);
+  box-shadow: -4px 4px 0 var(--bronze);
+  transform: translate(4px, -4px);
+}
+
+/* ============================================================================
    CTA BUTTONS
    ============================================================================ */
 

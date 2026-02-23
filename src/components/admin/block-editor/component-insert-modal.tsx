@@ -311,13 +311,13 @@ export function ComponentInsertModal({ componentType, onInsert, onClose }: Compo
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors rounded"
+              className="btn btn-outline btn-sm flex-1"
             >
               СКАСУВАТИ
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-bronze text-bg-950 text-sm font-bold hover:bg-bronze/90 transition-colors rounded"
+              className="btn btn-sm flex-1"
             >
               ВСТАВИТИ
             </button>

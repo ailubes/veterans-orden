@@ -196,7 +196,7 @@ export default function NewArticlePage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowPreview(!showPreview)}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold"
+            className="btn btn-outline flex items-center gap-2"
           >
             <Eye size={18} />
             {showPreview ? 'Редагувати' : 'Попередній перегляд'}
@@ -205,7 +205,7 @@ export default function NewArticlePage() {
           <button
             onClick={() => handleSubmit(false)}
             disabled={submitting}
-            className="flex items-center gap-2 px-4 py-2 border border-line rounded-lg hover:bg-panel-850/10 transition-colors font-bold disabled:opacity-50"
+            className="btn btn-outline flex items-center gap-2 disabled:opacity-50"
           >
             <Save size={18} />
             Зберегти чернетку
@@ -214,7 +214,7 @@ export default function NewArticlePage() {
           <button
             onClick={() => handleSubmit(true)}
             disabled={submitting}
-            className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all disabled:opacity-50"
+            className="btn flex items-center gap-2 disabled:opacity-50"
           >
             <Send size={18} />
             Опублікувати
@@ -423,7 +423,7 @@ export default function NewArticlePage() {
                 />
                 <button
                   onClick={addKeyword}
-                  className="p-2 bg-bronze text-canvas hover:shadow-[2px_2px_0px_0px_rgba(44,40,36,1)] transition-all"
+                  className="btn btn-sm"
                 >
                   <Plus size={16} />
                 </button>

@@ -238,14 +238,14 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
         <div className="flex flex-col sm:flex-row sm:justify-end gap-2 mb-4">
           <button
             onClick={handleExportExcel}
-            className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center justify-center gap-2 rounded"
+            className="btn btn-outline btn-sm flex items-center gap-2"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Експорт Excel
           </button>
           <button
             onClick={handleExportPDF}
-            className="px-4 py-2 border border-line text-text-100 text-sm font-bold hover:bg-panel-850 transition-colors flex items-center justify-center gap-2 rounded"
+            className="btn btn-outline btn-sm flex items-center gap-2"
           >
             <FileText className="w-4 h-4" />
             Експорт PDF

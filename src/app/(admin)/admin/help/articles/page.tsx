@@ -96,7 +96,7 @@ export default function AdminArticlesPage() {
 
         <Link
           href="/admin/help/articles/new"
-          className="flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold hover:shadow-[4px_4px_0px_0px_rgba(44,40,36,1)] transition-all"
+          className="btn flex items-center gap-2"
         >
           <Plus size={20} />
           Нова стаття
