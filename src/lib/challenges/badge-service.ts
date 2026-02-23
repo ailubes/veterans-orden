@@ -9,13 +9,13 @@ import type { Badge, UserBadge, BadgeRarity, BadgeCategory } from './types';
 // ----- BADGE MANAGEMENT -----
 
 /**
- * Award a badge to a user
- * Throws if user already has the badge
+ * Award a badge to a user.
+ * Uses SECURITY DEFINER RPC — idempotent (silently ignores duplicates).
  */
 export async function awardBadge(userId: string, badgeId: string): Promise<void> {
   const supabase = await createClient();
 
-  // Check if badge exists
+  // Verify badge exists (SELECT policy allows this)
   const { data: badge } = await supabase
     .from('badges')
     .select('id')
@@ -26,25 +26,10 @@ export async function awardBadge(userId: string, badgeId: string): Promise<void>
     throw new Error(`Badge not found: ${badgeId}`);
   }
 
-  // Check if user already has this badge
-  const { data: existing } = await supabase
-    .from('user_achievements')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('achievement_id', badgeId)
-    .single();
-
-  if (existing) {
-    throw new Error('User already has this badge');
-  }
-
-  // Award the badge
-  const { error } = await supabase
-    .from('user_achievements')
-    .insert({
-      user_id: userId,
-      achievement_id: badgeId,
-    });
+  const { error } = await supabase.rpc('award_badge_fn', {
+    p_user_id:  userId,
+    p_badge_id: badgeId,
+  });
 
   if (error) {
     throw new Error(`Failed to award badge: ${error.message}`);

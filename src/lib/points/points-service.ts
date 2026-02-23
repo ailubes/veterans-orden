@@ -8,7 +8,8 @@ import type {
 } from './types';
 
 /**
- * Award points to a user and create a transaction record
+ * Award points to a user and create a transaction record.
+ * Uses SECURITY DEFINER RPC to bypass RLS on points_transactions.
  */
 export async function awardPoints(params: AwardPointsParams): Promise<PointsTransaction> {
   const {
@@ -28,82 +29,43 @@ export async function awardPoints(params: AwardPointsParams): Promise<PointsTran
 
   const supabase = await createClient();
 
-  // Get current user balance
-  const { data: user, error: userError } = await supabase
-    .from('users')
-    .select('points, current_year_points')
-    .eq('id', userId)
-    .single();
+  const { data: rpcResult, error } = await supabase.rpc('award_points_fn', {
+    p_user_id:        userId,
+    p_amount:         amount,
+    p_type:           type,
+    p_reference_type: referenceType  ?? null,
+    p_reference_id:   referenceId    ?? null,
+    p_description:    description    ?? null,
+    p_created_by_id:  createdById    ?? null,
+  });
 
-  if (userError || !user) {
-    throw new Error('User not found');
+  if (error) {
+    throw new Error('Failed to award points: ' + error.message);
   }
 
-  const currentBalance = user.points || 0;
-  const newBalance = currentBalance + amount;
-
-  // Calculate year and expiration
+  const result = rpcResult as { transaction_id: string; new_balance: number };
   const now = new Date();
-  const earnedYear = now.getFullYear();
-  const expiresAt = new Date(earnedYear, 11, 31, 23, 59, 59); // Dec 31, 11:59:59 PM
-
-  // Create transaction record
-  const { data: transaction, error: transactionError } = await supabase
-    .from('points_transactions')
-    .insert({
-      user_id: userId,
-      type,
-      amount,
-      balance_after: newBalance,
-      earned_year: earnedYear,
-      expires_at: expiresAt.toISOString(),
-      reference_type: referenceType || null,
-      reference_id: referenceId || null,
-      description,
-      metadata: metadata || null,
-      created_by_id: createdById || null,
-    })
-    .select()
-    .single();
-
-  if (transactionError || !transaction) {
-    throw new Error('Failed to create transaction: ' + transactionError?.message);
-  }
-
-  // Update user balance
-  const currentYearPoints = (user.current_year_points || 0) + amount;
-  const { error: updateError } = await supabase
-    .from('users')
-    .update({
-      points: newBalance,
-      current_year_points: currentYearPoints,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId);
-
-  if (updateError) {
-    throw new Error('Failed to update user balance: ' + updateError.message);
-  }
 
   return {
-    id: transaction.id,
-    userId: transaction.user_id,
-    type: transaction.type,
-    amount: transaction.amount,
-    balanceAfter: transaction.balance_after,
-    earnedYear: transaction.earned_year,
-    expiresAt: transaction.expires_at,
-    referenceType: transaction.reference_type,
-    referenceId: transaction.reference_id,
-    description: transaction.description,
-    metadata: transaction.metadata,
-    createdAt: transaction.created_at,
-    createdById: transaction.created_by_id,
+    id: result.transaction_id,
+    userId,
+    type,
+    amount,
+    balanceAfter: result.new_balance,
+    earnedYear: now.getFullYear(),
+    expiresAt: new Date(now.getFullYear(), 11, 31, 23, 59, 59).toISOString(),
+    referenceType: referenceType || null,
+    referenceId: referenceId || null,
+    description: description || null,
+    metadata: metadata || null,
+    createdAt: now.toISOString(),
+    createdById: createdById || null,
   };
 }
 
 /**
- * Spend points from a user's balance
+ * Spend points from a user's balance.
+ * Uses SECURITY DEFINER RPC to bypass RLS on points_transactions.
  */
 export async function spendPoints(params: SpendPointsParams): Promise<PointsTransaction> {
   const { userId, amount, type, referenceType, referenceId, description, metadata } = params;
@@ -114,76 +76,40 @@ export async function spendPoints(params: SpendPointsParams): Promise<PointsTran
 
   const supabase = await createClient();
 
-  // Get current user balance
-  const { data: user, error: userError } = await supabase
-    .from('users')
-    .select('points, current_year_points')
-    .eq('id', userId)
-    .single();
+  const { data: rpcResult, error } = await supabase.rpc('spend_points_fn', {
+    p_user_id:        userId,
+    p_amount:         amount,
+    p_type:           type,
+    p_reference_type: referenceType ?? null,
+    p_reference_id:   referenceId   ?? null,
+    p_description:    description   ?? null,
+  });
 
-  if (userError || !user) {
-    throw new Error('User not found');
+  if (error) {
+    // Rethrow insufficient-points errors with a readable message
+    if (error.message.includes('insufficient points')) {
+      throw new Error(`Insufficient points. Required: ${amount}`);
+    }
+    throw new Error('Failed to spend points: ' + error.message);
   }
 
-  const currentBalance = user.points || 0;
-
-  if (currentBalance < amount) {
-    throw new Error(`Insufficient points. Available: ${currentBalance}, Required: ${amount}`);
-  }
-
-  const newBalance = currentBalance - amount;
-
-  // Create transaction record with negative amount
-  const { data: transaction, error: transactionError } = await supabase
-    .from('points_transactions')
-    .insert({
-      user_id: userId,
-      type,
-      amount: -amount, // Negative for spending
-      balance_after: newBalance,
-      reference_type: referenceType || null,
-      reference_id: referenceId || null,
-      description,
-      metadata: metadata || null,
-    })
-    .select()
-    .single();
-
-  if (transactionError || !transaction) {
-    throw new Error('Failed to create transaction: ' + transactionError?.message);
-  }
-
-  // Update user balance (subtract from current year first, then total)
-  const currentYearSpend = Math.min(user.current_year_points || 0, amount);
-  const newCurrentYearPoints = (user.current_year_points || 0) - currentYearSpend;
-
-  const { error: updateError } = await supabase
-    .from('users')
-    .update({
-      points: newBalance,
-      current_year_points: newCurrentYearPoints,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId);
-
-  if (updateError) {
-    throw new Error('Failed to update user balance: ' + updateError.message);
-  }
+  const result = rpcResult as { transaction_id: string; new_balance: number };
+  const now = new Date();
 
   return {
-    id: transaction.id,
-    userId: transaction.user_id,
-    type: transaction.type,
-    amount: transaction.amount,
-    balanceAfter: transaction.balance_after,
-    earnedYear: transaction.earned_year,
-    expiresAt: transaction.expires_at,
-    referenceType: transaction.reference_type,
-    referenceId: transaction.reference_id,
-    description: transaction.description,
-    metadata: transaction.metadata,
-    createdAt: transaction.created_at,
-    createdById: transaction.created_by_id,
+    id: result.transaction_id,
+    userId,
+    type,
+    amount: -amount,
+    balanceAfter: result.new_balance,
+    earnedYear: now.getFullYear(),
+    expiresAt: null,
+    referenceType: referenceType || null,
+    referenceId: referenceId || null,
+    description: description || null,
+    metadata: metadata || null,
+    createdAt: now.toISOString(),
+    createdById: null,
   };
 }
 
