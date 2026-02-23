@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { createServiceClient } from '@/lib/supabase/server';
 import type { Message, MessagesResponse, MessagingSettings, MessageAttachment } from '@/types/messaging';
 import { checkMessageRateLimit } from '@/lib/messaging/permissions';
 
@@ -113,9 +112,6 @@ export async function GET(
     const hasMore = (messagesData?.length || 0) > limit;
     const messagesSlice = messagesData?.slice(0, limit) || [];
 
-    // Create service client for user lookups (bypasses RLS on users table)
-    const serviceClient = createServiceClient();
-
     // Collect all unique sender IDs for batch lookup
     const senderIds = new Set<string>();
     for (const m of messagesSlice) {
@@ -126,10 +122,10 @@ export async function GET(
       if (replyTo?.sender_id) senderIds.add(replyTo.sender_id as string);
     }
 
-    // Fetch all senders in one query
+    // Fetch all senders in one query (users table readable by all authenticated users)
     const senderMap = new Map<string, Record<string, unknown>>();
     if (senderIds.size > 0) {
-      const { data: users } = await serviceClient
+      const { data: users } = await supabase
         .from('users')
         .select('id, first_name, last_name, avatar_url, sex, membership_role')
         .in('id', Array.from(senderIds));
@@ -425,10 +421,8 @@ export async function POST(
       console.error('[Messaging] Error marking messages read:', markReadError);
     }
 
-    // Increment unread counts for other participants
-    // Using service client to bypass RLS (updates other users' participant records)
-    const serviceClient = createServiceClient();
-    const { error: incrementError } = await serviceClient.rpc('increment_unread_counts', {
+    // Increment unread counts for other participants via SECURITY DEFINER function
+    const { error: incrementError } = await supabase.rpc('increment_unread_counts', {
       p_conversation_id: conversationId,
       p_sender_id: profile.id,
     });
