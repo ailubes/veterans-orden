@@ -28,8 +28,18 @@ CREATE POLICY "votes_admin_insert" ON votes
   WITH CHECK (is_admin());
 
 -- ============================================================
--- 3. vote_options — UPDATE (increment vote_count)
+-- 3. vote_options — INSERT/UPDATE/DELETE (admin), UPDATE vote_count (any auth)
 -- ============================================================
+DROP POLICY IF EXISTS "vote_options_admin_insert" ON vote_options;
+CREATE POLICY "vote_options_admin_insert" ON vote_options
+  FOR INSERT TO authenticated
+  WITH CHECK (is_admin());
+
+DROP POLICY IF EXISTS "vote_options_admin_delete" ON vote_options;
+CREATE POLICY "vote_options_admin_delete" ON vote_options
+  FOR DELETE TO authenticated
+  USING (is_admin());
+
 DROP POLICY IF EXISTS "vote_options_auth_update" ON vote_options;
 CREATE POLICY "vote_options_auth_update" ON vote_options
   FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
