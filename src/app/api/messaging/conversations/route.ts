@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { createServiceClient } from '@/lib/supabase/server';
 import type { Conversation, ConversationsResponse, CreateConversationRequest } from '@/types/messaging';
 
 export const dynamic = 'force-dynamic';
@@ -248,15 +247,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Use service client with fallback to user's session client
-    let insertClient: ReturnType<typeof createServiceClient> | typeof supabase = supabase;
-    try {
-      insertClient = createServiceClient();
-    } catch {
-      // Service client unavailable — use user's session client
-    }
-
-    const { data: conversation, error: convError } = await insertClient
+    const { data: conversation, error: convError } = await supabase
       .from('conversations')
       .insert({
         type,
@@ -287,19 +278,18 @@ export async function POST(request: Request) {
       })),
     ];
 
-    const { error: partError } = await insertClient
+    const { error: partError } = await supabase
       .from('conversation_participants')
       .insert(participants);
 
     if (partError) {
       console.error('[Messaging] Error adding participants:', partError);
-      await insertClient.from('conversations').delete().eq('id', conversation.id);
       return NextResponse.json({ error: 'Failed to add participants' }, { status: 500 });
     }
 
     // Add system message for group creation
     if (type === 'group') {
-      await insertClient.from('messages').insert({
+      await supabase.from('messages').insert({
         conversation_id: conversation.id,
         sender_id: null,
         type: 'system',

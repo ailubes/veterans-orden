@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { createServiceClient } from '@/lib/supabase/server';
 import type { Conversation } from '@/types/messaging';
 
 export const dynamic = 'force-dynamic';
@@ -132,18 +131,8 @@ export async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Create new DM conversation.
-    // Use service client as a fallback; primary path uses user's session with INSERT policies.
-    let serviceClient: ReturnType<typeof createServiceClient> | null = null;
-    try {
-      serviceClient = createServiceClient();
-    } catch {
-      // Service client unavailable — will use user's supabase client
-    }
-
-    const insertClient = serviceClient ?? supabase;
-
-    const { data: conversation, error: convError } = await insertClient
+    // Create new DM conversation using user's session (RLS INSERT policies allow this)
+    const { data: conversation, error: convError } = await supabase
       .from('conversations')
       .insert({
         type: 'direct',
@@ -158,8 +147,8 @@ export async function GET(
       return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
     }
 
-    // Add both participants
-    const { error: partError } = await insertClient
+    // Add both participants (allowed by conv_parts_auth_insert: creator can add any participant)
+    const { error: partError } = await supabase
       .from('conversation_participants')
       .insert([
         { conversation_id: conversation.id, user_id: profile.id, role: 'owner' },
@@ -168,7 +157,6 @@ export async function GET(
 
     if (partError) {
       console.error('[Messaging] Error adding participants:', partError);
-      await insertClient.from('conversations').delete().eq('id', conversation.id);
       return NextResponse.json({ error: 'Failed to create conversation' }, { status: 500 });
     }
 
