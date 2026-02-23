@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, Vote, Edit2, Trash2, BarChart3 } from 'lucide-react';
+import { Plus, Vote, Edit2, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
+import { DeleteVoteButton } from './delete-vote-button';
 
 export default async function AdminVotesPage() {
   const supabase = await createClient();
@@ -129,9 +130,7 @@ export default async function AdminVotesPage() {
                   >
                     <Edit2 size={16} />
                   </Link>
-                  <button className="p-2 border-2 border-red-200 text-red-500 hover:bg-red-50">
-                    <Trash2 size={16} />
-                  </button>
+                  <DeleteVoteButton voteId={vote.id} voteTitle={vote.title} variant="row" />
                 </div>
               </div>
             ))}
@@ -207,12 +206,7 @@ export default async function AdminVotesPage() {
                           >
                             <Edit2 size={16} />
                           </Link>
-                          <button
-                            className="p-2 hover:bg-red-50 rounded text-red-500"
-                            title="Видалити"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                          <DeleteVoteButton voteId={vote.id} voteTitle={vote.title} />
                         </div>
                       </td>
                     </tr>
