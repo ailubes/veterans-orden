@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { createServiceClient } from '@/lib/supabase/server';
-import { canInitiateDMs, canCreateGroupChats, canMessageUser, isRegionalLeaderMembership } from '@/lib/messaging/permissions';
-import type { Conversation, ConversationsResponse, CreateConversationRequest, MessagingSettings } from '@/types/messaging';
-import type { StaffRole } from '@/lib/permissions-utils';
-import type { MembershipRole } from '@/lib/constants';
+import type { Conversation, ConversationsResponse, CreateConversationRequest } from '@/types/messaging';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,16 +71,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Database error' }, { status: 500 });
     }
 
-    // Create service client for user lookups (bypasses RLS on users table)
-    const serviceClient = createServiceClient();
-
     // OPTIMIZATION: Batch fetch all other participants for DMs to avoid N+1 queries
-    // Collect all conversation IDs for DMs
     const conversationMap = new Map();
     const dmConversationIds: string[] = [];
 
     for (const pr of (participantRecords || [])) {
-      // Handle conversations - it may be an array or object depending on Supabase typing
       const convData = pr.conversations;
       const conv = (Array.isArray(convData) ? convData[0] : convData) as Record<string, unknown>;
 
@@ -100,7 +92,7 @@ export async function GET(request: Request) {
     const otherParticipantsMap = new Map();
 
     if (dmConversationIds.length > 0) {
-      // SINGLE batch query for all other participants
+      // Batch query for all other participants
       const { data: otherParts } = await supabase
         .from('conversation_participants')
         .select('conversation_id, user_id')
@@ -111,16 +103,14 @@ export async function GET(request: Request) {
       const userIds = (otherParts || []).map(p => p.user_id);
 
       if (userIds.length > 0) {
-        // SINGLE batch query for all user details
-        const { data: usersData } = await serviceClient
+        // users table is readable by all authenticated users
+        const { data: usersData } = await supabase
           .from('users')
           .select('id, first_name, last_name, avatar_url, sex, membership_role')
           .in('id', userIds);
 
-        // Map users by ID for O(1) lookup
         const usersById = new Map((usersData || []).map(u => [u.id, u]));
 
-        // Map other participants by conversation_id
         for (const part of (otherParts || [])) {
           const userData = usersById.get(part.user_id);
           if (userData) {
@@ -137,11 +127,10 @@ export async function GET(request: Request) {
       }
     }
 
-    // Build conversations with pre-fetched data (no more queries!)
+    // Build conversations with pre-fetched data
     const conversations: Conversation[] = Array.from(conversationMap.values()).map(({ pr, conv }) => {
       let otherParticipant = null;
 
-      // For DMs, get the other participant from pre-fetched map
       if (conv.type === 'direct') {
         otherParticipant = otherParticipantsMap.get(conv.id as string) || null;
       }
@@ -187,7 +176,8 @@ export async function GET(request: Request) {
 
 /**
  * POST /api/messaging/conversations
- * Create a new conversation (DM or group)
+ * Create a new conversation (DM or group).
+ * All authenticated members can message each other freely.
  */
 export async function POST(request: Request) {
   try {
@@ -197,19 +187,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user profile with staff_role
+    // Get user profile
     const { data: profile } = await supabase
       .from('users')
-      .select('id, membership_role, staff_role, referred_by_id, group_id')
+      .select('id')
       .eq('auth_id', user.id)
       .single();
 
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
-
-    const membershipRole = (profile.membership_role || 'supporter') as MembershipRole;
-    const staffRole = (profile.staff_role || 'none') as StaffRole;
 
     // Parse request body
     const body: CreateConversationRequest = await request.json();
@@ -222,54 +209,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get messaging settings
-    const { data: settingsRows } = await supabase
-      .from('organization_settings')
-      .select('key, value')
-      .like('key', 'messaging_%');
-
-    const settings: MessagingSettings = {
-      messaging_enabled: true,
-      messaging_dm_enabled: true,
-      messaging_group_chat_enabled: true,
-      messaging_dm_initiator_roles: ['network_leader', 'regional_leader', 'national_leader', 'network_guide'],
-      messaging_group_creator_roles: ['network_leader', 'regional_leader', 'national_leader', 'network_guide'],
-      messaging_same_group_enabled: false,
-      messaging_cross_group_enabled: false,
-      messaging_attachments_enabled: true,
-      messaging_max_attachment_size_mb: 10,
-      messaging_allowed_attachment_types: [],
-      messaging_rate_limit_messages_per_minute: 30,
-      messaging_max_group_participants: 100,
-      messaging_edit_window_minutes: 15,
-    };
-
-    for (const row of settingsRows || []) {
-      const key = row.key as keyof MessagingSettings;
-      try {
-        (settings as unknown as Record<string, unknown>)[key] = JSON.parse(row.value as string);
-      } catch {
-        // Keep default
-      }
-    }
-
-    // Check if messaging is enabled
-    if (!settings.messaging_enabled) {
-      return NextResponse.json(
-        { error: 'Messaging is disabled' },
-        { status: 403 }
-      );
-    }
-
-    // Validate permissions based on type
     if (type === 'direct') {
-      if (!canInitiateDMs(membershipRole, staffRole, settings)) {
-        return NextResponse.json(
-          { error: 'You do not have permission to start direct messages' },
-          { status: 403 }
-        );
-      }
-
       if (participantIds.length !== 1) {
         return NextResponse.json(
           { error: 'Direct messages must have exactly one other participant' },
@@ -277,7 +217,7 @@ export async function POST(request: Request) {
         );
       }
 
-      // Check for existing DM
+      // Return existing DM if one exists
       const otherUserId = participantIds[0];
       const { data: existingDM } = await supabase
         .rpc('find_existing_dm', {
@@ -289,77 +229,17 @@ export async function POST(request: Request) {
         return NextResponse.json({ conversation: existingDM[0] });
       }
 
-      // Validate that user can message this recipient
+      // Verify recipient exists
       const { data: recipient } = await supabase
         .from('users')
-        .select('id, membership_role, referred_by_id, group_id')
+        .select('id')
         .eq('id', otherUserId)
         .single();
 
       if (!recipient) {
         return NextResponse.json({ error: 'Recipient not found' }, { status: 404 });
       }
-
-      // Check if recipient is a direct referral of sender
-      const isDirectReferral = recipient.referred_by_id === profile.id;
-
-      // Check if recipient is in sender's referral tree (for regional leaders)
-      let isInReferralTree = isDirectReferral; // Direct referrals are always in tree
-      if (!isInReferralTree && isRegionalLeaderMembership(membershipRole)) {
-        const { data: treeCheck } = await supabase.rpc('is_in_referral_tree', {
-          p_referrer_id: profile.id,
-          p_user_id: otherUserId,
-        });
-        isInReferralTree = treeCheck === true;
-      }
-
-      // Get sender's direct referral count (for members with 2+ referrals rule)
-      const { count: referralCount } = await supabase
-        .from('users')
-        .select('id', { count: 'exact', head: true })
-        .eq('referred_by_id', profile.id);
-
-      // Check if user is in a group led by sender
-      const { data: leaderGroups } = await supabase
-        .from('groups')
-        .select('id')
-        .eq('leader_id', profile.id);
-
-      const isInLeaderGroup = leaderGroups?.some((g) => g.id === recipient.group_id) || false;
-
-      const canMessage = canMessageUser({
-        senderMembershipRole: membershipRole,
-        senderStaffRole: staffRole,
-        senderReferralCount: referralCount || 0,
-        recipientMembershipRole: recipient.membership_role as MembershipRole,
-        isDirectReferral,
-        isInReferralTree,
-        isInLeaderGroup,
-        isSameGroup: profile.group_id === recipient.group_id,
-        settings,
-      });
-
-      if (!canMessage) {
-        return NextResponse.json(
-          { error: 'You do not have permission to message this user' },
-          { status: 403 }
-        );
-      }
     } else if (type === 'group') {
-      if (!canCreateGroupChats(membershipRole, staffRole, settings)) {
-        return NextResponse.json(
-          { error: 'You do not have permission to create group chats' },
-          { status: 403 }
-        );
-      }
-
-      if (participantIds.length > settings.messaging_max_group_participants - 1) {
-        return NextResponse.json(
-          { error: `Maximum ${settings.messaging_max_group_participants} participants allowed` },
-          { status: 400 }
-        );
-      }
-
       if (!name) {
         return NextResponse.json(
           { error: 'Group name is required' },
@@ -368,11 +248,15 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create conversation using service client to bypass RLS
-    // (we've already validated permissions above)
-    const serviceClient = createServiceClient();
+    // Use service client with fallback to user's session client
+    let insertClient: ReturnType<typeof createServiceClient> | typeof supabase = supabase;
+    try {
+      insertClient = createServiceClient();
+    } catch {
+      // Service client unavailable — use user's session client
+    }
 
-    const { data: conversation, error: convError } = await serviceClient
+    const { data: conversation, error: convError } = await insertClient
       .from('conversations')
       .insert({
         type,
@@ -403,20 +287,19 @@ export async function POST(request: Request) {
       })),
     ];
 
-    const { error: partError } = await serviceClient
+    const { error: partError } = await insertClient
       .from('conversation_participants')
       .insert(participants);
 
     if (partError) {
       console.error('[Messaging] Error adding participants:', partError);
-      // Rollback conversation creation
-      await serviceClient.from('conversations').delete().eq('id', conversation.id);
+      await insertClient.from('conversations').delete().eq('id', conversation.id);
       return NextResponse.json({ error: 'Failed to add participants' }, { status: 500 });
     }
 
     // Add system message for group creation
     if (type === 'group') {
-      await serviceClient.from('messages').insert({
+      await insertClient.from('messages').insert({
         conversation_id: conversation.id,
         sender_id: null,
         type: 'system',
