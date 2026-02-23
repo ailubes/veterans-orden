@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 interface RouteContext {
@@ -59,10 +59,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (
-      adminProfile.role !== 'super_admin' &&
-      adminProfile.role !== 'admin'
-    ) {
+    if (!isStaffAdmin(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'Only admins can edit votes' },
         { status: 403 }
@@ -159,10 +156,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    if (
-      adminProfile.role !== 'super_admin' &&
-      adminProfile.role !== 'admin'
-    ) {
+    if (!isStaffAdmin(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'Only admins can delete votes' },
         { status: 403 }

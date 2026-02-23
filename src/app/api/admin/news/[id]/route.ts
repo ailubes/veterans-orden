@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin, isStaffSuperAdmin } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 export async function PATCH(
@@ -30,11 +30,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'Article not found' }, { status: 404 });
     }
 
-    // Check permissions - super_admin, admin, or regional_leader who created it
+    // Check permissions - staff admin, or regional leader who created it
     const canEdit =
-      adminProfile.role === 'super_admin' ||
-      adminProfile.role === 'admin' ||
-      (adminProfile.role === 'regional_leader' &&
+      isStaffAdmin(adminProfile.staff_role) ||
+      (!isStaffAdmin(adminProfile.staff_role) &&
         existingArticle.author_id === adminProfile.id);
 
     if (!canEdit) {
@@ -143,7 +142,7 @@ export async function DELETE(
     }
 
     // Only super_admin can delete news
-    if (adminProfile.role !== 'super_admin') {
+    if (!isStaffSuperAdmin(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'Forbidden - only super admins can delete news' },
         { status: 403 }

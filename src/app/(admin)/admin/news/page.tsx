@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, FileText, Edit2, Trash2, Eye, ExternalLink } from 'lucide-react';
+import { Plus, FileText, Edit2, Eye, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
+import { DeleteAdminButton } from '@/components/admin/delete-admin-button';
 
 export default async function AdminNewsPage() {
   const supabase = await createClient();
@@ -162,12 +163,10 @@ export default async function AdminNewsPage() {
                         >
                           <Edit2 size={16} />
                         </Link>
-                        <button
-                          className="p-2 hover:bg-red-50 rounded text-red-500"
-                          title="Видалити"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteAdminButton
+                          apiPath={`/api/admin/news/${article.id}`}
+                          itemTitle={article.title}
+                        />
                       </div>
                     </td>
                   </tr>

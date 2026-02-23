@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
-import { Plus, CheckSquare, Edit2, Trash2, Eye, FileCheck, ExternalLink } from 'lucide-react';
+import { Plus, CheckSquare, Edit2, Eye, FileCheck, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { DeleteAdminButton } from '@/components/admin/delete-admin-button';
 
 /**
  * Extracts and shortens a URL from text for display
@@ -227,9 +228,11 @@ export default async function AdminTasksPage() {
                   >
                     <Edit2 size={16} />
                   </Link>
-                  <button className="p-2 border-2 border-red-200 text-red-500 hover:bg-red-50">
-                    <Trash2 size={16} />
-                  </button>
+                  <DeleteAdminButton
+                    apiPath={`/api/admin/tasks/${task.id}`}
+                    itemTitle={task.title}
+                    variant="row"
+                  />
                 </div>
               </div>
             ))}
@@ -330,12 +333,10 @@ export default async function AdminTasksPage() {
                           >
                             <Edit2 size={16} />
                           </Link>
-                          <button
-                            className="p-2 hover:bg-red-50 rounded text-red-500"
-                            title="Видалити"
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                          <DeleteAdminButton
+                            apiPath={`/api/admin/tasks/${task.id}`}
+                            itemTitle={task.title}
+                          />
                         </div>
                       </td>
                     </tr>

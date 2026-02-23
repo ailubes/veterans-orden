@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest, isStaffAdmin } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isStaffAdmin, isStaffSuperAdmin } from '@/lib/permissions';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
 
 export async function PATCH(
@@ -131,7 +131,7 @@ export async function DELETE(
     }
 
     // Only super_admin can delete tasks
-    if (adminProfile.role !== 'super_admin') {
+    if (!isStaffSuperAdmin(adminProfile.staff_role)) {
       return NextResponse.json(
         { error: 'Forbidden - only super admins can delete tasks' },
         { status: 403 }
