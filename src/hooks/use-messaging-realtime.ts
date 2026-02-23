@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useCallback, useRef } from 'react';
-import { createClient, RealtimeChannel } from '@supabase/supabase-js';
+import { type RealtimeChannel } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/client';
 import type { Message, UserPresence } from '@/types/messaging';
 
 interface UseMessagingRealtimeProps {
@@ -36,11 +37,9 @@ export function useMessagingRealtime({
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isConnectedRef = useRef(false);
 
-  // Create Supabase client for realtime
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  // Use singleton Supabase client — avoids creating a new GoTrueClient on every render
+  const supabaseRef = useRef(createClient());
+  const supabase = supabaseRef.current;
 
   // Handle incoming realtime events
   const handleInsert = useCallback((payload: { new: Record<string, unknown> }) => {
@@ -147,7 +146,7 @@ export function useMessagingRealtime({
         },
         handleUpdate
       )
-      .on('broadcast', { event: 'typing' }, (payload) => {
+      .on('broadcast', { event: 'typing' }, (payload: { payload: Record<string, unknown> }) => {
         const { userId: typingUserId, isTyping } = payload.payload as {
           userId: string;
           isTyping: boolean;
@@ -161,7 +160,7 @@ export function useMessagingRealtime({
           onTypingStop(typingUserId);
         }
       })
-      .subscribe((status) => {
+      .subscribe((status: string) => {
         isConnectedRef.current = status === 'SUBSCRIBED';
       });
 
@@ -186,7 +185,7 @@ export function useMessagingRealtime({
           schema: 'public',
           table: 'user_presence',
         },
-        (payload) => {
+        (payload: { new: Record<string, unknown> }) => {
           if (!onPresenceChange) return;
 
           const p = payload.new as Record<string, unknown>;

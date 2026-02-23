@@ -44,7 +44,7 @@ export function AuthNav() {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_event: import('@supabase/supabase-js').AuthChangeEvent, session: import('@supabase/supabase-js').Session | null) => {
         setUser(session?.user ?? null);
         if (session?.user) {
           const { data } = await supabase
