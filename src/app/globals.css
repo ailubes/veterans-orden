@@ -657,8 +657,8 @@ nav {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: var(--panel-850);
-  color: var(--text-100);
+  background: var(--bronze);
+  color: #1a1008;
   font-weight: 700;
   font-family: 'IBM Plex Mono', monospace;
   text-transform: uppercase;
@@ -674,7 +674,7 @@ nav {
 
 .btn:hover {
   transform: translate(4px, -4px);
-  box-shadow: -4px 4px 0 var(--bronze);
+  box-shadow: -4px 4px 0 var(--bronze-2);
 }
 
 .btn:disabled,
@@ -692,13 +692,14 @@ nav {
 
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--line);
-  color: var(--text-100);
+  border: 1px solid var(--bronze);
+  color: var(--bronze);
 }
 
 .btn-outline:hover {
+  background: var(--bronze-alpha);
   border-color: var(--bronze);
-  box-shadow: -4px 4px 0 var(--bronze);
+  box-shadow: -4px 4px 0 var(--bronze-2);
   transform: translate(4px, -4px);
 }
 
