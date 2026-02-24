@@ -66,7 +66,7 @@ export default function HelpHomePage() {
   return (
     <div className="space-y-12">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-br from-white to-accent/5 border border-line rounded-lg p-8 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-panel-850 to-accent/5 border border-line rounded-lg p-8 relative overflow-hidden">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -84,7 +84,7 @@ export default function HelpHomePage() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t-2 border-line/20">
-          <div className="flex items-start gap-3 p-4 bg-white/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-md transition-all">
+          <div className="flex items-start gap-3 p-4 bg-panel-850/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-[-3px_3px_0_var(--bronze)/20] transition-all">
             <div className="p-3 bg-bronze/20 rounded">
               <Rocket className="text-bronze" size={24} />
             </div>
@@ -93,7 +93,7 @@ export default function HelpHomePage() {
               <p className="text-sm text-muted-500">Перші кроки на платформі</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-4 bg-white/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-md transition-all">
+          <div className="flex items-start gap-3 p-4 bg-panel-850/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-[-3px_3px_0_var(--bronze)/20] transition-all">
             <div className="p-3 bg-bronze/20 rounded">
               <Zap className="text-bronze" size={24} />
             </div>
@@ -102,7 +102,7 @@ export default function HelpHomePage() {
               <p className="text-sm text-muted-500">Детальні інструкції</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-4 bg-white/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-md transition-all">
+          <div className="flex items-start gap-3 p-4 bg-panel-850/80 border border-line/20 rounded hover:border-bronze/50 hover:shadow-[-3px_3px_0_var(--bronze)/20] transition-all">
             <div className="p-3 bg-bronze/20 rounded">
               <HelpCircle className="text-bronze" size={24} />
             </div>
@@ -129,7 +129,7 @@ export default function HelpHomePage() {
               <Link
                 key={category.id}
                 href={`/help/${category.slug}`}
-                className="bg-white border border-line rounded-lg p-6 hover:border-bronze hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.3)] transition-all group relative"
+                className="bg-panel-850 border border-line rounded-lg p-6 hover:border-bronze hover:shadow-[-4px_4px_0_var(--bronze)/30] transition-all group relative"
               >
                 <div className="joint joint-tl" />
                 <div className="joint joint-tr" />
@@ -168,7 +168,7 @@ export default function HelpHomePage() {
               <Link
                 key={article.id}
                 href={`/help/${article.category?.slug}/${article.slug}`}
-                className="bg-white border border-line rounded-lg p-6 hover:border-bronze hover:shadow-[4px_4px_0px_0px_rgba(212,93,58,0.2)] transition-all group relative"
+                className="bg-panel-850 border border-line rounded-lg p-6 hover:border-bronze hover:shadow-[-4px_4px_0_var(--bronze)/20] transition-all group relative"
               >
                 <div className="joint joint-tl" />
                 <div className="joint joint-br" />
@@ -206,7 +206,7 @@ export default function HelpHomePage() {
             Нові статті
           </h2>
 
-          <div className="bg-white border border-line rounded-lg relative">
+          <div className="bg-panel-850 border border-line rounded-lg relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 

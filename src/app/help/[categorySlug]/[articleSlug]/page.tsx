@@ -102,7 +102,7 @@ export default function ArticleDetailPage() {
 
   if (error || !article) {
     return (
-      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -120,7 +120,7 @@ export default function ArticleDetailPage() {
       {/* Main Content */}
       <div className="lg:col-span-2 space-y-8">
         {/* Article Header */}
-        <div className="bg-white border border-line rounded-lg p-8 relative">
+        <div className="bg-panel-850 border border-line rounded-lg p-8 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 
@@ -181,7 +181,7 @@ export default function ArticleDetailPage() {
         )}
 
         {/* Article Content */}
-        <div className="bg-white border border-line rounded-lg p-8 relative prose prose-invert max-w-none">
+        <div className="bg-panel-850 border border-line rounded-lg p-8 relative">
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 
@@ -199,7 +199,7 @@ export default function ArticleDetailPage() {
       <div className="lg:col-span-1 space-y-6">
         {/* Table of Contents */}
         {tableOfContents.length > 0 && (
-          <div className="bg-white border border-line rounded-lg p-6 sticky top-4 relative">
+          <div className="bg-panel-850 border border-line rounded-lg p-6 sticky top-4 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />
 
@@ -225,7 +225,7 @@ export default function ArticleDetailPage() {
 
         {/* Related Articles */}
         {relatedArticles.length > 0 && (
-          <div className="bg-white border border-line rounded-lg p-6 relative">
+          <div className="bg-panel-850 border border-line rounded-lg p-6 relative">
             <div className="joint joint-tl" />
             <div className="joint joint-br" />
 

@@ -2890,3 +2890,133 @@ nav {
   font-weight: 600;
   color: var(--text-100);
 }
+
+/* ============================================================================
+   HELP ARTICLE CONTENT - rendered HTML from help articles
+   ============================================================================ */
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  color: var(--text-100);
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-content h1 { font-size: 1.875rem; }
+.article-content h2 { font-size: 1.5rem; border-bottom: 2px solid var(--line); padding-bottom: 0.5rem; }
+.article-content h3 { font-size: 1.25rem; }
+.article-content h4 { font-size: 1.125rem; }
+
+.article-content p {
+  margin-bottom: 1rem;
+  color: var(--text-100);
+  line-height: 1.75;
+}
+
+.article-content ul,
+.article-content ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  color: var(--text-100);
+}
+
+.article-content ul { list-style-type: disc; }
+.article-content ol { list-style-type: decimal; }
+
+.article-content li {
+  margin-bottom: 0.375rem;
+  line-height: 1.7;
+}
+
+.article-content strong,
+.article-content b {
+  font-weight: 700;
+  color: var(--text-100);
+}
+
+.article-content em,
+.article-content i {
+  font-style: italic;
+}
+
+.article-content a {
+  color: var(--bronze);
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.article-content a:hover {
+  color: var(--bronze-2);
+}
+
+.article-content blockquote {
+  border-left: 4px solid var(--bronze);
+  padding-left: 1rem;
+  margin: 1.25rem 0;
+  color: var(--muted-500);
+  font-style: italic;
+}
+
+.article-content code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875em;
+  background: var(--panel-850);
+  border: 1px solid var(--line);
+  padding: 0.125rem 0.375rem;
+  color: var(--bronze);
+}
+
+.article-content pre {
+  background: var(--panel-900);
+  border: 1px solid var(--line);
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.article-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-100);
+}
+
+.article-content hr {
+  border: none;
+  border-top: 2px solid var(--line);
+  margin: 1.5rem 0;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.article-content th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--line);
+  background: var(--panel-900);
+  color: var(--text-100);
+  text-align: left;
+}
+
+.article-content td {
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--line);
+  color: var(--text-100);
+}
+
+.article-content tr:nth-child(even) td {
+  background: var(--panel-900);
+}

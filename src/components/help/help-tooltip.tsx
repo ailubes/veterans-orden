@@ -142,7 +142,7 @@ export function HelpTooltip({
         {isOpen && (
           <div
             ref={popoverRef}
-            className={`absolute z-50 w-80 bg-white border border-line rounded-lg shadow-lg ${getPositionClasses()}`}
+            className={`absolute z-50 w-80 bg-panel-850 border border-line rounded-lg shadow-lg ${getPositionClasses()}`}
           >
             <div className="joint joint-tl" />
             <div className="joint joint-tr" />

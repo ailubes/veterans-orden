@@ -43,7 +43,7 @@ export function VideoEmbed({ url, title }: VideoEmbedProps) {
   }
 
   return (
-    <div className="bg-white border border-line rounded-lg relative overflow-hidden">
+    <div className="bg-panel-850 border border-line rounded-lg relative overflow-hidden">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />

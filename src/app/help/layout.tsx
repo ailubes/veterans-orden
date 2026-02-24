@@ -31,7 +31,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-panel-900">
       {/* Header */}
-      <div className="border-b-2 border-line bg-white">
+      <div className="border-b-2 border-line bg-panel-850">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -59,7 +59,7 @@ export default function HelpLayout({ children }: { children: React.ReactNode }) 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="bg-white border border-line rounded-lg p-4 sticky top-4">
+            <div className="bg-panel-850 border border-line rounded-lg p-4 sticky top-4">
               <div className="joint joint-tl" />
               <div className="joint joint-tr" />
 

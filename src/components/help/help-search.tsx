@@ -188,7 +188,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
       {isOpen && results.length > 0 && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white border border-line rounded-lg shadow-lg max-h-96 overflow-y-auto z-50"
+          className="absolute top-full left-0 right-0 mt-2 bg-panel-850 border border-line rounded-lg shadow-lg max-h-96 overflow-y-auto z-50"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
@@ -250,7 +250,7 @@ export function HelpSearch({ placeholder = 'Пошук статей...', onSearc
       {isOpen && !isLoading && query.trim().length >= 2 && results.length === 0 && (
         <div
           ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white border border-line rounded-lg p-6 text-center z-50"
+          className="absolute top-full left-0 right-0 mt-2 bg-panel-850 border border-line rounded-lg p-6 text-center z-50"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />

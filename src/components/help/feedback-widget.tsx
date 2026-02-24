@@ -60,7 +60,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
 
   if (submitted) {
     return (
-      <div className="bg-white border border-line rounded-lg p-6 text-center relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-6 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -74,7 +74,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
   }
 
   return (
-    <div className="bg-white border border-line rounded-lg p-6 relative">
+    <div className="bg-panel-850 border border-line rounded-lg p-6 relative">
       <div className="joint joint-tl" />
       <div className="joint joint-tr" />
       <div className="joint joint-bl" />

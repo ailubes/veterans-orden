@@ -67,7 +67,7 @@ function SearchResults() {
 
   if (!query.trim()) {
     return (
-      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -91,7 +91,7 @@ function SearchResults() {
 
   if (error) {
     return (
-      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -105,7 +105,7 @@ function SearchResults() {
   return (
     <div className="space-y-8">
       {/* Search Header */}
-      <div className="bg-white border border-line rounded-lg p-8 relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-8 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -134,7 +134,7 @@ function SearchResults() {
             <Link
               key={result.id}
               href={`/help/${result.categorySlug}/${result.slug}`}
-              className="block bg-white border border-line rounded-lg p-6 hover:border-bronze transition-colors group relative"
+              className="block bg-panel-850 border border-line rounded-lg p-6 hover:border-bronze transition-colors group relative"
             >
               <div className="joint joint-tl" />
               <div className="joint joint-br" />
@@ -183,7 +183,7 @@ function SearchResults() {
           ))}
         </div>
       ) : (
-        <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+        <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
 

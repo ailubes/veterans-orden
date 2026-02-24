@@ -74,7 +74,7 @@ export default function CategoryPage() {
 
   if (error || !category) {
     return (
-      <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -91,7 +91,7 @@ export default function CategoryPage() {
   return (
     <div className="space-y-8">
       {/* Category Header */}
-      <div className="bg-white border border-line rounded-lg p-8 relative">
+      <div className="bg-panel-850 border border-line rounded-lg p-8 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
@@ -124,7 +124,7 @@ export default function CategoryPage() {
               <a
                 key={subcat.id}
                 href={`/help/${subcat.slug}`}
-                className="bg-white border border-line rounded-lg p-4 hover:border-bronze transition-colors group relative"
+                className="bg-panel-850 border border-line rounded-lg p-4 hover:border-bronze transition-colors group relative"
               >
                 <div className="joint joint-tl" />
                 <div className="joint joint-br" />
@@ -152,7 +152,7 @@ export default function CategoryPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white border border-line rounded-lg p-12 text-center relative">
+        <div className="bg-panel-850 border border-line rounded-lg p-12 text-center relative">
           <div className="joint joint-tl" />
           <div className="joint joint-br" />
 
