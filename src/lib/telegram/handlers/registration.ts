@@ -21,7 +21,7 @@ import {
   cancelKeyboard,
   mainMenuKeyboard,
 } from '../keyboards';
-import { Keyboard } from 'grammy';
+import { Keyboard, InlineKeyboard } from 'grammy';
 
 type BotContext = Context & { session: BotSession };
 
@@ -153,7 +153,19 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
   bot.callbackQuery(/^oblast:(.+)$/, async (ctx) => {
     await ctx.answerCallbackQuery();
     const session = ctx.session;
-    if (session.state !== 'reg:await_oblast') return;
+    if (session.state !== 'reg:await_oblast') {
+      // Session was lost (e.g. bot restarted) — ask user to start over
+      await ctx.editMessageText(
+        '⚠️ Сесія завершилась. Будь ласка, почніть реєстрацію знову за допомогою /start',
+        {
+          parse_mode: 'HTML',
+          reply_markup: new InlineKeyboard()
+            .text('📝 Зареєструватись', 'register')
+            .text('↩️ Головне меню', 'menu:main'),
+        }
+      );
+      return;
+    }
 
     const oblastId = ctx.match[1];
     const fromUser = ctx.from;
