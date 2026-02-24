@@ -30,7 +30,7 @@ type BotContext = Context & { session: BotSession };
 export function registerCallbackHandlers(bot: Bot<BotContext>) {
   // Cancel any ongoing flow
   bot.callbackQuery('cancel', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     session.state = undefined;
     session.regData = undefined;
@@ -39,7 +39,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Help inline button
   bot.callbackQuery('help', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     await ctx.editMessageText(msg.help, {
       parse_mode: 'HTML',
       reply_markup: mainMenuKeyboard(),
@@ -48,7 +48,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Register flow start
   bot.callbackQuery('register', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     session.state = 'reg:await_phone';
     session.regData = {};
@@ -66,7 +66,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Link: show method options
   bot.callbackQuery('link:start', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     await ctx.editMessageText(msg.linkAskMethod, {
       parse_mode: 'HTML',
       reply_markup: linkMethodsKeyboard(),
@@ -75,7 +75,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Link via email
   bot.callbackQuery('link:email', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     session.state = 'link:await_email';
     await ctx.editMessageText(msg.linkAskEmail, {
@@ -86,7 +86,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Link via phone
   bot.callbackQuery('link:phone', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     session.state = 'link:await_phone';
     await ctx.editMessageText(msg.linkAskPhone, {
@@ -100,7 +100,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Link via code from website
   bot.callbackQuery('link:code', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     session.state = 'link:await_code';
     await ctx.editMessageText(msg.linkAskCode, {
@@ -111,7 +111,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Main menu navigation
   bot.callbackQuery('menu:main', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -136,7 +136,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
   });
 
   bot.callbackQuery('menu:stats', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -178,7 +178,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
   });
 
   bot.callbackQuery('menu:referrals', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -204,7 +204,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
   });
 
   bot.callbackQuery('menu:invite', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -230,7 +230,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
   });
 
   bot.callbackQuery('menu:votes', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -256,7 +256,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
   });
 
   bot.callbackQuery('menu:settings', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -290,7 +290,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Notifications toggle
   bot.callbackQuery('notif:toggle', async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
 
@@ -332,7 +332,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Vote: open details
   bot.callbackQuery(/^vote_open:(.+)$/, async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const voteId = ctx.match[1];
 
     const supabase = createBotAdminClient();
@@ -355,7 +355,7 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
 
   // Vote: cast vote
   bot.callbackQuery(/^vote:([^:]+):(.+)$/, async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const fromUser = ctx.from;
     const voteId = ctx.match[1];

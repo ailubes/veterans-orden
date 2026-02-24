@@ -43,10 +43,8 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
-        // Check if phone already registered
         const existing = await getUserByPhone(phone);
         if (existing) {
-          // Offer to link instead
           await ctx.reply(msg.regPhoneExists(phone), {
             parse_mode: 'HTML',
             reply_markup: {
@@ -59,6 +57,7 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
+        // Update state BEFORE replies so it persists even if reply fails
         session.regData = { ...session.regData, phone };
         session.state = 'reg:await_email';
         await ctx.reply(msg.regAskEmail(phone), {
@@ -74,7 +73,6 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
-        // Check if email already registered
         const existing = await getUserByEmail(text);
         if (existing) {
           await ctx.reply(
@@ -86,16 +84,17 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
 
         const code = generateCode(6);
         storeVerificationCode(text, code);
-        // TODO: send actual email; for now show in chat (dev mode)
+        console.log(`[TG REG] Email OTP for ${text}: ${code}`);
+
+        // Update state BEFORE replies
+        session.regData = { ...session.regData, email: text };
+        session.state = 'reg:await_email_code';
+
         await ctx.reply(msg.regEmailSent(text), {
           parse_mode: 'HTML',
           reply_markup: cancelKeyboard(),
         });
-        // Show code in test mode
         await ctx.reply(msg.regEmailCodeHint(code), { parse_mode: 'HTML' });
-
-        session.regData = { ...session.regData, email: text };
-        session.state = 'reg:await_email_code';
         break;
       }
 
@@ -115,6 +114,7 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
+        // Update state BEFORE reply
         session.state = 'reg:await_name';
         await ctx.reply(msg.regAskName, {
           parse_mode: 'HTML',
@@ -136,8 +136,9 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
         const firstName = parts[0];
         const lastName = parts.slice(1).join(' ');
 
-        // Fetch oblasts and store in session for stable numbering
         const oblasts = await getOblasts();
+
+        // Update state BEFORE reply
         session.regData = { ...session.regData, firstName, lastName, oblastList: oblasts };
         session.state = 'reg:await_oblast';
 
@@ -156,7 +157,6 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
-        // Match by number (1-based) or by name (case-insensitive)
         const num = parseInt(text, 10);
         let matched: { id: string; name: string } | undefined;
 
@@ -175,6 +175,7 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
+        // Update state BEFORE reply
         session.regData = { ...session.regData, oblastId: matched.id };
         session.state = 'reg:await_settlement';
 
@@ -197,6 +198,10 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
         const fromUser = ctx.from;
         const regData = session.regData;
 
+        // Clear state BEFORE the async DB call so no duplicate registrations on retry
+        session.state = 'reg:creating';
+        session.regData = { ...session.regData, settlementName: text };
+
         const newUser = await createUserFromTelegram({
           telegramId: fromUser.id,
           telegramUsername: fromUser.username,
@@ -211,12 +216,11 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
         });
 
         if (!newUser) {
+          session.state = 'reg:await_settlement'; // allow retry
           await ctx.reply(msg.error, { parse_mode: 'HTML' });
-          session.state = undefined;
           return;
         }
 
-        // Award referral points if applicable
         if (session.referrerId) {
           await awardReferralPoints(session.referrerId, newUser.id);
         }
@@ -236,7 +240,7 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
 
   // Handle link_existing (phone already in DB → offer to link)
   bot.callbackQuery(/^link_existing:(.+)$/, async (ctx) => {
-    await ctx.answerCallbackQuery();
+    ctx.answerCallbackQuery().catch(() => {});
     const session = ctx.session;
     const userId = ctx.match[1];
     const fromUser = ctx.from;

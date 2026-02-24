@@ -1,10 +1,13 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-// Admin client that bypasses RLS — used for bot operations
+// Bot client using anon key — reads public data.
+// User creation uses a SECURITY DEFINER RPC that handles auth internally.
 export function createBotAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-  return createSupabaseClient(url, serviceKey, {
+  // Use anon key for reads (oblasts have public policy; users table queries work via anon)
+  // Service role key is NOT required since user creation goes via create_telegram_user RPC
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  return createSupabaseClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 }
@@ -103,62 +106,38 @@ export async function createUserFromTelegram(params: {
   referrerId?: string;
 }) {
   const email = params.email.toLowerCase().trim();
+  const referralCode = await uniqueReferralCode();
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
 
-  // 1. Create Supabase Auth user (required: auth_id is NOT NULL)
-  const randomPassword = crypto.randomUUID() + crypto.randomUUID();
-  const { data: authData, error: authError } = await getSupabase().auth.admin.createUser({
-    email,
-    password: randomPassword,
-    email_confirm: true, // mark email as confirmed
-    user_metadata: {
-      first_name: params.firstName,
-      last_name: params.lastName,
-      source: 'telegram_bot',
-    },
+  // Use SECURITY DEFINER RPC that creates auth user + public user atomically.
+  // This avoids needing the service_role key from the client side.
+  const { data, error } = await getSupabase().rpc('create_telegram_user', {
+    p_secret:               botSecret,
+    p_email:                email,
+    p_first_name:           params.firstName,
+    p_last_name:            params.lastName,
+    p_phone:                params.phone,
+    p_telegram_id:          params.telegramId,
+    p_telegram_username:    params.telegramUsername || null,
+    p_telegram_first_name:  params.telegramFirstName || null,
+    p_oblast_id:            params.oblastId || null,
+    p_settlement_name:      params.settlementName || null,
+    p_referred_by_id:       params.referrerId || null,
+    p_referral_code:        referralCode,
   });
 
-  if (authError || !authData.user) {
-    console.error('[TG DB] createUserFromTelegram auth error:', authError);
-    return null;
-  }
-
-  // 2. Generate unique referral code
-  const referralCode = await uniqueReferralCode();
-
-  // 3. Insert into public.users
-  const { data, error } = await getSupabase()
-    .from('users')
-    .insert({
-      auth_id: authData.user.id,
-      telegram_id: params.telegramId,
-      telegram_username: params.telegramUsername || null,
-      telegram_first_name: params.telegramFirstName || null,
-      telegram_linked_at: new Date().toISOString(),
-      telegram_notifications_enabled: true,
-      phone: params.phone,
-      email,
-      first_name: params.firstName,
-      last_name: params.lastName,
-      oblast_id: params.oblastId || null,
-      settlement_name: params.settlementName || null,
-      referred_by_id: params.referrerId || null,
-      referral_code: referralCode,
-      status: 'pending',
-      role: 'prospect',
-      membership_tier: 'free',
-      member_since: new Date().toISOString(),
-    })
-    .select()
-    .single();
-
   if (error) {
-    console.error('[TG DB] createUserFromTelegram insert error:', error);
-    // Clean up auth user to avoid orphan
-    await getSupabase().auth.admin.deleteUser(authData.user.id);
+    console.error('[TG DB] createUserFromTelegram rpc error:', error);
     return null;
   }
 
-  return data;
+  const row = Array.isArray(data) ? data[0] : data;
+  if (!row) {
+    console.error('[TG DB] createUserFromTelegram: no row returned');
+    return null;
+  }
+
+  return row as { id: string; first_name: string; last_name: string; status: string };
 }
 
 export async function getUserStats(userId: string) {
