@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { BulkActionsToolbar, commonBulkActions } from './bulk-actions-toolbar';
 import { toast } from '@/hooks/use-toast';
 import { exportMembersData } from '@/lib/export-utils';
-import { FileSpreadsheet, FileText } from 'lucide-react';
+import { FileSpreadsheet, FileText, UserCheck } from 'lucide-react';
 
 interface Member {
   id: string;
@@ -30,6 +30,26 @@ interface MembersTableProps {
 
 export function MembersTable({ members, canSuspend, canDelete, showExportButtons = true }: MembersTableProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [approvingIds, setApprovingIds] = useState<Set<string>>(new Set());
+  const [memberStatuses, setMemberStatuses] = useState<Record<string, string>>({});
+
+  const handleApprove = async (memberId: string) => {
+    setApprovingIds((prev) => new Set(prev).add(memberId));
+    try {
+      const res = await fetch(`/api/admin/members/${memberId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'active' }),
+      });
+      if (!res.ok) throw new Error('Failed');
+      setMemberStatuses((prev) => ({ ...prev, [memberId]: 'active' }));
+      toast({ title: 'Схвалено', description: 'Статус змінено на Активний' });
+    } catch {
+      toast({ title: 'Помилка', description: 'Не вдалося схвалити', variant: 'destructive' });
+    } finally {
+      setApprovingIds((prev) => { const s = new Set(prev); s.delete(memberId); return s; });
+    }
+  };
 
   const toggleSelect = (id: string) => {
     const newSelected = new Set(selectedIds);
@@ -333,23 +353,32 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
                 </span>
                 <span
                   className={`px-2 py-1 text-xs font-bold rounded ${
-                    member.status === 'active'
+                    (memberStatuses[member.id] || member.status) === 'active'
                       ? 'bg-green-500/10 text-green-400'
-                      : member.status === 'pending'
+                      : (memberStatuses[member.id] || member.status) === 'pending'
                       ? 'bg-yellow-500/10 text-yellow-400'
-                      : member.status === 'suspended'
+                      : (memberStatuses[member.id] || member.status) === 'suspended'
                       ? 'bg-red-500/10 text-red-400'
                       : 'bg-panel-850 text-muted-500'
                   }`}
                 >
-                  {member.status === 'active' && 'Активний'}
-                  {member.status === 'pending' && 'Перевірка'}
-                  {member.status === 'suspended' && 'Блок'}
-                  {member.status === 'churned' && 'Відійшов'}
+                  {(memberStatuses[member.id] || member.status) === 'active' && 'Активний'}
+                  {(memberStatuses[member.id] || member.status) === 'pending' && 'Перевірка'}
+                  {(memberStatuses[member.id] || member.status) === 'suspended' && 'Блок'}
+                  {(memberStatuses[member.id] || member.status) === 'churned' && 'Відійшов'}
                 </span>
                 <span className="font-bold text-bronze text-sm">
                   {member.points || 0} балів
                 </span>
+                {(memberStatuses[member.id] || member.status) === 'pending' && (
+                  <button
+                    onClick={() => handleApprove(member.id)}
+                    disabled={approvingIds.has(member.id)}
+                    className="text-xs text-green-400 hover:text-green-300 font-bold disabled:opacity-50"
+                  >
+                    {approvingIds.has(member.id) ? '...' : '✓ СХВАЛИТИ'}
+                  </button>
+                )}
                 <Link
                   href={`/admin/members/${member.id}`}
                   className="ml-auto text-xs text-bronze hover:underline font-bold"
@@ -376,19 +405,19 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
               <div className="hidden md:block md:col-span-1">
                 <span
                   className={`px-2 py-1 text-xs font-bold rounded ${
-                    member.status === 'active'
+                    (memberStatuses[member.id] || member.status) === 'active'
                       ? 'bg-green-500/10 text-green-400'
-                      : member.status === 'pending'
+                      : (memberStatuses[member.id] || member.status) === 'pending'
                       ? 'bg-yellow-500/10 text-yellow-400'
-                      : member.status === 'suspended'
+                      : (memberStatuses[member.id] || member.status) === 'suspended'
                       ? 'bg-red-500/10 text-red-400'
                       : 'bg-panel-850 text-muted-500'
                   }`}
                 >
-                  {member.status === 'active' && 'Активний'}
-                  {member.status === 'pending' && 'Перевірка'}
-                  {member.status === 'suspended' && 'Блок'}
-                  {member.status === 'churned' && 'Відійшов'}
+                  {(memberStatuses[member.id] || member.status) === 'active' && 'Активний'}
+                  {(memberStatuses[member.id] || member.status) === 'pending' && 'Перевірка'}
+                  {(memberStatuses[member.id] || member.status) === 'suspended' && 'Блок'}
+                  {(memberStatuses[member.id] || member.status) === 'churned' && 'Відійшов'}
                 </span>
               </div>
 
@@ -413,7 +442,17 @@ export function MembersTable({ members, canSuspend, canDelete, showExportButtons
               </div>
 
               {/* Actions - desktop only */}
-              <div className="hidden md:block md:col-span-2 text-right">
+              <div className="hidden md:flex md:col-span-2 items-center justify-end gap-3">
+                {(memberStatuses[member.id] || member.status) === 'pending' && (
+                  <button
+                    onClick={() => handleApprove(member.id)}
+                    disabled={approvingIds.has(member.id)}
+                    className="flex items-center gap-1 text-xs text-green-400 hover:text-green-300 font-bold disabled:opacity-50"
+                  >
+                    <UserCheck size={13} />
+                    {approvingIds.has(member.id) ? '...' : 'СХВАЛИТИ'}
+                  </button>
+                )}
                 <Link
                   href={`/admin/members/${member.id}`}
                   className="text-xs text-bronze hover:underline font-bold"

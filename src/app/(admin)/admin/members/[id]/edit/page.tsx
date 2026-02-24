@@ -93,16 +93,24 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
 
       const { data: adminProfile } = await supabase
         .from('users')
-        .select('role, id')
+        .select('role, staff_role, id')
         .eq('auth_id', user.id)
         .single();
 
-      if (!adminProfile || !['admin', 'super_admin', 'regional_leader'].includes(adminProfile.role)) {
+      const hasAccess = adminProfile && (
+        ['admin', 'super_admin'].includes(adminProfile.staff_role) ||
+        adminProfile.role === 'regional_leader'
+      );
+      if (!hasAccess) {
         router.push('/dashboard');
         return;
       }
 
-      setAdminRole(adminProfile.role);
+      // For canEditRole: use the effective admin level
+      const effectiveRole = ['admin', 'super_admin'].includes(adminProfile.staff_role)
+        ? adminProfile.staff_role
+        : adminProfile.role;
+      setAdminRole(effectiveRole);
 
       // Check regional leader access
       if (adminProfile.role === 'regional_leader') {

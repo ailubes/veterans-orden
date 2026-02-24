@@ -21,6 +21,7 @@ import { formatNumber, formatDate } from '@/lib/utils';
 import { MemberActivityTimeline } from '@/components/admin/member-activity-timeline';
 import RoleBadge from '@/components/ui/role-badge';
 import { MEMBERSHIP_ROLES } from '@/lib/constants';
+import { MemberQuickActions } from '@/components/admin/member-quick-actions';
 
 type MembershipRole = keyof typeof MEMBERSHIP_ROLES;
 
@@ -109,9 +110,12 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
 
   // Permission checks for actions
   const canEdit = true; // All admins can edit
+  const canApprove = member.status === 'pending';
   const canSuspend =
+    ['super_admin', 'admin'].includes(adminProfile.staff_role) ||
     adminProfile.role === 'super_admin' || adminProfile.role === 'admin';
-  const canImpersonate = adminProfile.role === 'super_admin';
+  const canImpersonate =
+    adminProfile.staff_role === 'super_admin' || adminProfile.role === 'super_admin';
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -192,35 +196,15 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
           </div>
 
           {/* Quick Actions */}
-          <div className="flex flex-wrap gap-2">
-            {canEdit && (
-              <Link
-                href={`/admin/members/${member.id}/edit`}
-                className="btn flex items-center gap-2"
-              >
-                <Edit size={16} />
-                РЕДАГУВАТИ
-              </Link>
-            )}
-            {canSuspend && member.status !== 'suspended' && (
-              <button className="btn btn-outline flex items-center gap-2">
-                <UserX size={16} />
-                ПРИЗУПИНИТИ
-              </button>
-            )}
-            {canSuspend && member.status === 'suspended' && (
-              <button className="btn btn-outline flex items-center gap-2">
-                <UserCheck size={16} />
-                ВІДНОВИТИ
-              </button>
-            )}
-            {canImpersonate && (
-              <button className="btn btn-outline flex items-center gap-2">
-                <Shield size={16} />
-                ІМІТУВАТИ
-              </button>
-            )}
-          </div>
+          <MemberQuickActions
+            memberId={member.id}
+            initialStatus={member.status}
+            editHref={`/admin/members/${member.id}/edit`}
+            canEdit={canEdit}
+            canApprove={canApprove}
+            canSuspend={canSuspend}
+            canImpersonate={canImpersonate}
+          />
         </div>
       </div>
 
