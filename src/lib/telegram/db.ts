@@ -273,12 +273,42 @@ export async function awardReferralPoints(referrerId: string, newUserId: string)
   });
 }
 
+// Hardcoded fallback in case the DB query fails
+const OBLASTS_FALLBACK = [
+  { id: 'f01ab202-f80c-4219-9cf7-e8f4428b2f9e', name: 'Вінницька' },
+  { id: '07b17900-469b-48e3-89e2-3fc403f6e745', name: 'Волинська' },
+  { id: '50fd6ea2-de37-49d8-87f1-a4e09e0aad4a', name: 'Дніпропетровська' },
+  { id: 'ea3a4beb-f1d4-4ba3-b4c8-89143b39fe17', name: 'Донецька' },
+  { id: '5de05ba7-7693-4d2d-9b05-08709b9ab876', name: 'Житомирська' },
+  { id: '5127a07d-4474-4511-a2fe-1b0d2128e5a9', name: 'Закарпатська' },
+  { id: 'c85b4925-04b0-4bb2-b0ec-4cbf071653df', name: 'Запорізька' },
+  { id: '1dbb8ab6-d0ac-440e-96a4-5d0107384ff7', name: 'Івано-Франківська' },
+  { id: 'e44457ba-9103-4642-8c87-9304fd79bf5e', name: 'Київська' },
+  { id: '078a898c-97eb-4ab3-9343-35120f07f5c2', name: 'Кіровоградська' },
+  { id: 'd3d55d1a-c368-4f1a-a9fc-9bad763e3b9a', name: 'Луганська' },
+  { id: '03b7a42c-4e41-4629-9a91-0285d5559cf5', name: 'Львівська' },
+  { id: '34253a9f-a1ff-4bdb-ae90-0cc58d15baa9', name: 'м. Київ' },
+  { id: '21965017-dddd-40cb-b116-91970f17cd60', name: 'Миколаївська' },
+  { id: '591a3fbf-0d32-4486-b241-0766383b378f', name: 'Одеська' },
+  { id: '74d8cc04-9eb5-4c1e-9e1b-e5711dd32544', name: 'Полтавська' },
+  { id: 'd0ca37d1-3e96-4fe7-8ca4-3f8a708991c3', name: 'Рівненська' },
+  { id: 'b15158b4-1ebd-43cb-bcbf-db970c80dd00', name: 'Сумська' },
+  { id: 'a5a1ff34-aef3-4021-93dd-103cb8e65644', name: 'Тернопільська' },
+  { id: 'a06fe9cf-33ab-4bca-9d4b-407eabcfb07e', name: 'Харківська' },
+  { id: '0703b793-e330-4077-8f93-8037cbe2293f', name: 'Херсонська' },
+  { id: '0a06040e-a996-4c67-a617-eedc0afa8ead', name: 'Хмельницька' },
+  { id: '643aab17-1a66-419a-bed4-3a689729f48f', name: 'Черкаська' },
+  { id: '97315dcc-19e6-4e71-ace7-92d8ead00f0e', name: 'Чернівецька' },
+  { id: '12815e76-60f0-4248-a970-9cd3c1c6cfda', name: 'Чернігівська' },
+];
+
 export async function getOblasts() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('oblasts')
     .select('id, name')
     .order('name', { ascending: true });
-  return data || [];
+  if (error) console.error('[TG DB] getOblasts error:', error);
+  return (data && data.length > 0) ? data : OBLASTS_FALLBACK;
 }
 
 export async function disableTelegramNotifications(telegramId: number) {
