@@ -35,7 +35,17 @@ export const msg = {
     `✅ Email підтверджено!\n\n` +
     `Введіть ваше <b>ім'я та прізвище</b> (наприклад: <i>Іван Петренко</i>):`,
 
-  regAskOblast: `🗺️ Оберіть вашу <b>область</b>:`,
+  regAskOblast: (oblasts: Array<{ id: string; name: string }>) => {
+    const list = oblasts.map((o, i) => `${i + 1}. ${o.name}`).join('\n');
+    return `🗺️ <b>Оберіть вашу область</b>\n\nВведіть номер зі списку:\n\n${list}`;
+  },
+
+  regOblastInvalid: `❌ Область не знайдено. Введіть число від 1 до 25:`,
+
+  regAskSettlement:
+    `📍 Введіть назву вашого <b>населеного пункту</b> (місто, село, смт):`,
+
+  regSettlementInvalid: `❌ Назва населеного пункту не може бути порожньою. Спробуйте ще раз:`,
 
   regComplete: (firstName: string) =>
     `🎉 <b>Вітаємо, ${firstName}!</b>\n\n` +

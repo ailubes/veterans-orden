@@ -89,6 +89,7 @@ export async function createUserFromTelegram(params: {
   firstName: string;
   lastName: string;
   oblastId?: string;
+  settlementName?: string;
   referrerId?: string;
 }) {
   const email = params.email.toLowerCase().trim();
@@ -129,6 +130,7 @@ export async function createUserFromTelegram(params: {
       first_name: params.firstName,
       last_name: params.lastName,
       oblast_id: params.oblastId || null,
+      settlement_name: params.settlementName || null,
       referred_by_id: params.referrerId || null,
       referral_code: referralCode,
       status: 'pending',

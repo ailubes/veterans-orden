@@ -17,11 +17,10 @@ import {
 } from '../db';
 import { msg } from '../messages';
 import {
-  oblastKeyboard,
   cancelKeyboard,
   mainMenuKeyboard,
 } from '../keyboards';
-import { Keyboard, InlineKeyboard } from 'grammy';
+import { InlineKeyboard } from 'grammy';
 
 type BotContext = Context & { session: BotSession };
 
@@ -136,71 +135,103 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
 
         const firstName = parts[0];
         const lastName = parts.slice(1).join(' ');
-        session.regData = { ...session.regData, firstName, lastName };
+
+        // Fetch oblasts and store in session for stable numbering
+        const oblasts = await getOblasts();
+        session.regData = { ...session.regData, firstName, lastName, oblastList: oblasts };
         session.state = 'reg:await_oblast';
 
-        const oblasts = await getOblasts();
-        await ctx.reply(msg.regAskOblast, {
+        await ctx.reply(msg.regAskOblast(oblasts), {
           parse_mode: 'HTML',
-          reply_markup: oblastKeyboard(oblasts),
+          reply_markup: cancelKeyboard(),
+        });
+        break;
+      }
+
+      case 'reg:await_oblast': {
+        const oblasts = session.regData?.oblastList || [];
+        if (!oblasts.length) {
+          session.state = undefined;
+          await ctx.reply(msg.error, { parse_mode: 'HTML' });
+          return;
+        }
+
+        // Match by number (1-based) or by name (case-insensitive)
+        const num = parseInt(text, 10);
+        let matched: { id: string; name: string } | undefined;
+
+        if (!isNaN(num) && num >= 1 && num <= oblasts.length) {
+          matched = oblasts[num - 1];
+        } else {
+          const lower = text.toLowerCase();
+          matched = oblasts.find((o) => o.name.toLowerCase().includes(lower));
+        }
+
+        if (!matched) {
+          await ctx.reply(msg.regOblastInvalid, {
+            parse_mode: 'HTML',
+            reply_markup: cancelKeyboard(),
+          });
+          return;
+        }
+
+        session.regData = { ...session.regData, oblastId: matched.id };
+        session.state = 'reg:await_settlement';
+
+        await ctx.reply(
+          `✅ Обрано: <b>${matched.name}</b>\n\n${msg.regAskSettlement}`,
+          { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
+        );
+        break;
+      }
+
+      case 'reg:await_settlement': {
+        if (!text || text.length < 2) {
+          await ctx.reply(msg.regSettlementInvalid, {
+            parse_mode: 'HTML',
+            reply_markup: cancelKeyboard(),
+          });
+          return;
+        }
+
+        const fromUser = ctx.from;
+        const regData = session.regData;
+
+        const newUser = await createUserFromTelegram({
+          telegramId: fromUser.id,
+          telegramUsername: fromUser.username,
+          telegramFirstName: fromUser.first_name,
+          phone: regData?.phone || '',
+          email: regData?.email || '',
+          firstName: regData?.firstName || '',
+          lastName: regData?.lastName || '',
+          oblastId: regData?.oblastId,
+          settlementName: text,
+          referrerId: session.referrerId,
+        });
+
+        if (!newUser) {
+          await ctx.reply(msg.error, { parse_mode: 'HTML' });
+          session.state = undefined;
+          return;
+        }
+
+        // Award referral points if applicable
+        if (session.referrerId) {
+          await awardReferralPoints(session.referrerId, newUser.id);
+        }
+
+        session.state = undefined;
+        session.userId = newUser.id;
+        session.regData = undefined;
+
+        await ctx.reply(msg.regComplete(newUser.first_name), {
+          parse_mode: 'HTML',
+          reply_markup: mainMenuKeyboard(),
         });
         break;
       }
     }
-  });
-
-  // Handle oblast selection callback
-  bot.callbackQuery(/^oblast:(.+)$/, async (ctx) => {
-    await ctx.answerCallbackQuery();
-    const session = ctx.session;
-    if (session.state !== 'reg:await_oblast') {
-      // Session was lost (e.g. bot restarted) — ask user to start over
-      await ctx.editMessageText(
-        '⚠️ Сесія завершилась. Будь ласка, почніть реєстрацію знову за допомогою /start',
-        {
-          parse_mode: 'HTML',
-          reply_markup: new InlineKeyboard()
-            .text('📝 Зареєструватись', 'register')
-            .text('↩️ Головне меню', 'menu:main'),
-        }
-      );
-      return;
-    }
-
-    const oblastId = ctx.match[1];
-    const fromUser = ctx.from;
-
-    const newUser = await createUserFromTelegram({
-      telegramId: fromUser.id,
-      telegramUsername: fromUser.username,
-      telegramFirstName: fromUser.first_name,
-      phone: session.regData?.phone || '',
-      email: session.regData?.email || '',
-      firstName: session.regData?.firstName || '',
-      lastName: session.regData?.lastName || '',
-      oblastId,
-      referrerId: session.referrerId,
-    });
-
-    if (!newUser) {
-      await ctx.editMessageText(msg.error, { parse_mode: 'HTML' });
-      session.state = undefined;
-      return;
-    }
-
-    // Award referral points if applicable
-    if (session.referrerId) {
-      await awardReferralPoints(session.referrerId, newUser.id);
-    }
-
-    session.state = undefined;
-    session.userId = newUser.id;
-    session.regData = undefined;
-
-    await ctx.editMessageText(msg.regComplete(newUser.first_name), {
-      parse_mode: 'HTML',
-      reply_markup: mainMenuKeyboard(),
-    });
   });
 
   // Handle link_existing (phone already in DB → offer to link)

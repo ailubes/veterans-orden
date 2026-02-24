@@ -13,6 +13,9 @@ export interface BotSession {
     email?: string;
     firstName?: string;
     lastName?: string;
+    oblastId?: string;
+    settlementName?: string;
+    oblastList?: Array<{ id: string; name: string }>;
   };
 }
 
