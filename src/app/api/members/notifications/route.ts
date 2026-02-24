@@ -40,17 +40,11 @@ export async function GET(request: Request) {
         is_read,
         read_at,
         delivered_at,
-        notifications!inner (
+        notifications!notification_recipients_notification_id_fkey (
           id,
           title,
-          message,
-          type,
-          metadata,
-          sender_id,
-          sender:users!notifications_sender_id_fkey (
-            first_name,
-            last_name
-          )
+          body,
+          type
         )
       `, { count: 'exact' })
       .eq('user_id', profile.id)
@@ -81,24 +75,27 @@ export async function GET(request: Request) {
       .eq('user_id', profile.id)
       .eq('is_read', false);
 
+    // Normalize timestamps from TIMESTAMP WITHOUT TIME ZONE columns by appending Z (UTC)
+    const toUtc = (s: unknown): string | null => {
+      if (!s) return null;
+      const str = s as string;
+      return str.endsWith('Z') || str.includes('+') ? str : str + 'Z';
+    };
+
     // Transform data to match our interface
     const notifications = (notificationRecords || []).map((nr: Record<string, unknown>) => {
       const notification = nr.notifications as Record<string, unknown>;
-      const sender = notification?.sender as Record<string, string> | null;
 
       return {
         id: nr.id as string,
         notificationId: nr.notification_id as string,
         title: notification?.title as string || '',
-        message: notification?.message as string || '',
-        type: (notification?.type || 'info') as NotificationType,
+        message: notification?.body as string || '',
+        type: (notification?.type || 'system') as NotificationType,
         isRead: nr.is_read as boolean,
-        readAt: nr.read_at as string | null,
-        deliveredAt: nr.delivered_at as string,
-        sender: sender ? {
-          firstName: sender.first_name || '',
-          lastName: sender.last_name || '',
-        } : undefined,
+        readAt: toUtc(nr.read_at),
+        deliveredAt: toUtc(nr.delivered_at) || new Date().toISOString(),
+        sender: undefined,
       };
     });
 

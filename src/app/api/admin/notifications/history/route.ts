@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminProfileFromRequest, isRegionalLeader } from '@/lib/permissions';
+import { getAdminProfileFromRequest, isRegionalLeaderOnly } from '@/lib/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,19 +17,19 @@ export async function GET(request: NextRequest) {
     const limit = 20;
     const offset = (page - 1) * limit;
 
-    // Build query
+    // Build query — join sender via the correct FK name
     let query = supabase
       .from('notifications')
-      .select('*, sender:users!sender_id(first_name, last_name, email)', {
-        count: 'exact',
-      });
+      .select(
+        '*, sender:users!notifications_user_id_users_id_fk(first_name, last_name, email)',
+        { count: 'exact' }
+      );
 
-    // Regional leaders see only their own notifications
-    if (isRegionalLeader(adminProfile.role)) {
-      query = query.eq('sender_id', adminProfile.id);
+    // Regional leaders see only notifications they sent
+    if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
+      query = query.eq('user_id', adminProfile.id);
     }
 
-    // Execute query with pagination
     const { data: notifications, count, error } = await query
       .order('sent_at', { ascending: false })
       .range(offset, offset + limit - 1);

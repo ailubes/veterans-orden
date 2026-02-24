@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Vote, Calendar, CheckSquare, Trophy, Newspaper, Users, AlertCircle } from 'lucide-react';
+import { Bell, Vote, Calendar, CheckSquare, Trophy, Newspaper, Users } from 'lucide-react';
 import type { Notification, NotificationType } from '@/types/notifications';
 import { formatRelativeTime } from '@/lib/utils';
 
@@ -12,10 +12,13 @@ interface NotificationItemProps {
 }
 
 const typeConfig: Record<NotificationType, { icon: typeof Bell; colorClass: string }> = {
-  info: { icon: Bell, colorClass: 'text-blue-500 bg-blue-500/10' },
-  success: { icon: CheckSquare, colorClass: 'text-green-500 bg-green-500/10' },
-  warning: { icon: AlertCircle, colorClass: 'text-yellow-500 bg-yellow-500/10' },
-  alert: { icon: AlertCircle, colorClass: 'text-red-500 bg-red-500/10' },
+  system: { icon: Bell, colorClass: 'text-blue-500 bg-blue-500/10' },
+  vote: { icon: Vote, colorClass: 'text-purple-500 bg-purple-500/10' },
+  event: { icon: Calendar, colorClass: 'text-green-500 bg-green-500/10' },
+  task: { icon: CheckSquare, colorClass: 'text-orange-500 bg-orange-500/10' },
+  achievement: { icon: Trophy, colorClass: 'text-yellow-500 bg-yellow-500/10' },
+  news: { icon: Newspaper, colorClass: 'text-teal-500 bg-teal-500/10' },
+  referral: { icon: Users, colorClass: 'text-pink-500 bg-pink-500/10' },
 };
 
 export function NotificationItem({
@@ -24,7 +27,7 @@ export function NotificationItem({
   onMarkRead,
   onClick,
 }: NotificationItemProps) {
-  const config = typeConfig[notification.type] || typeConfig.info;
+  const config = typeConfig[notification.type] || typeConfig.system;
   const Icon = config.icon;
 
   const handleClick = () => {
@@ -71,7 +74,7 @@ export function NotificationItem({
       className={`
         p-4 border border-line rounded-lg/10 rounded-lg cursor-pointer
         transition-all hover:border-line/20
-        ${!notification.isRead ? 'bg-bronze/5 border-bronze/20' : 'bg-white'}
+        ${!notification.isRead ? 'bg-bronze/5 border-bronze/20' : 'bg-panel-900'}
       `}
     >
       <div className="flex gap-4">

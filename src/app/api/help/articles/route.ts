@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
           slug,
           icon
         ),
-        author:users!help_articles_author_id_fkey(
+        author:users!help_articles_author_id_users_id_fk(
           id,
           first_name,
           last_name,

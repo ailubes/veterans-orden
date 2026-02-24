@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Bell, BellOff, CheckCheck, ChevronLeft, ChevronRight, Filter, AlertCircle, CheckSquare } from 'lucide-react';
+import { Bell, BellOff, CheckCheck, ChevronLeft, ChevronRight, Filter, Vote, Calendar, CheckSquare, Trophy, Newspaper, Users } from 'lucide-react';
 import Link from 'next/link';
 import { formatDateTime } from '@/lib/utils';
 import { useNotifications } from '@/hooks/use-notifications';
@@ -15,17 +15,23 @@ import {
 import type { Notification, NotificationType } from '@/types/notifications';
 
 const typeLabels: Record<NotificationType, string> = {
-  info: 'Системні',
-  success: 'Успіхи',
-  warning: 'Попередження',
-  alert: 'Важливі',
+  system: 'Системні',
+  vote: 'Голосування',
+  event: 'Заходи',
+  task: 'Завдання',
+  achievement: 'Досягнення',
+  news: 'Новини',
+  referral: 'Реферали',
 };
 
 const typeConfig: Record<NotificationType, { icon: typeof Bell; colorClass: string; label: string }> = {
-  info: { icon: Bell, colorClass: 'text-blue-500 bg-blue-500/10', label: 'Інформація' },
-  success: { icon: CheckSquare, colorClass: 'text-green-500 bg-green-500/10', label: 'Успіх' },
-  warning: { icon: AlertCircle, colorClass: 'text-yellow-500 bg-yellow-500/10', label: 'Попередження' },
-  alert: { icon: AlertCircle, colorClass: 'text-red-500 bg-red-500/10', label: 'Увага' },
+  system: { icon: Bell, colorClass: 'text-blue-500 bg-blue-500/10', label: 'Системне' },
+  vote: { icon: Vote, colorClass: 'text-purple-500 bg-purple-500/10', label: 'Голосування' },
+  event: { icon: Calendar, colorClass: 'text-green-500 bg-green-500/10', label: 'Захід' },
+  task: { icon: CheckSquare, colorClass: 'text-orange-500 bg-orange-500/10', label: 'Завдання' },
+  achievement: { icon: Trophy, colorClass: 'text-yellow-500 bg-yellow-500/10', label: 'Досягнення' },
+  news: { icon: Newspaper, colorClass: 'text-teal-500 bg-teal-500/10', label: 'Новини' },
+  referral: { icon: Users, colorClass: 'text-pink-500 bg-pink-500/10', label: 'Реферал' },
 };
 
 export default function NotificationsPage() {
@@ -71,8 +77,8 @@ export default function NotificationsPage() {
     : notifications;
 
   const config = selectedNotification
-    ? typeConfig[selectedNotification.type] || typeConfig.info
-    : typeConfig.info;
+    ? typeConfig[selectedNotification.type] || typeConfig.system
+    : typeConfig.system;
   const Icon = config.icon;
 
   return (

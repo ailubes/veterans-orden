@@ -90,7 +90,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
           <button
             onClick={() => handleFeedback(true)}
             disabled={submitting}
-            className="flex-1 btn btn-primary disabled:opacity-50"
+            className="flex-1 btn flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <ThumbsUp size={20} />
             Так, корисно
@@ -98,7 +98,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
           <button
             onClick={() => handleFeedback(false)}
             disabled={submitting}
-            className="flex-1 btn btn-secondary disabled:opacity-50"
+            className="flex-1 btn btn-outline flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <ThumbsDown size={20} />
             Ні, не корисно
@@ -123,7 +123,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
             <button
               type="submit"
               disabled={submitting}
-              className="btn btn-primary btn-sm disabled:opacity-50"
+              className="btn btn-sm disabled:opacity-50"
             >
               {submitting ? 'Надсилання...' : 'Надіслати відгук'}
             </button>
@@ -131,7 +131,7 @@ export function FeedbackWidget({ articleId }: FeedbackWidgetProps) {
               type="button"
               onClick={() => submitFeedback(false, '')}
               disabled={submitting}
-              className="btn btn-secondary btn-sm"
+              className="btn btn-outline btn-sm"
             >
               Пропустити
             </button>

@@ -1,8 +1,11 @@
 export type NotificationType =
-  | 'info'
-  | 'success'
-  | 'warning'
-  | 'alert';
+  | 'system'
+  | 'vote'
+  | 'event'
+  | 'task'
+  | 'achievement'
+  | 'news'
+  | 'referral';
 
 export interface Notification {
   id: string;

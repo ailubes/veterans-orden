@@ -14,8 +14,9 @@ interface ArticleCardProps {
 
 export function ArticleCard({ article }: ArticleCardProps) {
   const categorySlug = article.category?.slug || 'general';
-  const helpfulRate = article.helpfulCount + article.notHelpfulCount > 0
-    ? Math.round((article.helpfulCount / (article.helpfulCount + article.notHelpfulCount)) * 100)
+  const rawArticle = article as any;
+  const helpfulRate = rawArticle.helpful_count + rawArticle.not_helpful_count > 0
+    ? Math.round((rawArticle.helpful_count / (rawArticle.helpful_count + rawArticle.not_helpful_count)) * 100)
     : null;
 
   return (
@@ -54,7 +55,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
         <div className="flex items-center gap-4 text-xs text-muted-500 pt-4 border-t-2 border-line/20">
           <div className="flex items-center gap-1">
             <Eye size={14} />
-            <span>{article.viewCount || 0}</span>
+            <span>{rawArticle.view_count || 0}</span>
           </div>
 
           {helpfulRate !== null && (
@@ -64,7 +65,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
             </div>
           )}
 
-          {article.videoUrl && (
+          {rawArticle.video_url && (
             <span className="text-bronze font-bold">+ Відео</span>
           )}
         </div>

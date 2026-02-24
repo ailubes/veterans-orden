@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, canSendNotificationTo, isRegionalLeaderOnly } from '@/lib/permissions';
-import { createServiceClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,49 +9,19 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
-    console.log('[Send Notification] Starting...');
-
-    let adminProfile;
-    try {
-      const result = await getAdminProfileFromRequest(request);
-      adminProfile = result.profile;
-      console.log('[Send Notification] Admin authenticated:', adminProfile.id, adminProfile.staff_role, adminProfile.membership_role);
-    } catch (authError) {
-      console.error('[Send Notification] Auth error:', authError);
-      return NextResponse.json(
-        { error: 'Authentication failed', stage: 'auth' },
-        { status: 401 }
-      );
-    }
-
-    // Use service role client for database operations (bypasses RLS)
-    let supabase;
-    try {
-      supabase = createServiceClient();
-      console.log('[Send Notification] Service client created');
-    } catch (clientError) {
-      console.error('[Send Notification] Service client error:', clientError);
-      return NextResponse.json(
-        { error: 'Database client creation failed', stage: 'client' },
-        { status: 500 }
-      );
-    }
+    const { profile: adminProfile, auth } = await getAdminProfileFromRequest(request);
+    // Use the admin's authenticated supabase client (bypasses per-user RLS via admin policies)
+    const supabase = auth.supabase;
 
     let body;
     try {
       body = await request.json();
-      console.log('[Send Notification] Request body:', JSON.stringify(body));
-    } catch (parseError) {
-      console.error('[Send Notification] Body parse error:', parseError);
-      return NextResponse.json(
-        { error: 'Invalid request body', stage: 'parse' },
-        { status: 400 }
-      );
+    } catch {
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
     const { title, message, type, scope, scopeValue } = body;
 
-    // Validate input
     if (!title || !message || !scope) {
       return NextResponse.json(
         { error: 'Title, message, and scope are required' },
@@ -67,7 +36,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check permission for this scope
     if (!canSendNotificationTo(adminProfile.staff_role, adminProfile.membership_role, scope)) {
       return NextResponse.json(
         { error: `You do not have permission to send notifications to ${scope}` },
@@ -80,46 +48,31 @@ export async function POST(request: NextRequest) {
 
     switch (scope) {
       case 'all':
-        // All active users
         recipientQuery = recipientQuery.eq('status', 'active');
         break;
 
       case 'role':
         if (!scopeValue) {
-          return NextResponse.json(
-            { error: 'Role is required for role scope' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'Role is required for role scope' }, { status: 400 });
         }
         recipientQuery = recipientQuery.eq('role', scopeValue).eq('status', 'active');
         break;
 
       case 'oblast':
         if (!scopeValue) {
-          return NextResponse.json(
-            { error: 'Oblast ID is required for oblast scope' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'Oblast ID is required for oblast scope' }, { status: 400 });
         }
-        recipientQuery = recipientQuery
-          .eq('oblast_id', scopeValue)
-          .eq('status', 'active');
+        recipientQuery = recipientQuery.eq('oblast_id', scopeValue).eq('status', 'active');
         break;
 
       case 'tier':
         if (!scopeValue) {
-          return NextResponse.json(
-            { error: 'Tier is required for tier scope' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'Tier is required for tier scope' }, { status: 400 });
         }
-        recipientQuery = recipientQuery
-          .eq('membership_tier', scopeValue)
-          .eq('status', 'active');
+        recipientQuery = recipientQuery.eq('membership_tier', scopeValue).eq('status', 'active');
         break;
 
       case 'payment_expired':
-        // Users who had a paid tier but membership expired
         recipientQuery = recipientQuery
           .lt('membership_paid_until', new Date().toISOString())
           .not('membership_paid_until', 'is', null)
@@ -127,24 +80,17 @@ export async function POST(request: NextRequest) {
         break;
 
       case 'never_paid':
-        // Users who never paid (still on free tier)
-        recipientQuery = recipientQuery
-          .eq('membership_tier', 'free')
-          .eq('status', 'active');
+        recipientQuery = recipientQuery.eq('membership_tier', 'free').eq('status', 'active');
         break;
 
       case 'user':
         if (!scopeValue) {
-          return NextResponse.json(
-            { error: 'User ID is required for user scope' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'User ID is required for user scope' }, { status: 400 });
         }
         recipientQuery = recipientQuery.eq('id', scopeValue);
         break;
 
       case 'referral_tree':
-        // For regional leaders (by membership), get their referral tree
         if (isRegionalLeaderOnly(adminProfile.staff_role, adminProfile.membership_role)) {
           const { data: referrals } = await supabase.rpc(
             'get_referral_tree_members',
@@ -155,7 +101,6 @@ export async function POST(request: NextRequest) {
             const referralIds = referrals.map((r: { id: string }) => r.id);
             recipientQuery = recipientQuery.in('id', referralIds);
           } else {
-            // No referrals, return empty
             return NextResponse.json({
               success: true,
               recipientCount: 0,
@@ -171,21 +116,14 @@ export async function POST(request: NextRequest) {
         break;
 
       default:
-        return NextResponse.json(
-          { error: `Invalid scope: ${scope}` },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: `Invalid scope: ${scope}` }, { status: 400 });
     }
 
-    // Get recipient list
     const { data: recipients, error: recipientError } = await recipientQuery;
 
     if (recipientError) {
-      console.error('Error fetching recipients:', recipientError);
-      return NextResponse.json(
-        { error: 'Failed to fetch recipients' },
-        { status: 500 }
-      );
+      console.error('[Send Notification] Error fetching recipients:', recipientError);
+      return NextResponse.json({ error: 'Failed to fetch recipients' }, { status: 500 });
     }
 
     if (!recipients || recipients.length === 0) {
@@ -196,48 +134,44 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create notification record
-    const notificationData = {
-      sender_id: adminProfile.id,
-      title,
-      message,
-      type: type || 'info',
-      scope,
-      scope_value: scopeValue || null,
-      recipient_count: recipients.length,
-      message_type: 'admin_to_member',
-      metadata: {
-        sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
-        sent_by_staff_role: adminProfile.staff_role,
-        sent_by_membership_role: adminProfile.membership_role,
-      },
-    };
+    // Map the requested type to a valid notification_type enum value
+    // Enum: system, vote, event, task, achievement, news, referral
+    const validTypes = ['system', 'vote', 'event', 'task', 'achievement', 'news', 'referral'];
+    const notifType = validTypes.includes(type) ? type : 'system';
 
-    console.log('[Send Notification] Inserting:', JSON.stringify(notificationData));
-
+    // Create one notification record (user_id = sender/admin)
     const { data: notification, error: notificationError } = await supabase
       .from('notifications')
-      .insert(notificationData)
+      .insert({
+        user_id: adminProfile.id,
+        title,
+        body: message,
+        type: notifType,
+        sent_at: new Date().toISOString(),
+        data: {
+          scope,
+          scope_value: scopeValue || null,
+          recipient_count: recipients.length,
+          sent_by_name: `${adminProfile.first_name} ${adminProfile.last_name}`,
+          sent_by_staff_role: adminProfile.staff_role,
+        },
+      })
       .select()
       .single();
 
     if (notificationError || !notification) {
-      console.error('[Send Notification] Insert error:', JSON.stringify(notificationError));
+      console.error('[Send Notification] Insert error:', notificationError);
       return NextResponse.json(
         {
           error: 'Failed to create notification',
-          stage: 'insert',
-          details: notificationError?.message || 'Unknown error',
-          code: notificationError?.code || 'UNKNOWN',
-          hint: notificationError?.hint || null,
-          data: notificationData,
+          details: notificationError?.message,
         },
         { status: 500 }
       );
     }
 
     // Create recipient records
-    const recipientRecords = recipients.map((recipient) => ({
+    const recipientRecords = recipients.map((recipient: { id: string }) => ({
       notification_id: notification.id,
       user_id: recipient.id,
     }));
@@ -247,23 +181,9 @@ export async function POST(request: NextRequest) {
       .insert(recipientRecords);
 
     if (recipientInsertError) {
-      console.error('Error creating recipient records:', recipientInsertError);
-      // Don't fail the whole operation, just log it
+      console.error('[Send Notification] Recipient insert error:', recipientInsertError);
+      // Non-fatal: notification created, just recipients not linked
     }
-
-    // Create audit log
-    await supabase.from('audit_logs').insert({
-      admin_id: adminProfile.id,
-      action: 'send_notification',
-      entity_type: 'notification',
-      entity_id: notification.id,
-      metadata: {
-        title,
-        scope,
-        scope_value: scopeValue,
-        recipient_count: recipients.length,
-      },
-    });
 
     return NextResponse.json({
       success: true,
@@ -276,7 +196,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Internal server error',
-        stage: 'unknown',
         details: error instanceof Error ? error.message : String(error),
       },
       { status: 500 }
