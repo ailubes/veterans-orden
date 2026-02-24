@@ -57,16 +57,15 @@ export async function linkTelegramToUser(
   telegramUsername?: string,
   telegramFirstName?: string
 ) {
-  const { error } = await getSupabase()
-    .from('users')
-    .update({
-      telegram_id: telegramId,
-      telegram_username: telegramUsername || null,
-      telegram_first_name: telegramFirstName || null,
-      telegram_linked_at: new Date().toISOString(),
-      telegram_notifications_enabled: true,
-    })
-    .eq('id', userId);
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+  const { error } = await getSupabase().rpc('bot_link_telegram', {
+    p_secret:               botSecret,
+    p_user_id:              userId,
+    p_telegram_id:          telegramId,
+    p_telegram_username:    telegramUsername || null,
+    p_telegram_first_name:  telegramFirstName || null,
+  });
+  if (error) console.error('[TG DB] linkTelegramToUser error:', error);
   return !error;
 }
 
@@ -207,36 +206,17 @@ async function getUserBalance(userId: string): Promise<number> {
 }
 
 export async function castVote(userId: string, voteId: string, optionId: string) {
-  // Check if user already voted
-  const { data: existing } = await getSupabase()
-    .from('user_votes')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('vote_id', voteId)
-    .single();
-
-  if (existing) return { success: false, reason: 'already_voted' };
-
-  const { error } = await getSupabase().from('user_votes').insert({
-    user_id: userId,
-    vote_id: voteId,
-    option_id: optionId,
-    casted_at: new Date().toISOString(),
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+  const { data, error } = await getSupabase().rpc('bot_cast_vote', {
+    p_secret:    botSecret,
+    p_user_id:   userId,
+    p_vote_id:   voteId,
+    p_option_id: optionId,
   });
-
   if (error) return { success: false, reason: 'error' };
-
-  // Award points for voting
-  const currentBalance = await getUserBalance(userId);
-  await getSupabase().from('points_transactions').insert({
-    user_id: userId,
-    amount: 5,
-    balance_after: currentBalance + 5,
-    type: 'earn_vote',
-    description: 'Голосування через Telegram бот',
-  });
-
-  return { success: true };
+  if (data === 'already_voted') return { success: false, reason: 'already_voted' };
+  if (data === 'ok') return { success: true };
+  return { success: false, reason: 'error' };
 }
 
 export async function saveTelegramInvitation(params: {
@@ -245,24 +225,22 @@ export async function saveTelegramInvitation(params: {
   telegramUsername?: string;
   telegramFirstName?: string;
 }) {
-  await getSupabase().from('telegram_invitations').upsert({
-    inviter_id: params.inviterId,
-    telegram_id: params.telegramId,
-    telegram_username: params.telegramUsername || null,
-    telegram_first_name: params.telegramFirstName || null,
-    invited_at: new Date().toISOString(),
-  }, { onConflict: 'telegram_id' });
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+  await getSupabase().rpc('bot_save_invitation', {
+    p_secret:              botSecret,
+    p_inviter_id:          params.inviterId,
+    p_telegram_id:         params.telegramId,
+    p_telegram_username:   params.telegramUsername || null,
+    p_telegram_first_name: params.telegramFirstName || null,
+  });
 }
 
 export async function awardReferralPoints(referrerId: string, newUserId: string) {
-  const currentBalance = await getUserBalance(referrerId);
-  await getSupabase().from('points_transactions').insert({
-    user_id: referrerId,
-    amount: 25,
-    balance_after: currentBalance + 25,
-    type: 'earn_referral',
-    description: 'Реєстрація реферала через Telegram бот',
-    metadata: { referred_user_id: newUserId },
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+  await getSupabase().rpc('bot_award_referral_points', {
+    p_secret:      botSecret,
+    p_referrer_id: referrerId,
+    p_new_user_id: newUserId,
   });
 }
 
@@ -305,8 +283,9 @@ export async function getOblasts() {
 }
 
 export async function disableTelegramNotifications(telegramId: number) {
-  await getSupabase()
-    .from('users')
-    .update({ telegram_notifications_enabled: false })
-    .eq('telegram_id', telegramId);
+  const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+  await getSupabase().rpc('bot_disable_notifications_by_tgid', {
+    p_secret:      botSecret,
+    p_telegram_id: telegramId,
+  });
 }

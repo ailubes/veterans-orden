@@ -315,10 +315,12 @@ export function registerCallbackHandlers(bot: Bot<BotContext>) {
     const currentEnabled = user?.telegram_notifications_enabled ?? true;
     const newEnabled = !currentEnabled;
 
-    await supabase
-      .from('users')
-      .update({ telegram_notifications_enabled: newEnabled })
-      .eq('id', userId);
+    const botSecret = process.env.TELEGRAM_BOT_SECRET || 'tg_bot_secret_7e3a9f2d1c8b4e5a6d0f3c7b2e9a4d1f';
+    await supabase.rpc('bot_set_notifications', {
+      p_secret:  botSecret,
+      p_user_id: userId,
+      p_enabled: newEnabled,
+    });
 
     const replyText = newEnabled ? msg.notificationsEnabled : msg.notificationsDisabled;
     await ctx.editMessageText(
