@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, canSendNotificationTo, isRegionalLeaderOnly } from '@/lib/permissions';
+import { deliverNotificationToTelegram } from '@/lib/telegram/notify';
 
 export const dynamic = 'force-dynamic';
 
@@ -184,6 +185,17 @@ export async function POST(request: NextRequest) {
       console.error('[Send Notification] Recipient insert error:', recipientInsertError);
       // Non-fatal: notification created, just recipients not linked
     }
+
+    // Fire-and-forget Telegram delivery for users who have Telegram linked
+    deliverNotificationToTelegram(notification.id, {
+      id: notification.id,
+      title,
+      body: message,
+      type: notifType as 'system' | 'vote' | 'event' | 'task' | 'achievement' | 'news' | 'referral',
+      data: notification.data as Record<string, unknown>,
+    }).catch((err) => {
+      console.error('[Send Notification] Telegram delivery error:', err);
+    });
 
     return NextResponse.json({
       success: true,

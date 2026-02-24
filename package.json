@@ -53,6 +53,7 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "exceljs": "^4.4.0",
+    "grammy": "^1.40.0",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",
     "lottie-react": "^2.4.1",
