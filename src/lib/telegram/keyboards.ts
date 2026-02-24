@@ -71,6 +71,18 @@ export function eventRsvpKeyboard(eventId: string) {
     .text('❌ Не піду', `rsvp:${eventId}:not_going`);
 }
 
+export function inviteKeyboard(userId: string, botUsername: string) {
+  const botLink = `https://t.me/${botUsername}?start=ref_${userId}`;
+  const shareText = encodeURIComponent(
+    '🎖️ Приєднуйся до Ордену Ветеранів — спільноти ветеранів, яка впливає на майбутнє України!'
+  );
+  const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(botLink)}&text=${shareText}`;
+  return new InlineKeyboard()
+    .url('📤 Поділитися з контактами', shareUrl)
+    .row()
+    .text('↩️ Назад', 'menu:main');
+}
+
 export function notificationsKeyboard(enabled: boolean) {
   return new InlineKeyboard()
     .text(enabled ? '🔕 Вимкнути сповіщення' : '🔔 Увімкнути сповіщення', 'notif:toggle')

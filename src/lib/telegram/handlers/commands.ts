@@ -12,6 +12,7 @@ import {
   mainMenuKeyboard,
   linkMethodsKeyboard,
   notificationsKeyboard,
+  inviteKeyboard,
 } from '../keyboards';
 
 type BotContext = Context & { session: BotSession };
@@ -152,7 +153,7 @@ export function registerCommandHandlers(bot: Bot<BotContext>) {
     const botUsername = process.env.TELEGRAM_BOT_USERNAME || 'Orden_of_veterans_bot';
     await ctx.reply(msg.inviteLink(userId, botUsername), {
       parse_mode: 'HTML',
-      reply_markup: mainMenuKeyboard(),
+      reply_markup: inviteKeyboard(userId, botUsername),
     });
   });
 
