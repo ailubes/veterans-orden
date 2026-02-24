@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import VotesList from '@/components/votes/votes-list';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 
 export default async function VotesPage() {
   const supabase = await createClient();
@@ -25,9 +26,12 @@ export default async function VotesPage() {
       {/* Header */}
       <div className="mb-8">
         <p className="mono text-bronze text-xs tracking-widest mb-2">// ГОЛОСУВАННЯ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
-          Прийняття рішень
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
+            Прийняття рішень
+          </h1>
+          <HelpTooltip pageSlug="dashboard-votes" elementId="vote-list" position="right" />
+        </div>
       </div>
 
       <VotesList activeVotes={activeVotes} closedVotes={closedVotes} />

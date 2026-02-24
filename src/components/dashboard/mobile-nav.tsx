@@ -25,6 +25,7 @@ import {
   HelpCircle,
   Target,
   User,
+  BookHeart,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { NotificationBell } from './notification-bell';
@@ -44,6 +45,7 @@ const navItems = [
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
+  { href: '/dashboard/resources', icon: BookHeart, label: 'РЕСУРСИ' },
   { href: '/dashboard/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
   { href: '/dashboard/marketplace/checkout', icon: ShoppingCart, label: 'КОШИК' },
   { href: '/dashboard/points', icon: Coins, label: 'МОЇ БАЛИ' },

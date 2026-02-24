@@ -106,7 +106,7 @@ export default function FeatureGate({
 
   // Feature is locked - show overlay
   return (
-    <div className="relative">
+    <div className="relative min-h-[460px]">
       {/* Dimmed content */}
       <div className="opacity-30 pointer-events-none select-none">
         {children}
@@ -121,7 +121,6 @@ export default function FeatureGate({
           p-6
           text-center
           relative
-          overflow-hidden
         ">
           {/* Locked badge */}
           <div className="absolute top-0 left-0 right-0 bg-bronze/20 py-1.5 px-3">

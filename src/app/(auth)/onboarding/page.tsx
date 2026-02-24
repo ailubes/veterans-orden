@@ -42,9 +42,11 @@ export default function OnboardingPage() {
 
   // Membership tier
   const [selectedTier, setSelectedTier] = useState<'free' | 'basic_49' | 'supporter_100' | 'supporter_200' | 'patron_500'>('free');
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paymentPending, setPaymentPending] = useState(false);
 
   const [user, setUser] = useState<{ email: string; id: string } | null>(null);
 
@@ -116,18 +118,8 @@ export default function OnboardingPage() {
         referralCode += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      // Find oblast UUID from KATOTTG data or selected oblast code
-      let oblastId = null;
-      const oblastCodeToUse = katottgDetails?.oblastCode || selectedOblastCode;
-
-      if (oblastCodeToUse) {
-        const { data: oblastData } = await supabase
-          .from('oblasts')
-          .select('id')
-          .eq('code', oblastCodeToUse)
-          .single();
-        oblastId = oblastData?.id || null;
-      }
+      // oblasts table not yet seeded — skip lookup
+      const oblastId = null;
 
       // Check if user was referred by someone
       const referrerCode = user.user_metadata?.referral_code;
@@ -157,7 +149,7 @@ export default function OnboardingPage() {
       const finalMemberSince = existingProfile?.member_since || new Date().toISOString();
 
       // Upsert: INSERT on first run, UPDATE if trigger already created the row
-      const { error: upsertError, data: newUser } = await supabase
+      const { error: upsertError } = await supabase
         .from('users')
         .upsert({
           auth_id: user.id,
@@ -181,24 +173,10 @@ export default function OnboardingPage() {
           status: 'active',
           member_since: finalMemberSince,
           updated_at: new Date().toISOString(),
-        }, { onConflict: 'auth_id' })
-        .select('id')
-        .single();
+        }, { onConflict: 'auth_id' });
 
       if (upsertError) {
         throw upsertError;
-      }
-
-      // Generate progression tasks for new user
-      if (newUser?.id) {
-        const { error: tasksError } = await supabase.rpc('generate_progression_tasks', {
-          p_user_id: newUser.id
-        });
-
-        if (tasksError) {
-          console.error('Failed to generate progression tasks:', tasksError);
-          // Don't block registration, just log the error
-        }
       }
 
       // If user was referred, increment the referrer's count and add points
@@ -221,43 +199,35 @@ export default function OnboardingPage() {
         }
       }
 
-      // If paid tier selected, redirect to payment
+      // If paid tier selected, attempt payment
       if (selectedTier !== 'free') {
-        // Create payment order
         const paymentResponse = await fetch('/api/payments/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tierId: selectedTier }),
+          body: JSON.stringify({ tierId: selectedTier, isAnnual }),
         });
 
         if (!paymentResponse.ok) {
-          throw new Error('Помилка створення платежу');
+          const err = await paymentResponse.json().catch(() => ({}));
+          throw new Error(err.error || 'Помилка створення запиту на оплату');
         }
 
-        const { data, signature } = await paymentResponse.json();
+        const { hutkoToken, orderId, payLater, amount } = await paymentResponse.json();
 
-        // Redirect to LiqPay
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = 'https://www.liqpay.ua/api/3/checkout';
-        form.style.display = 'none';
+        if (hutkoToken) {
+          // HUTKO configured — redirect to embedded payment page
+          const annualFlag = isAnnual ? '&annual=1' : '';
+          const amountParam = amount ? `&amount=${amount}` : '';
+          router.push(`/pay?token=${hutkoToken}&orderId=${encodeURIComponent(orderId)}&tier=${selectedTier}${annualFlag}${amountParam}`);
+          return;
+        }
 
-        const dataInput = document.createElement('input');
-        dataInput.name = 'data';
-        dataInput.value = data;
-        form.appendChild(dataInput);
-
-        const signatureInput = document.createElement('input');
-        signatureInput.name = 'signature';
-        signatureInput.value = signature;
-        form.appendChild(signatureInput);
-
-        document.body.appendChild(form);
-        form.submit();
-        return;
+        // payLater: payment record created but no gateway — show pending notice
+        if (payLater) {
+          setPaymentPending(true);
+        }
       }
 
-      // Free tier - complete immediately
       setStep('complete');
     } catch (err) {
       console.error('Onboarding error:', err);
@@ -539,6 +509,35 @@ export default function OnboardingPage() {
               Підтримайте громаду та отримайте додаткові можливості
             </p>
 
+            {/* Billing period toggle — shown only when a paid tier is selected */}
+            {selectedTier !== 'free' && (
+              <div className="flex rounded-lg border border-line overflow-hidden mb-5">
+                <button
+                  type="button"
+                  onClick={() => setIsAnnual(false)}
+                  className={`flex-1 py-2 text-sm font-mono transition-colors ${
+                    !isAnnual
+                      ? 'bg-bronze text-bg-950 font-bold'
+                      : 'text-muted-500 hover:text-text-100'
+                  }`}
+                >
+                  Щомісяця
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAnnual(true)}
+                  className={`flex-1 py-2 text-sm font-mono transition-colors ${
+                    isAnnual
+                      ? 'bg-bronze text-bg-950 font-bold'
+                      : 'text-muted-500 hover:text-text-100'
+                  }`}
+                >
+                  Щорічно
+                  <span className="ml-1.5 text-xs bg-green-500/20 text-green-400 rounded px-1 py-0.5">−2 міс.</span>
+                </button>
+              </div>
+            )}
+
             <div className="space-y-3 mb-6">
               {/* Free Tier */}
               <div
@@ -587,8 +586,18 @@ export default function OnboardingPage() {
                     </ul>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-xl text-text-100">49₴</div>
-                    <div className="text-xs text-muted-500">на місяць</div>
+                    {isAnnual ? (
+                      <>
+                        <div className="font-bold text-xl text-text-100">490₴</div>
+                        <div className="text-xs text-muted-500">на рік</div>
+                        <div className="text-xs text-green-400">економія 98₴</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-xl text-text-100">49₴</div>
+                        <div className="text-xs text-muted-500">на місяць</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -613,8 +622,18 @@ export default function OnboardingPage() {
                     </ul>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-xl text-text-100">100₴</div>
-                    <div className="text-xs text-muted-500">на місяць</div>
+                    {isAnnual ? (
+                      <>
+                        <div className="font-bold text-xl text-text-100">1000₴</div>
+                        <div className="text-xs text-muted-500">на рік</div>
+                        <div className="text-xs text-green-400">економія 200₴</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-xl text-text-100">100₴</div>
+                        <div className="text-xs text-muted-500">на місяць</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -639,8 +658,18 @@ export default function OnboardingPage() {
                     </ul>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-xl text-text-100">200₴</div>
-                    <div className="text-xs text-muted-500">на місяць</div>
+                    {isAnnual ? (
+                      <>
+                        <div className="font-bold text-xl text-text-100">2000₴</div>
+                        <div className="text-xs text-muted-500">на рік</div>
+                        <div className="text-xs text-green-400">економія 400₴</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-xl text-text-100">200₴</div>
+                        <div className="text-xs text-muted-500">на місяць</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -666,8 +695,18 @@ export default function OnboardingPage() {
                     </ul>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-xl text-text-100">500₴</div>
-                    <div className="text-xs text-muted-500">на місяць</div>
+                    {isAnnual ? (
+                      <>
+                        <div className="font-bold text-xl text-text-100">5000₴</div>
+                        <div className="text-xs text-muted-500">на рік</div>
+                        <div className="text-xs text-green-400">економія 1000₴</div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="font-bold text-xl text-text-100">500₴</div>
+                        <div className="text-xs text-muted-500">на місяць</div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -710,6 +749,15 @@ export default function OnboardingPage() {
               Ваш профіль налаштовано. Тепер ви можете користуватися всіма
               можливостями Ордену.
             </p>
+
+            {paymentPending && (
+              <div className="bg-bronze/10 border border-bronze/30 rounded-lg p-4 mb-6 text-sm text-left">
+                <p className="font-bold text-bronze mb-1">Оплата очікує підтвердження</p>
+                <p className="text-muted-500">
+                  Ваш запит на членство зареєстровано. Реквізити для оплати надійдуть на пошту.
+                </p>
+              </div>
+            )}
 
             <div className="space-y-3">
               <HeavyCta

@@ -113,8 +113,8 @@ export async function requireAdminUser(request: Request | NextRequest) {
     };
   }
 
-  const adminRoles = ['admin', 'super_admin'];
-  const isAdmin = result.profile && adminRoles.includes(result.profile.role);
+  // staff_role is the admin column; role is the membership column
+  const isAdmin = result.profile && ['admin', 'super_admin'].includes(result.profile.staff_role);
 
   return {
     ...result,
@@ -137,7 +137,7 @@ export async function requireSuperAdminUser(request: Request | NextRequest) {
     };
   }
 
-  const isSuperAdmin = result.profile?.role === 'super_admin';
+  const isSuperAdmin = result.profile?.staff_role === 'super_admin';
 
   return {
     ...result,

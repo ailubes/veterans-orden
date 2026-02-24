@@ -6,6 +6,7 @@ import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { GrainOverlay } from '@/components/layout/grain-overlay';
 import { MessengerWrapper } from '@/components/messaging/messenger-wrapper';
 import { checkProfileCompletion, type UserProfile } from '@/lib/profile-completion';
+import { OnboardingTour } from '@/components/dashboard/onboarding-tour';
 
 export default async function DashboardLayout({
   children,
@@ -24,7 +25,7 @@ export default async function DashboardLayout({
   // Check if user profile is complete
   const { data: profile } = await supabase
     .from('users')
-    .select('first_name, last_name, phone, date_of_birth, katottg_code')
+    .select('first_name, last_name, phone, date_of_birth, katottg_code, onboarding_completed_at, status, membership_tier, membership_paid_until')
     .eq('auth_id', user.id)
     .single();
 
@@ -34,6 +35,24 @@ export default async function DashboardLayout({
   if (!completionStatus.isComplete) {
     redirect('/complete-profile');
   }
+
+  // Block suspended members (failed to pay)
+  if (profile?.status === 'suspended') {
+    redirect('/payment-required');
+  }
+
+  // Block paid-tier members with expired membership (past 7-day grace period)
+  const paidTiers = ['basic_49', 'supporter_100', 'supporter_200', 'patron_500'];
+  if (
+    profile?.membership_tier &&
+    paidTiers.includes(profile.membership_tier) &&
+    profile?.membership_paid_until &&
+    new Date(profile.membership_paid_until) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  ) {
+    redirect('/payment-required');
+  }
+
+  const hasCompletedOnboarding = !!(profile as any)?.onboarding_completed_at;
 
   return (
     <MessengerWrapper>
@@ -47,6 +66,7 @@ export default async function DashboardLayout({
             <main className="flex-1 p-4 lg:p-8">{children}</main>
           </div>
         </div>
+        <OnboardingTour userId={user.id} hasCompletedOnboarding={hasCompletedOnboarding} />
       </div>
     </MessengerWrapper>
   );

@@ -23,6 +23,7 @@ import {
   CHALLENGE_GOAL_TYPE_LABELS,
   BADGE_RARITY_LABELS,
 } from '@/lib/challenges';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 import type { ChallengeWithProgress, ChallengeType, ChallengeStatus, UserBadge, BadgeRarity } from '@/lib/challenges';
 
 const goalIcons = {
@@ -158,9 +159,12 @@ export default function ChallengesPage() {
       {/* Header */}
       <div className="mb-8">
         <p className="mono text-bronze text-xs tracking-widest mb-2">// ВИКЛИКИ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
-          Челенджі
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
+            Челенджі
+          </h1>
+          <HelpTooltip pageSlug="dashboard-challenges" elementId="challenge-list" position="right" />
+        </div>
       </div>
 
       {/* User Stats */}

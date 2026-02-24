@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Coins, TrendingUp, Clock, History, ChevronRight } from 'lucide-react';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 import { getUserLevel, getPointsToNextLevel, TRANSACTION_TYPE_LABELS, pointsToUAH } from '@/lib/points/constants';
 
 interface PointsBalance {
@@ -108,11 +109,14 @@ export default function PointsPage() {
       {/* Header */}
       <div className="mb-8">
         <p className="label mb-2">БАЛИ</p>
-        <h1 className="font-syne text-3xl lg:text-4xl font-bold">Мої бали</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-syne text-3xl lg:text-4xl font-bold">Мої бали</h1>
+          <HelpTooltip pageSlug="dashboard-points" elementId="points-balance" position="right" />
+        </div>
       </div>
 
       {/* Balance Card */}
-      <div className="bg-panel-850 text-canvas p-6 relative mb-8">
+      <div id="points-balance" className="bg-panel-850 text-canvas p-6 relative mb-8">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
         <div className="joint joint-bl" />
@@ -197,13 +201,14 @@ export default function PointsPage() {
       )}
 
       {/* Transaction History */}
-      <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
+      <div id="points-history" className="bg-panel-900 border border-line rounded-lg p-6 relative">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
 
         <div className="flex items-center gap-2 mb-6">
           <History className="text-bronze" size={20} />
           <h2 className="font-syne text-xl font-bold">Історія транзакцій</h2>
+          <HelpTooltip pageSlug="dashboard-points" elementId="points-history" position="right" />
         </div>
 
         {history.transactions.length > 0 ? (

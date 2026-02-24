@@ -92,9 +92,14 @@ export default function JoinPage() {
                   </div>
                 </div>
                 <div className="join-option-footer">
-                  <HeavyCta href="/join/procedure" variant="primary" size="lg" className="join-option-cta">
-                    ДІЗНАТИСЯ ПРОЦЕДУРУ
-                  </HeavyCta>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <HeavyCta href="/join/request" variant="primary" size="lg" className="join-option-cta">
+                      ПОДАТИ ЗАПИТ
+                    </HeavyCta>
+                    <HeavyCta href="/join/procedure" variant="outline" size="lg" className="join-option-cta">
+                      ДІЗНАТИСЯ ПРОЦЕДУРУ
+                    </HeavyCta>
+                  </div>
                 </div>
               </div>
             </div>

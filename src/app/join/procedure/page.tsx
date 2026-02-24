@@ -72,8 +72,11 @@ export default function JoinProcedurePage() {
               Заповніть заявку — і ми запропонуємо найкращий формат участі
             </p>
             <CtaGroup align="center">
-              <HeavyCta href="/join" variant="primary" size="lg">
-                ПОДАТИ ЗАЯВКУ
+              <HeavyCta href="/join/request" variant="primary" size="lg">
+                ПОДАТИ ЗАПИТ НА ВСТУП В ОРДЕН
+              </HeavyCta>
+              <HeavyCta href="/sign-up" variant="outline" size="lg">
+                ВСТУПИТИ ДО СПІЛЬНОТИ
               </HeavyCta>
             </CtaGroup>
           </div>

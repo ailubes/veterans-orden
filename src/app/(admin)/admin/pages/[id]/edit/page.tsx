@@ -90,7 +90,7 @@ export default function EditPagePage({ params }: EditPageProps) {
         .order('sort_order');
 
       if (pages) {
-        setParentPages(pages.filter(p => !p.slug.startsWith(page.slug)));
+        setParentPages(pages.filter((p: { slug: string }) => !p.slug.startsWith(page.slug)));
       }
 
       setLoading(false);

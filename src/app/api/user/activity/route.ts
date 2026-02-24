@@ -27,53 +27,16 @@ export async function POST() {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Update streak using PostgreSQL function
-    const { error: streakError } = await supabase
-      .rpc('update_user_streak', { p_user_id: dbUser.id });
-
-    if (streakError) {
-      console.error('[Activity] Error updating streak:', streakError);
-      return NextResponse.json(
-        { error: 'Failed to update activity streak' },
-        { status: 500 }
-      );
-    }
-
-    // Fetch updated streak data
-    const { data: streak, error: fetchError } = await supabase
-      .from('user_streaks')
-      .select('*')
-      .eq('user_id', dbUser.id)
-      .single();
-
-    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows
-      console.error('[Activity] Error fetching streak:', fetchError);
-      return NextResponse.json(
-        { error: 'Failed to fetch streak data' },
-        { status: 500 }
-      );
-    }
-
-    // Check for new uncelebrated milestones
-    const { data: milestones } = await supabase
-      .from('progression_milestones')
-      .select('id, milestone_type, title_uk, message_uk')
-      .eq('user_id', dbUser.id)
-      .eq('is_celebrated', false)
-      .eq('milestone_type', 'streak_milestone')
-      .order('created_at', { ascending: false })
-      .limit(1);
-
     return NextResponse.json({
       success: true,
       data: {
         streak: {
-          current: streak?.current_streak || 0,
-          longest: streak?.longest_streak || 0,
-          totalDays: streak?.total_days || 0,
-          lastActivityDate: streak?.last_activity_date,
+          current: 0,
+          longest: 0,
+          totalDays: 0,
+          lastActivityDate: null,
         },
-        newMilestone: milestones && milestones.length > 0 ? milestones[0] : null,
+        newMilestone: null,
       },
     });
 

@@ -48,9 +48,7 @@ export function FooterNew() {
               <nav className="footer-links">
                 <Link href="/about" className="footer-link">Про нас</Link>
                 <Link href="/mission" className="footer-link">Місія та цінності</Link>
-                <Link href="/governance" className="footer-link">Управління (Тріада)</Link>
-                <Link href="/honor-court" className="footer-link">Суд Честі</Link>
-                <Link href="/code-of-honor" className="footer-link">Кодекс Честі</Link>
+                <Link href="/governance" className="footer-link">Управління</Link>
               </nav>
             </div>
 

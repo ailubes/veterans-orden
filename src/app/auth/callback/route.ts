@@ -53,8 +53,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', requestUrl.origin));
   }
 
-  // Handle PKCE flow (middleware already exchanged the code)
+  // Handle PKCE flow — exchange code for session
+  const code = requestUrl.searchParams.get('code');
   const supabase = await createClient();
+
+  if (code) {
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    if (exchangeError) {
+      console.error('Code exchange error:', exchangeError);
+      return NextResponse.redirect(
+        new URL('/sign-in?error=auth_callback_error', requestUrl.origin)
+      );
+    }
+  }
+
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

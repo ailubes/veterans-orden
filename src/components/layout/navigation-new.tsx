@@ -34,8 +34,6 @@ export function NavigationNew() {
         { href: '/about', label: 'Про нас' },
         { href: '/mission', label: 'Місія та цінності' },
         { href: '/governance', label: 'Управління' },
-        { href: '/honor-court', label: 'Суд Честі' },
-        { href: '/code-of-honor', label: 'Кодекс Честі' },
       ],
     },
     {

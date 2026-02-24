@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { TaskFilters } from '@/components/tasks/task-filters';
 import TasksList from '@/components/tasks/tasks-list';
+import { HelpTooltip } from '@/components/help/help-tooltip';
 
 interface PageProps {
   searchParams: Promise<{ type?: string; priority?: string }>;
@@ -67,9 +68,12 @@ export default async function TasksPage({ searchParams }: PageProps) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <p className="mono text-bronze text-xs tracking-widest mb-2">// ЗАВДАННЯ</p>
-          <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
-            Мої завдання
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-syne text-3xl lg:text-4xl font-bold text-text-100">
+              Мої завдання
+            </h1>
+            <HelpTooltip pageSlug="dashboard-tasks" elementId="task-list" position="right" />
+          </div>
         </div>
         <div className="flex gap-2">
           <TaskFilters />

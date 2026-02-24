@@ -6,39 +6,6 @@ import { SectionCard, SectionCardGrid } from '@/components/ui/section-card';
 import { HeavyCta, CtaGroup } from '@/components/ui/heavy-cta';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
 
-const DIRECTIONS = [
-  {
-    slug: 'adaptation',
-    title: 'АДАПТАЦІЯ',
-    description: 'Підтримка переходу до цивільного життя, наставництво, спільнота контактів, супровід.',
-  },
-  {
-    slug: 'legal-protection',
-    title: 'ПРАВОВИЙ ЗАХИСТ',
-    description: 'Консультації, звернення, супровід кейсів, захист прав ветеранів і родин.',
-  },
-  {
-    slug: 'psychological-support',
-    title: 'ПСИХОЛОГІЧНА ПІДТРИМКА',
-    description: 'Скринінг, перенаправлення до фахівців, групи підтримки, кризові контакти.',
-  },
-  {
-    slug: 'education',
-    title: 'ОСВІТА & НАСТАВНИЦТВО',
-    description: 'Навчальні події, тренінги, розвиток лідерів, робота "мислителів".',
-  },
-  {
-    slug: 'civic-campaigns',
-    title: 'ГРОМАДЯНСЬКІ КАМПАНІЇ',
-    description: 'Адвокація, публічні звернення, комунікаційні кампанії, контроль виконання рішень.',
-  },
-  {
-    slug: 'mutual-aid',
-    title: 'ВЗАЄМОДОПОМОГА',
-    description: 'Підтримка побратимів, волонтерські місії, координація ресурсів, партнерства.',
-  },
-];
-
 export default function DirectionsPage() {
   return (
     <PageLayout>
@@ -59,36 +26,128 @@ export default function DirectionsPage() {
       <PageHeader
         subtitle="// НАПРЯМИ РОБОТИ"
         title="ЩО МИ РОБИМО"
-        description="Орден Ветеранів працює у шести ключових напрямках: адаптація, правовий захист, психологічна підтримка, освіта, громадянські кампанії та взаємодопомога."
+        description="Ми не займаємось імітацією бурхливої діяльності. Ми будуємо систему, яка працює на посилення ветеранів у цивільному житті. Наша робота ведеться за трьома основними напрямками."
       />
 
       <PageContent narrow>
         <p>
-          Кожен напрям роботи Ордену спрямований на конкретну підтримку ветеранів, їхніх родин та спільноти.
-          Ми не обіцяємо всього — ми робимо те, що можемо зробити якісно.
-        </p>
-        <p>
-          Наша система побудована на принципах взаємодопомоги, чіткої відповідальності та прозорості.
-          Кожен напрям має координаторів, процедури та критерії якості.
+          Кожен напрям Ордену спрямований на конкретний результат: ветеран як власник справи, ветеран як частина згуртованої спільноти, ветеран у системі, що захищає його честь зсередини.
         </p>
       </PageContent>
 
-      {/* Directions Grid */}
+      {/* 3 Directions */}
       <section className="section" style={{ background: 'var(--bg-elevated)' }}>
         <Scaffold>
-          <div className="col-span-full">
+          {/* Direction 1 — Business Incubator */}
+          <div className="col-span-full" style={{ marginBottom: '3rem' }}>
+            <span className="mono section-kicker">// НАПРЯМ 01</span>
+            <h2 className="section-title" style={{ marginBottom: '1rem' }}>БІЗНЕС-ІНКУБАТОР</h2>
+            <p className="section-desc" style={{ marginBottom: '2rem' }}>
+              Головний напрям Ордену. Ми трансформуємо бойовий досвід у бізнес, відповідальність і економічну самостійність.
+            </p>
             <SectionCardGrid columns={3}>
-              {DIRECTIONS.map((direction) => (
-                <SectionCard
-                  key={direction.slug}
-                  title={direction.title}
-                  subtitle="// НАПРЯМ"
-                  href={`/directions/${direction.slug}`}
-                  variant="dark"
-                >
-                  {direction.description}
-                </SectionCard>
-              ))}
+              <SectionCard
+                title="БАНК ГОТОВИХ РІШЕНЬ"
+                subtitle="// СТАРТАПИ"
+                href="/directions"
+                variant="dark"
+              >
+                Орден розробляє та пропонує життєздатні бізнес-моделі, перевірені реальним досвідом.
+              </SectionCard>
+              <SectionCard
+                title="ФІНАНСОВА НАВІГАЦІЯ"
+                subtitle="// ФІНАНСУВАННЯ"
+                href="/directions"
+                variant="dark"
+              >
+                Орден допоможе у пошуку грантів і підготовці заявок.
+              </SectionCard>
+              <SectionCard
+                title="ІНФРАСТРУКТУРА"
+                subtitle="// ЛОКАЦІЇ"
+                href="/directions"
+                variant="dark"
+              >
+                Орден допоможе з пошуком приміщень та землі для старту.
+              </SectionCard>
+              <SectionCard
+                title="НАВЧАННЯ"
+                subtitle="// ЗНАННЯ"
+                href="/directions"
+                variant="dark"
+              >
+                Орден проводить навчання та дає прикладні знання для створення та управління власним бізнесом.
+              </SectionCard>
+              <SectionCard
+                title="ПАРТНЕРСЬКА ПІДТРИМКА"
+                subtitle="// СУПРОВІД"
+                href="/directions"
+                variant="dark"
+              >
+                Підтримуємо на ключових етапах. Ми не няньки, але підставляємо плече, коли це справді потрібно.
+              </SectionCard>
+            </SectionCardGrid>
+          </div>
+
+          {/* Direction 2 — Community Building */}
+          <div className="col-span-full" style={{ marginBottom: '3rem' }}>
+            <span className="mono section-kicker">// НАПРЯМ 02</span>
+            <h2 className="section-title" style={{ marginBottom: '1rem' }}>РОЗБУДОВА СПІЛЬНОТИ</h2>
+            <p className="section-desc" style={{ marginBottom: '2rem' }}>
+              Орден — це братерська мережа. Якщо ти готовий прийти на допомогу побратиму, побратими прийдуть на допомогу до тебе.
+            </p>
+            <SectionCardGrid columns={3}>
+              <SectionCard
+                title="КООРДИНАЦІЯ"
+                subtitle="// МЕРЕЖА"
+                href="/commanderies"
+                variant="dark"
+              >
+                Розгалужена мережа осередків (командерій) по всій Україні та за кордоном. Горизонтальні зв'язки між членами.
+              </SectionCard>
+              <SectionCard
+                title="КОМУНІКАЦІЯ"
+                subtitle="// ВЗАЄМОДІЯ"
+                href="/directions"
+                variant="dark"
+              >
+                Внутрішні канали зв'язку, спільні події, навчання та взаємодія між членами спільноти.
+              </SectionCard>
+              <SectionCard
+                title="СОЦІАЛЬНИЙ КАПІТАЛ"
+                subtitle="// МЕРЕЖА ПІДТРИМКИ"
+                href="/directions"
+                variant="dark"
+              >
+                Орден підставляє плече у складних ситуаціях. Захист від свавілля, взаємна порука, братерська відповідальність.
+              </SectionCard>
+            </SectionCardGrid>
+          </div>
+
+          {/* Direction 3 — Internal Order */}
+          <div className="col-span-full">
+            <span className="mono section-kicker">// НАПРЯМ 03</span>
+            <h2 className="section-title" style={{ marginBottom: '1rem' }}>ВНУТРІШНІЙ ПОРЯДОК</h2>
+            <p className="section-desc" style={{ marginBottom: '2rem' }}>
+              Порядок всередині — гарантія сили зовні. Орден живе за чіткими правилами, які захищають кожного члена.
+            </p>
+            <SectionCardGrid columns={3}>
+              <SectionCard
+                title="ЯДРО ОРДЕНУ"
+                subtitle="// ДИСЦИПЛІНА"
+                href="/join/procedure"
+                variant="dark"
+              >
+                Дисципліноване ядро: ієрархія, кодекс, операційна дія. Вступ через запрошення, випробування та посвяту.
+              </SectionCard>
+              <SectionCard
+                title="НАРАДА"
+                subtitle="// ВНУТРІШНІЙ АРБІТРАЖ"
+                href="/governance"
+                variant="dark"
+              >
+                Внутрішній механізм вирішення спорів та захисту честі. Нарада утримує спільноту від руйнування зсередини та приймає стратегічні рішення.
+              </SectionCard>
             </SectionCardGrid>
           </div>
         </Scaffold>

@@ -23,12 +23,17 @@ export default async function AdminLayout({
   // Check user's role from the database
   const { data: profile } = await supabase
     .from('users')
-    .select('role')
+    .select('role, staff_role')
     .eq('auth_id', user.id)
     .single();
 
-  const adminRoles = ['admin', 'super_admin', 'regional_leader'];
-  if (!profile || !adminRoles.includes(profile.role)) {
+  // staff_role = admin/super_admin grants full admin access
+  // role = regional_leader grants regional admin access
+  const hasAdminAccess = profile && (
+    ['admin', 'super_admin'].includes(profile.staff_role) ||
+    profile.role === 'regional_leader'
+  );
+  if (!hasAdminAccess) {
     redirect('/dashboard');
   }
 

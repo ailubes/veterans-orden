@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { createLiqPayData, createLiqPaySignature, generateOrderId, type LiqPayConfig } from '@/lib/liqpay';
+import { generateOrderId } from '@/lib/liqpay';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
-import { parsePaymentSettings } from '@/lib/settings/parser';
+import { createHutkoToken } from '@/lib/payments/hutko';
+import { parseSettingValue } from '@/lib/settings/parser';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's database ID
+    // Get user's database profile
     const { data: profile } = await supabase
       .from('users')
       .select('id, first_name, last_name, email')
@@ -25,68 +26,32 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Fetch payment settings from organization_settings
-    const { data: settings, error: settingsError } = await supabase
-      .from('organization_settings')
-      .select('key, value')
-      .in('key', [
-        'payment_liqpay_enabled',
-        'payment_liqpay_public_key',
-        'payment_liqpay_private_key',
-        'payment_liqpay_sandbox_mode',
-        'payment_currency',
-      ]);
+    // Parse + validate tier before any settings fetch
+    const body = await request.json();
+    const { tierId, isAnnual = false } = body;
 
-    if (settingsError) {
-      console.error('Error fetching payment settings:', settingsError);
-      return NextResponse.json(
-        { error: 'Payment system configuration error' },
-        { status: 500 }
-      );
-    }
-
-    // Parse payment settings with type safety
-    const settingsMap = new Map(settings?.map((s) => [s.key, s.value]) || []);
-    const paymentSettings = parsePaymentSettings(settingsMap);
-
-    // Validate payment system is configured
-    if (!paymentSettings.payment_liqpay_enabled) {
-      return NextResponse.json(
-        { error: 'Payment system is currently disabled' },
-        { status: 503 }
-      );
-    }
-
-    if (!paymentSettings.payment_liqpay_public_key || !paymentSettings.payment_liqpay_private_key) {
-      console.error('LiqPay keys not configured');
-      return NextResponse.json(
-        { error: 'Payment system is not properly configured. Please contact administrator.' },
-        { status: 503 }
-      );
-    }
-
-    const { tierId } = await request.json();
-
-    // Validate tier
     const tier = MEMBERSHIP_TIERS[tierId as keyof typeof MEMBERSHIP_TIERS];
     if (!tier) {
       return NextResponse.json({ error: 'Invalid tier' }, { status: 400 });
     }
 
+    const monthlyAmount = tier.price;
+    const amount = isAnnual ? monthlyAmount * 10 : monthlyAmount;
     const orderId = generateOrderId(profile.id, tierId);
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ordenv.org';
 
-    // Create payment record
+    // Always create a pending payment record first
     const { error: paymentError } = await supabase.from('payments').insert({
       user_id: profile.id,
-      order_id: orderId,
-      amount: tier.price,
-      currency: paymentSettings.payment_currency,
+      type: 'membership',
+      amount,
+      currency: 'UAH',
+      membership_tier: tierId,
+      provider: 'hutko',
+      provider_transaction_id: orderId,
       status: 'pending',
-      payment_type: 'membership',
-      metadata: {
-        tier_id: tierId,
+      provider_data: {
         tier_name: tier.name,
+        is_annual: isAnnual,
       },
     });
 
@@ -95,31 +60,48 @@ export async function POST(request: Request) {
       throw paymentError;
     }
 
-    // Build LiqPay config from database settings
-    const liqpayConfig: LiqPayConfig = {
-      publicKey: paymentSettings.payment_liqpay_public_key,
-      privateKey: paymentSettings.payment_liqpay_private_key,
-      currency: paymentSettings.payment_currency,
-      sandboxMode: paymentSettings.payment_liqpay_sandbox_mode,
-    };
+    // Fetch HUTKO settings
+    const { data: settings } = await supabase
+      .from('organization_settings')
+      .select('key, value')
+      .in('key', [
+        'payment_hutko_enabled',
+        'payment_hutko_merchant_id',
+        'payment_hutko_secret_key',
+      ]);
 
-    // Create LiqPay data
-    const data = createLiqPayData({
-      action: 'pay',
-      amount: tier.price,
-      description: `Членство в Ордені Ветеранів: ${tier.name}`,
-      order_id: orderId,
-      result_url: `${baseUrl}/dashboard/settings?payment=success`,
-      server_url: `${baseUrl}/api/payments/callback`,
-    }, liqpayConfig);
+    const settingsMap = new Map((settings || []).map((s) => [s.key, s.value]));
+    const hutkoEnabled = parseSettingValue<boolean>(settingsMap.get('payment_hutko_enabled'), 'boolean');
+    const hutkoMerchantId = parseSettingValue<string>(settingsMap.get('payment_hutko_merchant_id'), 'string');
+    const hutkoSecretKey = parseSettingValue<string>(settingsMap.get('payment_hutko_secret_key'), 'string');
 
-    const signature = createLiqPaySignature(data, paymentSettings.payment_liqpay_private_key);
+    if (hutkoEnabled && hutkoMerchantId && hutkoSecretKey) {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ordenv.org';
 
-    return NextResponse.json({
-      data,
-      signature,
-      checkoutUrl: 'https://www.liqpay.ua/api/3/checkout',
-    });
+      // Amount in kopiyki (UAH × 100)
+      const amountKopiyki = Math.round(amount * 100);
+
+      try {
+        const hutkoToken = await createHutkoToken(
+          { merchantId: Number(hutkoMerchantId), secretKey: hutkoSecretKey },
+          {
+            orderId,
+            orderDesc: `Членство в Ордені Ветеранів: ${tier.name}`,
+            amount: amountKopiyki,
+            currency: 'UAH',
+            serverCallbackUrl: `${baseUrl}/api/payments/hutko-callback`,
+          }
+        );
+
+        return NextResponse.json({ hutkoToken, orderId, isAnnual, amount });
+      } catch (hutkoError) {
+        console.error('HUTKO token creation failed:', hutkoError);
+        // Fall through to payLater response so the user isn't blocked
+      }
+    }
+
+    // HUTKO not configured (or token creation failed) — pay later
+    return NextResponse.json({ success: true, payLater: true, orderId });
   } catch (error) {
     console.error('Payment creation error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
