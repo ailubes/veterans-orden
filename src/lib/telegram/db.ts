@@ -9,10 +9,20 @@ export function createBotAdminClient() {
   });
 }
 
-const supabase = createBotAdminClient();
+// Lazy singleton — do NOT initialize at module level; env vars aren't
+// available at import time in Next.js. The client is created on first use,
+// inside a live request handler where process.env is fully populated.
+let _supabase: ReturnType<typeof createBotAdminClient> | null = null;
+function getSupabase() {
+  if (!_supabase) {
+    _supabase = createBotAdminClient();
+    console.log('[TG DB] Supabase client initialized, URL:', process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 40));
+  }
+  return _supabase;
+}
 
 export async function getUserByTelegramId(telegramId: number) {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('users')
     .select('*')
     .eq('telegram_id', telegramId)
@@ -21,7 +31,7 @@ export async function getUserByTelegramId(telegramId: number) {
 }
 
 export async function getUserByEmail(email: string) {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('users')
     .select('*')
     .eq('email', email.toLowerCase().trim())
@@ -30,7 +40,7 @@ export async function getUserByEmail(email: string) {
 }
 
 export async function getUserByPhone(phone: string) {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('users')
     .select('*')
     .eq('phone', phone)
@@ -44,7 +54,7 @@ export async function linkTelegramToUser(
   telegramUsername?: string,
   telegramFirstName?: string
 ) {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('users')
     .update({
       telegram_id: telegramId,
@@ -69,7 +79,7 @@ function generateReferralCode(): string {
 async function uniqueReferralCode(): Promise<string> {
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = generateReferralCode();
-    const { data } = await supabase
+    const { data } = await getSupabase()
       .from('users')
       .select('id')
       .eq('referral_code', code)
@@ -96,7 +106,7 @@ export async function createUserFromTelegram(params: {
 
   // 1. Create Supabase Auth user (required: auth_id is NOT NULL)
   const randomPassword = crypto.randomUUID() + crypto.randomUUID();
-  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+  const { data: authData, error: authError } = await getSupabase().auth.admin.createUser({
     email,
     password: randomPassword,
     email_confirm: true, // mark email as confirmed
@@ -116,7 +126,7 @@ export async function createUserFromTelegram(params: {
   const referralCode = await uniqueReferralCode();
 
   // 3. Insert into public.users
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('users')
     .insert({
       auth_id: authData.user.id,
@@ -144,7 +154,7 @@ export async function createUserFromTelegram(params: {
   if (error) {
     console.error('[TG DB] createUserFromTelegram insert error:', error);
     // Clean up auth user to avoid orphan
-    await supabase.auth.admin.deleteUser(authData.user.id);
+    await getSupabase().auth.admin.deleteUser(authData.user.id);
     return null;
   }
 
@@ -152,18 +162,18 @@ export async function createUserFromTelegram(params: {
 }
 
 export async function getUserStats(userId: string) {
-  const { data: user } = await supabase
+  const { data: user } = await getSupabase()
     .from('users')
     .select('id, first_name, last_name, role, membership_tier, status, created_at')
     .eq('id', userId)
     .single();
 
-  const { count: referralCount } = await supabase
+  const { count: referralCount } = await getSupabase()
     .from('users')
     .select('id', { count: 'exact', head: true })
     .eq('referred_by_id', userId);
 
-  const { data: points } = await supabase
+  const { data: points } = await getSupabase()
     .from('points_transactions')
     .select('amount')
     .eq('user_id', userId);
@@ -174,7 +184,7 @@ export async function getUserStats(userId: string) {
 }
 
 export async function getReferrals(userId: string) {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('users')
     .select('id, first_name, last_name, status, created_at')
     .eq('referred_by_id', userId)
@@ -184,7 +194,7 @@ export async function getReferrals(userId: string) {
 }
 
 export async function getActiveVotes(oblastId?: string) {
-  let query = supabase
+  let query = getSupabase()
     .from('votes')
     .select('id, title, description, ends_at, type, scope, options:vote_options(id, text)')
     .eq('status', 'active')
@@ -203,7 +213,7 @@ export async function getActiveVotes(oblastId?: string) {
 }
 
 async function getUserBalance(userId: string): Promise<number> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from('points_transactions')
     .select('balance_after')
     .eq('user_id', userId)
@@ -215,7 +225,7 @@ async function getUserBalance(userId: string): Promise<number> {
 
 export async function castVote(userId: string, voteId: string, optionId: string) {
   // Check if user already voted
-  const { data: existing } = await supabase
+  const { data: existing } = await getSupabase()
     .from('user_votes')
     .select('id')
     .eq('user_id', userId)
@@ -224,7 +234,7 @@ export async function castVote(userId: string, voteId: string, optionId: string)
 
   if (existing) return { success: false, reason: 'already_voted' };
 
-  const { error } = await supabase.from('user_votes').insert({
+  const { error } = await getSupabase().from('user_votes').insert({
     user_id: userId,
     vote_id: voteId,
     option_id: optionId,
@@ -235,7 +245,7 @@ export async function castVote(userId: string, voteId: string, optionId: string)
 
   // Award points for voting
   const currentBalance = await getUserBalance(userId);
-  await supabase.from('points_transactions').insert({
+  await getSupabase().from('points_transactions').insert({
     user_id: userId,
     amount: 5,
     balance_after: currentBalance + 5,
@@ -252,7 +262,7 @@ export async function saveTelegramInvitation(params: {
   telegramUsername?: string;
   telegramFirstName?: string;
 }) {
-  await supabase.from('telegram_invitations').upsert({
+  await getSupabase().from('telegram_invitations').upsert({
     inviter_id: params.inviterId,
     telegram_id: params.telegramId,
     telegram_username: params.telegramUsername || null,
@@ -263,7 +273,7 @@ export async function saveTelegramInvitation(params: {
 
 export async function awardReferralPoints(referrerId: string, newUserId: string) {
   const currentBalance = await getUserBalance(referrerId);
-  await supabase.from('points_transactions').insert({
+  await getSupabase().from('points_transactions').insert({
     user_id: referrerId,
     amount: 25,
     balance_after: currentBalance + 25,
@@ -303,7 +313,7 @@ const OBLASTS_FALLBACK = [
 ];
 
 export async function getOblasts() {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('oblasts')
     .select('id, name')
     .order('name', { ascending: true });
@@ -312,7 +322,7 @@ export async function getOblasts() {
 }
 
 export async function disableTelegramNotifications(telegramId: number) {
-  await supabase
+  await getSupabase()
     .from('users')
     .update({ telegram_notifications_enabled: false })
     .eq('telegram_id', telegramId);
