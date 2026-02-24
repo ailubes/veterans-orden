@@ -128,6 +128,10 @@ export async function createUserFromTelegram(params: {
 
   if (error) {
     console.error('[TG DB] createUserFromTelegram rpc error:', error);
+    // 23505 = unique_violation (email or phone already registered)
+    if ((error as { code?: string }).code === '23505') {
+      return { emailExists: true } as const;
+    }
     return null;
   }
 

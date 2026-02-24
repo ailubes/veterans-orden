@@ -221,6 +221,18 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
+        if ('emailExists' in newUser) {
+          // Email already registered — offer to link instead
+          session.state = undefined;
+          session.regData = undefined;
+          await ctx.reply(
+            `⚠️ Email <code>${regData?.email}</code> вже зареєстровано в системі.\n\n` +
+            `Скористайтесь командою /link щоб прив'язати ваш існуючий акаунт до Telegram.`,
+            { parse_mode: 'HTML', reply_markup: mainMenuKeyboard() }
+          );
+          return;
+        }
+
         if (session.referrerId) {
           await awardReferralPoints(session.referrerId, newUser.id);
         }
