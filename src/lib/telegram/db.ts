@@ -274,8 +274,8 @@ export async function awardReferralPoints(referrerId: string, newUserId: string)
 export async function getOblasts() {
   const { data } = await supabase
     .from('oblasts')
-    .select('id, name_uk')
-    .order('name_uk', { ascending: true });
+    .select('id, name')
+    .order('name', { ascending: true });
   return data || [];
 }
 

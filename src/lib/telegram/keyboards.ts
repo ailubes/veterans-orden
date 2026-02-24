@@ -36,10 +36,10 @@ export function shareContactKeyboard() {
     .oneTime();
 }
 
-export function oblastKeyboard(oblasts: Array<{ id: string; name_uk: string }>) {
+export function oblastKeyboard(oblasts: Array<{ id: string; name: string }>) {
   const keyboard = new InlineKeyboard();
   oblasts.forEach((oblast, idx) => {
-    keyboard.text(oblast.name_uk, `oblast:${oblast.id}`);
+    keyboard.text(oblast.name, `oblast:${oblast.id}`);
     if ((idx + 1) % 2 === 0) keyboard.row();
   });
   keyboard.row().text('↩️ Скасувати', 'cancel');
