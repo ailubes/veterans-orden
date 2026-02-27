@@ -503,7 +503,7 @@ nav {
 }
 
 /* ============================================================================
-   SIGN-IN BUTTON (Bronze background)
+   SIGN-IN BUTTON - Standardized with heavy-cta style
    ============================================================================ */
 
 .nav-signin-btn {
@@ -511,31 +511,29 @@ nav {
   align-items: center;
   justify-content: center;
   padding: 0.65rem 1.25rem;
-  background: #b5793a !important;
-  color: #0f1011 !important;
+  border: 2px solid var(--bronze);
+  background: rgba(181, 121, 58, 0.12);
+  color: var(--text-100) !important;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.75rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: 12px;
+  transition: all 0.25s ease;
   margin-left: 0.75rem;
-  box-shadow: 0 2px 8px rgba(181, 121, 58, 0.3);
   visibility: visible !important;
   opacity: 1 !important;
 }
 
 .nav-signin-btn:hover {
-  background: var(--bronze-2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(181, 121, 58, 0.4);
+  background: var(--bronze);
+  color: #0f1011 !important;
 }
 
 .nav-signin-btn:active {
   transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(181, 121, 58, 0.3);
 }
 
 /* ============================================================================
@@ -648,7 +646,7 @@ nav {
 
 /* ============================================================================
    SYSTEM BUTTONS (.btn, .btn-sm, .btn-outline)
-   Offset-shadow style used across all dashboard/admin pages.
+   Standardized heavy-cta style across all pages.
    ============================================================================ */
 
 .btn {
@@ -656,25 +654,28 @@ nav {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: var(--bronze);
-  color: #1a1008;
+  padding: 0.85rem 1.5rem;
+  border: 2px solid var(--bronze);
+  background: rgba(181, 121, 58, 0.12);
+  color: var(--text-100);
   font-weight: 700;
   font-family: 'IBM Plex Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.8rem;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: all 0.25s ease;
   cursor: pointer;
-  border: none;
   text-decoration: none;
   line-height: 1;
   white-space: nowrap;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn:hover {
-  transform: translate(4px, -4px);
-  box-shadow: -4px 4px 0 var(--bronze-2);
+  background: var(--bronze);
+  color: #0f1011;
 }
 
 .btn:disabled,
@@ -685,22 +686,26 @@ nav {
 }
 
 .btn-sm {
-  padding: 0.4rem 0.9rem;
-  font-size: 0.7rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
+}
+
+.btn-lg {
+  padding: 1.1rem 2rem;
+  font-size: 0.9rem;
 }
 
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--bronze);
-  color: var(--bronze);
+  border: 2px solid var(--text-100);
+  color: var(--text-100);
 }
 
 .btn-outline:hover {
-  background: var(--bronze-alpha);
-  border-color: var(--bronze);
-  box-shadow: -4px 4px 0 var(--bronze-2);
-  transform: translate(4px, -4px);
+  background: var(--text-100);
+  border-color: var(--text-100);
+  color: var(--bg-950);
 }
 
 /* ============================================================================
