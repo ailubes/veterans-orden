@@ -22,6 +22,7 @@ export async function createHutkoToken(
     amount: number; // in kopiyki (e.g. 49 UAH = 4900)
     currency: string;
     serverCallbackUrl: string;
+    requiredRectoken?: 'Y' | 'N';
   }
 ): Promise<string> {
   const requestParams: Record<string, string | number> = {
@@ -31,7 +32,7 @@ export async function createHutkoToken(
     amount: opts.amount,
     currency: opts.currency,
     server_callback_url: opts.serverCallbackUrl,
-    required_rectoken: 'Y',
+    required_rectoken: opts.requiredRectoken ?? 'Y',
   };
   const signature = createSignature(requestParams, config.secretKey);
 

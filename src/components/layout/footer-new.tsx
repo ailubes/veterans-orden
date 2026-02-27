@@ -36,8 +36,8 @@ export function FooterNew() {
                 <a href="mailto:info@veterans-orden.org" className="footer-contact-link">
                   info@veterans-orden.org
                 </a>
-                <a href="https://t.me/orden_veteraniv" className="footer-contact-link" target="_blank" rel="noopener noreferrer">
-                  @orden_veteraniv
+                <a href="https://t.me/Orden_of_veterans_bot" className="footer-contact-link" target="_blank" rel="noopener noreferrer">
+                  @Orden_of_veterans_bot
                 </a>
               </div>
             </div>
@@ -84,6 +84,7 @@ export function FooterNew() {
                 <Link href="/faq" className="footer-link">FAQ</Link>
                 <Link href="/media" className="footer-link">Медіа / Прес-кіт</Link>
                 <Link href="/privacy" className="footer-link">Конфіденційність</Link>
+                <Link href="/offer" className="footer-link">Публічна оферта</Link>
               </nav>
             </div>
           </div>
@@ -98,7 +99,7 @@ export function FooterNew() {
             </span>
             <div className="footer-socials">
               <a
-                href="https://www.facebook.com/veteransorden"
+                href="https://www.facebook.com/share/1JpbnMXNdc/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"
@@ -109,7 +110,7 @@ export function FooterNew() {
                 </svg>
               </a>
               <a
-                href="https://t.me/orden_veteraniv"
+                href="https://t.me/Orden_of_veterans_bot"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-link"

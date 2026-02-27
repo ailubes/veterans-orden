@@ -53,6 +53,7 @@ const legalLinks = [
   { href: '/privacy', label: 'Політика конфіденційності' },
   { href: '/copyright', label: 'Політика авторських прав' },
   { href: '/documents', label: 'Документи' },
+  { href: '/offer', label: 'Публічна оферта' },
 ];
 
 const getSocialLinks = () => {

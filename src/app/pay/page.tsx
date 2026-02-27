@@ -50,6 +50,7 @@ function PayPageContent() {
   const token = searchParams.get('token') ?? '';
   const isAnnual = searchParams.get('annual') === '1';
   const amount = searchParams.get('amount');
+  const isDonation = searchParams.get('type') === 'donation';
 
   const [sdkReady, setSdkReady] = useState(false);
 
@@ -75,8 +76,8 @@ function PayPageContent() {
   const apiRef = useRef<HutkoApiInstance | null>(null);
 
   useEffect(() => {
-    if (!token) router.replace('/dashboard');
-  }, [token, router]);
+    if (!token) router.replace(isDonation ? '/support' : '/dashboard');
+  }, [token, router, isDonation]);
 
   // After SDK loads — initialise PaymentRequestApi and check available methods
   useEffect(() => {
@@ -128,7 +129,7 @@ function PayPageContent() {
         .done((model) => {
           model.sendResponse();
           setSuccess(true);
-          setTimeout(() => router.push('/dashboard?payment=success'), 1500);
+          setTimeout(() => router.push(isDonation ? '/?donate=success' : '/dashboard?payment=success'), 1500);
         })
         .fail((model) => {
           setError(model.error_message || 'Помилка оплати. Спробуйте картку ще раз.');
@@ -164,7 +165,7 @@ function PayPageContent() {
         .done((model) => {
           model.sendResponse();
           setSuccess(true);
-          setTimeout(() => router.push('/dashboard?payment=success'), 1500);
+          setTimeout(() => router.push(isDonation ? '/?donate=success' : '/dashboard?payment=success'), 1500);
         })
         .fail((model) => {
           setError(model.error_message || 'Помилка оплати. Перевірте дані картки.');
@@ -214,15 +215,19 @@ function PayPageContent() {
         </div>
 
         <h1 className="font-inter font-black text-2xl text-text-100 text-center mb-1 mt-0">
-          Оплата членства
+          {isDonation ? 'Підтримка Ордену' : 'Оплата членства'}
         </h1>
         <p className="text-sm text-muted-500 text-center mb-2">Орден Ветеранів</p>
         {amount && (
           <div className="text-center mb-6">
             <span className="inline-flex items-center gap-2 bg-panel-850 border border-line rounded-lg px-4 py-2 text-sm text-text-100">
               <span className="font-bold">{amount}₴</span>
-              <span className="text-muted-500">·</span>
-              <span className="text-muted-500">{isAnnual ? 'річна оплата (2 місяці безкоштовно)' : 'за перший місяць'}</span>
+              {!isDonation && (
+                <>
+                  <span className="text-muted-500">·</span>
+                  <span className="text-muted-500">{isAnnual ? 'річна оплата (2 місяці безкоштовно)' : 'за перший місяць'}</span>
+                </>
+              )}
             </span>
           </div>
         )}
@@ -406,10 +411,10 @@ function PayPageContent() {
               <div className="text-center">
                 <button
                   type="button"
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push(isDonation ? '/support' : '/dashboard')}
                   className="text-xs text-muted-500 hover:text-text-100 transition-colors underline underline-offset-2"
                 >
-                  Оплатити пізніше
+                  {isDonation ? 'Повернутись' : 'Оплатити пізніше'}
                 </button>
               </div>
             </form>

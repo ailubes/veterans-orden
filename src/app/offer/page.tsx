@@ -291,8 +291,34 @@ export default function OfferPage() {
               </p>
             </div>
 
+            <div className="mt-6 pt-6 border-t border-line">
+              <p className="font-bold mb-4">Банківські реквізити</p>
+              <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-xs">
+                <dt className="text-muted-500">Отримувач</dt>
+                <dd>ГО «ОРДЕН ВЕТЕРАНІВ»</dd>
+
+                <dt className="text-muted-500">ЄДРПОУ</dt>
+                <dd className="font-mono">14282829</dd>
+
+                <dt className="text-muted-500">Рахунок (IBAN)</dt>
+                <dd className="font-mono break-all">UA383348510000000026007327586</dd>
+
+                <dt className="text-muted-500">Валюта</dt>
+                <dd>980 — Гривня (UAH)</dd>
+
+                <dt className="text-muted-500">Банк отримувача</dt>
+                <dd>АТ «ПЕРШИЙ УКРАЇНСЬКИЙ МІЖНАРОДНИЙ БАНК»</dd>
+
+                <dt className="text-muted-500">МФО</dt>
+                <dd className="font-mono">334851</dd>
+
+                <dt className="text-muted-500">Адреса банку</dt>
+                <dd>04070, Україна, м. Київ, вул. Андріївська, 4</dd>
+              </dl>
+            </div>
+
             <p className="mt-6 text-xs text-muted-500">
-              Редакція від 23 лютого 2026 р. Усі попередні редакції втрачають чинність.
+              Редакція від 27 лютого 2026 р. Усі попередні редакції втрачають чинність.
             </p>
           </section>
 
