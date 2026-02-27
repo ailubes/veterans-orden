@@ -331,7 +331,7 @@ export function CTA({ title, description, buttonText, href }: CTAProps) {
       )}
       <Link
         href={href}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold text-sm rounded hover:bg-bronze/90 transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-bronze text-canvas !text-canvas font-bold text-sm rounded hover:bg-bronze/90 transition-colors !no-underline"
       >
         {buttonText}
       </Link>
