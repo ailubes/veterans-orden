@@ -59,18 +59,39 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
-    const { firstName, lastName, city, oblastId } = body;
+    const {
+      firstName, lastName, city, oblastId, bio,
+      phone, additionalPhone, hasViber, hasWhatsapp, hasSignal,
+      facebookUrl, education, profession,
+      katottgCode, settlementName, hromadaName, raionName, oblastNameKatottg,
+    } = body;
+
+    const updateData: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
+    if (firstName !== undefined) updateData.first_name = firstName;
+    if (lastName !== undefined) updateData.last_name = lastName;
+    if (city !== undefined) updateData.city = city;
+    if (oblastId !== undefined) updateData.oblast_id = oblastId;
+    if (bio !== undefined) updateData.bio = bio;
+    if (phone !== undefined) updateData.phone = phone;
+    if (additionalPhone !== undefined) updateData.additional_phone = additionalPhone;
+    if (hasViber !== undefined) updateData.has_viber = hasViber;
+    if (hasWhatsapp !== undefined) updateData.has_whatsapp = hasWhatsapp;
+    if (hasSignal !== undefined) updateData.has_signal = hasSignal;
+    if (facebookUrl !== undefined) updateData.facebook_url = facebookUrl;
+    if (education !== undefined) updateData.education = education;
+    if (profession !== undefined) updateData.profession = profession;
+    if (katottgCode !== undefined) updateData.katottg_code = katottgCode;
+    if (settlementName !== undefined) updateData.settlement_name = settlementName;
+    if (hromadaName !== undefined) updateData.hromada_name = hromadaName;
+    if (raionName !== undefined) updateData.raion_name = raionName;
+    if (oblastNameKatottg !== undefined) updateData.oblast_name_katottg = oblastNameKatottg;
 
     // Update user profile
     const { data, error: dbError } = await supabase
       .from('users')
-      .update({
-        first_name: firstName,
-        last_name: lastName,
-        city,
-        oblast_id: oblastId,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq('auth_id', user.id)
       .select()
       .single();

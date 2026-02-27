@@ -8,6 +8,9 @@ import OblastsManagementTab from '@/components/admin/settings/oblasts-management
 import SystemConfigTab from '@/components/admin/settings/system-config-tab';
 import EmailTemplatesTab from '@/components/admin/settings/email-templates-tab';
 import MessagingSettingsTab from '@/components/admin/settings/messaging-settings-tab';
+import DocumentsTab from '@/components/admin/settings/documents-tab';
+import MediaTab from '@/components/admin/settings/media-tab';
+import PressKitTab from '@/components/admin/settings/press-kit-tab';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -92,6 +95,24 @@ export default async function AdminSettingsPage() {
           >
             Система
           </TabsTrigger>
+          <TabsTrigger
+            value="documents"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+          >
+            Документи
+          </TabsTrigger>
+          <TabsTrigger
+            value="media"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+          >
+            Медіа
+          </TabsTrigger>
+          <TabsTrigger
+            value="press-kit"
+            className="border border-line rounded-lg bg-panel-900 text-text-100 font-bold data-[state=active]:bg-panel-850 data-[state=active]:text-canvas h-10 px-3 text-xs sm:text-sm sm:h-12 sm:px-4 flex-1 sm:flex-none min-w-[calc(50%-4px)] sm:min-w-0"
+          >
+            Прес-кіт
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="organization" className="mt-0">
@@ -141,6 +162,18 @@ export default async function AdminSettingsPage() {
 
         <TabsContent value="system" className="mt-0">
           <SystemConfigTab adminProfile={adminProfile} />
+        </TabsContent>
+
+        <TabsContent value="documents" className="mt-0">
+          <DocumentsTab adminProfile={adminProfile} />
+        </TabsContent>
+
+        <TabsContent value="media" className="mt-0">
+          <MediaTab adminProfile={adminProfile} />
+        </TabsContent>
+
+        <TabsContent value="press-kit" className="mt-0">
+          <PressKitTab adminProfile={adminProfile} />
         </TabsContent>
       </Tabs>
     </div>

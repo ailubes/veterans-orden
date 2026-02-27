@@ -9,8 +9,8 @@ import {
   MapPin,
   Clock,
   XCircle,
-  CheckCircle,
 } from 'lucide-react';
+import { AttendeesPanel } from '@/components/admin/events/attendees-panel';
 
 interface EventDetailPageProps {
   params: Promise<{
@@ -45,18 +45,26 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     adminProfile.role === 'admin' ||
     (adminProfile.role === 'regional_leader' && event.organizer_id === adminProfile.id);
 
-  // Get RSVPs
+  // Get RSVPs with full personal data
   const { data: rsvps } = await supabase
     .from('event_rsvps')
-    .select('*, user:users(first_name, last_name, email, oblast_id)')
+    .select(`
+      id, status, created_at, attended_at, ticket_purchased,
+      user:users(
+        id, first_name, last_name, patronymic, date_of_birth,
+        email, phone, additional_phone,
+        settlement_name, hromada_name, raion_name, oblast_name_katottg, city,
+        profession, education
+      )
+    `)
     .eq('event_id', id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: true });
 
   // Count RSVP statuses
   const goingCount = rsvps?.filter((r) => r.status === 'going').length || 0;
   const maybeCount = rsvps?.filter((r) => r.status === 'maybe').length || 0;
   const notGoingCount = rsvps?.filter((r) => r.status === 'not_going').length || 0;
-  const attendedCount = rsvps?.filter((r) => r.attended).length || 0;
+  const attendedCount = rsvps?.filter((r) => r.attended_at).length || 0;
 
   // Format dates
   const formatDate = (dateString: string | null) => {
@@ -310,62 +318,12 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
         </div>
       </div>
 
-      {/* RSVP List */}
-      {rsvps && rsvps.length > 0 && (
-        <div className="bg-panel-900 border border-line rounded-lg relative">
-          <div className="joint joint-tl" />
-          <div className="joint joint-tr" />
-          <div className="joint joint-bl" />
-          <div className="joint joint-br" />
-
-          <div className="p-6">
-            <p className="label text-bronze mb-4">ЗАРЕЄСТРОВАНІ УЧАСНИКИ</p>
-
-            <div className="space-y-2">
-              {rsvps.map((rsvp) => (
-                <div
-                  key={rsvp.id}
-                  className="flex items-center justify-between p-3 border border-line/20 hover:bg-panel-850/5"
-                >
-                  <div className="flex items-center gap-3">
-                    {rsvp.attended ? (
-                      <CheckCircle size={20} className="text-green-600" />
-                    ) : (
-                      <div className="w-5 h-5" />
-                    )}
-                    <div>
-                      <p className="font-bold text-sm">
-                        {rsvp.user?.first_name} {rsvp.user?.last_name}
-                      </p>
-                      <p className="text-xs text-muted-500">{rsvp.user?.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`px-2 py-1 text-xs font-bold ${
-                        rsvp.status === 'going'
-                          ? 'bg-green-100 text-green-700'
-                          : rsvp.status === 'maybe'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}
-                    >
-                      {rsvp.status === 'going' && 'Підтвердив'}
-                      {rsvp.status === 'maybe' && 'Можливо'}
-                      {rsvp.status === 'not_going' && 'Не прийде'}
-                    </span>
-                    {!rsvp.attended && rsvp.status === 'going' && canEdit && (
-                      <button className="text-xs text-bronze hover:underline font-bold">
-                        ВІДМІТИТИ ПРИСУТНІСТЬ
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Attendees Panel */}
+      <AttendeesPanel
+        eventId={id}
+        rsvps={(rsvps || []) as any}
+        canEdit={canEdit}
+      />
     </div>
   );
 }

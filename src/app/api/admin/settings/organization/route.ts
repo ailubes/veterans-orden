@@ -56,19 +56,24 @@ export async function PATCH(request: Request) {
       oldData[s.key] = s.value;
     });
 
-    // Update each setting
+    // Upsert each setting (insert if not exists, update if exists)
     const updates = Object.entries(body).map(([key, value]) => {
       return supabase
         .from('organization_settings')
-        .update({
-          value: JSON.stringify(value),
-          updated_at: new Date().toISOString(),
-          updated_by: adminProfile.id,
-        })
-        .eq('key', key);
+        .upsert(
+          {
+            key,
+            value: String(value ?? ''),
+            updated_at: new Date().toISOString(),
+            updated_by: adminProfile.id,
+          },
+          { onConflict: 'key' }
+        );
     });
 
-    await Promise.all(updates);
+    const results = await Promise.all(updates);
+    const firstError = results.find(r => r.error)?.error;
+    if (firstError) throw firstError;
 
     // Create audit log
     await createAuditLog({

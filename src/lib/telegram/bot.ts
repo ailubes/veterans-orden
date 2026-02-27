@@ -4,6 +4,14 @@ import { registerCallbackHandlers } from './handlers/callbacks';
 import { registerRegistrationHandler } from './handlers/registration';
 import { registerContactHandler } from './handlers/contacts';
 
+export interface SettlementResult {
+  code: string;
+  name: string;
+  hromadaName: string | null;
+  raionName: string | null;
+  oblastName: string | null;
+}
+
 export interface BotSession {
   userId?: string;
   referrerId?: string;
@@ -14,8 +22,16 @@ export interface BotSession {
     firstName?: string;
     lastName?: string;
     oblastId?: string;
-    settlementName?: string;
+    oblastName?: string;
     oblastList?: Array<{ id: string; name: string }>;
+    // KATOTTG settlement search results (shown as numbered list)
+    settlementResults?: SettlementResult[];
+    // Chosen KATOTTG entry
+    katottgCode?: string;
+    katottgSettlementName?: string;
+    katottgHromadaName?: string;
+    katottgRaionName?: string;
+    katottgOblastName?: string;
   };
 }
 

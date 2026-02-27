@@ -102,6 +102,10 @@ export async function createUserFromTelegram(params: {
   lastName: string;
   oblastId?: string;
   settlementName?: string;
+  katottgCode?: string;
+  hromadaName?: string;
+  raionName?: string;
+  oblastNameKatottg?: string;
   referrerId?: string;
 }) {
   const email = params.email.toLowerCase().trim();
@@ -123,6 +127,10 @@ export async function createUserFromTelegram(params: {
     p_settlement_name:      params.settlementName || null,
     p_referred_by_id:       params.referrerId || null,
     p_referral_code:        referralCode,
+    p_katottg_code:         params.katottgCode || null,
+    p_hromada_name:         params.hromadaName || null,
+    p_raion_name:           params.raionName || null,
+    p_oblast_name_katottg:  params.oblastNameKatottg || null,
   });
 
   if (error) {
@@ -272,6 +280,37 @@ const OBLASTS_FALLBACK = [
   { id: '97315dcc-19e6-4e71-ace7-92d8ead00f0e', name: 'Чернівецька' },
   { id: '12815e76-60f0-4248-a970-9cd3c1c6cfda', name: 'Чернігівська' },
 ];
+
+export async function searchKatottgSettlements(query: string, oblastName: string) {
+  // "м. Київ" in oblasts table → "Київ" in katottg.oblast_name
+  // Kyiv city has districts at level 5 (not level 4)
+  const katottgOblastName = oblastName === 'м. Київ' ? 'Київ' : oblastName;
+  const includeLevel5 = oblastName === 'м. Київ';
+
+  let q = getSupabase()
+    .from('katottg')
+    .select('code, name, hromada_name, raion_name, oblast_name')
+    .ilike('oblast_name', `${katottgOblastName}%`)
+    .ilike('name', `%${query}%`)
+    .order('name')
+    .limit(10);
+
+  if (includeLevel5) {
+    q = q.in('level', [4, 5]);
+  } else {
+    q = q.eq('level', 4);
+  }
+
+  const { data, error } = await q;
+  if (error) console.error('[TG DB] searchKatottgSettlements error:', error);
+  return (data || []) as Array<{
+    code: string;
+    name: string;
+    hromada_name: string | null;
+    raion_name: string | null;
+    oblast_name: string | null;
+  }>;
+}
 
 export async function getOblasts() {
   const { data, error } = await getSupabase()

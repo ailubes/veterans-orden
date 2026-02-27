@@ -14,6 +14,7 @@ import {
   linkTelegramToUser,
   awardReferralPoints,
   getOblasts,
+  searchKatottgSettlements,
 } from '../db';
 import { msg } from '../messages';
 import {
@@ -23,6 +24,63 @@ import {
 import { InlineKeyboard } from 'grammy';
 
 type BotContext = Context & { session: BotSession };
+
+// Shared helper: complete registration after settlement is resolved (or skipped)
+async function finishRegistration(ctx: BotContext, session: BotSession, _opts: Record<string, never>) {
+  const fromUser = ctx.from!;
+  const regData = session.regData;
+
+  // Lock state to prevent duplicate submissions
+  session.state = 'reg:creating';
+
+  const newUser = await createUserFromTelegram({
+    telegramId: fromUser.id,
+    telegramUsername: fromUser.username,
+    telegramFirstName: fromUser.first_name,
+    phone: regData?.phone || '',
+    email: regData?.email || '',
+    firstName: regData?.firstName || '',
+    lastName: regData?.lastName || '',
+    oblastId: regData?.oblastId,
+    settlementName: regData?.katottgSettlementName,
+    katottgCode: regData?.katottgCode,
+    hromadaName: regData?.katottgHromadaName,
+    raionName: regData?.katottgRaionName,
+    oblastNameKatottg: regData?.katottgOblastName,
+    referrerId: session.referrerId,
+  });
+
+  if (!newUser) {
+    // Allow retry from settlement search
+    session.state = 'reg:await_settlement_search';
+    await ctx.reply(msg.error, { parse_mode: 'HTML' });
+    return;
+  }
+
+  if ('emailExists' in newUser) {
+    session.state = undefined;
+    session.regData = undefined;
+    await ctx.reply(
+      `⚠️ Email <code>${regData?.email}</code> вже зареєстровано в системі.\n\n` +
+      `Скористайтесь командою /link щоб прив'язати ваш існуючий акаунт до Telegram.`,
+      { parse_mode: 'HTML', reply_markup: mainMenuKeyboard() }
+    );
+    return;
+  }
+
+  if (session.referrerId) {
+    await awardReferralPoints(session.referrerId, newUser.id);
+  }
+
+  session.state = undefined;
+  session.userId = newUser.id;
+  session.regData = undefined;
+
+  await ctx.reply(msg.regComplete(newUser.first_name), {
+    parse_mode: 'HTML',
+    reply_markup: mainMenuKeyboard(),
+  });
+}
 
 // Handle incoming text messages during registration flow
 export function registerRegistrationHandler(bot: Bot<BotContext>) {
@@ -175,76 +233,126 @@ export function registerRegistrationHandler(bot: Bot<BotContext>) {
           return;
         }
 
-        // Update state BEFORE reply
-        session.regData = { ...session.regData, oblastId: matched.id };
-        session.state = 'reg:await_settlement';
+        // Store both id (for DB) and name (for KATOTTG search filtering)
+        session.regData = { ...session.regData, oblastId: matched.id, oblastName: matched.name };
+        session.state = 'reg:await_settlement_search';
 
-        await ctx.reply(
-          `✅ Обрано: <b>${matched.name}</b>\n\n${msg.regAskSettlement}`,
-          { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
-        );
+        await ctx.reply(msg.regAskSettlementSearch(matched.name), {
+          parse_mode: 'HTML',
+          reply_markup: cancelKeyboard(),
+        });
         break;
       }
 
-      case 'reg:await_settlement': {
+      case 'reg:await_settlement_search': {
+        // "0" = skip settlement selection
+        if (text === '0') {
+          await finishRegistration(ctx, session, {});
+          return;
+        }
+
         if (!text || text.length < 2) {
-          await ctx.reply(msg.regSettlementInvalid, {
+          await ctx.reply(
+            `⚠️ Введіть щонайменше 2 символи для пошуку або <code>0</code> щоб пропустити.`,
+            { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
+          );
+          return;
+        }
+
+        const oblastName = session.regData?.oblastName || '';
+        const results = await searchKatottgSettlements(text, oblastName);
+
+        if (results.length === 0) {
+          await ctx.reply(msg.regSettlementNotFound(text), {
             parse_mode: 'HTML',
             reply_markup: cancelKeyboard(),
           });
           return;
         }
 
-        const fromUser = ctx.from;
-        const regData = session.regData;
+        // Map to session-friendly format
+        session.regData = {
+          ...session.regData,
+          settlementResults: results.map((r) => ({
+            code: r.code,
+            name: r.name,
+            hromadaName: r.hromada_name,
+            raionName: r.raion_name,
+            oblastName: r.oblast_name,
+          })),
+        };
+        session.state = 'reg:await_settlement_choice';
 
-        // Clear state BEFORE the async DB call so no duplicate registrations on retry
-        session.state = 'reg:creating';
-        session.regData = { ...session.regData, settlementName: text };
+        await ctx.reply(
+          msg.regSettlementResults(results.map((r) => ({ name: r.name, hromadaName: r.hromada_name }))),
+          { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
+        );
+        break;
+      }
 
-        const newUser = await createUserFromTelegram({
-          telegramId: fromUser.id,
-          telegramUsername: fromUser.username,
-          telegramFirstName: fromUser.first_name,
-          phone: regData?.phone || '',
-          email: regData?.email || '',
-          firstName: regData?.firstName || '',
-          lastName: regData?.lastName || '',
-          oblastId: regData?.oblastId,
-          settlementName: text,
-          referrerId: session.referrerId,
-        });
+      case 'reg:await_settlement_choice': {
+        const results = session.regData?.settlementResults || [];
+        const num = parseInt(text, 10);
 
-        if (!newUser) {
-          session.state = 'reg:await_settlement'; // allow retry
-          await ctx.reply(msg.error, { parse_mode: 'HTML' });
+        // Valid number → pick from list
+        if (!isNaN(num) && num >= 1 && num <= results.length) {
+          const chosen = results[num - 1];
+          session.regData = {
+            ...session.regData,
+            katottgCode: chosen.code,
+            katottgSettlementName: chosen.name,
+            katottgHromadaName: chosen.hromadaName || undefined,
+            katottgRaionName: chosen.raionName || undefined,
+            katottgOblastName: chosen.oblastName || undefined,
+          };
+          await ctx.reply(msg.regSettlementChosen(chosen.name, chosen.hromadaName), {
+            parse_mode: 'HTML',
+          });
+          await finishRegistration(ctx, session, {});
           return;
         }
 
-        if ('emailExists' in newUser) {
-          // Email already registered — offer to link instead
-          session.state = undefined;
-          session.regData = undefined;
+        // "0" = skip
+        if (text === '0') {
+          await finishRegistration(ctx, session, {});
+          return;
+        }
+
+        // Otherwise treat as a new search query
+        if (text.length >= 2) {
+          const oblastName = session.regData?.oblastName || '';
+          const newResults = await searchKatottgSettlements(text, oblastName);
+
+          if (newResults.length === 0) {
+            await ctx.reply(msg.regSettlementNotFound(text), {
+              parse_mode: 'HTML',
+              reply_markup: cancelKeyboard(),
+            });
+            return;
+          }
+
+          session.regData = {
+            ...session.regData,
+            settlementResults: newResults.map((r) => ({
+              code: r.code,
+              name: r.name,
+              hromadaName: r.hromada_name,
+              raionName: r.raion_name,
+              oblastName: r.oblast_name,
+            })),
+          };
+          // Stay in reg:await_settlement_choice after a new search
           await ctx.reply(
-            `⚠️ Email <code>${regData?.email}</code> вже зареєстровано в системі.\n\n` +
-            `Скористайтесь командою /link щоб прив'язати ваш існуючий акаунт до Telegram.`,
-            { parse_mode: 'HTML', reply_markup: mainMenuKeyboard() }
+            msg.regSettlementResults(newResults.map((r) => ({ name: r.name, hromadaName: r.hromada_name }))),
+            { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
           );
           return;
         }
 
-        if (session.referrerId) {
-          await awardReferralPoints(session.referrerId, newUser.id);
-        }
-
-        session.state = undefined;
-        session.userId = newUser.id;
-        session.regData = undefined;
-
-        await ctx.reply(msg.regComplete(newUser.first_name), {
-          parse_mode: 'HTML',
-          reply_markup: mainMenuKeyboard(),
-        });
+        await ctx.reply(
+          `⚠️ Введіть номер зі списку або нову назву для пошуку. Введіть <code>0</code> щоб пропустити.`,
+          { parse_mode: 'HTML', reply_markup: cancelKeyboard() }
+        );
         break;
       }
     }

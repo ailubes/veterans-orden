@@ -13,11 +13,6 @@ interface MemberEditPageProps {
   }>;
 }
 
-interface Oblast {
-  id: string;
-  name: string;
-}
-
 interface Member {
   id: string;
   first_name: string;
@@ -33,9 +28,6 @@ interface Member {
   raion_name: string | null;
   oblast_name_katottg: string | null;
   location_last_changed_at: string | null;
-  // Legacy location
-  oblast_id: string | null;
-  city: string | null;
   role: string;
   status: string;
   is_email_verified: boolean;
@@ -49,7 +41,6 @@ interface Member {
 export default function MemberEditPage({ params }: MemberEditPageProps) {
   const router = useRouter();
   const [member, setMember] = useState<Member | null>(null);
-  const [oblasts, setOblasts] = useState<Oblast[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -159,15 +150,7 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         });
       }
 
-      // Get oblasts (legacy)
-      const { data: oblastsData } = await supabase
-        .from('oblasts')
-        .select('id, name')
-        .order('name');
 
-      if (oblastsData) {
-        setOblasts(oblastsData);
-      }
 
       setLoading(false);
     } catch (err) {
@@ -237,9 +220,6 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
         hromada_name: katottgDetails?.hromadaName || null,
         raion_name: katottgDetails?.raionName || null,
         oblast_name_katottg: katottgDetails?.oblastName || null,
-        // Legacy location
-        oblast_id: member.oblast_id,
-        city: member.city,
         status: member.status,
         is_email_verified: member.is_email_verified,
         is_phone_verified: member.is_phone_verified,
@@ -482,39 +462,26 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
             label="НАСЕЛЕНИЙ ПУНКТ"
           />
 
-          {/* Legacy location fields (hidden, kept for backwards compatibility) */}
-          <details className="mt-4">
-            <summary className="text-xs text-muted-500 cursor-pointer hover:text-text-100">
-              Застарілі поля локації (для сумісності)
-            </summary>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 pt-3 border-t border-line">
-              <div>
-                <label className="block text-xs font-bold mb-2 text-muted-500">Область (застаріле)</label>
-                <select
-                  value={member.oblast_id || ''}
-                  onChange={(e) => setMember({ ...member, oblast_id: e.target.value })}
-                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
-                >
-                  <option value="">Оберіть область</option>
-                  {oblasts.map((oblast) => (
-                    <option key={oblast.id} value={oblast.id}>
-                      {oblast.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold mb-2 text-muted-500">Місто (застаріле)</label>
-                <input
-                  type="text"
-                  value={member.city || ''}
-                  onChange={(e) => setMember({ ...member, city: e.target.value })}
-                  className="w-full px-4 py-2 bg-panel-850 border border-line text-text-100 font-mono text-sm focus:border-bronze focus:outline-none rounded"
-                />
-              </div>
+          {/* Hint: show legacy settlement_name when no KATOTTG code set */}
+          {!katottgCode && member.settlement_name && (
+            <div className="mt-3 p-3 bg-yellow-500/10 border border-yellow-500 rounded text-sm text-yellow-400">
+              <p className="font-medium">Дані з Telegram реєстрації</p>
+              <p className="text-xs mt-1">
+                Населений пункт: <strong>{member.settlement_name}</strong>
+                {member.oblast_name_katottg && ` (${member.oblast_name_katottg})`}
+                {' '}— скористайтесь пошуком вище для прив&apos;язки до КАТОТТГ
+              </p>
             </div>
-          </details>
+          )}
+
+          {!katottgCode && !member.settlement_name && (
+            <div className="mt-3 p-3 bg-orange-500/10 border border-orange-500 rounded text-sm text-orange-400">
+              <p className="font-medium">Місцезнаходження не заповнено</p>
+              <p className="text-xs mt-1">
+                Попросіть члена заповнити населений пункт через профіль або вкажіть його вище.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Role & Status */}

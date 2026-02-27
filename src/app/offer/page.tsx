@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { PageLayout, PageHeader, PageContent } from '@/components/layout/page-layout';
 import { Scaffold } from '@/components/layout/skeleton-grid';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { getOrgSettings } from '@/lib/settings/org-settings';
+
+export const revalidate = 3600; // re-fetch at most once per hour
 
 export const metadata: Metadata = {
   title: 'Договір публічної оферти — Орден Ветеранів',
@@ -9,7 +12,8 @@ export const metadata: Metadata = {
     'Договір публічної оферти на надання послуг з членства в Громадській організації «Орден Ветеранів».',
 };
 
-export default function OfferPage() {
+export default async function OfferPage() {
+  const org = await getOrgSettings();
   return (
     <PageLayout>
       {/* Breadcrumb */}
@@ -33,7 +37,7 @@ export default function OfferPage() {
       />
 
       <PageContent narrow>
-        <div className="space-y-10 font-mono text-sm leading-relaxed">
+        <div className="space-y-10 text-sm leading-relaxed">
 
           {/* 1. Загальні положення */}
           <section>
@@ -274,46 +278,76 @@ export default function OfferPage() {
             <h2 className="font-syne font-bold text-base uppercase mb-4 text-bronze">
               9. Реквізити організації
             </h2>
-            <div className="space-y-1">
-              <p><span className="text-muted-500">Повна назва:</span> Громадська організація «Орден Ветеранів»</p>
-              <p><span className="text-muted-500">Скорочена назва:</span> ГО «Орден Ветеранів»</p>
-              <p>
-                <span className="text-muted-500">Вебсайт:</span>{' '}
-                <a href="https://ordenv.org" className="text-bronze hover:underline">
-                  ordenv.org
+            <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-xs">
+              <dt className="text-muted-500">Повна назва</dt>
+              <dd>{org.organization_name}</dd>
+
+              <dt className="text-muted-500">Скорочена назва</dt>
+              <dd>ГО «Орден Ветеранів»</dd>
+
+              {org.organization_address && (
+                <>
+                  <dt className="text-muted-500">Адреса</dt>
+                  <dd>{org.organization_address}</dd>
+                </>
+              )}
+
+              <dt className="text-muted-500">Вебсайт</dt>
+              <dd>
+                <a href="https://ordenv.org" className="text-bronze hover:underline">ordenv.org</a>
+              </dd>
+
+              <dt className="text-muted-500">Email</dt>
+              <dd>
+                <a href={`mailto:${org.organization_contact_email}`} className="text-bronze hover:underline">
+                  {org.organization_contact_email}
                 </a>
-              </p>
-              <p>
-                <span className="text-muted-500">Email:</span>{' '}
-                <a href="mailto:info@ordenv.org" className="text-bronze hover:underline">
-                  info@ordenv.org
-                </a>
-              </p>
-            </div>
+              </dd>
+            </dl>
 
             <div className="mt-6 pt-6 border-t border-line">
               <p className="font-bold mb-4">Банківські реквізити</p>
               <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-xs">
                 <dt className="text-muted-500">Отримувач</dt>
-                <dd>ГО «ОРДЕН ВЕТЕРАНІВ»</dd>
+                <dd>{org.organization_name}</dd>
 
-                <dt className="text-muted-500">ЄДРПОУ</dt>
-                <dd className="font-mono">14282829</dd>
+                {org.organization_edrpou && (
+                  <>
+                    <dt className="text-muted-500">ЄДРПОУ</dt>
+                    <dd className="font-mono">{org.organization_edrpou}</dd>
+                  </>
+                )}
 
-                <dt className="text-muted-500">Рахунок (IBAN)</dt>
-                <dd className="font-mono break-all">UA383348510000000026007327586</dd>
+                {org.organization_bank_iban && (
+                  <>
+                    <dt className="text-muted-500">Рахунок (IBAN)</dt>
+                    <dd className="font-mono break-all">{org.organization_bank_iban}</dd>
+                  </>
+                )}
 
                 <dt className="text-muted-500">Валюта</dt>
                 <dd>980 — Гривня (UAH)</dd>
 
-                <dt className="text-muted-500">Банк отримувача</dt>
-                <dd>АТ «ПЕРШИЙ УКРАЇНСЬКИЙ МІЖНАРОДНИЙ БАНК»</dd>
+                {org.organization_bank_name && (
+                  <>
+                    <dt className="text-muted-500">Банк отримувача</dt>
+                    <dd>{org.organization_bank_name}</dd>
+                  </>
+                )}
 
-                <dt className="text-muted-500">МФО</dt>
-                <dd className="font-mono">334851</dd>
+                {org.organization_bank_mfo && (
+                  <>
+                    <dt className="text-muted-500">МФО</dt>
+                    <dd className="font-mono">{org.organization_bank_mfo}</dd>
+                  </>
+                )}
 
-                <dt className="text-muted-500">Адреса банку</dt>
-                <dd>04070, Україна, м. Київ, вул. Андріївська, 4</dd>
+                {org.organization_bank_address && (
+                  <>
+                    <dt className="text-muted-500">Адреса банку</dt>
+                    <dd>{org.organization_bank_address}</dd>
+                  </>
+                )}
               </dl>
             </div>
 

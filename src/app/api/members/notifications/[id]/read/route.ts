@@ -96,3 +96,6 @@ export async function PATCH(
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }
+
+// Mobile sends POST instead of PATCH — support both
+export const POST = PATCH;

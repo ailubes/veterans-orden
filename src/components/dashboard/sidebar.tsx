@@ -21,6 +21,8 @@ import {
   Target,
   MessageCircle,
   BookHeart,
+  Newspaper,
+  Users2,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -29,6 +31,8 @@ import { useMessenger } from '@/components/messaging/messenger-provider';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
+  { href: '/dashboard/feed', icon: Newspaper, label: 'СТРІЧКА' },
+  { href: '/dashboard/community', icon: Users2, label: 'СПІЛЬНОТА' },
   { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
   { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },

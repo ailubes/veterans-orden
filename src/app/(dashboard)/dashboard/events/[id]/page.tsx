@@ -28,13 +28,22 @@ export default async function EventDetailPage({ params }: PageProps) {
   // Get event details
   const { data: event, error } = await supabase
     .from('events')
-    .select('*, users!events_organizer_id_fkey(first_name, last_name), oblasts(name)')
+    .select('*, oblasts(name)')
     .eq('id', id)
     .single();
 
   if (error || !event) {
     notFound();
   }
+
+  // Get organizer info separately to avoid FK hint issues
+  const { data: organizer } = event.organizer_id
+    ? await supabase
+        .from('users')
+        .select('first_name, last_name')
+        .eq('id', event.organizer_id)
+        .single()
+    : { data: null };
 
   // Get user's RSVP status
   let userRsvp: any = null;
@@ -175,7 +184,7 @@ export default async function EventDetailPage({ params }: PageProps) {
               <User size={40} className="text-muted-500" />
               <div>
                 <p className="font-bold text-text-100">
-                  {event.users?.first_name} {event.users?.last_name}
+                  {organizer?.first_name} {organizer?.last_name}
                 </p>
               </div>
             </div>

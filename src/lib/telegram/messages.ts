@@ -42,8 +42,30 @@ export const msg = {
 
   regOblastInvalid: `❌ Область не знайдено. Введіть число від 1 до 25:`,
 
-  regAskSettlement:
-    `📍 Введіть назву вашого <b>населеного пункту</b> (місто, село, смт):`,
+  regAskSettlementSearch: (oblastName: string) =>
+    `📍 <b>Населений пункт</b> — ${oblastName}\n\n` +
+    `Введіть назву або частину назви вашого міста, села або смт:\n\n` +
+    `<i>💡 Підказка: достатньо 3–4 літери — наприклад <code>Бори</code> знайде Бориспіль</i>`,
+
+  regSettlementResults: (results: Array<{ name: string; hromadaName: string | null }>) => {
+    const list = results
+      .map((r, i) => `${i + 1}. <b>${r.name}</b>${r.hromadaName ? ` (${r.hromadaName} громада)` : ''}`)
+      .join('\n');
+    return (
+      `🔍 Знайдено ${results.length} результат(ів):\n\n${list}\n\n` +
+      `Введіть <b>номер</b> для вибору або нову назву для повторного пошуку:`
+    );
+  },
+
+  regSettlementNotFound: (query: string) =>
+    `❌ За запитом «<b>${query}</b>» нічого не знайдено.\n\n` +
+    `Спробуйте:\n` +
+    `• Скоротити назву (наприклад: <code>Київ</code> замість <code>Київський</code>)\n` +
+    `• Перевірити правопис\n` +
+    `• Введіть <code>0</code> щоб пропустити вибір пункту`,
+
+  regSettlementChosen: (name: string, hromadaName: string | null) =>
+    `✅ Обрано: <b>${name}</b>${hromadaName ? ` (${hromadaName} громада)` : ''}`,
 
   regSettlementInvalid: `❌ Назва населеного пункту не може бути порожньою. Спробуйте ще раз:`,
 

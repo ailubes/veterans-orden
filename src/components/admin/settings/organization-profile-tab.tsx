@@ -17,6 +17,12 @@ interface OrganizationSettings {
   organization_contact_email: string;
   organization_contact_phone: string;
   organization_about: string;
+  organization_address: string;
+  organization_edrpou: string;
+  organization_bank_name: string;
+  organization_bank_mfo: string;
+  organization_bank_iban: string;
+  organization_bank_address: string;
   organization_social_facebook: string;
   organization_social_telegram: string;
   organization_social_youtube: string;
@@ -33,6 +39,12 @@ export default function OrganizationProfileTab({
     organization_contact_email: '',
     organization_contact_phone: '',
     organization_about: '',
+    organization_address: '',
+    organization_edrpou: '',
+    organization_bank_name: '',
+    organization_bank_mfo: '',
+    organization_bank_iban: '',
+    organization_bank_address: '',
     organization_social_facebook: '',
     organization_social_telegram: '',
     organization_social_youtube: '',
@@ -187,6 +199,95 @@ export default function OrganizationProfileTab({
             <p className="text-xs text-muted-500 mt-1">
               Короткий опис вашої організації для публічних сторінок
             </p>
+          </div>
+
+          <div>
+            <Label htmlFor="org_address">Адреса організації</Label>
+            <Input
+              id="org_address"
+              value={settings.organization_address}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_address: e.target.value })
+              }
+              placeholder="вул. Прикладна, 1, м. Київ, 01001"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        {/* Legal & Banking */}
+        <div className="space-y-4 pt-6 border-t-2 border-line">
+          <h3 className="font-syne font-bold text-lg">Юридичні реквізити та банківська інформація</h3>
+
+          <div>
+            <Label htmlFor="org_edrpou">ЄДРПОУ</Label>
+            <Input
+              id="org_edrpou"
+              value={settings.organization_edrpou}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_edrpou: e.target.value })
+              }
+              placeholder="12345678"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="org_bank_name">Банк отримувача</Label>
+            <Input
+              id="org_bank_name"
+              value={settings.organization_bank_name}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_bank_name: e.target.value })
+              }
+              placeholder="АТ «ПЕРШИЙ УКРАЇНСЬКИЙ МІЖНАРОДНИЙ БАНК»"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="org_bank_mfo">МФО банку</Label>
+            <Input
+              id="org_bank_mfo"
+              value={settings.organization_bank_mfo}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_bank_mfo: e.target.value })
+              }
+              placeholder="334851"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="org_bank_iban">Рахунок (IBAN)</Label>
+            <Input
+              id="org_bank_iban"
+              value={settings.organization_bank_iban}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_bank_iban: e.target.value })
+              }
+              placeholder="UA383348510000000026007327586"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="org_bank_address">Адреса банку</Label>
+            <Input
+              id="org_bank_address"
+              value={settings.organization_bank_address}
+              onChange={(e) =>
+                setSettings({ ...settings, organization_bank_address: e.target.value })
+              }
+              placeholder="04070, Україна, м. Київ, вул. Андріївська, 4"
+              disabled={isReadOnly}
+              className="mt-1"
+            />
           </div>
         </div>
 
