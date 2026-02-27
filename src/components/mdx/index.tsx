@@ -182,7 +182,7 @@ export function Steps({ children }: StepsProps) {
       {steps.map((step, index) => (
         <div key={index} className="flex gap-4">
           <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-bronze text-bg-950 flex items-center justify-center font-syne font-bold text-sm">
+            <div className="w-8 h-8 rounded-full bg-bronze text-canvas flex items-center justify-center font-syne font-bold text-sm">
               {index + 1}
             </div>
             {index < steps.length - 1 && (
@@ -331,7 +331,7 @@ export function CTA({ title, description, buttonText, href }: CTAProps) {
       )}
       <Link
         href={href}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-bronze text-bg-950 font-bold text-sm rounded hover:bg-bronze/90 transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-bronze text-canvas font-bold text-sm rounded hover:bg-bronze/90 transition-colors"
       >
         {buttonText}
       </Link>
