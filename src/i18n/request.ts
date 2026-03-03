@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { defaultLocale, type Locale, locales, LOCALE_STORAGE_KEY } from './config';
 
 /**
@@ -11,12 +11,9 @@ import { defaultLocale, type Locale, locales, LOCALE_STORAGE_KEY } from './confi
  */
 export default getRequestConfig(async () => {
   // Try to get locale from cookie (set by client-side)
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get(LOCALE_STORAGE_KEY)?.value;
   const headersList = await headers();
-  const cookieHeader = headersList.get('cookie') || '';
-  const localeCookie = cookieHeader
-    .split(';')
-    .find((c) => c.trim().startsWith(`${LOCALE_STORAGE_KEY}=`))
-    ?.split('=')[1];
 
   let locale: Locale = defaultLocale;
 

@@ -29,7 +29,7 @@ export function NavigationNew() {
   const navLinks: NavItem[] = [
     {
       href: '/about',
-      label: '// ПРО ОРДЕН',
+      label: `// ${t('about')}`,
       children: [
         { href: '/about', label: 'Про нас' },
         { href: '/mission', label: 'Місія та цінності' },
@@ -38,7 +38,7 @@ export function NavigationNew() {
     },
     {
       href: '/directions',
-      label: '// ДІЯЛЬНІСТЬ',
+      label: `// ${t('directions')}`,
       children: [
         { href: '/directions', label: 'Всі напрями' },
         { href: '/directions/adaptation', label: 'Адаптація' },
@@ -53,7 +53,7 @@ export function NavigationNew() {
     },
     {
       href: '/support',
-      label: '// ПІДТРИМКА',
+      label: `// ${t('support')}`,
       children: [
         { href: '/support', label: 'Підтримати' },
         { href: '/support/partnership', label: 'Партнерство' },
@@ -63,7 +63,7 @@ export function NavigationNew() {
     },
     {
       href: '/help-request',
-      label: '// ДОПОМОГА',
+      label: `// ${t('help')}`,
       children: [
         { href: '/help-request', label: 'Потрібна допомога' },
         { href: '/faq', label: 'FAQ' },
