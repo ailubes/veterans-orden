@@ -1,27 +1,18 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Navigation } from '@/components/layout/navigation';
-import { Footer } from '@/components/layout/footer';
-import { SkeletonGrid } from '@/components/layout/skeleton-grid';
-import { GrainOverlay } from '@/components/layout/grain-overlay';
+import { PageWrapper, Scaffold } from '@/components/layout/skeleton-grid';
+import { NavigationNew } from '@/components/layout/navigation-new';
+import { FooterNew } from '@/components/layout/footer-new';
 
 export default function NotFound() {
   return (
-    <div
-      style={{
-        backgroundColor: 'var(--canvas)',
-        color: 'var(--panel-850)',
-        fontFamily: "'Space Mono', monospace",
-        minHeight: '100vh',
-      }}
-    >
-      <GrainOverlay />
-      <SkeletonGrid>
-        <Navigation />
-
+    <PageWrapper>
+      <NavigationNew />
+      <main className="section section-lg">
+        <Scaffold>
         <section
           style={{
-            gridColumn: '2 / 5',
+            gridColumn: '1 / -1',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -43,7 +34,7 @@ export default function NotFound() {
               fontWeight: 800,
               lineHeight: 1,
               marginBottom: '40px',
-              color: 'var(--panel-850)',
+              color: 'var(--text-100)',
             }}
           >
             <span>4</span>
@@ -88,7 +79,7 @@ export default function NotFound() {
             <Link
               href="/"
               style={{
-                color: 'var(--accent)',
+                color: 'var(--bronze)',
                 textDecoration: 'underline',
               }}
             >
@@ -102,9 +93,9 @@ export default function NotFound() {
             НА ГОЛОВНУ →
           </Link>
         </section>
-
-        <Footer />
-      </SkeletonGrid>
-    </div>
+        </Scaffold>
+      </main>
+      <FooterNew />
+    </PageWrapper>
   );
 }

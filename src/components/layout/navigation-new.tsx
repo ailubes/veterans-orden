@@ -81,8 +81,8 @@ export function NavigationNew() {
             <Image
               src="/images/logo-veterans-orden.png"
               alt={tBrand('name')}
-              width={144}
-              height={144}
+              width={64}
+              height={64}
               priority
               className="nav-logo-image"
             />
@@ -102,7 +102,7 @@ export function NavigationNew() {
               >
                 <Link
                   href={link.href}
-                  className="nav-link"
+                  className="nav-main-link"
                 >
                   {link.label}
                   {link.children && (

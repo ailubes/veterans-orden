@@ -6,7 +6,7 @@ interface StatCardProps {
   value: string | number;
   label: string;
   className?: string;
-  variant?: 'default' | 'bronze' | 'outline';
+  variant?: 'default' | 'bronze' | 'steel' | 'accent' | 'outline';
 }
 
 /**
