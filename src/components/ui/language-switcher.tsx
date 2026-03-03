@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLocale } from 'next-intl';
 import {
   locales,
   localeNames,
@@ -21,16 +22,24 @@ interface LanguageSwitcherProps {
  * reloads to fetch new translations.
  */
 export function LanguageSwitcher({ className = '', onChange }: LanguageSwitcherProps) {
+  const activeLocale = useLocale();
   const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (locales.includes(activeLocale as Locale)) {
+      setCurrentLocale(activeLocale as Locale);
+      return;
+    }
     setCurrentLocale(getCurrentLocale());
-  }, []);
+  }, [activeLocale]);
 
   const handleLocaleChange = (locale: Locale) => {
-    if (locale === currentLocale) return;
+    const runtimeLocale = locales.includes(activeLocale as Locale)
+      ? (activeLocale as Locale)
+      : currentLocale;
+    if (locale === runtimeLocale) return;
 
     setCurrentLocale(locale);
     setStoredLocale(locale);
@@ -71,16 +80,24 @@ export function LanguageSwitcher({ className = '', onChange }: LanguageSwitcherP
  * Styled as a pill toggle matching the design system
  */
 export function LanguageSwitcherCompact({ className = '', onChange }: LanguageSwitcherProps) {
+  const activeLocale = useLocale();
   const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (locales.includes(activeLocale as Locale)) {
+      setCurrentLocale(activeLocale as Locale);
+      return;
+    }
     setCurrentLocale(getCurrentLocale());
-  }, []);
+  }, [activeLocale]);
 
   const handleLocaleChange = (locale: Locale) => {
-    if (locale === currentLocale) return;
+    const runtimeLocale = locales.includes(activeLocale as Locale)
+      ? (activeLocale as Locale)
+      : currentLocale;
+    if (locale === runtimeLocale) return;
 
     setCurrentLocale(locale);
     setStoredLocale(locale);

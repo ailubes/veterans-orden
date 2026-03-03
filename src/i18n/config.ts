@@ -24,6 +24,35 @@ export const localeFullNames: Record<Locale, string> = {
 export const LOCALE_STORAGE_KEY = 'order-veterans-locale';
 
 /**
+ * Get locale from cookie (client-side only)
+ */
+export function getCookieLocale(): Locale | null {
+  if (typeof document === 'undefined') return null;
+
+  const value = document.cookie
+    .split(';')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${LOCALE_STORAGE_KEY}=`))
+    ?.split('=')[1];
+
+  if (value && locales.includes(value as Locale)) {
+    return value as Locale;
+  }
+  return null;
+}
+
+/**
+ * Persist locale in cookie for server-side rendering
+ */
+export function setLocaleCookie(locale: Locale): void {
+  if (typeof document === 'undefined') return;
+
+  const expires = new Date();
+  expires.setFullYear(expires.getFullYear() + 1);
+  document.cookie = `${LOCALE_STORAGE_KEY}=${locale}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+}
+
+/**
  * Get the stored locale from localStorage (client-side only)
  */
 export function getStoredLocale(): Locale | null {
@@ -45,10 +74,8 @@ export function setStoredLocale(locale: Locale): void {
   // Store in localStorage
   localStorage.setItem(LOCALE_STORAGE_KEY, locale);
 
-  // Also store in cookie for server-side access with proper settings
-  const expires = new Date();
-  expires.setFullYear(expires.getFullYear() + 1);
-  document.cookie = `${LOCALE_STORAGE_KEY}=${locale}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  // Also store in cookie for server-side access
+  setLocaleCookie(locale);
 }
 
 /**
@@ -73,6 +100,9 @@ export function detectBrowserLocale(): Locale {
 export function getCurrentLocale(): Locale {
   const stored = getStoredLocale();
   if (stored) return stored;
+
+  const cookieLocale = getCookieLocale();
+  if (cookieLocale) return cookieLocale;
 
   return detectBrowserLocale();
 }

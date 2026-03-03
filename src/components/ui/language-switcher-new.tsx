@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLocale } from 'next-intl';
 import {
   locales,
   localeNames,
@@ -23,28 +24,31 @@ interface LanguageSwitcherProps {
  * - Better cookie handling
  */
 export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
+  const activeLocale = useLocale();
   const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
   const [mounted, setMounted] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (locales.includes(activeLocale as Locale)) {
+      setCurrentLocale(activeLocale as Locale);
+      return;
+    }
     setCurrentLocale(getCurrentLocale());
-  }, []);
+  }, [activeLocale]);
 
   const handleLocaleChange = (locale: Locale) => {
-    if (locale === currentLocale || isSwitching) return;
+    const runtimeLocale = locales.includes(activeLocale as Locale)
+      ? (activeLocale as Locale)
+      : currentLocale;
+    if (locale === runtimeLocale || isSwitching) return;
 
     setIsSwitching(true);
     setCurrentLocale(locale);
 
     // Store in localStorage
     setStoredLocale(locale);
-
-    // Store in cookie with proper settings
-    const expires = new Date();
-    expires.setFullYear(expires.getFullYear() + 1);
-    document.cookie = `order-veterans-locale=${locale}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
 
     // Small delay to show loading state, then reload
     setTimeout(() => {

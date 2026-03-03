@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLocale } from 'next-intl';
 import {
   locales,
-  localeNames,
   type Locale,
   getCurrentLocale,
   setStoredLocale,
@@ -18,6 +18,7 @@ interface LanguageSwitcherDropdownProps {
  * Small, clickable dropdown showing current language
  */
 export function LanguageSwitcherDropdown({ className = '' }: LanguageSwitcherDropdownProps) {
+  const activeLocale = useLocale();
   const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -25,8 +26,12 @@ export function LanguageSwitcherDropdown({ className = '' }: LanguageSwitcherDro
 
   useEffect(() => {
     setMounted(true);
+    if (locales.includes(activeLocale as Locale)) {
+      setCurrentLocale(activeLocale as Locale);
+      return;
+    }
     setCurrentLocale(getCurrentLocale());
-  }, []);
+  }, [activeLocale]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -43,17 +48,18 @@ export function LanguageSwitcherDropdown({ className = '' }: LanguageSwitcherDro
   }, [isOpen]);
 
   const handleLocaleChange = (locale: Locale) => {
-    if (locale === currentLocale) {
+    const runtimeLocale = locales.includes(activeLocale as Locale)
+      ? (activeLocale as Locale)
+      : currentLocale;
+
+    if (locale === runtimeLocale) {
       setIsOpen(false);
       return;
     }
 
     setStoredLocale(locale);
-
-    // Store in cookie
-    const expires = new Date();
-    expires.setFullYear(expires.getFullYear() + 1);
-    document.cookie = `order-veterans-locale=${locale}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+    setCurrentLocale(locale);
+    setIsOpen(false);
 
     // Reload page
     window.location.reload();
