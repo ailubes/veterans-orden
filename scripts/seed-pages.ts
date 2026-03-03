@@ -340,9 +340,8 @@ info@veterans-orden.org
 
 ## Соціальні мережі
 
-- [Facebook](https://facebook.com/veteransorden)
-- [Instagram](https://instagram.com/veterans_orden)
-- [YouTube](https://youtube.com/@veteransorden)
+- [Facebook](https://www.facebook.com/share/1JpbnMXNdc/)
+- [Telegram](https://t.me/Orden_of_veterans_bot)
 
 <Callout type="info" title="Реєстрація">
 Якщо ви хочете приєднатися до Ордену, почніть з реєстрації на нашому сайті.

@@ -292,9 +292,8 @@ const pagesToReseed = [
 ### Соціальні мережі
 
 Слідкуйте за нами:
-- Facebook
-- Instagram
-- Telegram
+- [Facebook](https://www.facebook.com/share/1JpbnMXNdc/)
+- [Telegram](https://t.me/Orden_of_veterans_bot)
 
 <CTA
   title="Готові приєднатися?"
