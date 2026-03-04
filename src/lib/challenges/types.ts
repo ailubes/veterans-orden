@@ -31,6 +31,9 @@ export interface Challenge {
   createdById: string | null;
   createdAt: string;
   updatedAt: string;
+  linkedTaskIds?: string[];
+  linkedTasks?: ChallengeLinkedTask[];
+  regionalProgress?: ChallengeRegionalProgress[];
 }
 
 export interface ChallengeParticipant {
@@ -50,6 +53,7 @@ export interface ChallengeWithProgress extends Challenge {
   userJoined: boolean;
   participantCount: number;
   percentComplete: number;
+  regionalProgress?: ChallengeRegionalProgress[];
 }
 
 export interface ChallengeLeaderboardEntry {
@@ -72,6 +76,23 @@ export interface ChallengeWithDetails extends Challenge {
     lastName: string;
   };
   badge?: Badge | null;
+  regionalProgress?: ChallengeRegionalProgress[];
+}
+
+export interface ChallengeLinkedTask {
+  id: string;
+  title: string;
+  status: string;
+  points: number;
+  requiresProof: boolean;
+}
+
+export interface ChallengeRegionalProgress {
+  region: string;
+  participants: number;
+  totalProgress: number;
+  averageProgress: number;
+  completionRate: number;
 }
 
 // ----- BADGE INTERFACES -----
@@ -112,6 +133,7 @@ export interface CreateChallengeParams {
   startDate: Date | string;
   endDate: Date | string;
   createdById: string;
+  taskIds?: string[];
 }
 
 export interface UpdateChallengeParams {
@@ -128,6 +150,7 @@ export interface UpdateChallengeParams {
   startDate?: Date | string;
   endDate?: Date | string;
   status?: ChallengeStatus;
+  taskIds?: string[];
 }
 
 export interface ListChallengesOptions {

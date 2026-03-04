@@ -339,6 +339,47 @@ export default function ChallengeDetailPage({ params }: PageProps) {
                   </div>
                 </div>
               )}
+
+              {challenge.goalType === 'tasks' && challenge.linkedTasks && challenge.linkedTasks.length > 0 && (
+                <div className="p-3 bg-panel-850 rounded">
+                  <p className="font-bold text-text-100 mb-2">Завдання челенджу</p>
+                  <p className="text-xs text-muted-500 mb-3">
+                    Прогрес рахується тільки за виконання завдань зі списку нижче.
+                  </p>
+                  <div className="space-y-2">
+                    {challenge.linkedTasks.map((task) => (
+                      <div key={task.id} className="text-sm text-muted-500">
+                        • {task.title}
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/dashboard/tasks" className="inline-block mt-3 text-sm text-bronze hover:underline">
+                    Перейти до моїх завдань →
+                  </Link>
+                </div>
+              )}
+
+              {challenge.regionalProgress && challenge.regionalProgress.length > 0 && (
+                <div className="p-3 bg-panel-850 rounded">
+                  <p className="font-bold text-text-100 mb-2">Командний прогрес по областях</p>
+                  <div className="space-y-2">
+                    {challenge.regionalProgress.map((region) => (
+                      <div key={region.region}>
+                        <div className="flex items-center justify-between text-xs text-muted-500 mb-1">
+                          <span>{region.region}</span>
+                          <span>{region.totalProgress} дій • {region.participants} уч.</span>
+                        </div>
+                        <div className="h-2 bg-panel-900 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-bronze"
+                            style={{ width: `${Math.min(region.completionRate, 100)}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Join/Leave Button */}

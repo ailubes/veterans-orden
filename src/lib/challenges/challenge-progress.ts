@@ -6,6 +6,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { ChallengeGoalType } from './types';
 import { updateProgress, checkAndCompleteChallenge } from './challenge-service';
+import { registerChallengeTaskStreak, triggerAlmostDonePrompt } from './challenge-automation';
 
 /**
  * Update progress for all active challenges tracking the specified goal type
@@ -14,8 +15,9 @@ import { updateProgress, checkAndCompleteChallenge } from './challenge-service';
 export async function updateChallengeProgressForUser(
   userId: string,
   goalType: ChallengeGoalType,
-  increment: number = 1
-): Promise<string[]> {
+  increment: number = 1,
+  referenceId?: string
+): Promise<{ completedChallengeIds: string[]; updatedCount: number }> {
   const supabase = await createClient();
 
   // Find all active challenges for this goal type that the user has joined
@@ -28,6 +30,7 @@ export async function updateChallengeProgressForUser(
       completed_at,
       challenges:challenge_id (
         id,
+        title,
         goal_type,
         goal_target,
         status
@@ -37,14 +40,16 @@ export async function updateChallengeProgressForUser(
     .is('completed_at', null);
 
   if (!participations) {
-    return [];
+    return { completedChallengeIds: [], updatedCount: 0 };
   }
 
   const completedChallengeIds: string[] = [];
+  let updatedCount = 0;
 
   for (const participation of participations) {
     const challenge = participation.challenges as unknown as {
       id: string;
+      title: string;
       goal_type: string;
       goal_target: number;
       status: string;
@@ -55,8 +60,48 @@ export async function updateChallengeProgressForUser(
       continue;
     }
 
+    // For tasks challenges with explicit task links, only count selected tasks.
+    if (goalType === 'tasks' && referenceId) {
+      const { data: linkedTask } = await supabase
+        .from('challenge_tasks')
+        .select('task_id')
+        .eq('challenge_id', challenge.id)
+        .eq('task_id', referenceId)
+        .maybeSingle();
+
+      const { count: linkedTaskCount } = await supabase
+        .from('challenge_tasks')
+        .select('*', { count: 'exact', head: true })
+        .eq('challenge_id', challenge.id);
+
+      // If challenge has linked tasks, only increment when current task is linked.
+      if ((linkedTaskCount || 0) > 0 && !linkedTask) {
+        continue;
+      }
+    }
+
     // Update progress
     await updateProgress(challenge.id, userId, increment);
+    updatedCount++;
+
+    if (goalType === 'tasks') {
+      const { data: updatedParticipant } = await supabase
+        .from('challenge_participants')
+        .select('progress')
+        .eq('challenge_id', challenge.id)
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (updatedParticipant) {
+        await triggerAlmostDonePrompt(
+          userId,
+          challenge.id,
+          updatedParticipant.progress || 0,
+          challenge.goal_target || 0,
+          challenge.title || `#${challenge.id}`
+        );
+      }
+    }
 
     // Check if challenge is completed
     const result = await checkAndCompleteChallenge(challenge.id, userId);
@@ -65,7 +110,7 @@ export async function updateChallengeProgressForUser(
     }
   }
 
-  return completedChallengeIds;
+  return { completedChallengeIds, updatedCount };
 }
 
 /**
@@ -126,7 +171,11 @@ export async function checkUserChallengeCompletions(userId: string): Promise<str
  */
 export async function onTaskCompleted(userId: string, taskId: string): Promise<void> {
   try {
-    await updateChallengeProgressForUser(userId, 'tasks', 1);
+    const result = await updateChallengeProgressForUser(userId, 'tasks', 1, taskId);
+    if (result.updatedCount > 0) {
+      // Streak counts days with at least one challenge-related task completion.
+      await registerChallengeTaskStreak(userId);
+    }
   } catch (error) {
     // Log but don't fail the main operation
     console.error('Failed to update challenge progress for task:', error);

@@ -4,6 +4,9 @@ import {
   getChallenge,
   updateChallenge,
   deleteChallenge,
+  getChallengeTaskIds,
+  getChallengeLinkedTasks,
+  getChallengeRegionalProgress,
 } from '@/lib/challenges/challenge-service';
 
 export const dynamic = 'force-dynamic';
@@ -39,6 +42,12 @@ export async function GET(
     if (!challenge) {
       return NextResponse.json({ error: 'Challenge not found' }, { status: 404 });
     }
+
+    if (challenge.goalType === 'tasks') {
+      challenge.linkedTaskIds = await getChallengeTaskIds(id);
+      challenge.linkedTasks = await getChallengeLinkedTasks(id);
+    }
+    challenge.regionalProgress = await getChallengeRegionalProgress(id, 7);
 
     return NextResponse.json({ challenge });
   } catch (error) {
@@ -77,7 +86,21 @@ export async function PATCH(
 
   try {
     const body = await request.json();
+    const taskIds = Array.isArray(body.taskIds) ? body.taskIds : undefined;
     const challenge = await updateChallenge(id, body);
+
+    if (challenge.goalType === 'tasks') {
+      if (taskIds !== undefined) {
+        challenge.linkedTaskIds = taskIds;
+      } else {
+        challenge.linkedTaskIds = await getChallengeTaskIds(id);
+      }
+      challenge.linkedTasks = await getChallengeLinkedTasks(id);
+    } else {
+      challenge.linkedTaskIds = [];
+      challenge.linkedTasks = [];
+    }
+    challenge.regionalProgress = await getChallengeRegionalProgress(id, 7);
 
     return NextResponse.json({ challenge });
   } catch (error) {
@@ -87,6 +110,13 @@ export async function PATCH(
       { status: 500 }
     );
   }
+}
+
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  return PATCH(request, context);
 }
 
 /**

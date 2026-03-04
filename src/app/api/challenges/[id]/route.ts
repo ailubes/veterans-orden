@@ -22,11 +22,16 @@ export async function GET(
     let userId: string | undefined;
 
     if (user) {
-      const { data: profile } = await supabase
+      const { data: profileByAuthId } = await supabase
         .from('users')
         .select('id')
         .eq('auth_id', user.id)
         .single();
+      const profile = profileByAuthId || (await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single()).data;
       userId = profile?.id;
     }
 

@@ -5,8 +5,11 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { awardPoints } from '@/lib/points';
+import { SupabaseClient } from '@supabase/supabase-js';
 import type {
   Challenge,
+  ChallengeLinkedTask,
+  ChallengeRegionalProgress,
   ChallengeParticipant,
   ChallengeWithProgress,
   ChallengeWithDetails,
@@ -29,6 +32,11 @@ import { awardBadge } from './badge-service';
  */
 export async function createChallenge(params: CreateChallengeParams): Promise<Challenge> {
   const supabase = await createClient();
+  const normalizedTaskIds = normalizeTaskIds(params.taskIds);
+  const targetGoal =
+    params.goalType === 'tasks' && normalizedTaskIds.length > 0
+      ? normalizedTaskIds.length
+      : params.goalTarget;
 
   const { data, error } = await supabase
     .from('challenges')
@@ -37,7 +45,7 @@ export async function createChallenge(params: CreateChallengeParams): Promise<Ch
       description: params.description || null,
       type: params.type,
       goal_type: params.goalType,
-      goal_target: params.goalTarget,
+      goal_target: targetGoal,
       points: params.points ?? CHALLENGE_REWARDS.DEFAULT_POINTS,
       badge_id: params.badgeId || null,
       is_competitive: params.isCompetitive ?? false,
@@ -55,7 +63,14 @@ export async function createChallenge(params: CreateChallengeParams): Promise<Ch
     throw new Error(`Failed to create challenge: ${error?.message}`);
   }
 
-  return mapChallengeFromDb(data);
+  const challenge = mapChallengeFromDb(data);
+
+  if (params.goalType === 'tasks' && normalizedTaskIds.length > 0) {
+    await syncChallengeTasks(challenge.id, normalizedTaskIds, supabase);
+    challenge.linkedTaskIds = normalizedTaskIds;
+  }
+
+  return challenge;
 }
 
 /**
@@ -63,6 +78,19 @@ export async function createChallenge(params: CreateChallengeParams): Promise<Ch
  */
 export async function updateChallenge(id: string, params: UpdateChallengeParams): Promise<Challenge> {
   const supabase = await createClient();
+  const normalizedTaskIds =
+    params.taskIds !== undefined ? normalizeTaskIds(params.taskIds) : undefined;
+  const existingChallenge = await getChallenge(id);
+
+  if (!existingChallenge) {
+    throw new Error('Challenge not found');
+  }
+
+  const targetGoalType = params.goalType ?? existingChallenge.goalType;
+  const targetGoal =
+    targetGoalType === 'tasks' && normalizedTaskIds && normalizedTaskIds.length > 0
+      ? normalizedTaskIds.length
+      : params.goalTarget;
 
   const updateData: Record<string, unknown> = {
     updated_at: new Date().toISOString(),
@@ -72,7 +100,7 @@ export async function updateChallenge(id: string, params: UpdateChallengeParams)
   if (params.description !== undefined) updateData.description = params.description;
   if (params.type !== undefined) updateData.type = params.type;
   if (params.goalType !== undefined) updateData.goal_type = params.goalType;
-  if (params.goalTarget !== undefined) updateData.goal_target = params.goalTarget;
+  if (targetGoal !== undefined) updateData.goal_target = targetGoal;
   if (params.points !== undefined) updateData.points = params.points;
   if (params.badgeId !== undefined) updateData.badge_id = params.badgeId;
   if (params.isCompetitive !== undefined) updateData.is_competitive = params.isCompetitive;
@@ -97,7 +125,19 @@ export async function updateChallenge(id: string, params: UpdateChallengeParams)
     throw new Error(`Failed to update challenge: ${error?.message}`);
   }
 
-  return mapChallengeFromDb(data);
+  const challenge = mapChallengeFromDb(data);
+
+  if (normalizedTaskIds !== undefined) {
+    if (targetGoalType === 'tasks') {
+      await syncChallengeTasks(id, normalizedTaskIds, supabase);
+      challenge.linkedTaskIds = normalizedTaskIds;
+    } else {
+      await syncChallengeTasks(id, [], supabase);
+      challenge.linkedTaskIds = [];
+    }
+  }
+
+  return challenge;
 }
 
 /**
@@ -117,6 +157,99 @@ export async function getChallenge(id: string): Promise<Challenge | null> {
   }
 
   return mapChallengeFromDb(data);
+}
+
+export async function getChallengeTaskIds(
+  challengeId: string,
+  supabaseClient?: SupabaseClient
+): Promise<string[]> {
+  const supabase = supabaseClient || await createClient();
+  const { data, error } = await supabase
+    .from('challenge_tasks')
+    .select('task_id')
+    .eq('challenge_id', challengeId);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => row.task_id);
+}
+
+export async function getChallengeLinkedTasks(
+  challengeId: string,
+  supabaseClient?: SupabaseClient
+): Promise<ChallengeLinkedTask[]> {
+  const supabase = supabaseClient || await createClient();
+  const taskIds = await getChallengeTaskIds(challengeId, supabase);
+
+  if (taskIds.length === 0) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('id, title, status, points, requires_proof')
+    .in('id', taskIds);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((task) => ({
+    id: task.id,
+    title: task.title,
+    status: task.status,
+    points: task.points || 0,
+    requiresProof: !!task.requires_proof,
+  }));
+}
+
+export async function getChallengeRegionalProgress(
+  challengeId: string,
+  limit: number = 5,
+  supabaseClient?: SupabaseClient
+): Promise<ChallengeRegionalProgress[]> {
+  const supabase = supabaseClient || await createClient();
+  const { data, error } = await supabase
+    .from('challenge_participants')
+    .select(`
+      progress,
+      completed_at,
+      users:user_id (
+        oblast_name_katottg
+      )
+    `)
+    .eq('challenge_id', challengeId);
+
+  if (error || !data) {
+    return [];
+  }
+
+  const grouped = new Map<string, { participants: number; totalProgress: number; completed: number }>();
+
+  for (const row of data) {
+    const user = row.users as unknown as { oblast_name_katottg?: string | null };
+    const region = user?.oblast_name_katottg || 'Без області';
+    const current = grouped.get(region) || { participants: 0, totalProgress: 0, completed: 0 };
+    current.participants += 1;
+    current.totalProgress += row.progress || 0;
+    if (row.completed_at) {
+      current.completed += 1;
+    }
+    grouped.set(region, current);
+  }
+
+  return Array.from(grouped.entries())
+    .map(([region, stats]) => ({
+      region,
+      participants: stats.participants,
+      totalProgress: stats.totalProgress,
+      averageProgress: stats.participants > 0 ? Math.round((stats.totalProgress / stats.participants) * 100) / 100 : 0,
+      completionRate: stats.participants > 0 ? Math.round((stats.completed / stats.participants) * 100) : 0,
+    }))
+    .sort((a, b) => b.totalProgress - a.totalProgress)
+    .slice(0, limit);
 }
 
 /**
@@ -166,6 +299,11 @@ export async function getChallengeWithProgress(
   }
 
   const mapped = mapChallengeFromDb(challenge);
+  if (mapped.goalType === 'tasks') {
+    mapped.linkedTaskIds = await getChallengeTaskIds(id, supabase);
+    mapped.linkedTasks = await getChallengeLinkedTasks(id, supabase);
+  }
+  mapped.regionalProgress = await getChallengeRegionalProgress(id, 5, supabase);
   const percentComplete = mapped.goalTarget > 0
     ? Math.min(100, Math.round((userProgress / mapped.goalTarget) * 100))
     : 0;
@@ -270,6 +408,41 @@ export async function listChallenges(options: ListChallengesOptions = {}): Promi
   });
 }
 
+export async function syncChallengeTasks(
+  challengeId: string,
+  taskIds: string[],
+  supabaseClient?: SupabaseClient
+): Promise<void> {
+  const supabase = supabaseClient || await createClient();
+  const normalizedTaskIds = normalizeTaskIds(taskIds);
+
+  const { error: deleteError } = await supabase
+    .from('challenge_tasks')
+    .delete()
+    .eq('challenge_id', challengeId);
+
+  if (deleteError) {
+    throw new Error(`Failed to clear challenge tasks: ${deleteError.message}`);
+  }
+
+  if (normalizedTaskIds.length === 0) {
+    return;
+  }
+
+  const rows = normalizedTaskIds.map((taskId) => ({
+    challenge_id: challengeId,
+    task_id: taskId,
+  }));
+
+  const { error: insertError } = await supabase
+    .from('challenge_tasks')
+    .insert(rows);
+
+  if (insertError) {
+    throw new Error(`Failed to link challenge tasks: ${insertError.message}`);
+  }
+}
+
 /**
  * Delete a challenge (only if not started)
  */
@@ -344,6 +517,30 @@ export async function joinChallenge(challengeId: string, userId: string): Promis
 
   if (error || !participant) {
     return { success: false, error: `Помилка приєднання: ${error?.message}` };
+  }
+
+  if (challenge.goalType === 'tasks') {
+    const linkedTaskIds = await getChallengeTaskIds(challengeId, supabase);
+    if (linkedTaskIds.length > 0) {
+      const { count: completedLinkedTasks } = await supabase
+        .from('tasks')
+        .select('*', { count: 'exact', head: true })
+        .in('id', linkedTaskIds)
+        .eq('assignee_id', userId)
+        .eq('status', 'completed');
+
+      const backfilledProgress = completedLinkedTasks || 0;
+      if (backfilledProgress > 0) {
+        await supabase
+          .from('challenge_participants')
+          .update({ progress: backfilledProgress })
+          .eq('id', participant.id);
+      }
+
+      if (backfilledProgress >= challenge.goalTarget) {
+        await checkAndCompleteChallenge(challengeId, userId);
+      }
+    }
   }
 
   return {
@@ -834,4 +1031,17 @@ function mapParticipantFromDb(data: Record<string, unknown>): ChallengeParticipa
     rewardClaimed: data.reward_claimed as boolean,
     finalRank: data.final_rank as number | null,
   };
+}
+
+function normalizeTaskIds(taskIds?: string[]): string[] {
+  if (!taskIds || taskIds.length === 0) {
+    return [];
+  }
+
+  const trimmed = taskIds
+    .filter(Boolean)
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0);
+
+  return [...new Set(trimmed)];
 }

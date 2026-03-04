@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { awardPoints } from '@/lib/points';
+import { onTaskCompleted } from '@/lib/challenges/challenge-progress';
 
 export async function POST(
   request: Request,
@@ -15,11 +16,21 @@ export async function POST(
     }
 
     // Get user's database ID
-    const { data: profile } = await supabase
+    const { data: profileByAuthId } = await supabase
       .from('users')
       .select('id, points')
       .eq('auth_id', user.id)
       .single();
+
+    let profile = profileByAuthId;
+    if (!profile) {
+      const { data: profileById } = await supabase
+        .from('users')
+        .select('id, points')
+        .eq('id', user.id)
+        .single();
+      profile = profileById;
+    }
 
     if (!profile) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
@@ -123,6 +134,9 @@ export async function POST(
         // Continue even if points fail - task is still completed
       }
     }
+
+    // Update task-based challenge progress for joined active challenges.
+    await onTaskCompleted(profile.id, taskId);
 
     return NextResponse.json({ success: true, pointsEarned: taskPoints });
   } catch (error) {

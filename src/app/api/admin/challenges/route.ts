@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
-import { listChallenges, createChallenge } from '@/lib/challenges/challenge-service';
+import {
+  listChallenges,
+  createChallenge,
+  getChallengeTaskIds,
+  getChallengeLinkedTasks,
+} from '@/lib/challenges/challenge-service';
 import type { ChallengeType, ChallengeStatus } from '@/lib/challenges';
 
 export const dynamic = 'force-dynamic';
@@ -91,11 +96,18 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
+    const taskIds = Array.isArray(body.taskIds) ? body.taskIds : undefined;
 
     const challenge = await createChallenge({
       ...body,
+      taskIds,
       createdById: profile.id,
     });
+
+    if (challenge.goalType === 'tasks') {
+      challenge.linkedTaskIds = await getChallengeTaskIds(challenge.id);
+      challenge.linkedTasks = await getChallengeLinkedTasks(challenge.id);
+    }
 
     return NextResponse.json({ challenge }, { status: 201 });
   } catch (error) {

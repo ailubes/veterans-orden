@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getUserChallenges } from '@/lib/challenges/challenge-service';
+import { autoEnrollStarterChallenge, sendDailyChallengeNudge } from '@/lib/challenges/challenge-automation';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,11 +23,17 @@ export async function GET() {
       );
     }
 
-    const { data: profile } = await supabase
+    const { data: profileByAuthId } = await supabase
       .from('users')
       .select('id')
       .eq('auth_id', user.id)
       .single();
+
+    const profile = profileByAuthId || (await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single()).data;
 
     if (!profile) {
       return NextResponse.json(
@@ -34,6 +41,9 @@ export async function GET() {
         { status: 404 }
       );
     }
+
+    await autoEnrollStarterChallenge(profile.id);
+    await sendDailyChallengeNudge(profile.id);
 
     const challenges = await getUserChallenges(profile.id);
 

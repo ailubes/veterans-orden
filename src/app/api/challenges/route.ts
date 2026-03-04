@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { listChallenges } from '@/lib/challenges/challenge-service';
+import { autoEnrollStarterChallenge, sendDailyChallengeNudge } from '@/lib/challenges/challenge-automation';
 import type { ChallengeType, ChallengeStatus } from '@/lib/challenges';
 
 export const dynamic = 'force-dynamic';
@@ -31,12 +32,22 @@ export async function GET(request: NextRequest) {
     let userId: string | undefined;
 
     if (user) {
-      const { data: profile } = await supabase
+      const { data: profileByAuthId } = await supabase
         .from('users')
         .select('id')
         .eq('auth_id', user.id)
         .single();
+      const profile = profileByAuthId || (await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single()).data;
       userId = profile?.id;
+
+      if (userId) {
+        await autoEnrollStarterChallenge(userId);
+        await sendDailyChallengeNudge(userId);
+      }
     }
 
     // Determine status filter

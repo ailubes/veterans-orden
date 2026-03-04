@@ -477,6 +477,42 @@ export default function AdminChallengeDetailPage({ params }: PageProps) {
                 <span className="font-bold">{formatShortDate(challenge.createdAt)}</span>
               </div>
             </div>
+
+            {challenge.goalType === 'tasks' && challenge.linkedTasks && challenge.linkedTasks.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-canvas/20">
+                <p className="font-bold mb-2">Зв'язані завдання ({challenge.linkedTasks.length})</p>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {challenge.linkedTasks.map((task) => (
+                    <div key={task.id} className="bg-panel-900/30 px-2 py-1 text-xs">
+                      <div className="font-bold line-clamp-1">{task.title}</div>
+                      <div className="opacity-70">{task.status} • {task.points} балів</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {challenge.regionalProgress && challenge.regionalProgress.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-canvas/20">
+                <p className="font-bold mb-2">Командний прогрес по областях</p>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {challenge.regionalProgress.map((region) => (
+                    <div key={region.region}>
+                      <div className="flex items-center justify-between text-xs opacity-70 mb-1">
+                        <span>{region.region}</span>
+                        <span>{region.totalProgress} • {region.participants} уч.</span>
+                      </div>
+                      <div className="h-2 bg-panel-900/30 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-bronze"
+                          style={{ width: `${Math.min(region.completionRate, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

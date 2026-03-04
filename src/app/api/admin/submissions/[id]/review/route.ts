@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminProfileFromRequest, checkReferralTreeAccess } from '@/lib/permissions';
 import { isRegionalLeader } from '@/lib/permissions-utils';
 import { createAuditLog, AUDIT_ACTIONS, AUDIT_ENTITY_TYPES } from '@/lib/audit';
+import { onTaskCompleted } from '@/lib/challenges/challenge-progress';
 
 export async function POST(
   request: NextRequest,
@@ -123,6 +124,11 @@ export async function POST(
       if (pointsError) {
         console.error('Points update error:', pointsError);
       }
+    }
+
+    // Approved proof-based completion should also advance task challenges.
+    if (action === 'approve') {
+      await onTaskCompleted(submission.user_id, submission.task_id);
     }
 
     // Create notification for user

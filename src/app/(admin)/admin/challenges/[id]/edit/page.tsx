@@ -11,6 +11,14 @@ import {
 } from '@/lib/challenges';
 import type { Challenge, ChallengeType, ChallengeGoalType } from '@/lib/challenges';
 
+interface ChallengeTaskOption {
+  id: string;
+  title: string;
+  status: string;
+  points: number;
+  requires_proof: boolean;
+}
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -19,9 +27,11 @@ export default function EditChallengePage({ params }: PageProps) {
   const { id } = use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [loadingTasks, setLoadingTasks] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [challenge, setChallenge] = useState<Challenge | null>(null);
+  const [availableTasks, setAvailableTasks] = useState<ChallengeTaskOption[]>([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -34,11 +44,27 @@ export default function EditChallengePage({ params }: PageProps) {
     endDate: '',
     isCompetitive: false,
     maxWinners: 3,
+    taskIds: [] as string[],
   });
 
   useEffect(() => {
+    fetchAvailableTasks();
     fetchChallenge();
   }, [id]);
+
+  async function fetchAvailableTasks() {
+    setLoadingTasks(true);
+    try {
+      const res = await fetch('/api/admin/challenges/tasks?limit=200');
+      if (!res.ok) return;
+      const data = await res.json();
+      setAvailableTasks(data.tasks || []);
+    } catch (err) {
+      console.error('Failed to load tasks for challenge linking:', err);
+    } finally {
+      setLoadingTasks(false);
+    }
+  }
 
   async function fetchChallenge() {
     try {
@@ -63,6 +89,7 @@ export default function EditChallengePage({ params }: PageProps) {
         endDate: c.endDate.split('T')[0],
         isCompetitive: c.isCompetitive,
         maxWinners: c.maxWinners || 3,
+        taskIds: c.linkedTaskIds || [],
       });
     } catch (err) {
       console.error('Failed to fetch challenge:', err);
@@ -79,19 +106,23 @@ export default function EditChallengePage({ params }: PageProps) {
 
     try {
       const res = await fetch(`/api/admin/challenges/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: formData.title,
           description: formData.description,
           type: formData.type,
           goalType: formData.goalType,
-          goalTarget: formData.goalTarget,
+          goalTarget:
+            formData.goalType === 'tasks' && formData.taskIds.length > 0
+              ? formData.taskIds.length
+              : formData.goalTarget,
           points: formData.points,
           startDate: formData.startDate,
           endDate: formData.endDate,
           isCompetitive: formData.isCompetitive,
           maxWinners: formData.isCompetitive ? formData.maxWinners : 1,
+          taskIds: formData.goalType === 'tasks' ? formData.taskIds : [],
         }),
       });
 
@@ -109,6 +140,18 @@ export default function EditChallengePage({ params }: PageProps) {
       setSaving(false);
     }
   };
+
+  function toggleTask(taskId: string) {
+    const nextTaskIds = formData.taskIds.includes(taskId)
+      ? formData.taskIds.filter((id) => id !== taskId)
+      : [...formData.taskIds, taskId];
+
+    setFormData((prev) => ({
+      ...prev,
+      taskIds: nextTaskIds,
+      goalTarget: prev.goalType === 'tasks' && nextTaskIds.length > 0 ? nextTaskIds.length : prev.goalTarget,
+    }));
+  }
 
   if (loading) {
     return (
@@ -248,6 +291,11 @@ export default function EditChallengePage({ params }: PageProps) {
                   max="1000"
                   required
                 />
+                <p className="text-xs text-muted-500 mt-1">
+                  {formData.goalType === 'tasks' && formData.taskIds.length > 0
+                    ? `Автоматично: ${formData.taskIds.length} обраних завдань`
+                    : `Скільки ${CHALLENGE_GOAL_TYPE_LABELS[formData.goalType].uk.toLowerCase()} потрібно`}
+                </p>
               </div>
 
               <div>
@@ -263,6 +311,42 @@ export default function EditChallengePage({ params }: PageProps) {
                 />
               </div>
             </div>
+
+            {formData.goalType === 'tasks' && (
+              <div className="border-t border-line/20 pt-4 mt-4">
+                <label className="label block mb-2">ПОВ'ЯЗАНІ ЗАВДАННЯ</label>
+                <p className="text-xs text-muted-500 mb-3">
+                  Якщо обрати завдання, прогрес челенджу буде рахуватись тільки за ними.
+                </p>
+
+                <div className="max-h-64 overflow-y-auto border border-line rounded-lg">
+                  {loadingTasks ? (
+                    <div className="p-4 text-sm text-muted-500">Завантаження завдань...</div>
+                  ) : availableTasks.length === 0 ? (
+                    <div className="p-4 text-sm text-muted-500">Немає доступних завдань</div>
+                  ) : (
+                    <div className="divide-y divide-line/20">
+                      {availableTasks.map((task) => (
+                        <label key={task.id} className="flex items-start gap-3 p-3 cursor-pointer hover:bg-panel-850/10">
+                          <input
+                            type="checkbox"
+                            checked={formData.taskIds.includes(task.id)}
+                            onChange={() => toggleTask(task.id)}
+                            className="mt-1"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className="font-bold text-sm line-clamp-1">{task.title}</p>
+                            <p className="text-xs text-muted-500">
+                              {task.status} • {task.points} балів {task.requires_proof ? '• Потрібен proof' : ''}
+                            </p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Dates */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

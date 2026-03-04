@@ -26,11 +26,16 @@ export async function POST(
       );
     }
 
-    const { data: profile } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single();
+    const { data: profileByAuthId } = await supabase
+        .from('users')
+        .select('id')
+        .eq('auth_id', user.id)
+        .single();
+      const profile = profileByAuthId || (await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single()).data;
 
     if (!profile) {
       return NextResponse.json(
