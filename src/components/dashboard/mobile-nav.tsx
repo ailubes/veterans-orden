@@ -9,25 +9,10 @@ import {
   MessagesSquare,
   ChevronDown,
   X,
-  Home,
-  Users,
-  Calendar,
-  Vote,
-  CheckSquare,
   Settings,
   LogOut,
-  Trophy,
   Shield,
-  Bell,
-  ShoppingBag,
-  ShoppingCart,
-  Coins,
-  HelpCircle,
-  Target,
   User,
-  BookHeart,
-  Newspaper,
-  Users2,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { NotificationBell } from './notification-bell';
@@ -39,25 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
-  { href: '/dashboard/feed', icon: Newspaper, label: 'СТРІЧКА' },
-  { href: '/dashboard/community', icon: Users2, label: 'СПІЛЬНОТА' },
-  { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
-  { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
-  { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
-  { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
-  { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
-  { href: '/dashboard/resources', icon: BookHeart, label: 'РЕСУРСИ' },
-  { href: '/dashboard/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
-  { href: '/dashboard/marketplace/checkout', icon: ShoppingCart, label: 'КОШИК' },
-  { href: '/dashboard/points', icon: Coins, label: 'МОЇ БАЛИ' },
-  { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
-  { href: '/help', icon: HelpCircle, label: 'ДОПОМОГА' },
-  { href: '/dashboard/notifications', icon: Bell, label: 'ПОВІДОМЛЕННЯ' },
-  { href: '/dashboard/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
-];
+import { dashboardNavGroups, isDashboardItemActive } from './navigation-config';
 
 interface UserProfile {
   first_name: string | null;
@@ -70,6 +37,7 @@ interface UserProfile {
 
 export function MobileNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
@@ -108,6 +76,16 @@ export function MobileNav() {
     setIsMenuOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const defaults: Record<string, boolean> = {};
+    for (const group of dashboardNavGroups) {
+      if (group.collapsible) {
+        defaults[group.id] = !!group.defaultCollapsed;
+      }
+    }
+    setCollapsedGroups(defaults);
+  }, []);
+
   // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -132,6 +110,13 @@ export function MobileNav() {
     const first = profile.first_name?.[0] || '';
     const last = profile.last_name?.[0] || '';
     return (first + last).toUpperCase() || '?';
+  };
+
+  const toggleGroup = (groupId: string) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
   };
 
   return (
@@ -264,35 +249,66 @@ export function MobileNav() {
         <nav className="fixed inset-0 top-[60px] bg-panel-850 text-canvas z-50 overflow-y-auto animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="min-h-full pb-20">
             {/* Navigation Items */}
-            <ul className="py-3">
-              {navItems.map((item, index) => {
-                const isActive = pathname === item.href;
-                const Icon = item.icon;
-
-                return (
-                  <li
-                    key={item.href}
-                    style={{ animationDelay: `${index * 30}ms` }}
-                    className="animate-in fade-in slide-in-from-left-2 duration-200"
-                  >
-                    <Link
-                      href={item.href}
-                      className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
-                        isActive
-                          ? 'bg-bronze text-canvas shadow-md'
-                          : 'hover:bg-panel-900/10 hover:translate-x-1'
-                      }`}
+            <div className="py-2">
+              {dashboardNavGroups.map((group, groupIndex) => (
+                <div key={group.id} className={groupIndex > 0 ? 'mt-2 pt-2 border-t border-canvas/10' : ''}>
+                  {(() => {
+                    const hasActiveItem = group.items.some((item) => isDashboardItemActive(pathname, item));
+                    const isCollapsed = !!(group.collapsible && collapsedGroups[group.id] && !hasActiveItem);
+                    return (
+                      <>
+                  {group.collapsible ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(group.id)}
+                      className="w-full px-6 py-2 text-[10px] font-bold tracking-[0.18em] text-canvas/60 flex items-center justify-between"
                     >
-                      <Icon size={20} strokeWidth={2.5} />
-                      <span className="flex-1">{item.label}</span>
-                      {isActive && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-panel-900 animate-pulse" />
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+                      <span>{group.title}</span>
+                      <ChevronDown
+                        size={14}
+                        className={`transition-transform ${isCollapsed ? '-rotate-90' : 'rotate-0'}`}
+                      />
+                    </button>
+                  ) : (
+                    <p className="px-6 py-2 text-[10px] font-bold tracking-[0.18em] text-canvas/60">
+                      {group.title}
+                    </p>
+                  )}
+                  <ul className={isCollapsed ? 'hidden' : ''}>
+                    {group.items.map((item, index) => {
+                      const isActive = isDashboardItemActive(pathname, item);
+                      const Icon = item.icon;
+
+                      return (
+                        <li
+                          key={item.href}
+                          style={{ animationDelay: `${(groupIndex * 6 + index) * 25}ms` }}
+                          className="animate-in fade-in slide-in-from-left-2 duration-200"
+                        >
+                          <Link
+                            href={item.href}
+                            className={`flex items-center gap-4 px-6 ${item.secondary ? 'py-3 text-xs' : 'py-4 text-sm'} tracking-wide transition-all ${
+                              isActive
+                                ? 'bg-bronze text-canvas shadow-md'
+                                : 'hover:bg-panel-900/10 hover:translate-x-1'
+                            }`}
+                          >
+                            <Icon size={item.secondary ? 18 : 20} strokeWidth={2.5} />
+                            <span className="flex-1">{item.label}</span>
+                            {isActive && (
+                              <div className="w-1.5 h-1.5 rounded-full bg-panel-900 animate-pulse" />
+                            )}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                      </>
+                    );
+                  })()}
+                </div>
+              ))}
+            </div>
 
             {/* Admin Link - only visible to admins */}
             {isAdmin && (

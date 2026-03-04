@@ -4,54 +4,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
-  Home,
-  Users,
-  Calendar,
-  Vote,
-  CheckSquare,
-  Settings,
   LogOut,
-  Trophy,
   Shield,
-  Bell,
-  ShoppingBag,
-  ShoppingCart,
-  Coins,
-  HelpCircle,
-  Target,
   MessageCircle,
-  BookHeart,
-  Newspaper,
-  Users2,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMessenger } from '@/components/messaging/messenger-provider';
-
-const navItems = [
-  { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
-  { href: '/dashboard/feed', icon: Newspaper, label: 'СТРІЧКА' },
-  { href: '/dashboard/community', icon: Users2, label: 'СПІЛЬНОТА' },
-  { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
-  { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
-  { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
-  { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
-  { href: '/dashboard/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
-  { href: '/dashboard/resources', icon: BookHeart, label: 'РЕСУРСИ' },
-  { href: '/dashboard/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
-  { href: '/dashboard/marketplace/checkout', icon: ShoppingCart, label: 'КОШИК' },
-  { href: '/dashboard/points', icon: Coins, label: 'МОЇ БАЛИ' },
-  { href: '/dashboard/leaderboard', icon: Trophy, label: 'РЕЙТИНГ' },
-  { href: '/help', icon: HelpCircle, label: 'ДОПОМОГА' },
-  { href: '/dashboard/notifications', icon: Bell, label: 'ПОВІДОМЛЕННЯ' },
-  { href: '/dashboard/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
-];
+import { dashboardNavGroups, isDashboardItemActive } from './navigation-config';
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const { totalUnread, toggleMessenger } = useMessenger();
 
   useEffect(() => {
@@ -87,6 +56,49 @@ export function Sidebar() {
     router.refresh();
   };
 
+  useEffect(() => {
+    const defaults: Record<string, boolean> = {};
+    for (const group of dashboardNavGroups) {
+      if (group.collapsible) {
+        defaults[group.id] = !!group.defaultCollapsed;
+      }
+    }
+    // On shorter laptop screens collapse the busiest group by default.
+    if (typeof window !== 'undefined' && window.innerHeight < 900) {
+      defaults.engagement = true;
+    }
+    setCollapsedGroups(defaults);
+  }, []);
+
+  useEffect(() => {
+    const applyResponsiveCollapse = () => {
+      const engagementGroup = dashboardNavGroups.find((group) => group.id === 'engagement');
+      if (!engagementGroup) return;
+
+      const engagementActive = engagementGroup.items.some((item) =>
+        isDashboardItemActive(pathname, item)
+      );
+
+      if (window.innerHeight < 900 && !engagementActive) {
+        setCollapsedGroups((prev) => ({
+          ...prev,
+          engagement: true,
+        }));
+      }
+    };
+
+    applyResponsiveCollapse();
+    window.addEventListener('resize', applyResponsiveCollapse);
+    return () => window.removeEventListener('resize', applyResponsiveCollapse);
+  }, [pathname]);
+
+  const toggleGroup = (groupId: string) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [groupId]: !prev[groupId],
+    }));
+  };
+
   return (
     <aside className="hidden lg:flex flex-col w-64 bg-panel-900 text-text-100 min-h-screen border-r border-line">
       {/* Logo */}
@@ -105,30 +117,62 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 overflow-y-auto flex flex-col">
-        <ul className="space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors rounded ${
-                    isActive
-                      ? 'bg-bronze text-bg-950'
-                      : 'hover:bg-panel-850'
-                  }`}
+        <div className="space-y-4">
+          {dashboardNavGroups.map((group) => (
+            <div key={group.id}>
+              {(() => {
+                const hasActiveItem = group.items.some((item) => isDashboardItemActive(pathname, item));
+                const isCollapsed = !!(group.collapsible && collapsedGroups[group.id] && !hasActiveItem);
+                return (
+                  <>
+              {group.collapsible ? (
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(group.id)}
+                  className="w-full px-3 mb-1 text-[10px] font-bold tracking-[0.18em] text-muted-500/90 flex items-center justify-between hover:text-text-100 transition-colors"
                 >
-                  <Icon size={18} />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
+                  <span>{group.title}</span>
+                  {isCollapsed ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                </button>
+              ) : (
+                <p className="px-3 mb-1 text-[10px] font-bold tracking-[0.18em] text-muted-500/90">
+                  {group.title}
+                </p>
+              )}
+              <ul className={`space-y-1 ${isCollapsed ? 'hidden' : ''}`}>
+                {group.items.map((item) => {
+                  const isActive = isDashboardItemActive(pathname, item);
+                  const Icon = item.icon;
 
-          {/* Messaging Button */}
-          <li>
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={`flex items-center gap-3 px-4 rounded transition-colors ${
+                          item.secondary ? 'py-2 text-[11px]' : 'py-2.5 text-xs font-bold tracking-wider'
+                        } ${
+                          isActive
+                            ? 'bg-bronze text-bg-950'
+                            : 'hover:bg-panel-850'
+                        }`}
+                      >
+                        <Icon size={item.secondary ? 16 : 18} />
+                        {item.label}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+                  </>
+                );
+              })()}
+            </div>
+          ))}
+
+          <div>
+            <p className="px-3 mb-1 text-[10px] font-bold tracking-[0.18em] text-muted-500/90">
+              ЗВ'ЯЗОК
+            </p>
             <button
               onClick={toggleMessenger}
               className="flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors hover:bg-panel-850 rounded w-full relative"
@@ -141,11 +185,10 @@ export function Sidebar() {
                 </span>
               )}
             </button>
-          </li>
+          </div>
 
-          {/* Admin Link - only visible to admins */}
           {isAdmin && (
-            <li className="pt-4 mt-4 border-t border-line">
+            <div className="pt-3 mt-3 border-t border-line">
               <Link
                 href="/admin"
                 className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors rounded ${
@@ -157,9 +200,9 @@ export function Sidebar() {
                 <Shield size={18} />
                 АДМІН-ПАНЕЛЬ
               </Link>
-            </li>
+            </div>
           )}
-        </ul>
+        </div>
       </nav>
 
       {/* Sign Out */}
