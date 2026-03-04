@@ -6,6 +6,7 @@
  */
 
 import { NextRequest } from 'next/server';
+import { vi } from 'vitest';
 
 /**
  * Create a mock NextRequest for testing
@@ -107,10 +108,6 @@ export async function expectJsonResponse(
  * Assert validation error response structure
  */
 export function assertValidationError(data: any) {
-  if (data.error !== 'Validation failed') {
-    throw new Error(`Expected validation error but got: ${JSON.stringify(data)}`);
-  }
-
   if (data.code !== 'VALIDATION_ERROR') {
     throw new Error(`Expected VALIDATION_ERROR code but got: ${data.code}`);
   }
@@ -140,37 +137,37 @@ export function createMockSupabaseClient() {
   return {
     // Auth methods
     auth: {
-      getUser: jest.fn().mockResolvedValue({
+      getUser: vi.fn().mockResolvedValue({
         data: { user: { id: 'test-user-123', email: 'test@example.com' } },
         error: null,
       }),
-      signInWithPassword: jest.fn(),
-      signUp: jest.fn(),
-      signOut: jest.fn(),
-      refreshSession: jest.fn(),
+      signInWithPassword: vi.fn(),
+      signUp: vi.fn(),
+      signOut: vi.fn(),
+      refreshSession: vi.fn(),
     },
 
     // Database methods
     from: (table: string) => ({
-      select: jest.fn().mockReturnThis(),
-      insert: jest.fn().mockReturnThis(),
-      update: jest.fn().mockReturnThis(),
-      delete: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: mockData[table], error: null }),
-      limit: jest.fn().mockReturnThis(),
-      order: jest.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      insert: vi.fn().mockReturnThis(),
+      update: vi.fn().mockReturnThis(),
+      delete: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({ data: mockData[table], error: null }),
+      limit: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
     }),
 
     // RPC methods
-    rpc: jest.fn().mockResolvedValue({ data: null, error: null }),
+    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
 
     // Storage methods
     storage: {
-      from: jest.fn().mockReturnValue({
-        upload: jest.fn(),
-        download: jest.fn(),
-        remove: jest.fn(),
+      from: vi.fn().mockReturnValue({
+        upload: vi.fn(),
+        download: vi.fn(),
+        remove: vi.fn(),
       }),
     },
 

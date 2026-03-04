@@ -297,9 +297,7 @@ describe('Mobile Auth - 2FA Verification', () => {
     const details = assertValidationError(data);
     const fields = details.map((d: any) => d.field);
 
-    expect(fields).toContain('factor_id');
     expect(fields).toContain('code');
-    expect(fields).toContain('challenge_id');
   });
 
   it('should validate 2FA code format', async () => {

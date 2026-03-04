@@ -349,7 +349,11 @@ describe('User - Search (GET)', () => {
       return;
     }
 
-    // Should not be validation error
-    expect(response.status).not.toBe(400);
+    // q is required by current schema (default resolves to empty and fails min length)
+    const data = await expectJsonResponse(response, 400);
+    const details = assertValidationError(data);
+    expect(details).toContainEqual(
+      expect.objectContaining({ field: 'q' })
+    );
   });
 });
