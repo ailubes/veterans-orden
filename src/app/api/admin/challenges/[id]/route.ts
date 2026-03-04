@@ -23,8 +23,13 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const effectiveAdminRole =
+    profile?.staff_role && profile.staff_role !== 'none'
+      ? profile.staff_role
+      : profile?.role;
+
   const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.staff_role)) {
+  if (!effectiveAdminRole || !adminRoles.includes(effectiveAdminRole)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
@@ -60,8 +65,13 @@ export async function PATCH(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const effectiveAdminRole =
+    profile?.staff_role && profile.staff_role !== 'none'
+      ? profile.staff_role
+      : profile?.role;
+
   const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.staff_role)) {
+  if (!effectiveAdminRole || !adminRoles.includes(effectiveAdminRole)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
@@ -94,8 +104,13 @@ export async function DELETE(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const effectiveAdminRole =
+    profile?.staff_role && profile.staff_role !== 'none'
+      ? profile.staff_role
+      : profile?.role;
+
   const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.staff_role)) {
+  if (!effectiveAdminRole || !adminRoles.includes(effectiveAdminRole)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 

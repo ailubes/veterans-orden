@@ -15,6 +15,21 @@ export interface AuthResult {
   error: string | null;
 }
 
+type UserProfile = {
+  id: string;
+  auth_id: string | null;
+  role: string | null;
+  staff_role: string | null;
+};
+
+export function getEffectiveAdminRole(profile: UserProfile | null): string | null {
+  if (!profile) return null;
+  if (profile.staff_role && profile.staff_role !== 'none') {
+    return profile.staff_role;
+  }
+  return profile.role;
+}
+
 /**
  * Unified authentication helper that works for both:
  * - Web requests (cookie-based authentication)
@@ -82,15 +97,32 @@ export async function getAuthenticatedUserWithProfile(request: Request | NextReq
     };
   }
 
-  // Get user profile from database
-  const { data: profile, error: profileError } = await authResult.supabase
+  // Get user profile from database by auth_id (primary mapping)
+  const { data: profileByAuthId, error: profileByAuthIdError } = await authResult.supabase
     .from('users')
     .select('*')
     .eq('auth_id', authResult.user.id)
     .single();
 
-  if (profileError && profileError.code !== 'PGRST116') {
-    console.error('Error fetching user profile:', profileError);
+  if (profileByAuthIdError && profileByAuthIdError.code !== 'PGRST116') {
+    console.error('Error fetching user profile by auth_id:', profileByAuthIdError);
+  }
+
+  let profile = profileByAuthId;
+
+  // Backward compatibility: some records use auth UUID as users.id without auth_id set
+  if (!profile) {
+    const { data: profileById, error: profileByIdError } = await authResult.supabase
+      .from('users')
+      .select('*')
+      .eq('id', authResult.user.id)
+      .single();
+
+    if (profileByIdError && profileByIdError.code !== 'PGRST116') {
+      console.error('Error fetching user profile by id fallback:', profileByIdError);
+    }
+
+    profile = profileById || null;
   }
 
   return {
@@ -113,8 +145,8 @@ export async function requireAdminUser(request: Request | NextRequest) {
     };
   }
 
-  // staff_role is the admin column; role is the membership column
-  const isAdmin = result.profile && ['admin', 'super_admin'].includes(result.profile.staff_role);
+  const effectiveAdminRole = getEffectiveAdminRole(result.profile);
+  const isAdmin = !!effectiveAdminRole && ['admin', 'super_admin'].includes(effectiveAdminRole);
 
   return {
     ...result,
@@ -137,7 +169,8 @@ export async function requireSuperAdminUser(request: Request | NextRequest) {
     };
   }
 
-  const isSuperAdmin = result.profile?.staff_role === 'super_admin';
+  const effectiveAdminRole = getEffectiveAdminRole(result.profile);
+  const isSuperAdmin = effectiveAdminRole === 'super_admin';
 
   return {
     ...result,
