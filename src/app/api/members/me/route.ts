@@ -63,6 +63,7 @@ export async function PATCH(request: Request) {
       firstName, lastName, city, oblastId, bio,
       phone, additionalPhone, hasViber, hasWhatsapp, hasSignal,
       facebookUrl, education, profession,
+      militaryUnit, position, memberIdentity,
       katottgCode, settlementName, hromadaName, raionName, oblastNameKatottg,
     } = body;
 
@@ -82,6 +83,9 @@ export async function PATCH(request: Request) {
     if (facebookUrl !== undefined) updateData.facebook_url = facebookUrl;
     if (education !== undefined) updateData.education = education;
     if (profession !== undefined) updateData.profession = profession;
+    if (militaryUnit !== undefined) updateData.military_unit = militaryUnit;
+    if (position !== undefined) updateData.position = position;
+    if (memberIdentity !== undefined) updateData.member_identity = memberIdentity;
     if (katottgCode !== undefined) updateData.katottg_code = katottgCode;
     if (settlementName !== undefined) updateData.settlement_name = settlementName;
     if (hromadaName !== undefined) updateData.hromada_name = hromadaName;

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 
 type UserSex = 'male' | 'female' | 'not_specified' | null;
+type MemberIdentity = 'veteran' | 'volunteer' | 'supporter';
 
 interface UserProfile {
   id: string;
@@ -35,6 +36,9 @@ interface UserProfile {
   phone: string | null;
   dateOfBirth: string | null;
   sex: UserSex;
+  militaryUnit: string | null;
+  position: string | null;
+  memberIdentity: MemberIdentity;
   membershipTier: string;
   avatarUrl: string | null;
   referralCode: string;
@@ -95,6 +99,9 @@ export default function SettingsPage() {
   const [lastName, setLastName] = useState('');
   const [patronymic, setPatronymic] = useState('');
   const [sex, setSex] = useState<UserSex>(null);
+  const [militaryUnit, setMilitaryUnit] = useState('');
+  const [servicePosition, setServicePosition] = useState('');
+  const [memberIdentity, setMemberIdentity] = useState<MemberIdentity>('supporter');
 
   // KATOTTG location
   const [katottgCode, setKatottgCode] = useState<string | null>(null);
@@ -138,6 +145,9 @@ export default function SettingsPage() {
             phone,
             date_of_birth,
             sex,
+            military_unit,
+            position,
+            member_identity,
             membership_tier,
             avatar_url,
             referral_code,
@@ -214,6 +224,9 @@ export default function SettingsPage() {
             phone: profile.phone,
             dateOfBirth: profile.date_of_birth,
             sex: profile.sex as UserSex,
+            militaryUnit: profile.military_unit || null,
+            position: profile.position || null,
+            memberIdentity: (profile.member_identity || 'supporter') as MemberIdentity,
             membershipTier: profile.membership_tier || 'free',
             avatarUrl: profile.avatar_url,
             referralCode: profile.referral_code,
@@ -252,6 +265,9 @@ export default function SettingsPage() {
           setLastName(profile.last_name || '');
           setPatronymic(profile.patronymic || '');
           setSex(profile.sex as UserSex);
+          setMilitaryUnit(profile.military_unit || '');
+          setServicePosition(profile.position || '');
+          setMemberIdentity((profile.member_identity || 'supporter') as MemberIdentity);
           setKatottgCode(profile.katottg_code || null);
           setOriginalKatottgCode(profile.katottg_code || null); // Track original for change detection
           // Load KATOTTG details if code exists
@@ -376,6 +392,9 @@ export default function SettingsPage() {
         last_name: lastName.trim(),
         patronymic: patronymic.trim() || null,
         sex: sex || 'not_specified',
+        military_unit: militaryUnit.trim() || null,
+        position: servicePosition.trim() || null,
+        member_identity: memberIdentity,
         // Address
         street_address: streetAddress.trim() || null,
         postal_code: postalCode.trim() || null,
@@ -664,6 +683,42 @@ export default function SettingsPage() {
                 <option value="female">Жінка</option>
               </select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="label block mb-2">ХТО ВИ У СПІЛЬНОТІ</label>
+              <select
+                value={memberIdentity}
+                onChange={(e) => setMemberIdentity(e.target.value as MemberIdentity)}
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
+              >
+                <option value="supporter">Прихильник</option>
+                <option value="volunteer">Волонтер</option>
+                <option value="veteran">Ветеран</option>
+              </select>
+            </div>
+            <div>
+              <label className="label block mb-2">ПІДРОЗДІЛ / ОРГАНІЗАЦІЯ</label>
+              <input
+                type="text"
+                value={militaryUnit}
+                onChange={(e) => setMilitaryUnit(e.target.value)}
+                placeholder="Необов'язково"
+                className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="label block mb-2">ПОСАДА / РОЛЬ</label>
+            <input
+              type="text"
+              value={servicePosition}
+              onChange={(e) => setServicePosition(e.target.value)}
+              placeholder="Необов'язково"
+              className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

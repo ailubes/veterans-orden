@@ -20,10 +20,12 @@ export async function GET(
       .from('users')
       .select(`
         id,
-        display_name,
+        first_name,
+        last_name,
         avatar_url,
         military_unit,
         position,
+        member_identity,
         city,
         profession,
         bio,
@@ -72,6 +74,8 @@ export async function GET(
     return NextResponse.json({
       profile: {
         ...profile,
+        display_name:
+          `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Користувач',
         followers_count: followerCount?.length || 0,
         following_count: followingCount?.length || 0,
         posts_count: postsCount?.length || 0,

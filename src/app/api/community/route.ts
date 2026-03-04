@@ -21,14 +21,15 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('users')
-      .select('id, display_name, avatar_url, military_unit, position, city, profession, bio, created_at', { count: 'exact' })
+      .select('id, first_name, last_name, avatar_url, military_unit, position, member_identity, city, profession, bio, created_at', { count: 'exact' })
       .eq('status', 'active')
-      .order('display_name', { ascending: true })
+      .order('first_name', { ascending: true })
+      .order('last_name', { ascending: true })
       .range((page - 1) * limit, page * limit - 1);
 
     // Apply search filter
     if (search) {
-      query = query.or(`display_name.ilike.%${search}%,bio.ilike.%${search}%,military_unit.ilike.%${search}%`);
+      query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,bio.ilike.%${search}%,military_unit.ilike.%${search}%`);
     }
 
     // Apply filters
@@ -63,6 +64,8 @@ export async function GET(request: NextRequest) {
     // Format members with follow status
     const formattedMembers = members?.map(member => ({
       ...member,
+      display_name:
+        `${member.first_name || ''} ${member.last_name || ''}`.trim() || 'Користувач',
       is_following: followedIds.has(member.id),
     })) || [];
 

@@ -12,6 +12,7 @@ interface UserCardProps {
     avatar_url?: string;
     military_unit?: string;
     position?: string;
+    member_identity?: 'veteran' | 'volunteer' | 'supporter';
     city?: string;
     profession?: string;
     bio?: string;
@@ -21,6 +22,12 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, showFollowButton = true }: UserCardProps) {
+  const identityLabel: Record<'veteran' | 'volunteer' | 'supporter', string> = {
+    veteran: 'Ветеран',
+    volunteer: 'Волонтер',
+    supporter: 'Прихильник',
+  };
+
   return (
     <div className="bg-card rounded-lg border p-4 flex items-start gap-4">
       <Link href={`/profile/${user.id}`}>
@@ -36,6 +43,9 @@ export function UserCard({ user, showFollowButton = true }: UserCardProps) {
         <Link href={`/profile/${user.id}`}>
           <h3 className="font-semibold truncate">{user.display_name}</h3>
         </Link>
+        {user.member_identity && (
+          <p className="text-xs text-muted-foreground mt-1">{identityLabel[user.member_identity]}</p>
+        )}
 
         {(user.position || user.military_unit) && (
           <p className="text-sm text-muted-foreground truncate">

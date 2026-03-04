@@ -13,6 +13,7 @@ interface Member {
   avatar_url?: string;
   military_unit?: string;
   position?: string;
+  member_identity?: 'veteran' | 'volunteer' | 'supporter';
   city?: string;
   profession?: string;
   bio?: string;

@@ -18,6 +18,7 @@ interface UserProfile {
   avatar_url?: string;
   military_unit?: string;
   position?: string;
+  member_identity?: 'veteran' | 'volunteer' | 'supporter';
   city?: string;
   profession?: string;
   bio?: string;
@@ -162,6 +163,13 @@ export default function UserProfilePage() {
 
           <div className="flex-1 text-center sm:text-left">
             <h1 className="text-2xl font-bold">{profile.display_name}</h1>
+            {profile.member_identity && (
+              <p className="text-sm text-muted-foreground">
+                {profile.member_identity === 'veteran' && 'Ветеран'}
+                {profile.member_identity === 'volunteer' && 'Волонтер'}
+                {profile.member_identity === 'supporter' && 'Прихильник'}
+              </p>
+            )}
             {(profile.position || profile.military_unit) && (
               <p className="text-muted-foreground">
                 {profile.position}
