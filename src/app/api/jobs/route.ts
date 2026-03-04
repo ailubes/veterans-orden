@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
       .from('jobs')
       .select(`
         *,
-        author:users!jobs_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
+        author:users!jobs_author_id_fkey(id, first_name, last_name, avatar_url)
       `)
       .eq('status', 'active')
       .order('created_at', { ascending: false })
@@ -263,7 +263,7 @@ export async function POST(request: NextRequest) {
       .from('jobs')
       .select(`
         *,
-        author:users!jobs_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
+        author:users!jobs_author_id_fkey(id, first_name, last_name, avatar_url)
       `)
       .eq('id', job.id)
       .single();
