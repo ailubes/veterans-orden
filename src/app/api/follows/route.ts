@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // POST /api/follows - Follow a user
 export async function POST(request: NextRequest) {
   try {
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
     const body = await request.json();
     const { following_id } = body;
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'following_id is required' }, { status: 400 });
     }
 
-    if (following_id === user.id) {
+    if (following_id === dbUserId) {
       return NextResponse.json({ error: 'Cannot follow yourself' }, { status: 400 });
     }
 
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const { data: follow, error } = await supabase
       .from('follows')
       .upsert({
-        follower_id: user.id,
+        follower_id: dbUserId,
         following_id,
         status: 'active',
       }, {
@@ -70,11 +71,12 @@ export async function POST(request: NextRequest) {
 // DELETE /api/follows - Unfollow a user
 export async function DELETE(request: NextRequest) {
   try {
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
     const { searchParams } = new URL(request.url);
     const following_id = searchParams.get('following_id');
@@ -86,7 +88,7 @@ export async function DELETE(request: NextRequest) {
     const { error } = await supabase
       .from('follows')
       .delete()
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .eq('following_id', following_id);
 
     if (error) {

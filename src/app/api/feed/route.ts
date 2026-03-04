@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/feed - Get personalized feed
 export async function GET(request: NextRequest) {
@@ -9,21 +9,22 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const type = searchParams.get('type') || 'mixed'; // mixed, posts, activity
 
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
     // Get following list
     const { data: following } = await supabase
       .from('follows')
       .select('following_id')
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .eq('status', 'active');
 
     const followingIds = following?.map(f => f.following_id) || [];
-    followingIds.push(user.id); // Include own content
+    followingIds.push(dbUserId); // Include own content
 
     let posts: unknown[] = [];
     let activities: unknown[] = [];
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest) {
         .from('posts')
         .select(`
           *,
-          author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+          author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
           likes_count:likes(count),
           comments_count:comments(count)
         `)
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
         .from('activity_log')
         .select(`
           *,
-          actor:users!activity_log_actor_id_fkey(id, display_name, avatar_url)
+          actor:users!activity_log_actor_id_fkey(id, first_name, last_name, avatar_url)
         `)
         .in('actor_id', followingIds)
         .order('created_at', { ascending: false })
@@ -86,7 +87,7 @@ export async function GET(request: NextRequest) {
     const { data: userLikes } = await supabase
       .from('likes')
       .select('target_id, reaction_type')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'post')
       .in('target_id', postIds);
 
@@ -95,12 +96,18 @@ export async function GET(request: NextRequest) {
     // Format posts
     const formattedPosts = (posts as Array<{
       id: string;
+      author?: { first_name?: string; last_name?: string } | null;
       likes_count?: { count: number }[];
       comments_count?: { count: number }[];
       created_at: string;
     }>).map((post) => ({
       type: 'post' as const,
       ...post,
+      author: {
+        ...(post.author || {}),
+        display_name:
+          `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+      },
       likes_count: post.likes_count?.[0]?.count || 0,
       comments_count: post.comments_count?.[0]?.count || 0,
       user_liked: userLikesMap.has(post.id),
@@ -109,9 +116,14 @@ export async function GET(request: NextRequest) {
     }));
 
     // Format activities
-    const formattedActivities = (activities as Array<{ created_at: string }>).map((activity) => ({
+    const formattedActivities = (activities as Array<{ created_at: string; actor?: { first_name?: string; last_name?: string } | null }>).map((activity) => ({
       type: 'activity' as const,
       ...activity,
+      actor: {
+        ...(activity.actor || {}),
+        display_name:
+          `${activity.actor?.first_name || ''} ${activity.actor?.last_name || ''}`.trim() || 'Користувач',
+      },
       feed_timestamp: activity.created_at,
     }));
 

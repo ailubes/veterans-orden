@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/users/[id] - Get public profile for a user
 export async function GET(
@@ -8,11 +8,12 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile: currentProfile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = currentProfile?.id || user.id;
 
     // Get user profile
     const { data: profile, error } = await supabase
@@ -55,7 +56,7 @@ export async function GET(
     const { data: followStatus } = await supabase
       .from('follows')
       .select('status')
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .eq('following_id', id)
       .eq('status', 'active')
       .single();

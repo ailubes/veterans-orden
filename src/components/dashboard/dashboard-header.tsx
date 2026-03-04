@@ -24,6 +24,7 @@ import {
   Target,
   User,
   X,
+  Briefcase,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -41,6 +42,7 @@ import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
   { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
+  { href: '/dashboard/jobs', icon: Briefcase, label: 'РОБОТА' },
   { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
   { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/dashboard/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },

@@ -9,6 +9,7 @@ import {
   Vote,
   CheckSquare,
   Trophy,
+  Briefcase,
   BookHeart,
   ShoppingBag,
   ShoppingCart,
@@ -49,6 +50,7 @@ export const dashboardNavGroups: DashboardNavGroup[] = [
     title: 'УЧАСТЬ',
     items: [
       { href: '/dashboard/community', icon: Users2, label: 'СПІЛЬНОТА' },
+      { href: '/dashboard/jobs', icon: Briefcase, label: 'РОБОТА' },
       { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
       { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
       { href: '/dashboard/events', icon: Calendar, label: 'ПОДІЇ' },

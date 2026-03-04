@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/follows/followers - Get followers list
 export async function GET(request: NextRequest) {
@@ -9,13 +9,14 @@ export async function GET(request: NextRequest) {
     const cursor = searchParams.get('cursor');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
-    const targetUserId = userId || user.id;
+    const targetUserId = userId || dbUserId;
 
     let query = supabase
       .from('follows')
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
     const { data: followingStatus } = await supabase
       .from('follows')
       .select('following_id')
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .in('following_id', followerIds)
       .eq('status', 'active');
 

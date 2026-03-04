@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/follows/following - Get following list
 export async function GET(request: NextRequest) {
@@ -9,13 +9,14 @@ export async function GET(request: NextRequest) {
     const cursor = searchParams.get('cursor');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
-    const targetUserId = userId || user.id;
+    const targetUserId = userId || dbUserId;
 
     let query = supabase
       .from('follows')
@@ -40,14 +41,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if each followed user follows back (only if viewing own following list)
-    const isOwnList = targetUserId === user.id;
+    const isOwnList = targetUserId === dbUserId;
     let followingIds: Set<string> = new Set();
 
     if (!isOwnList) {
       const { data: followBackStatus } = await supabase
         .from('follows')
         .select('follower_id')
-        .eq('following_id', user.id)
+        .eq('following_id', dbUserId)
         .in('follower_id', following?.map(f => f.following_id) || [])
         .eq('status', 'active');
 

@@ -545,7 +545,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                       value={formData.required_role}
                       onChange={(e) => setFormData({ ...formData, required_role: e.target.value })}
                       className="w-full px-4 py-3 bg-panel-900 border border-line rounded-lg font-mono text-sm focus:border-bronze focus:outline-none"
-                      placeholder="наприклад: moderator"
+                      placeholder="наприклад: news_editor"
                     />
                   </div>
                 </div>

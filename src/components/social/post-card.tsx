@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreHorizontal, Briefcase, MapPin, Building2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -23,6 +23,16 @@ interface PostCardProps {
     created_at: string;
     is_edited?: boolean;
     visibility: string;
+    link_preview?: {
+      kind?: string;
+      job_id?: string;
+      title?: string;
+      company_name?: string;
+      location?: string;
+      application_url?: string;
+      salary_min?: number | null;
+      salary_max?: number | null;
+    } | null;
     author: {
       id: string;
       display_name: string;
@@ -42,6 +52,7 @@ interface PostCardProps {
 
 export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
   const [isLiking, setIsLiking] = useState(false);
+  const isJobPost = post.link_preview?.kind === 'job';
 
   const timeAgo = formatDistanceToNow(new Date(post.created_at), {
     addSuffix: true,
@@ -102,6 +113,32 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
 
       {/* Content */}
       <Link href={`/post/${post.id}`}>
+        {isJobPost && (
+          <div className="mb-3 rounded-md border bg-blue-500/5 border-blue-500/20 p-3 space-y-2">
+            <div className="inline-flex items-center gap-1 text-xs font-semibold text-blue-500">
+              <Briefcase className="h-3.5 w-3.5" />
+              ВАКАНСІЯ
+            </div>
+            <p className="font-semibold text-sm">
+              {post.link_preview?.title || 'Нова вакансія'}
+            </p>
+            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+              {post.link_preview?.company_name ? (
+                <span className="inline-flex items-center gap-1">
+                  <Building2 className="h-3.5 w-3.5" />
+                  {post.link_preview.company_name}
+                </span>
+              ) : null}
+              {post.link_preview?.location ? (
+                <span className="inline-flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {post.link_preview.location}
+                </span>
+              ) : null}
+            </div>
+          </div>
+        )}
+
         <p className="text-sm leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
         {post.media_urls && post.media_urls.length > 0 && (
@@ -121,6 +158,7 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
             ))}
           </div>
         )}
+
       </Link>
 
       {/* Actions */}
@@ -153,6 +191,12 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
         <Button variant="outline" size="sm" className="gap-2 ml-auto">
           <Share2 className="h-4 w-4" />
         </Button>
+
+        {isJobPost && (
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/dashboard/jobs">Робота</Link>
+          </Button>
+        )}
       </div>
     </div>
   );

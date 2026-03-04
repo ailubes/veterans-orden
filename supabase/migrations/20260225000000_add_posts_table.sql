@@ -73,7 +73,7 @@ CREATE POLICY "Admins can manage all posts"
     EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );
 

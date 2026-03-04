@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/community - Get member directory with search/filter
 export async function GET(request: NextRequest) {
@@ -12,11 +12,12 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+    const dbUserId = profile?.id || user.id;
 
     let query = supabase
       .from('users')
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
     const { data: follows } = await supabase
       .from('follows')
       .select('following_id')
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .in('following_id', memberIds)
       .eq('status', 'active');
 

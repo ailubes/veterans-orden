@@ -87,7 +87,7 @@ export async function PUT(
     // Check ownership or admin
     const dbUserId = profile?.id || user.id;
     const isOwner = existingPost.author_id === dbUserId;
-    const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'moderator';
+    const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'super_admin';
 
     if (!isOwner && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -166,7 +166,7 @@ export async function DELETE(
     // Check ownership or admin
     const dbUserId = profile?.id || user.id;
     const isOwner = existingPost.author_id === dbUserId;
-    const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'moderator';
+    const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'super_admin';
 
     if (!isOwner && !isAdmin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

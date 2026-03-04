@@ -69,7 +69,7 @@ CREATE POLICY "Admins can view all activity"
     EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );
 

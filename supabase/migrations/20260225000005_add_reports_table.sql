@@ -46,25 +46,25 @@ CREATE POLICY "Users can create reports"
   ON reports FOR INSERT
   WITH CHECK (reporter_id = auth.uid());
 
--- Admins/moderators can view all reports
+-- Admins/super admins can view all reports
 CREATE POLICY "Admins can view all reports"
   ON reports FOR SELECT
   USING (
     EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );
 
--- Admins/moderators can update reports
+-- Admins/super admins can update reports
 CREATE POLICY "Admins can update reports"
   ON reports FOR UPDATE
   USING (
     EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );
 
@@ -123,7 +123,7 @@ CREATE POLICY "Users cannot view hidden posts"
     OR EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );
 
@@ -136,6 +136,6 @@ CREATE POLICY "Users cannot view hidden comments"
     OR EXISTS (
       SELECT 1 FROM users
       WHERE id = auth.uid()
-      AND staff_role IN ('admin', 'moderator')
+      AND staff_role IN ('admin', 'super_admin')
     )
   );

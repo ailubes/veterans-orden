@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // POST /api/users/[id]/follow - Follow a specific user
 export async function POST(
@@ -8,15 +8,16 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const following_id = id;
+    const dbUserId = profile?.id || user.id;
 
-    if (following_id === user.id) {
+    if (following_id === dbUserId) {
       return NextResponse.json({ error: 'Cannot follow yourself' }, { status: 400 });
     }
 
@@ -35,7 +36,7 @@ export async function POST(
     const { error } = await supabase
       .from('follows')
       .upsert({
-        follower_id: user.id,
+        follower_id: dbUserId,
         following_id,
         status: 'active',
       }, {
@@ -71,18 +72,19 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const following_id = id;
+    const dbUserId = profile?.id || user.id;
 
     const { error } = await supabase
       .from('follows')
       .delete()
-      .eq('follower_id', user.id)
+      .eq('follower_id', dbUserId)
       .eq('following_id', following_id);
 
     if (error) {
