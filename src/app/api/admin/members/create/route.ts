@@ -50,10 +50,11 @@ export async function POST(request: NextRequest) {
   try {
     // Check admin permissions
     const { profile: adminProfile } = await getAdminProfileFromRequest(request);
+    const adminStaffRole = adminProfile.staff_role ?? 'none';
 
-    if (adminProfile.role !== 'super_admin') {
+    if (!['admin', 'super_admin'].includes(adminStaffRole)) {
       return NextResponse.json(
-        { error: 'Only super admins can create members' },
+        { error: 'Only admins can create members' },
         { status: 403 }
       );
     }
@@ -74,6 +75,17 @@ export async function POST(request: NextRequest) {
       membership_paid_until,
       points,
     } = body;
+
+    // Regular admins cannot create elevated admin roles
+    if (
+      adminStaffRole !== 'super_admin' &&
+      ['admin', 'super_admin'].includes(role)
+    ) {
+      return NextResponse.json(
+        { error: 'Only super admins can assign admin roles' },
+        { status: 403 }
+      );
+    }
 
     // Validate required fields
     if (!first_name || !last_name || !email) {

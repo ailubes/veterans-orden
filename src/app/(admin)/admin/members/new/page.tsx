@@ -38,6 +38,7 @@ interface CreatedMemberInfo {
 export default function NewMemberPage() {
   const router = useRouter();
   const [oblasts, setOblasts] = useState<Oblast[]>([]);
+  const [adminStaffRole, setAdminStaffRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,15 +79,17 @@ export default function NewMemberPage() {
 
       const { data: adminProfile } = await supabase
         .from('users')
-        .select('role')
+        .select('staff_role')
         .eq('auth_id', user.id)
         .single();
 
-      // Only super_admin can create new members
-      if (!adminProfile || adminProfile.role !== 'super_admin') {
+      // Allow admins and super admins to create members
+      if (!adminProfile || !['admin', 'super_admin'].includes(adminProfile.staff_role)) {
         router.push('/admin/members');
         return;
       }
+
+      setAdminStaffRole(adminProfile.staff_role);
 
       // Get oblasts
       const { data: oblastsData } = await supabase
@@ -105,6 +108,8 @@ export default function NewMemberPage() {
       setLoading(false);
     }
   };
+
+  const canAssignElevatedRoles = adminStaffRole === 'super_admin';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -439,8 +444,12 @@ export default function NewMemberPage() {
                 <option value="full_member">Повноцінний член</option>
                 <option value="group_leader">Лідер групи</option>
                 <option value="regional_leader">Регіональний лідер</option>
-                <option value="admin">Адмін</option>
-                <option value="super_admin">Супер-адмін</option>
+                {canAssignElevatedRoles && (
+                  <>
+                    <option value="admin">Адмін</option>
+                    <option value="super_admin">Супер-адмін</option>
+                  </>
+                )}
               </select>
             </div>
 
