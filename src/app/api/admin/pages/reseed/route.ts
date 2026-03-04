@@ -502,6 +502,9 @@ export async function POST(request: NextRequest) {
       results,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Pages Reseed] Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

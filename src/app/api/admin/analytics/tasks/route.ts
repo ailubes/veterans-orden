@@ -162,6 +162,9 @@ export async function GET(request: NextRequest) {
       topPerformers,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Task Analytics] Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

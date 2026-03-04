@@ -38,6 +38,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ data: event }, { status: 200 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/events/[id]]', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -153,6 +156,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ data: updatedEvent }, { status: 200 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[PATCH /api/admin/events/[id]]', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -231,6 +237,9 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[DELETE /api/admin/events/[id]]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

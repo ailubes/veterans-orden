@@ -40,6 +40,9 @@ export async function GET(request: NextRequest) {
     // If data exists, slug is not unique
     return NextResponse.json({ unique: !data });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error checking slug:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

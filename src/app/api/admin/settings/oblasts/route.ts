@@ -49,6 +49,9 @@ export async function GET(request: Request) {
       totalMembers: totalMembers || 0,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Oblasts GET Error]', error);
     return NextResponse.json(
       { error: 'Failed to fetch oblasts' },

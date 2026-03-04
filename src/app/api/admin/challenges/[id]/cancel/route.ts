@@ -33,6 +33,9 @@ export async function POST(
     const challenge = await updateChallenge(id, { status: 'cancelled' });
     return NextResponse.json({ challenge });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] Cancel error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to cancel challenge' },

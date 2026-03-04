@@ -51,6 +51,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ tooltips: tooltips || [] });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -130,6 +133,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ tooltip }, { status: 201 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

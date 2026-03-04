@@ -86,6 +86,9 @@ export async function POST(request: NextRequest) {
       message: `Successfully deleted ${memberIds.length} members`,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Bulk Delete Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

@@ -40,6 +40,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ order });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/marketplace/orders/[id]]', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -148,6 +151,9 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ order });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[PATCH /api/admin/marketplace/orders/[id]]', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

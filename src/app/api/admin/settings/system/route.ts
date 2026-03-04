@@ -37,6 +37,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json(configObject);
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[System Config GET Error]', error);
     return NextResponse.json(
       { error: 'Failed to fetch config' },
@@ -95,6 +98,9 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[System Config PATCH Error]', error);
     return NextResponse.json(
       { error: 'Failed to update config' },

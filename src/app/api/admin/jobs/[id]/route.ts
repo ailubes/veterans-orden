@@ -103,6 +103,9 @@ export async function PUT(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Jobs PUT] Internal error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
@@ -149,6 +152,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Jobs DELETE] Internal error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }

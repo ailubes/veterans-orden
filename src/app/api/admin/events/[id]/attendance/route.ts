@@ -112,6 +112,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
           results.success.push(userId);
         }
       } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
         console.error(`Error processing user ${userId}:`, error);
         results.errors.push({
           userId,
@@ -126,6 +129,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
       results,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[POST /api/admin/events/[id]/attendance]', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -181,6 +187,9 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       count: userIds.length,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[DELETE /api/admin/events/[id]/attendance]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

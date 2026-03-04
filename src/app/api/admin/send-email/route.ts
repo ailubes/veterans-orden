@@ -75,6 +75,9 @@ export async function POST(request: NextRequest) {
       messageId: result?.id,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Send email error:', error);
     return NextResponse.json(
       {

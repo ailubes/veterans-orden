@@ -204,6 +204,9 @@ export async function POST(request: NextRequest) {
       message: `Notification sent to ${recipients.length} users`,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Send Notification Error]', error);
     return NextResponse.json(
       {

@@ -51,6 +51,9 @@ export async function GET(
 
     return NextResponse.json({ challenge });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] GET error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
@@ -104,6 +107,9 @@ export async function PATCH(
 
     return NextResponse.json({ challenge });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] PATCH error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to update challenge' },
@@ -148,6 +154,9 @@ export async function DELETE(
     await deleteChallenge(id);
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] DELETE error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to delete challenge' },

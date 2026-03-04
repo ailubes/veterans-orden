@@ -179,6 +179,9 @@ export async function POST(
       pointsAwarded: action === 'approve' ? taskPoints : 0,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Submission review error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

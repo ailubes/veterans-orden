@@ -60,6 +60,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/marketplace/orders]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

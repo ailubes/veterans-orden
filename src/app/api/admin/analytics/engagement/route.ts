@@ -66,6 +66,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: chartData });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Analytics Engagement Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

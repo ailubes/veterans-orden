@@ -104,6 +104,9 @@ export async function POST(request: NextRequest, context: RouteContext) {
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[POST /api/admin/members/[id]/suspend]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

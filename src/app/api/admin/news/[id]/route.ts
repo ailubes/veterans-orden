@@ -116,6 +116,9 @@ export async function PATCH(
 
     return NextResponse.json(updatedArticle, { status: 200 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('News PATCH error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -190,6 +193,9 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('News DELETE error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

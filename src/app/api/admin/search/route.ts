@@ -112,6 +112,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ results });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Search Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

@@ -146,6 +146,9 @@ export async function GET(
       total: recentActivities.length,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error fetching member activity:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

@@ -66,6 +66,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[POST /api/help/articles/search]', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
@@ -134,6 +137,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/help/articles/search]', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

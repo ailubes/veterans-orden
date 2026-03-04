@@ -40,6 +40,9 @@ export async function GET() {
 
     return NextResponse.json({ requirements });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error getting role requirements:', error);
     return NextResponse.json(
       { error: 'Failed to get role requirements' },
@@ -107,6 +110,9 @@ export async function PATCH(request: NextRequest) {
       requirements: updatedRequirements,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error updating role requirements:', error);
     return NextResponse.json(
       { error: 'Failed to update role requirements' },

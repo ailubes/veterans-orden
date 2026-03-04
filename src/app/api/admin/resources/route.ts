@@ -29,6 +29,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ resource: data }, { status: 201 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Admin resources POST error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }

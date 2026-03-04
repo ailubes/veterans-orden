@@ -42,6 +42,9 @@ export async function POST(request: Request) {
       backupCodes,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('2FA setup error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

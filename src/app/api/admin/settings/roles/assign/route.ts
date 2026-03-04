@@ -69,6 +69,9 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Role Assignment Error]', error);
     return NextResponse.json(
       { error: 'Failed to assign role' },

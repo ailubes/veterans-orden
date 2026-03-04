@@ -210,6 +210,9 @@ export async function POST(request: NextRequest) {
         });
         successCount++;
       } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
         console.error(`Error processing row ${rowNumber}:`, error);
         results.push({
           success: false,
@@ -231,6 +234,9 @@ export async function POST(request: NextRequest) {
       results,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Import error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

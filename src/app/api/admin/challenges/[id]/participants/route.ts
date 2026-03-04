@@ -44,6 +44,9 @@ export async function GET(
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] Get participants error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to get participants' },

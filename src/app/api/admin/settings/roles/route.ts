@@ -24,6 +24,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json(users);
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Roles GET Error]', error);
     return NextResponse.json(
       { error: 'Failed to fetch users' },

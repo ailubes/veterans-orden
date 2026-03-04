@@ -22,6 +22,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ categories });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Categories API] Error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch categories' },
@@ -93,6 +96,9 @@ export async function POST(request: NextRequest) {
         'Категорія додана до метаданих. Щоб використовувати її в статтях, додайте значення до enum через міграцію.',
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Categories API] Error:', error);
     return NextResponse.json(
       { error: 'Failed to create category' },

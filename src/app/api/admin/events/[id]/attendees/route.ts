@@ -134,6 +134,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     return NextResponse.json({ attendees, event });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/events/[id]/attendees]', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

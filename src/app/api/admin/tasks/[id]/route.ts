@@ -105,6 +105,9 @@ export async function PATCH(
 
     return NextResponse.json(updatedTask, { status: 200 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Task PATCH error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -179,6 +182,9 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Task DELETE error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

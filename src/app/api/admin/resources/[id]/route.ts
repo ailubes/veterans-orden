@@ -40,6 +40,9 @@ export async function PUT(
 
     return NextResponse.json({ resource: data });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Admin resources PUT error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
@@ -67,6 +70,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Admin resources DELETE error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }

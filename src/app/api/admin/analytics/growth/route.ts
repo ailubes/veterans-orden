@@ -65,6 +65,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Analytics Growth Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

@@ -65,6 +65,9 @@ export async function POST(request: Request) {
       message: '2FA disabled successfully',
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('2FA disable error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

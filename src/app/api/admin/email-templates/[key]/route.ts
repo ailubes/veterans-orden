@@ -64,6 +64,9 @@ export async function GET(
 
     return NextResponse.json({ template: transformedTemplate });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error(`[GET /api/admin/email-templates/${key}]`, error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
@@ -132,6 +135,9 @@ export async function PATCH(
 
     return NextResponse.json({ template: transformedTemplate });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error(`[PATCH /api/admin/email-templates/${key}]`, error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

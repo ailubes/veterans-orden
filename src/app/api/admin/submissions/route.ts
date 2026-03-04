@@ -72,6 +72,9 @@ export async function GET(request: NextRequest) {
       offset,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Submissions GET error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

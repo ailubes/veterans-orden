@@ -42,6 +42,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ page });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Pages API] GET [id] error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
@@ -158,6 +161,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ page });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Pages API] PUT error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to update page' },
@@ -225,6 +231,9 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Pages API] DELETE error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to delete page' },

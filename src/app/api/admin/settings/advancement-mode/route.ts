@@ -50,6 +50,9 @@ export async function GET() {
 
     return NextResponse.json({ mode });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error getting advancement mode:', error);
     return NextResponse.json(
       { error: 'Failed to get advancement mode' },
@@ -133,6 +136,9 @@ export async function PATCH(request: NextRequest) {
       mode,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error updating advancement mode:', error);
     return NextResponse.json(
       { error: 'Failed to update advancement mode' },

@@ -212,6 +212,9 @@ export async function POST(request: NextRequest) {
       message: 'Користувача створено успішно',
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error in POST /api/admin/members/create:', error);
     return NextResponse.json(
       { error: 'Внутрішня помилка сервера' },

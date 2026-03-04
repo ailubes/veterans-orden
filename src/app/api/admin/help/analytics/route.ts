@@ -195,6 +195,9 @@ export async function GET(request: NextRequest) {
       viewsOverTime,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

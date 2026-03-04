@@ -49,6 +49,9 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil((count || 0) / limit),
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Notifications History Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

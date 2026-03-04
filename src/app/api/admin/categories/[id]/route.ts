@@ -31,6 +31,9 @@ export async function GET(
 
     return NextResponse.json({ category });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Category API] Error:', error);
     return NextResponse.json({ error: 'Failed to fetch category' }, { status: 500 });
   }
@@ -90,6 +93,9 @@ export async function PATCH(
 
     return NextResponse.json({ category });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Category API] Error:', error);
     return NextResponse.json({ error: 'Failed to update category' }, { status: 500 });
   }
@@ -135,6 +141,9 @@ export async function DELETE(
       category,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Category API] Error:', error);
     return NextResponse.json({ error: 'Failed to delete category' }, { status: 500 });
   }

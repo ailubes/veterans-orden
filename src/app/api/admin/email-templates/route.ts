@@ -43,6 +43,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ templates: transformedTemplates });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/email-templates]', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },

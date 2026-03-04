@@ -88,6 +88,9 @@ export async function POST(
       progress,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error advancing member role:', error);
     return NextResponse.json(
       { error: 'Failed to advance member role' },
@@ -140,6 +143,9 @@ export async function GET(
 
     return NextResponse.json({ progress });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error getting member role progress:', error);
     return NextResponse.json(
       { error: 'Failed to get member role progress' },

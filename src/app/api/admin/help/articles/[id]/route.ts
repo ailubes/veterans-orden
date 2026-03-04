@@ -106,6 +106,9 @@ export async function PUT(
 
     return NextResponse.json({ article });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -159,6 +162,9 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Article deleted successfully' });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

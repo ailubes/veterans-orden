@@ -83,6 +83,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Impersonation Status Error]', error);
     return NextResponse.json({ session: null }, { status: 500 });
   }

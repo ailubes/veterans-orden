@@ -65,6 +65,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] GET error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Internal server error' },
@@ -111,6 +114,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ challenge }, { status: 201 });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] POST error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to create challenge' },

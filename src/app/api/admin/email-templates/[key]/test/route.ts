@@ -65,6 +65,9 @@ export async function POST(
       message: `Test email sent to ${testEmail}`,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error(`[POST /api/admin/email-templates/${key}/test]`, error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to send test email' },

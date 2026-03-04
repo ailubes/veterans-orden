@@ -57,6 +57,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error getting advancement requests:', error);
     return NextResponse.json(
       { error: 'Failed to get advancement requests' },
@@ -128,6 +131,9 @@ export async function POST(request: NextRequest) {
         : 'Запит відхилено',
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error processing advancement request:', error);
     return NextResponse.json(
       { error: 'Failed to process advancement request' },

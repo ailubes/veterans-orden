@@ -92,6 +92,9 @@ export async function PUT(
 
     return NextResponse.json({ tooltip });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -146,6 +149,9 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Tooltip deleted successfully' });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('Error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

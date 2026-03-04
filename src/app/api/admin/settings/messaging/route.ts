@@ -77,6 +77,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ settings });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin] Unexpected error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
@@ -231,6 +234,9 @@ export async function PATCH(request: Request) {
       updated: updates.map((u) => u.key),
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin] Unexpected error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }

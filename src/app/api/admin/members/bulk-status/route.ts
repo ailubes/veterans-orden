@@ -112,6 +112,9 @@ export async function POST(request: NextRequest) {
       message: `Successfully updated ${memberIds.length} members to ${status}`,
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Bulk Status Update Error]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

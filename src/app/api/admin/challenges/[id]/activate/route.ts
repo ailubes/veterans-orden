@@ -33,6 +33,9 @@ export async function POST(
     const challenge = await updateChallenge(id, { status: 'active' });
     return NextResponse.json({ challenge });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] Activate error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to activate challenge' },

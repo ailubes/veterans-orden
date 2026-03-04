@@ -33,6 +33,9 @@ export async function POST(
     const result = await completeChallenge(id);
     return NextResponse.json({ result });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Challenges API] Complete error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to complete challenge' },

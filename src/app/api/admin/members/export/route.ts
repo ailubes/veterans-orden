@@ -147,6 +147,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[GET /api/admin/members/export]', error);
     return NextResponse.json(
       { error: 'Internal server error' },

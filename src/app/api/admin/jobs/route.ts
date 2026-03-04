@@ -52,6 +52,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ jobs: formattedJobs });
   } catch (error) {
+    if (error instanceof Response) {
+      return error;
+    }
     console.error('[Admin Jobs GET] Internal error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
