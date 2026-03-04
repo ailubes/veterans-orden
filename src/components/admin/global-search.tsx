@@ -9,6 +9,7 @@ import {
   Vote,
   CheckSquare,
   Newspaper,
+  Briefcase,
   ArrowRight,
 } from 'lucide-react';
 
@@ -234,6 +235,7 @@ export function GlobalSearch() {
                     icon: Vote,
                   },
                   { label: 'Завдання', url: '/admin/tasks', icon: CheckSquare },
+                  { label: 'Робота', url: '/admin/jobs', icon: Briefcase },
                   { label: 'Новини', url: '/admin/news', icon: Newspaper },
                   {
                     label: 'Налаштування',

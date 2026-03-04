@@ -18,6 +18,7 @@ import {
   BookOpen,
   Target,
   PanelTop,
+  Briefcase,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
@@ -29,6 +30,7 @@ const navItems = [
   { href: '/admin/events', icon: Calendar, label: 'ПОДІЇ' },
   { href: '/admin/votes', icon: Vote, label: 'ГОЛОСУВАННЯ' },
   { href: '/admin/tasks', icon: CheckSquare, label: 'ЗАВДАННЯ' },
+  { href: '/admin/jobs', icon: Briefcase, label: 'РОБОТА' },
   { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
   { href: '/admin/pages', icon: PanelTop, label: 'СТОРІНКИ' },
   { href: '/admin/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
