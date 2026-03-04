@@ -35,6 +35,14 @@ interface UserProfile {
   avatar_url?: string;
 }
 
+interface MemberMeResponse {
+  id?: string;
+  first_name?: string;
+  last_name?: string;
+  display_name?: string;
+  avatar_url?: string;
+}
+
 export default function FeedPage() {
   const { toast } = useToast();
   const [posts, setPosts] = useState<Post[]>([]);
@@ -89,8 +97,21 @@ export default function FeedPage() {
     try {
       const response = await fetch('/api/members/me');
       if (!response.ok) throw new Error('Failed to fetch user');
-      const data = await response.json();
-      setUser(data.user);
+      const data = (await response.json()) as MemberMeResponse;
+      const displayName =
+        data.display_name ||
+        `${data.first_name || ''} ${data.last_name || ''}`.trim() ||
+        'Користувач';
+
+      if (data.id) {
+        setUser({
+          id: data.id,
+          display_name: displayName,
+          avatar_url: data.avatar_url,
+        });
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       console.error('Error fetching user:', error);
     }
@@ -101,9 +122,13 @@ export default function FeedPage() {
   }, [fetchUser]);
 
   useEffect(() => {
-    setCursor(null);
-    fetchPosts(true);
+      setCursor(null);
+      fetchPosts(true);
   }, [filter]);
+
+  const handlePostCreated = (post: Post) => {
+    setPosts((prev) => [post, ...prev]);
+  };
 
   const handleLike = async (postId: string, currentlyLiked: boolean) => {
     try {
@@ -179,7 +204,7 @@ export default function FeedPage() {
         </TabsList>
       </Tabs>
 
-      {user && <PostCreator user={user} />}
+      {user && <PostCreator user={user} onCreated={handlePostCreated} />}
 
       <div className="space-y-4">
         {posts.map((post) => (

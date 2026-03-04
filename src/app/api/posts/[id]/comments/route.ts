@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/posts/[id]/comments - Get comments for a post
 export async function GET(
@@ -12,11 +12,13 @@ export async function GET(
     const limit = parseInt(searchParams.get('limit') || '50');
 
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const dbUserId = profile?.id || user.id;
 
     // Check if post exists
     const { data: post } = await supabase
@@ -33,7 +35,7 @@ export async function GET(
       .from('comments')
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
         likes_count:likes(count)
       `)
       .eq('post_id', id)
@@ -57,7 +59,7 @@ export async function GET(
     const { data: userLikes } = await supabase
       .from('likes')
       .select('target_id')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'comment')
       .in('target_id', commentIds);
 
@@ -66,6 +68,11 @@ export async function GET(
     // Format comments
     const formattedComments = comments?.map(comment => ({
       ...comment,
+      author: {
+        ...comment.author,
+        display_name:
+          `${comment.author?.first_name || ''} ${comment.author?.last_name || ''}`.trim() || 'Користувач',
+      },
       likes_count: comment.likes_count?.[0]?.count || 0,
       user_liked: likedCommentIds.has(comment.id),
     })) || [];
@@ -84,11 +91,13 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const dbUserId = profile?.id || user.id;
 
     const body = await request.json();
     const { content, parent_id } = body;
@@ -126,13 +135,13 @@ export async function POST(
       .from('comments')
       .insert({
         post_id: id,
-        author_id: user.id,
+        author_id: dbUserId,
         parent_id: parent_id || null,
         content: content.trim(),
       })
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
         likes_count:likes(count)
       `)
       .single();
@@ -144,7 +153,7 @@ export async function POST(
 
     // Log activity (fire and forget)
     void supabase.rpc('log_activity', {
-      p_actor_id: user.id,
+      p_actor_id: dbUserId,
       p_activity_type: 'comment_created',
       p_target_type: 'post',
       p_target_id: id,
@@ -154,6 +163,11 @@ export async function POST(
     return NextResponse.json({
       comment: {
         ...comment,
+        author: {
+          ...comment.author,
+          display_name:
+            `${comment.author?.first_name || ''} ${comment.author?.last_name || ''}`.trim() || 'Користувач',
+        },
         likes_count: 0,
         user_liked: false,
       },

@@ -10,17 +10,19 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get('type') || 'all'; // all, following, popular
     const userId = searchParams.get('userId');
 
-    const { user, supabase } = await getAuthenticatedUserWithProfile(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     let query = supabase
       .from('posts')
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
         likes_count:likes(count),
         comments_count:comments(count)
       `)
@@ -42,11 +44,11 @@ export async function GET(request: NextRequest) {
       const { data: following } = await supabase
         .from('follows')
         .select('following_id')
-        .eq('follower_id', user.id)
+        .eq('follower_id', dbUserId)
         .eq('status', 'active');
 
       const followingIds = following?.map(f => f.following_id) || [];
-      followingIds.push(user.id); // Include own posts
+      followingIds.push(dbUserId); // Include own posts
 
       query = query.in('author_id', followingIds);
     }
@@ -63,7 +65,7 @@ export async function GET(request: NextRequest) {
     const { data: userLikes } = await supabase
       .from('likes')
       .select('target_id, reaction_type')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'post')
       .in('target_id', postIds);
 
@@ -72,6 +74,11 @@ export async function GET(request: NextRequest) {
     // Format posts
     const formattedPosts = posts?.map(post => ({
       ...post,
+      author: {
+        ...post.author,
+        display_name:
+          `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+      },
       likes_count: post.likes_count?.[0]?.count || 0,
       comments_count: post.comments_count?.[0]?.count || 0,
       user_liked: userLikesMap.has(post.id),
@@ -101,6 +108,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     // Check if user is suspended
     if (profile?.status === 'suspended') {
       return NextResponse.json({ error: 'Account suspended' }, { status: 403 });
@@ -116,7 +125,7 @@ export async function POST(request: NextRequest) {
     const { data: post, error } = await supabase
       .from('posts')
       .insert({
-        author_id: user.id,
+        author_id: dbUserId,
         content: content.trim(),
         content_type,
         media_urls: media_urls || null,
@@ -125,7 +134,7 @@ export async function POST(request: NextRequest) {
       })
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position)
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .single();
 
@@ -134,7 +143,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
     }
 
-    return NextResponse.json({ post }, { status: 201 });
+    return NextResponse.json({
+      post: {
+        ...post,
+        author: {
+          ...post.author,
+          display_name:
+            `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+        },
+        likes_count: 0,
+        comments_count: 0,
+        user_liked: false,
+        user_reaction: null,
+      },
+    }, { status: 201 });
   } catch (error) {
     console.error('Error in POST /api/posts:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

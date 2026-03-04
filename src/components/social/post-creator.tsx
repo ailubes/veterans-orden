@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { ImagePlus, Globe, Users, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,9 +16,30 @@ import { useToast } from '@/hooks/use-toast';
 
 interface PostCreatorProps {
   user: {
+    id?: string;
     display_name: string;
     avatar_url?: string;
   };
+  onCreated?: (post: {
+    id: string;
+    content: string;
+    content_type: string;
+    media_urls?: string[];
+    created_at: string;
+    is_edited?: boolean;
+    visibility: string;
+    author: {
+      id: string;
+      display_name: string;
+      avatar_url?: string;
+      military_unit?: string;
+      position?: string;
+    };
+    likes_count: number;
+    comments_count: number;
+    user_liked?: boolean;
+    user_reaction?: string | null;
+  }) => void;
 }
 
 const visibilityOptions = [
@@ -28,8 +48,7 @@ const visibilityOptions = [
   { key: 'private', label: 'Приватний', icon: Lock },
 ];
 
-export function PostCreator({ user }: PostCreatorProps) {
-  const router = useRouter();
+export function PostCreator({ user, onCreated }: PostCreatorProps) {
   const { toast } = useToast();
   const [content, setContent] = useState('');
   const [visibility, setVisibility] = useState('public');
@@ -52,12 +71,15 @@ export function PostCreator({ user }: PostCreatorProps) {
 
       if (!response.ok) throw new Error('Failed to create post');
 
+      const data = await response.json();
       setContent('');
+      if (data?.post && onCreated) {
+        onCreated(data.post);
+      }
       toast({
         title: 'Допис опубліковано',
         description: 'Ваш допис успішно опубліковано',
       });
-      router.refresh();
     } catch (error) {
       toast({
         title: 'Помилка',

@@ -8,17 +8,19 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUserWithProfile(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     const { data: post, error } = await supabase
       .from('posts')
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
         likes_count:likes(count),
         comments_count:comments(count)
       `)
@@ -33,13 +35,18 @@ export async function GET(
     const { data: userLike } = await supabase
       .from('likes')
       .select('reaction_type')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'post')
       .eq('target_id', id)
       .single();
 
     const formattedPost = {
       ...post,
+      author: {
+        ...post.author,
+        display_name:
+          `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+      },
       likes_count: post.likes_count?.[0]?.count || 0,
       comments_count: post.comments_count?.[0]?.count || 0,
       user_liked: !!userLike,
@@ -78,7 +85,8 @@ export async function PUT(
     }
 
     // Check ownership or admin
-    const isOwner = existingPost.author_id === user.id;
+    const dbUserId = profile?.id || user.id;
+    const isOwner = existingPost.author_id === dbUserId;
     const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'moderator';
 
     if (!isOwner && !isAdmin) {
@@ -106,7 +114,7 @@ export async function PUT(
       .eq('id', id)
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position)
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .single();
 
@@ -115,7 +123,16 @@ export async function PUT(
       return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
     }
 
-    return NextResponse.json({ post });
+    return NextResponse.json({
+      post: {
+        ...post,
+        author: {
+          ...post.author,
+          display_name:
+            `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+        },
+      },
+    });
   } catch (error) {
     console.error('Error in PUT /api/posts/[id]:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -147,7 +164,8 @@ export async function DELETE(
     }
 
     // Check ownership or admin
-    const isOwner = existingPost.author_id === user.id;
+    const dbUserId = profile?.id || user.id;
+    const isOwner = existingPost.author_id === dbUserId;
     const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'moderator';
 
     if (!isOwner && !isAdmin) {

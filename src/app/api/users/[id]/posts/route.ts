@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/users/[id]/posts - Get posts by a specific user
 export async function GET(
@@ -12,21 +12,23 @@ export async function GET(
     const limit = parseInt(searchParams.get('limit') || '20');
 
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     // Check if viewing own profile or if following
-    const isOwnProfile = user.id === id;
+    const isOwnProfile = dbUserId === id;
     let canSeeFollowersOnly = isOwnProfile;
 
     if (!isOwnProfile) {
       const { data: followStatus } = await supabase
         .from('follows')
         .select('status')
-        .eq('follower_id', user.id)
+        .eq('follower_id', dbUserId)
         .eq('following_id', id)
         .eq('status', 'active')
         .single();
@@ -38,7 +40,7 @@ export async function GET(
       .from('posts')
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, display_name, avatar_url, military_unit, position),
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
         likes_count:likes(count),
         comments_count:comments(count)
       `)
@@ -72,7 +74,7 @@ export async function GET(
     const { data: userLikes } = await supabase
       .from('likes')
       .select('target_id, reaction_type')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'post')
       .in('target_id', postIds);
 
@@ -81,6 +83,11 @@ export async function GET(
     // Format posts
     const formattedPosts = posts?.map(post => ({
       ...post,
+      author: {
+        ...post.author,
+        display_name:
+          `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
+      },
       likes_count: post.likes_count?.[0]?.count || 0,
       comments_count: post.comments_count?.[0]?.count || 0,
       user_liked: userLikesMap.has(post.id),

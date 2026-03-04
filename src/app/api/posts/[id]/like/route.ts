@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // POST /api/posts/[id]/like - Like a post
 export async function POST(
@@ -8,11 +8,13 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const dbUserId = profile?.id || user.id;
 
     const body = await request.json().catch(() => ({}));
     const { reaction_type = 'like' } = body;
@@ -32,7 +34,7 @@ export async function POST(
     const { error } = await supabase
       .from('likes')
       .upsert({
-        user_id: user.id,
+        user_id: dbUserId,
         target_type: 'post',
         target_id: id,
         reaction_type,
@@ -47,7 +49,7 @@ export async function POST(
 
     // Log activity (fire and forget)
     void supabase.rpc('log_activity', {
-      p_actor_id: user.id,
+      p_actor_id: dbUserId,
       p_activity_type: 'post_liked',
       p_target_type: 'post',
       p_target_id: id,
@@ -79,16 +81,18 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     const { error } = await supabase
       .from('likes')
       .delete()
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'post')
       .eq('target_id', id);
 
