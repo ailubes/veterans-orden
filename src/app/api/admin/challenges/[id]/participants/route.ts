@@ -20,7 +20,7 @@ export async function GET(
   }
 
   const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.role)) {
+  if (!profile || !adminRoles.includes(profile.staff_role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
