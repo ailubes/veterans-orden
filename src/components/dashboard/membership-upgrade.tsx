@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Check, Loader2 } from 'lucide-react';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
 
@@ -9,6 +10,7 @@ interface MembershipUpgradeProps {
 }
 
 export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
 
@@ -28,28 +30,20 @@ export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
         throw new Error(data.error || 'Payment failed');
       }
 
-      const { data, signature, checkoutUrl } = await response.json();
+      const { checkoutUrl, hutkoToken, orderId, amount } = await response.json();
 
-      // Create form and submit to LiqPay
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = checkoutUrl;
-      form.acceptCharset = 'utf-8';
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+        return;
+      }
 
-      const dataInput = document.createElement('input');
-      dataInput.type = 'hidden';
-      dataInput.name = 'data';
-      dataInput.value = data;
-      form.appendChild(dataInput);
+      if (hutkoToken) {
+        const amountParam = amount ? `&amount=${amount}` : '';
+        router.push(`/pay?token=${hutkoToken}&orderId=${encodeURIComponent(orderId)}&tier=${tierId}${amountParam}`);
+        return;
+      }
 
-      const signatureInput = document.createElement('input');
-      signatureInput.type = 'hidden';
-      signatureInput.name = 'signature';
-      signatureInput.value = signature;
-      form.appendChild(signatureInput);
-
-      document.body.appendChild(form);
-      form.submit();
+      throw new Error('Платіжне посилання не отримано');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Помилка оплати');
       setLoading(null);
