@@ -48,7 +48,6 @@ export default function NewsEditPage({ params }: NewsEditPageProps) {
     if (newsId) {
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newsId]);
 
   // Validate slug uniqueness (exclude current article)

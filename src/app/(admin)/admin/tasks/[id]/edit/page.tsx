@@ -46,7 +46,6 @@ export default function TaskEditPage({ params }: TaskEditPageProps) {
     if (taskId) {
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
   const loadData = async () => {

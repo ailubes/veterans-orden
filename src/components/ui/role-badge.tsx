@@ -41,6 +41,7 @@ const roleIcons: Record<MembershipRole, React.ElementType> = {
 const staffIcons: Record<StaffRole, React.ElementType | null> = {
   none: null,
   news_editor: Edit3,
+  payment_manager: Shield,
   admin: Shield,
   super_admin: Shield,
 };

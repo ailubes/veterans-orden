@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocale } from 'next-intl';
+import { useHydrated } from '@/hooks/use-hydrated';
 import {
   locales,
   localeNames,
@@ -25,27 +26,21 @@ interface LanguageSwitcherProps {
  */
 export function LanguageSwitcher({ className = '' }: LanguageSwitcherProps) {
   const activeLocale = useLocale();
-  const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
-  const [mounted, setMounted] = useState(false);
+  const [pendingLocale, setPendingLocale] = useState<Locale | null>(null);
+  const mounted = useHydrated();
   const [isSwitching, setIsSwitching] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    if (locales.includes(activeLocale as Locale)) {
-      setCurrentLocale(activeLocale as Locale);
-      return;
-    }
-    setCurrentLocale(getCurrentLocale());
-  }, [activeLocale]);
+  const runtimeLocale = locales.includes(activeLocale as Locale)
+    ? (activeLocale as Locale)
+    : mounted
+      ? getCurrentLocale()
+      : 'uk';
+  const currentLocale = pendingLocale ?? runtimeLocale;
 
   const handleLocaleChange = (locale: Locale) => {
-    const runtimeLocale = locales.includes(activeLocale as Locale)
-      ? (activeLocale as Locale)
-      : currentLocale;
     if (locale === runtimeLocale || isSwitching) return;
 
     setIsSwitching(true);
-    setCurrentLocale(locale);
+    setPendingLocale(locale);
 
     // Store in localStorage
     setStoredLocale(locale);

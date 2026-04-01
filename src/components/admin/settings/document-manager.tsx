@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { AdminProfile } from '@/lib/permissions';
+import { isStaffAdmin } from '@/lib/permissions-utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, Upload, Trash2, Download, FileIcon, Pencil, Check, X } from 'lucide-react';
@@ -49,7 +50,7 @@ export default function DocumentManager({
   title,
   description,
   accept,
-  adminProfile: _adminProfile,
+  adminProfile,
 }: DocumentManagerProps) {
   const [docs, setDocs] = useState<OrgDocument[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,11 +60,15 @@ export default function DocumentManager({
   const [editingName, setEditingName] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const canManage = isStaffAdmin(adminProfile.staff_role);
 
   useEffect(() => {
+    if (!canManage) {
+      setLoading(false);
+      return;
+    }
     fetchDocs();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [category, canManage]);
 
   async function fetchDocs() {
     setLoading(true);
@@ -79,6 +84,7 @@ export default function DocumentManager({
   }
 
   async function handleUpload() {
+    if (!canManage) return;
     const file = fileInputRef.current?.files?.[0];
     if (!file) {
       toast({ title: 'Оберіть файл', variant: 'destructive' });
@@ -116,6 +122,7 @@ export default function DocumentManager({
   }
 
   async function handleDelete(id: string) {
+    if (!canManage) return;
     if (!confirm('Видалити файл? Цю дію неможливо скасувати.')) return;
     setDeletingId(id);
     try {
@@ -134,6 +141,7 @@ export default function DocumentManager({
   }
 
   async function handleRename(id: string) {
+    if (!canManage) return;
     if (!editingName.trim()) return;
     try {
       const res = await fetch(`/api/admin/settings/documents/${id}`, {
@@ -160,6 +168,16 @@ export default function DocumentManager({
 
       <h2 className="font-syne text-xl sm:text-2xl font-bold mb-1">{title}</h2>
       <p className="text-muted-500 mb-6">{description}</p>
+
+      {!canManage ? (
+        <div className="p-8 border-2 border-bronze bg-panel-900/50 text-center">
+          <p className="text-bronze font-medium">⚠️ Доступ заборонено</p>
+          <p className="text-muted-500 text-sm mt-2">
+            Тільки адміністратори можуть керувати файлами в цьому розділі
+          </p>
+        </div>
+      ) : (
+        <>
 
       {/* Upload form */}
       <div className="border border-line rounded-lg p-4 bg-panel-850 mb-6">
@@ -271,6 +289,8 @@ export default function DocumentManager({
             </div>
           ))}
         </div>
+      )}
+        </>
       )}
     </div>
   );

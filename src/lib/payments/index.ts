@@ -33,7 +33,6 @@ const LIQPAY_SETTING_KEYS = [
   'payment_currency',
 ] as const;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getActiveProvider(supabase: SupabaseClient<any, any, any>): Promise<PaymentProvider> {
   const allKeys = [...PUMB_SETTING_KEYS, ...LIQPAY_SETTING_KEYS];
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { BookOpen, FileText, Folder, MessageSquare, TrendingUp, Eye, ThumbsUp, Plus } from 'lucide-react';
+import { FileText, Folder, MessageSquare, TrendingUp, Eye, ThumbsUp, Plus } from 'lucide-react';
 
 interface HelpStats {
   totalArticles: number;
@@ -65,7 +65,7 @@ export default function AdminHelpPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-line border-t-accent"></div>
           <p className="mt-4 text-muted-500">Завантаження...</p>
@@ -75,9 +75,10 @@ export default function AdminHelpPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
+        <p className="mono text-bronze mb-2 text-xs tracking-widest">// ДОВІДКОВИЙ ЦЕНТР</p>
         <h1 className="font-syne text-3xl font-bold mb-2">Управління довідкою</h1>
         <p className="text-muted-500">
           Керуйте статтями допомоги, категоріями та підказками
@@ -87,53 +88,61 @@ export default function AdminHelpPage() {
       {/* Stats Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white border border-line rounded-lg p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative card-with-joints">
             <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
               <FileText className="text-bronze" size={32} />
               <span className="text-xs font-bold text-muted-500">СТАТТІ</span>
             </div>
-            <p className="font-syne text-4xl font-bold mb-2">{stats.totalArticles}</p>
+            <p className="font-syne text-4xl font-bold text-text-100 mb-2">{stats.totalArticles}</p>
             <p className="text-sm text-muted-500">
               {stats.publishedArticles} опубліковано, {stats.draftArticles} чернеток
             </p>
           </div>
 
-          <div className="bg-white border border-line rounded-lg p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative card-with-joints">
             <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
               <Folder className="text-bronze" size={32} />
               <span className="text-xs font-bold text-muted-500">КАТЕГОРІЇ</span>
             </div>
-            <p className="font-syne text-4xl font-bold mb-2">{stats.totalCategories}</p>
+            <p className="font-syne text-4xl font-bold text-text-100 mb-2">{stats.totalCategories}</p>
             <p className="text-sm text-muted-500">Активних категорій</p>
           </div>
 
-          <div className="bg-white border border-line rounded-lg p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative card-with-joints">
             <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
               <Eye className="text-bronze" size={32} />
               <span className="text-xs font-bold text-muted-500">ПЕРЕГЛЯДИ</span>
             </div>
-            <p className="font-syne text-4xl font-bold mb-2">{stats.totalViews.toLocaleString()}</p>
+            <p className="font-syne text-4xl font-bold text-text-100 mb-2">{stats.totalViews.toLocaleString()}</p>
             <p className="text-sm text-muted-500">Всього переглядів</p>
           </div>
 
-          <div className="bg-white border border-line rounded-lg p-6 relative">
+          <div className="bg-panel-900 border border-line rounded-lg p-6 relative card-with-joints">
             <div className="joint joint-tl" />
+            <div className="joint joint-tr" />
+            <div className="joint joint-bl" />
             <div className="joint joint-br" />
 
             <div className="flex items-start justify-between mb-4">
               <ThumbsUp className="text-bronze" size={32} />
               <span className="text-xs font-bold text-muted-500">КОРИСНІСТЬ</span>
             </div>
-            <p className="font-syne text-4xl font-bold mb-2">
+            <p className="font-syne text-4xl font-bold text-text-100 mb-2">
               {stats.averageHelpfulRate > 0 ? `${stats.averageHelpfulRate.toFixed(0)}%` : 'N/A'}
             </p>
             <p className="text-sm text-muted-500">Середня оцінка корисності</p>
@@ -145,10 +154,12 @@ export default function AdminHelpPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Link
           href="/admin/help/articles/new"
-          className="bg-bronze text-canvas border border-line rounded-lg p-8 hover:shadow-[8px_8px_0px_0px_rgba(44,40,36,1)] transition-all group relative"
+          className="bg-bronze text-canvas border border-line rounded-lg p-8 transition-all group relative card-with-joints hover:-translate-y-0.5"
         >
           <div className="joint joint-tl" />
           <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
+          <div className="joint joint-br" />
 
           <div className="flex items-center gap-4">
             <div className="p-4 bg-panel-900/20">
@@ -163,9 +174,11 @@ export default function AdminHelpPage() {
 
         <Link
           href="/admin/help/categories"
-          className="bg-white border border-line rounded-lg p-8 hover:border-bronze transition-colors group relative"
+          className="bg-panel-900 border border-line rounded-lg p-8 hover:border-bronze transition-colors group relative card-with-joints"
         >
           <div className="joint joint-tl" />
+          <div className="joint joint-tr" />
+          <div className="joint joint-bl" />
           <div className="joint joint-br" />
 
           <div className="flex items-center gap-4">
@@ -173,7 +186,7 @@ export default function AdminHelpPage() {
               <Folder size={32} className="text-text-100 group-hover:text-bronze transition-colors" />
             </div>
             <div>
-              <h2 className="font-syne text-2xl font-bold mb-1 group-hover:text-bronze transition-colors">
+              <h2 className="font-syne text-2xl font-bold text-text-100 mb-1 group-hover:text-bronze transition-colors">
                 Категорії
               </h2>
               <p className="text-muted-500">Керування категоріями</p>
@@ -183,24 +196,26 @@ export default function AdminHelpPage() {
       </div>
 
       {/* Management Links */}
-      <div className="bg-white border border-line rounded-lg relative">
+      <div className="bg-panel-900 border border-line rounded-lg relative card-with-joints">
         <div className="joint joint-tl" />
         <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
 
         <div className="p-6 border-b-2 border-line/20">
-          <h2 className="font-syne text-xl font-bold">Управління контентом</h2>
+          <h2 className="font-syne text-xl font-bold text-text-100">Управління контентом</h2>
         </div>
 
         <div className="divide-y-2 divide-line/20">
           <Link
             href="/admin/help/articles"
-            className="block p-6 hover:bg-panel-850/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <FileText className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-bronze transition-colors">
+                  <h3 className="font-bold text-text-100 group-hover:text-bronze transition-colors">
                     Всі статті
                   </h3>
                   <p className="text-sm text-muted-500">
@@ -214,13 +229,13 @@ export default function AdminHelpPage() {
 
           <Link
             href="/admin/help/tooltips"
-            className="block p-6 hover:bg-panel-850/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <MessageSquare className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-bronze transition-colors">
+                  <h3 className="font-bold text-text-100 group-hover:text-bronze transition-colors">
                     Підказки
                   </h3>
                   <p className="text-sm text-muted-500">
@@ -234,13 +249,13 @@ export default function AdminHelpPage() {
 
           <Link
             href="/admin/help/analytics"
-            className="block p-6 hover:bg-panel-850/5 transition-colors group"
+            className="block p-6 hover:bg-panel-850 transition-colors group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <TrendingUp className="text-bronze" size={24} />
                 <div>
-                  <h3 className="font-bold group-hover:text-bronze transition-colors">
+                  <h3 className="font-bold text-text-100 group-hover:text-bronze transition-colors">
                     Аналітика
                   </h3>
                   <p className="text-sm text-muted-500">

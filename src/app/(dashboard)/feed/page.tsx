@@ -5,7 +5,7 @@ import { PostCard } from '@/components/social/post-card';
 import { PostCreator } from '@/components/social/post-creator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Newspaper, Users, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Post {
@@ -52,6 +52,8 @@ export default function FeedPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
+  const [isFollowingLoading, setIsFollowingLoading] = useState(false);
 
   const fetchPosts = useCallback(async (reset = false) => {
     if (reset) {
@@ -117,9 +119,26 @@ export default function FeedPage() {
     }
   }, []);
 
+  const fetchFollowing = useCallback(async () => {
+    setIsFollowingLoading(true);
+    try {
+      const response = await fetch('/api/follows/following?limit=200');
+      if (!response.ok) return;
+
+      const data = await response.json();
+      const ids = new Set<string>((data.following || []).map((u: { id: string }) => u.id));
+      setFollowingIds(ids);
+    } catch (error) {
+      console.error('Error fetching following list:', error);
+    } finally {
+      setIsFollowingLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+    fetchFollowing();
+  }, [fetchUser, fetchFollowing]);
 
   useEffect(() => {
       setCursor(null);
@@ -184,6 +203,36 @@ export default function FeedPage() {
     }
   };
 
+  const handleToggleFollow = async (authorId: string) => {
+    const currentlyFollowing = followingIds.has(authorId);
+    const previous = new Set(followingIds);
+    const next = new Set(followingIds);
+
+    if (currentlyFollowing) {
+      next.delete(authorId);
+    } else {
+      next.add(authorId);
+    }
+    setFollowingIds(next);
+
+    try {
+      const response = await fetch(`/api/users/${authorId}/follow`, {
+        method: currentlyFollowing ? 'DELETE' : 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update follow state');
+      }
+    } catch (error) {
+      setFollowingIds(previous);
+      toast({
+        title: 'Помилка',
+        description: 'Не вдалося оновити підписку',
+        variant: 'destructive',
+      });
+    }
+  };
+
   if (loading && posts.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -193,20 +242,53 @@ export default function FeedPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Стрічка</h1>
+    <div className="max-w-3xl mx-auto space-y-6">
+      <div className="bg-panel-900 border border-line rounded-lg p-5 sm:p-6 card-with-joints relative">
+        <div className="joint joint-tl" />
+        <div className="joint joint-tr" />
+        <div className="joint joint-bl" />
+        <div className="joint joint-br" />
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <p className="mono text-bronze text-xs tracking-widest mb-2">// СОЦІАЛЬНА СТРІЧКА</p>
+            <h1 className="font-syne text-2xl sm:text-3xl font-bold text-text-100">Стрічка</h1>
+            <p className="text-sm text-muted-500 mt-1">
+              Слідкуйте за публікаціями спільноти та підписуйтесь на авторів
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-500">
+            <Users className="h-4 w-4" />
+            {isFollowingLoading ? 'Оновлюємо підписки...' : `Підписок: ${followingIds.size}`}
+          </div>
+        </div>
+      </div>
 
       <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all">Усі</TabsTrigger>
-          <TabsTrigger value="following">Підписки</TabsTrigger>
-          <TabsTrigger value="popular">Популярні</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-panel-900 border border-line">
+          <TabsTrigger value="all" className="gap-2">
+            <Newspaper className="h-4 w-4" />
+            Усі
+          </TabsTrigger>
+          <TabsTrigger value="following" className="gap-2">
+            <Users className="h-4 w-4" />
+            Підписки
+          </TabsTrigger>
+          <TabsTrigger value="popular" className="gap-2">
+            <Sparkles className="h-4 w-4" />
+            Популярні
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
       {user && <PostCreator user={user} onCreated={handlePostCreated} />}
 
       <div className="space-y-4">
+        {filter === 'following' && followingIds.size === 0 && (
+          <div className="rounded-lg border border-line bg-panel-900 p-4 text-sm text-muted-500">
+            У вас ще немає підписок. Натисніть <strong className="text-text-100">Підписатись</strong> біля автора допису.
+          </div>
+        )}
+
         {posts.map((post) => (
           <PostCard
             key={post.id}
@@ -214,12 +296,17 @@ export default function FeedPage() {
             onLike={() => handleLike(post.id, post.user_liked || false)}
             onDelete={() => handleDelete(post.id)}
             isOwner={user?.id === post.author.id}
+            canFollow={!!user && user.id !== post.author.id}
+            isFollowingAuthor={followingIds.has(post.author.id)}
+            onToggleFollow={() => handleToggleFollow(post.author.id)}
           />
         ))}
 
         {posts.length === 0 && !loading && (
-          <div className="text-center py-12 text-muted-foreground">
-            Поки немає дописів. Будьте першим!
+          <div className="text-center py-12 text-muted-foreground bg-panel-900 border border-line rounded-lg">
+            {filter === 'following'
+              ? 'У стрічці підписок поки порожньо. Підпишіться на авторів у стрічці "Усі".'
+              : 'Поки немає дописів. Будьте першим!'}
           </div>
         )}
 

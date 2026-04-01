@@ -15,12 +15,30 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useMessenger } from '@/components/messaging/messenger-provider';
 import { dashboardNavGroups, isDashboardItemActive } from './navigation-config';
+import {
+  canAccessPaymentsAdmin,
+  hasAdminAccess,
+  type StaffRole,
+} from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [adminHref, setAdminHref] = useState('/admin');
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => {
+    const defaults: Record<string, boolean> = {};
+    for (const group of dashboardNavGroups) {
+      if (group.collapsible) {
+        defaults[group.id] = !!group.defaultCollapsed;
+      }
+    }
+    if (typeof window !== 'undefined' && window.innerHeight < 900) {
+      defaults.engagement = true;
+    }
+    return defaults;
+  });
   const { totalUnread, toggleMessenger } = useMessenger();
 
   useEffect(() => {
@@ -31,17 +49,20 @@ export function Sidebar() {
       if (user) {
         const { data: profile } = await supabase
           .from('users')
-          .select('staff_role, membership_role')
+          .select('staff_role, membership_role, role')
           .eq('auth_id', user.id)
           .single();
 
         if (profile) {
-          // Check if user has admin access through either staff role or membership role
-          const staffRole = profile.staff_role || 'none';
-          const membershipRole = profile.membership_role || 'supporter';
-          const isStaffAdmin = staffRole === 'admin' || staffRole === 'super_admin';
-          const isLeaderByMembership = ['regional_leader', 'national_leader', 'network_guide'].includes(membershipRole);
-          setIsAdmin(isStaffAdmin || isLeaderByMembership);
+          const staffRole = profile.staff_role as StaffRole | null;
+          const membershipRole = profile.membership_role as MembershipRole | null;
+
+          setIsAdmin(
+            hasAdminAccess(staffRole, membershipRole) ||
+              canAccessPaymentsAdmin(staffRole) ||
+              ['admin', 'super_admin', 'regional_leader'].includes(profile.role || '')
+          );
+          setAdminHref(staffRole === 'payment_manager' ? '/admin/payments' : '/admin');
         }
       }
     };
@@ -55,20 +76,6 @@ export function Sidebar() {
     router.push('/');
     router.refresh();
   };
-
-  useEffect(() => {
-    const defaults: Record<string, boolean> = {};
-    for (const group of dashboardNavGroups) {
-      if (group.collapsible) {
-        defaults[group.id] = !!group.defaultCollapsed;
-      }
-    }
-    // On shorter laptop screens collapse the busiest group by default.
-    if (typeof window !== 'undefined' && window.innerHeight < 900) {
-      defaults.engagement = true;
-    }
-    setCollapsedGroups(defaults);
-  }, []);
 
   useEffect(() => {
     const applyResponsiveCollapse = () => {
@@ -190,7 +197,7 @@ export function Sidebar() {
           {isAdmin && (
             <div className="pt-3 mt-3 border-t border-line">
               <Link
-                href="/admin"
+                href={adminHref}
                 className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold tracking-wider transition-colors rounded ${
                   pathname.startsWith('/admin')
                     ? 'bg-bronze text-bg-950'

@@ -17,10 +17,10 @@ export async function POST(
       return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's database ID and role
+    // Get user's database profile for eligibility checks
     const { data: profile } = await supabase
       .from('users')
-      .select('id, role')
+      .select('id, role, membership_role, commandery_id, status')
       .eq('auth_id', user.id)
       .single();
 
@@ -49,12 +49,46 @@ export async function POST(
     }
 
     // Check if user is eligible to vote
-    const eligibleRoles = vote.eligible_roles as string[];
-    if (eligibleRoles && !eligibleRoles.includes(profile.role)) {
-      return NextResponse.json(
-        { error: 'You are not eligible to vote' },
-        { status: 403 }
-      );
+    if (vote.is_election && vote.commandery_scope) {
+      const allowedMembershipRoles = new Set([
+        'member',
+        'honorary_member',
+        'network_leader',
+        'regional_leader',
+        'national_leader',
+        'network_guide',
+      ]);
+
+      if (profile.status !== 'active') {
+        return NextResponse.json({ error: 'Only active members can vote in primaries' }, { status: 403 });
+      }
+
+      if (!profile.commandery_id || profile.commandery_id !== vote.commandery_scope) {
+        return NextResponse.json({ error: 'You are not a member of this commandery' }, { status: 403 });
+      }
+
+      if (!profile.membership_role || !allowedMembershipRoles.has(profile.membership_role)) {
+        return NextResponse.json({ error: 'Your membership role cannot vote in primaries' }, { status: 403 });
+      }
+    } else if (vote.commandery_scope) {
+      if (profile.status !== 'active') {
+        return NextResponse.json({ error: 'Only active members can vote' }, { status: 403 });
+      }
+      if (!profile.commandery_id || profile.commandery_id !== vote.commandery_scope) {
+        return NextResponse.json({ error: 'You are not a member of this commandery' }, { status: 403 });
+      }
+    } else {
+      const eligibleRoles = (vote.eligible_roles || []) as string[];
+      if (
+        eligibleRoles.length > 0
+        && !(profile.role && eligibleRoles.includes(profile.role))
+        && !(profile.membership_role && eligibleRoles.includes(profile.membership_role))
+      ) {
+        return NextResponse.json(
+          { error: 'You are not eligible to vote' },
+          { status: 403 }
+        );
+      }
     }
 
     // Check if user has already voted

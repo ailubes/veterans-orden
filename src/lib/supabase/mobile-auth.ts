@@ -11,7 +11,6 @@ export interface MobileAuthResult {
     email: string;
     user_metadata?: Record<string, unknown>;
   } | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: SupabaseClient<any, any, any>;
   error: string | null;
 }

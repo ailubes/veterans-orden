@@ -172,7 +172,9 @@ export default function ProgressionPage() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || 'Помилка створення платежу');
 
-      if (json.hutkoToken) {
+      if (json.checkoutUrl) {
+        window.location.href = json.checkoutUrl;
+      } else if (json.hutkoToken) {
         router.push(`/pay?token=${json.hutkoToken}&orderId=${encodeURIComponent(json.orderId)}&tier=${tierId}`);
       } else {
         // payLater — show feedback in place

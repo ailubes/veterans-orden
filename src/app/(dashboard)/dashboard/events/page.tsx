@@ -20,7 +20,7 @@ export default async function EventsPage({ searchParams }: PageProps) {
   // Get user's database ID and oblast
   const { data: profile } = await supabase
     .from('users')
-    .select('id, oblast_id')
+    .select('id, oblast_id, commandery_id')
     .eq('auth_id', user?.id)
     .single();
 
@@ -35,6 +35,12 @@ export default async function EventsPage({ searchParams }: PageProps) {
     .from('events')
     .select('*')
     .eq('status', 'published');
+
+  if (profile?.commandery_id) {
+    eventsQuery = eventsQuery.or(`commandery_id.is.null,commandery_id.eq.${profile.commandery_id}`);
+  } else {
+    eventsQuery = eventsQuery.is('commandery_id', null);
+  }
 
   // Apply date filter
   if (showPast) {

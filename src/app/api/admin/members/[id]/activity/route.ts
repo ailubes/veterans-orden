@@ -65,7 +65,6 @@ export async function GET(
     const activities: ActivityItem[] = [];
 
     // Event RSVPs
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (eventRsvps || []).forEach((rsvp: any) => {
       if (rsvp.event && !Array.isArray(rsvp.event)) {
         activities.push({
@@ -79,7 +78,6 @@ export async function GET(
     });
 
     // Vote submissions
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (voteSubmissions || []).forEach((submission: any) => {
       if (submission.vote && !Array.isArray(submission.vote)) {
         activities.push({
@@ -93,7 +91,6 @@ export async function GET(
     });
 
     // Task claims
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (taskClaims || []).forEach((claim: any) => {
       if (claim.task && !Array.isArray(claim.task)) {
         const isCompleted = claim.status === 'completed';

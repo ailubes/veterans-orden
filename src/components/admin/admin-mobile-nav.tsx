@@ -22,9 +22,11 @@ import {
   Target,
   PanelTop,
   Briefcase,
+  CreditCard,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Logo } from '@/components/ui/logo';
+import type { StaffRole } from '@/lib/permissions-utils';
 
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'ОГЛЯД' },
@@ -37,16 +39,35 @@ const navItems = [
   { href: '/admin/news', icon: FileText, label: 'НОВИНИ' },
   { href: '/admin/pages', icon: PanelTop, label: 'СТОРІНКИ' },
   { href: '/admin/marketplace', icon: ShoppingBag, label: 'МАГАЗИН' },
+  { href: '/admin/payments', icon: CreditCard, label: 'ПЛАТЕЖІ' },
   { href: '/admin/help', icon: BookOpen, label: 'ДОВІДКА' },
   { href: '/admin/notifications', icon: Bell, label: 'СПОВІЩЕННЯ' },
   { href: '/admin/analytics', icon: BarChart3, label: 'АНАЛІТИКА' },
   { href: '/admin/settings', icon: Settings, label: 'НАЛАШТУВАННЯ' },
 ];
 
-export function AdminMobileNav() {
+function getNavItems(staffRole: StaffRole | null | undefined) {
+  if (staffRole === 'payment_manager') {
+    return navItems.filter((item) => item.href === '/admin/payments');
+  }
+
+  return navItems;
+}
+
+function getAdminHomeHref(staffRole: StaffRole | null | undefined) {
+  return staffRole === 'payment_manager' ? '/admin/payments' : '/admin';
+}
+
+interface AdminMobileNavProps {
+  staffRole?: StaffRole | null;
+}
+
+export function AdminMobileNav({ staffRole }: AdminMobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const items = getNavItems(staffRole);
+  const adminHomeHref = getAdminHomeHref(staffRole);
 
   const handleSignOut = async () => {
     const supabase = createClient();
@@ -59,7 +80,7 @@ export function AdminMobileNav() {
     <div className="lg:hidden">
       {/* Header */}
       <header className="flex items-center justify-between p-4 bg-panel-900 text-text-100 border-b border-line">
-        <Link href="/admin" className="flex items-center gap-3">
+        <Link href={adminHomeHref} className="flex items-center gap-3">
           <Logo size={32} />
           <div>
             <span className="font-syne font-bold tracking-tight">АДМІН</span>
@@ -92,7 +113,7 @@ export function AdminMobileNav() {
 
           {/* Navigation items */}
           <ul className="p-4 space-y-1">
-            {navItems.map((item) => {
+            {items.map((item) => {
               const isActive =
                 item.href === '/admin'
                   ? pathname === '/admin'

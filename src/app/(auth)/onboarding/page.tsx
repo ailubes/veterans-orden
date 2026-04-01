@@ -212,10 +212,14 @@ export default function OnboardingPage() {
           throw new Error(err.error || 'Помилка створення запиту на оплату');
         }
 
-        const { hutkoToken, orderId, payLater, amount } = await paymentResponse.json();
+        const { hutkoToken, checkoutUrl, orderId, payLater, amount } = await paymentResponse.json();
+
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
+          return;
+        }
 
         if (hutkoToken) {
-          // HUTKO configured — redirect to embedded payment page
           const annualFlag = isAnnual ? '&annual=1' : '';
           const amountParam = amount ? `&amount=${amount}` : '';
           router.push(`/pay?token=${hutkoToken}&orderId=${encodeURIComponent(orderId)}&tier=${selectedTier}${annualFlag}${amountParam}`);

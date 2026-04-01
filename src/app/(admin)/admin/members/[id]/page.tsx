@@ -83,6 +83,7 @@ export default async function MemberDetailPage({ params }: MemberDetailPageProps
   const roleLabels: Record<string, string> = {
     super_admin: 'Супер-адмін',
     admin: 'Адмін',
+    payment_manager: 'Менеджер платежів',
     regional_leader: 'Регіональний лідер',
     group_leader: 'Лідер групи',
     full_member: 'Повноцінний член',

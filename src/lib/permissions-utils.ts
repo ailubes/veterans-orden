@@ -3,7 +3,7 @@
  * These are pure functions without any server-side dependencies
  *
  * Two-tier role system:
- * 1. StaffRole - Administrative access (none, news_editor, admin, super_admin)
+ * 1. StaffRole - Administrative access (none, news_editor, payment_manager, admin, super_admin)
  * 2. MembershipRole - Network progression (supporter → network_guide)
  *
  * Admin panel access requires either:
@@ -14,7 +14,12 @@
 import type { MembershipRole } from '@/lib/constants';
 
 // Staff roles for administrative access
-export type StaffRole = 'none' | 'news_editor' | 'admin' | 'super_admin';
+export type StaffRole =
+  | 'none'
+  | 'news_editor'
+  | 'payment_manager'
+  | 'admin'
+  | 'super_admin';
 
 // Legacy UserRole type - kept for backwards compatibility during migration
 export type UserRole =
@@ -57,6 +62,19 @@ export function isStaffSuperAdmin(staffRole: StaffRole | null | undefined): bool
  */
 export function isNewsEditor(staffRole: StaffRole | null | undefined): boolean {
   return staffRole === 'news_editor' || isStaffAdmin(staffRole);
+}
+
+/**
+ * Check if staff role can access payment operations and logs
+ */
+export function canAccessPaymentsAdmin(
+  staffRole: StaffRole | null | undefined
+): boolean {
+  return (
+    staffRole === 'payment_manager' ||
+    staffRole === 'admin' ||
+    staffRole === 'super_admin'
+  );
 }
 
 // ============================================
@@ -240,12 +258,12 @@ export function canSendNotificationTo(
  */
 export function getAssignableStaffRoles(adminStaffRole: StaffRole | null | undefined): StaffRole[] {
   if (isStaffSuperAdmin(adminStaffRole)) {
-    return ['none', 'news_editor', 'admin', 'super_admin'];
+    return ['none', 'news_editor', 'payment_manager', 'admin', 'super_admin'];
   }
 
   if (adminStaffRole === 'admin') {
     // Cannot assign super_admin
-    return ['none', 'news_editor', 'admin'];
+    return ['none', 'news_editor', 'payment_manager', 'admin'];
   }
 
   // Regional leaders cannot assign staff roles

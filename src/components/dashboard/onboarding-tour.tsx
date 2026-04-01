@@ -81,9 +81,12 @@ export function OnboardingTour({ userId, hasCompletedOnboarding }: OnboardingTou
 
   useEffect(() => {
     if (isVisible) {
-      updateTargetRect();
+      const frame = requestAnimationFrame(updateTargetRect);
       window.addEventListener('resize', updateTargetRect);
-      return () => window.removeEventListener('resize', updateTargetRect);
+      return () => {
+        cancelAnimationFrame(frame);
+        window.removeEventListener('resize', updateTargetRect);
+      };
     }
   }, [isVisible, updateTargetRect]);
 

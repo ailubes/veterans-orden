@@ -35,8 +35,7 @@ export async function GET(
       .from('comments')
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
-        likes_count:likes(count)
+        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .eq('post_id', id)
       .is('parent_id', null) // Top-level comments only
@@ -54,14 +53,26 @@ export async function GET(
       return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
     }
 
-    // Get user's likes for these comments
+    // Get likes aggregates and current user's likes for comments
     const commentIds = comments?.map(c => c.id) || [];
-    const { data: userLikes } = await supabase
-      .from('likes')
-      .select('target_id')
-      .eq('user_id', dbUserId)
-      .eq('target_type', 'comment')
-      .in('target_id', commentIds);
+    const [{ data: likeRows }, { data: userLikes }] = await Promise.all([
+      supabase
+        .from('likes')
+        .select('target_id')
+        .eq('target_type', 'comment')
+        .in('target_id', commentIds),
+      supabase
+        .from('likes')
+        .select('target_id')
+        .eq('user_id', dbUserId)
+        .eq('target_type', 'comment')
+        .in('target_id', commentIds),
+    ]);
+
+    const likesCountMap = new Map<string, number>();
+    for (const row of likeRows || []) {
+      likesCountMap.set(row.target_id, (likesCountMap.get(row.target_id) || 0) + 1);
+    }
 
     const likedCommentIds = new Set(userLikes?.map(l => l.target_id) || []);
 
@@ -73,7 +84,7 @@ export async function GET(
         display_name:
           `${comment.author?.first_name || ''} ${comment.author?.last_name || ''}`.trim() || 'Користувач',
       },
-      likes_count: comment.likes_count?.[0]?.count || 0,
+      likes_count: likesCountMap.get(comment.id) || 0,
       user_liked: likedCommentIds.has(comment.id),
     })) || [];
 
@@ -141,8 +152,7 @@ export async function POST(
       })
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
-        likes_count:likes(count)
+        author:users!comments_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .single();
 

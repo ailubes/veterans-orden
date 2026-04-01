@@ -13,6 +13,10 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
+import {
+  canAccessPaymentsAdmin,
+  type StaffRole,
+} from '@/lib/permissions-utils';
 
 interface UserProfile {
   first_name: string | null;
@@ -20,7 +24,7 @@ interface UserProfile {
   avatar_url: string | null;
   sex: UserSex;
   role: string;
-  staff_role: string | null;
+  staff_role: StaffRole | null;
 }
 
 interface UserDropdownProps {
@@ -33,8 +37,9 @@ export function UserDropdown({ profile }: UserDropdownProps) {
 
   const isAdmin = profile && (
     ['admin', 'super_admin'].includes(profile.role) ||
-    ['admin', 'super_admin'].includes(profile.staff_role || '')
+    canAccessPaymentsAdmin(profile.staff_role)
   );
+  const adminHref = profile?.staff_role === 'payment_manager' ? '/admin/payments' : '/admin';
 
   const getInitials = () => {
     if (!profile) return '?';
@@ -60,7 +65,12 @@ export function UserDropdown({ profile }: UserDropdownProps) {
               <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
             </div>
           ) : (
-            <DefaultAvatar sex={profile?.sex} size="sm" fallbackInitials={getInitials()} />
+            <DefaultAvatar
+              sex={profile?.sex}
+              size="sm"
+              fallbackInitials={getInitials()}
+              showAnimation={false}
+            />
           )}
           <ChevronDown className="w-4 h-4 text-muted-500" />
         </button>
@@ -101,7 +111,7 @@ export function UserDropdown({ profile }: UserDropdownProps) {
           {isAdmin && (
             <DropdownMenuItem asChild>
               <Link
-                href="/admin"
+                href={adminHref}
                 className="flex items-center gap-3 px-4 py-2.5 cursor-pointer text-text-100 hover:bg-panel-850 hover:text-bronze transition-colors"
                 onClick={() => setOpen(false)}
               >

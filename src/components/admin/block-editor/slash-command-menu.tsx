@@ -113,7 +113,10 @@ export function SlashCommandMenu({ position, onSelect, onClose }: SlashCommandMe
 
   // Reset selected index when filtered list changes
   useEffect(() => {
-    setSelectedIndex(0);
+    const frame = requestAnimationFrame(() => {
+      setSelectedIndex(0);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [searchQuery]);
 
   return (

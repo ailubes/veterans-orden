@@ -48,7 +48,6 @@ export default function VoteEditPage({ params }: VoteEditPageProps) {
     if (voteId) {
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voteId]);
 
   const loadData = async () => {

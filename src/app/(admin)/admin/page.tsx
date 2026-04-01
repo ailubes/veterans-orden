@@ -11,12 +11,16 @@ export default async function AdminDashboardPage() {
     { count: activeMembers },
     { count: paidMembers },
     { count: upcomingEvents },
+    { count: failedPayments },
+    { count: pendingPayments },
     { data: recentMembers },
   ] = await Promise.all([
     supabase.from('users').select('*', { count: 'exact', head: true }),
     supabase.from('users').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('users').select('*', { count: 'exact', head: true }).neq('membership_tier', 'free'),
     supabase.from('events').select('*', { count: 'exact', head: true }).gte('start_date', new Date().toISOString()),
+    supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'failed'),
+    supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('users').select('id, first_name, last_name, created_at').order('created_at', { ascending: false }).limit(5),
   ]);
 
@@ -107,11 +111,21 @@ export default async function AdminDashboardPage() {
         <div className="bg-panel-900 border border-line rounded-lg p-6 relative">
           <p className="mono text-bronze text-xs tracking-widest mb-4">// ОСТАННЯ АКТИВНІСТЬ</p>
 
-          <div className="text-center py-8 text-muted-500">
-            <p className="text-sm">Поки що немає активності</p>
-            <p className="text-xs mt-2 opacity-60">
-              Дії користувачів відображатимуться тут
-            </p>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between py-2 border-b border-line">
+              <span className="text-sm text-text-100">Проблемні платежі</span>
+              <span className="font-syne text-xl font-bold text-red-400">{failedPayments || 0}</span>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-line">
+              <span className="text-sm text-text-100">Очікують статусу</span>
+              <span className="font-syne text-xl font-bold text-yellow-400">{pendingPayments || 0}</span>
+            </div>
+            <Link
+              href="/admin/payments"
+              className="inline-flex text-xs text-bronze hover:text-text-100 transition-colors"
+            >
+              ВІДКРИТИ ЖУРНАЛ ПЛАТЕЖІВ →
+            </Link>
           </div>
         </div>
       </div>

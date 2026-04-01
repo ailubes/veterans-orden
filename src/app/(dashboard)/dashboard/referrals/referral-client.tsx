@@ -17,13 +17,6 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
   // Use old format: /signup/{code}
   const referralLink = `${typeof window !== 'undefined' ? window.location.origin : ''}/signup/${referralCode}`;
 
-  useEffect(() => {
-    if (showQR && referralCode) {
-      generateQRCode();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showQR, referralCode]);
-
   const generateQRCode = async () => {
     try {
       const url = await QRCodeLib.toDataURL(referralLink, {
@@ -51,6 +44,15 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
       console.error('Error generating QR code:', error);
     }
   };
+
+  useEffect(() => {
+    if (showQR && referralCode) {
+      const frame = requestAnimationFrame(() => {
+        generateQRCode();
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [showQR, referralCode]);
 
   const handleCopy = async () => {
     try {
@@ -164,7 +166,6 @@ export function ReferralClient({ referralCode }: ReferralClientProps) {
           <div className="bg-panel-900/10 p-6 flex flex-col items-center gap-4">
             {qrCodeUrl && (
               <div className="bg-panel-900 p-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={qrCodeUrl} alt="QR Code" className="w-64 h-64" />
               </div>
             )}

@@ -40,9 +40,7 @@ export async function GET(
       .from('posts')
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
-        likes_count:likes(count),
-        comments_count:comments(count)
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .eq('author_id', id)
       .eq('is_hidden', false)
@@ -69,14 +67,35 @@ export async function GET(
       return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
     }
 
-    // Get user's likes for these posts
+    // Get like/comment aggregates and user's likes for these posts
     const postIds = posts?.map(p => p.id) || [];
-    const { data: userLikes } = await supabase
-      .from('likes')
-      .select('target_id, reaction_type')
-      .eq('user_id', dbUserId)
-      .eq('target_type', 'post')
-      .in('target_id', postIds);
+    const [{ data: likeRows }, { data: commentRows }, { data: userLikes }] = await Promise.all([
+      supabase
+        .from('likes')
+        .select('target_id')
+        .eq('target_type', 'post')
+        .in('target_id', postIds),
+      supabase
+        .from('comments')
+        .select('post_id')
+        .in('post_id', postIds),
+      supabase
+        .from('likes')
+        .select('target_id, reaction_type')
+        .eq('user_id', dbUserId)
+        .eq('target_type', 'post')
+        .in('target_id', postIds),
+    ]);
+
+    const likesCountMap = new Map<string, number>();
+    for (const row of likeRows || []) {
+      likesCountMap.set(row.target_id, (likesCountMap.get(row.target_id) || 0) + 1);
+    }
+
+    const commentsCountMap = new Map<string, number>();
+    for (const row of commentRows || []) {
+      commentsCountMap.set(row.post_id, (commentsCountMap.get(row.post_id) || 0) + 1);
+    }
 
     const userLikesMap = new Map(userLikes?.map(l => [l.target_id, l.reaction_type]) || []);
 
@@ -88,8 +107,8 @@ export async function GET(
         display_name:
           `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
       },
-      likes_count: post.likes_count?.[0]?.count || 0,
-      comments_count: post.comments_count?.[0]?.count || 0,
+      likes_count: likesCountMap.get(post.id) || 0,
+      comments_count: commentsCountMap.get(post.id) || 0,
       user_liked: userLikesMap.has(post.id),
       user_reaction: userLikesMap.get(post.id) || null,
     })) || [];

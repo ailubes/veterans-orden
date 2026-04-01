@@ -108,7 +108,6 @@ const allRoutes = [...new Set(Object.keys(manifest).map(toPublicRoute))]
 
 const results = [];
 for (const route of allRoutes) {
-  // eslint-disable-next-line no-await-in-loop
   results.push(await hit(route));
 }
 

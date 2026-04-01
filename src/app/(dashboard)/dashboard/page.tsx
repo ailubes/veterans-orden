@@ -3,7 +3,7 @@ import { StatsCard } from '@/components/dashboard/stats-card';
 import { UserTaskStats } from '@/components/dashboard/user-task-stats';
 import RoleProgressCard from '@/components/dashboard/role-progress-card';
 import Link from 'next/link';
-import { Vote, Calendar, CheckSquare, Users } from 'lucide-react';
+import { Vote, Calendar, CheckSquare, Users, Building2 } from 'lucide-react';
 import { formatDateShort } from '@/lib/utils';
 import { HelpTooltip } from '@/components/help/help-tooltip';
 
@@ -224,6 +224,26 @@ export default async function DashboardPage() {
             <HelpTooltip pageSlug="dashboard-home" elementId="role-progress" position="left" />
           </div>
           <RoleProgressCard />
+        </div>
+      </div>
+
+      <div className="bg-panel-900 border border-line p-6 mb-8 rounded-lg">
+        <p className="mono text-bronze text-xs tracking-widest mb-3">// КОМАНДЕРІЇ</p>
+        <div className="flex items-start gap-3">
+          <Building2 className="w-5 h-5 text-bronze mt-0.5" />
+          <div>
+            <h2 className="font-syne text-xl font-bold text-text-100">Осередки в кабінеті</h2>
+            <p className="text-sm text-muted-500 mt-2">
+              Перегляд командерій доступний усім учасникам. Створення нової командерії доступне
+              лише для ролі «Почесний Член».
+            </p>
+            <Link
+              href="/dashboard/commanderies"
+              className="inline-flex items-center gap-2 mt-4 bg-bronze text-bg-950 px-4 py-2 rounded font-semibold text-sm"
+            >
+              ВІДКРИТИ КОМАНДЕРІЇ →
+            </Link>
+          </div>
         </div>
       </div>
 

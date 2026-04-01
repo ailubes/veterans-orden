@@ -1,7 +1,16 @@
-import { type NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
+  const host = request.headers.get('host');
+  if (host === 'www.ordenv.org') {
+    const redirectUrl = new URL(
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+      'https://ordenv.org'
+    );
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   return await updateSession(request);
 }
 

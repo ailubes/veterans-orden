@@ -1,30 +1,62 @@
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
+function getStorageRegion(): string {
+  return process.env.S3_REGION || process.env.AWS_REGION || 'us-east-1';
+}
+
+function getStorageAccessKey(): string | undefined {
+  return process.env.S3_ACCESS_KEY || process.env.AWS_ACCESS_KEY_ID;
+}
+
+function getStorageSecretKey(): string | undefined {
+  return process.env.S3_SECRET_KEY || process.env.AWS_SECRET_ACCESS_KEY;
+}
+
+function getStorageBucketName(): string | undefined {
+  return process.env.S3_BUCKET_NAME || process.env.AWS_S3_BUCKET;
+}
+
+function getStorageEndpoint(): string | undefined {
+  return process.env.S3_ENDPOINT_URL || process.env.AWS_S3_ENDPOINT_URL;
+}
+
+function getPublicStorageEndpoint(): string | undefined {
+  return process.env.NEXT_PUBLIC_S3_ENDPOINT_URL || getStorageEndpoint();
+}
+
+function buildPublicUrl(bucketName: string, s3Key: string): string {
+  const publicEndpoint = getPublicStorageEndpoint();
+
+  if (publicEndpoint) {
+    return `${publicEndpoint.replace(/\/$/, '')}/${bucketName}/${s3Key}`;
+  }
+
+  const region = getStorageRegion();
+  return `https://${bucketName}.s3.${region}.amazonaws.com/${s3Key}`;
+}
+
 // S3 client configuration (server-side only)
 function getS3Client() {
-  const accessKeyId = process.env.S3_ACCESS_KEY;
-  const secretAccessKey = process.env.S3_SECRET_KEY;
-  const endpoint = process.env.S3_ENDPOINT_URL;
+  const accessKeyId = getStorageAccessKey();
+  const secretAccessKey = getStorageSecretKey();
+  const endpoint = getStorageEndpoint();
 
   if (!accessKeyId || !secretAccessKey) {
     throw new Error(
-      `S3 credentials missing. S3_ACCESS_KEY: ${accessKeyId ? 'set' : 'MISSING'}, S3_SECRET_KEY: ${secretAccessKey ? 'set' : 'MISSING'}`
+      `S3 credentials missing. S3_ACCESS_KEY/AWS_ACCESS_KEY_ID: ${accessKeyId ? 'set' : 'MISSING'}, S3_SECRET_KEY/AWS_SECRET_ACCESS_KEY: ${secretAccessKey ? 'set' : 'MISSING'}`
     );
   }
 
-  if (!endpoint) {
-    throw new Error('S3_ENDPOINT_URL is not configured');
-  }
-
   return new S3Client({
-    region: process.env.S3_REGION || 'us-east-1',
-    endpoint: endpoint,
+    region: getStorageRegion(),
+    ...(endpoint ? { endpoint } : {}),
     credentials: {
       accessKeyId,
       secretAccessKey,
     },
-    forcePathStyle: true, // Required for MinIO
+    // Required for MinIO and other S3-compatible endpoints
+    forcePathStyle: Boolean(endpoint),
     // Disable automatic checksum calculation for S3-compatible storage
     requestChecksumCalculation: 'WHEN_REQUIRED',
     responseChecksumValidation: 'WHEN_REQUIRED',
@@ -129,20 +161,18 @@ export async function generatePresignedUploadUrl(params: {
 
   try {
     // Validate required env vars
-    if (!process.env.S3_ACCESS_KEY || !process.env.S3_SECRET_KEY) {
-      throw new Error('S3 credentials not configured. Please set S3_ACCESS_KEY and S3_SECRET_KEY.');
+    if (!getStorageAccessKey() || !getStorageSecretKey()) {
+      throw new Error(
+        'S3 credentials not configured. Please set S3_ACCESS_KEY/S3_SECRET_KEY or AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY.'
+      );
     }
 
-    if (!process.env.S3_BUCKET_NAME) {
-      throw new Error('S3_BUCKET_NAME not configured');
-    }
-
-    if (!process.env.NEXT_PUBLIC_S3_ENDPOINT_URL) {
-      throw new Error('NEXT_PUBLIC_S3_ENDPOINT_URL not configured');
+    const bucketName = getStorageBucketName();
+    if (!bucketName) {
+      throw new Error('S3 bucket not configured. Please set S3_BUCKET_NAME or AWS_S3_BUCKET.');
     }
 
     const s3Client = getS3Client();
-    const bucketName = process.env.S3_BUCKET_NAME;
 
     // Generate unique filename
     const uniqueFilename = generateUniqueFilename(filename);
@@ -164,7 +194,7 @@ export async function generatePresignedUploadUrl(params: {
     });
 
     // Public URL for accessing the file
-    const publicUrl = `${process.env.NEXT_PUBLIC_S3_ENDPOINT_URL}/${bucketName}/${s3Key}`;
+    const publicUrl = buildPublicUrl(bucketName, s3Key);
 
     return {
       uploadUrl,
@@ -200,7 +230,10 @@ export async function uploadToS3(params: {
   const { file, filename, fileType, context } = params;
 
   const s3Client = getS3Client();
-  const bucketName = process.env.S3_BUCKET_NAME!;
+  const bucketName = getStorageBucketName();
+  if (!bucketName) {
+    throw new Error('S3 bucket not configured. Please set S3_BUCKET_NAME or AWS_S3_BUCKET.');
+  }
 
   const uniqueFilename = generateUniqueFilename(filename);
   const s3Key = getFilePath(context, uniqueFilename);
@@ -214,7 +247,7 @@ export async function uploadToS3(params: {
 
   await s3Client.send(command);
 
-  const publicUrl = `${process.env.NEXT_PUBLIC_S3_ENDPOINT_URL}/${bucketName}/${s3Key}`;
+  const publicUrl = buildPublicUrl(bucketName, s3Key);
 
   return {
     publicUrl,
@@ -230,7 +263,10 @@ export async function uploadToS3(params: {
  */
 export async function deleteFromS3(s3Key: string): Promise<void> {
   const s3Client = getS3Client();
-  const bucketName = process.env.S3_BUCKET_NAME!;
+  const bucketName = getStorageBucketName();
+  if (!bucketName) {
+    throw new Error('S3 bucket not configured. Please set S3_BUCKET_NAME or AWS_S3_BUCKET.');
+  }
 
   const command = new DeleteObjectCommand({
     Bucket: bucketName,
@@ -372,7 +408,8 @@ export function getTargetFileSize(context: string): number {
  */
 export function extractS3KeyFromUrl(url: string): string | null {
   try {
-    const bucketName = process.env.S3_BUCKET_NAME!;
+    const bucketName = getStorageBucketName();
+    if (!bucketName) return null;
     const pattern = new RegExp(`${bucketName}/(.+)$`);
     const match = url.match(pattern);
     return match ? match[1] : null;

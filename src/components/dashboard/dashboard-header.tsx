@@ -25,6 +25,7 @@ import {
   User,
   X,
   Briefcase,
+  Building2,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import {
@@ -38,9 +39,16 @@ import {
 import { NotificationBell } from './notification-bell';
 import { useMessenger } from '@/components/messaging/messenger-provider';
 import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
+import {
+  canAccessPaymentsAdmin,
+  hasAdminAccess,
+  type StaffRole,
+} from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'ОГЛЯД' },
+  { href: '/dashboard/commanderies', icon: Building2, label: 'КОМАНДЕРІЇ' },
   { href: '/dashboard/referrals', icon: Users, label: 'ЗАПРОШЕННЯ' },
   { href: '/dashboard/jobs', icon: Briefcase, label: 'РОБОТА' },
   { href: '/dashboard/challenges', icon: Target, label: 'ВИКЛИКИ' },
@@ -62,12 +70,15 @@ interface UserProfile {
   email: string | null;
   avatar_url: string | null;
   sex: UserSex;
-  role: string;
+  role: string | null;
+  staff_role: string | null;
+  membership_role: string | null;
 }
 
 export function DashboardHeader() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminHref, setAdminHref] = useState('/admin');
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -81,14 +92,20 @@ export function DashboardHeader() {
       if (user) {
         const { data } = await supabase
           .from('users')
-          .select('first_name, last_name, email, avatar_url, sex, role')
+          .select('first_name, last_name, email, avatar_url, sex, role, staff_role, membership_role')
           .eq('auth_id', user.id)
           .single();
 
         if (data) {
           setProfile(data);
-          const adminRoles = ['admin', 'super_admin', 'regional_leader'];
-          setIsAdmin(adminRoles.includes(data.role));
+          const staffRole = data.staff_role as StaffRole | null;
+          const membershipRole = data.membership_role as MembershipRole | null;
+          setIsAdmin(
+            hasAdminAccess(staffRole, membershipRole) ||
+              canAccessPaymentsAdmin(staffRole) ||
+              ['admin', 'super_admin', 'regional_leader'].includes(data.role || '')
+          );
+          setAdminHref(staffRole === 'payment_manager' ? '/admin/payments' : '/admin');
         }
       }
     };
@@ -162,7 +179,7 @@ export function DashboardHeader() {
               <div className="py-2">
                 <DropdownMenuItem asChild>
                   <Link
-                    href="/admin"
+                    href={adminHref}
                     onClick={() => setMenuOpen(false)}
                     className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer ${
                       pathname.startsWith('/admin')
@@ -258,6 +275,18 @@ export function DashboardHeader() {
                 <span className="text-sm">Налаштування</span>
               </Link>
             </DropdownMenuItem>
+
+            {isAdmin && (
+              <DropdownMenuItem asChild>
+                <Link
+                  href={adminHref}
+                  className="flex items-center gap-3 px-4 py-2 cursor-pointer text-text-100 hover:bg-panel-850"
+                >
+                  <Shield size={16} />
+                  <span className="text-sm">Адмін-панель</span>
+                </Link>
+              </DropdownMenuItem>
+            )}
           </div>
 
           <DropdownMenuSeparator className="bg-line" />

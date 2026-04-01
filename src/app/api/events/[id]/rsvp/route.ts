@@ -27,6 +27,28 @@ export async function POST(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
+    const { data: event } = await supabase
+      .from('events')
+      .select('requires_ticket_purchase, ticket_price_points, commandery_id')
+      .eq('id', eventId)
+      .single();
+
+    if (!event) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    if (event.commandery_id) {
+      const { data: profileLocation } = await supabase
+        .from('users')
+        .select('commandery_id')
+        .eq('id', profile.id)
+        .single();
+
+      if (!profileLocation?.commandery_id || profileLocation.commandery_id !== event.commandery_id) {
+        return NextResponse.json({ error: 'This event is restricted to another commandery' }, { status: 403 });
+      }
+    }
+
     // Validate request body
     const { data: validatedData, error: validationError } = await validateBody(
       request,
@@ -45,17 +67,6 @@ export async function POST(
     }
 
     const { status } = validatedData;
-
-    // Check if event requires ticket purchase
-    const { data: event } = await supabase
-      .from('events')
-      .select('requires_ticket_purchase, ticket_price_points')
-      .eq('id', eventId)
-      .single();
-
-    if (!event) {
-      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
-    }
 
     // For paid events, users cannot RSVP as "going" without purchasing a ticket
     if (event.requires_ticket_purchase && status === 'going') {
@@ -146,6 +157,28 @@ export async function DELETE(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
+    const { data: event } = await supabase
+      .from('events')
+      .select('commandery_id')
+      .eq('id', eventId)
+      .single();
+
+    if (!event) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+
+    if (event.commandery_id) {
+      const { data: profileLocation } = await supabase
+        .from('users')
+        .select('commandery_id')
+        .eq('id', profile.id)
+        .single();
+
+      if (!profileLocation?.commandery_id || profileLocation.commandery_id !== event.commandery_id) {
+        return NextResponse.json({ error: 'This event is restricted to another commandery' }, { status: 403 });
+      }
+    }
+
     // Check if RSVP has a purchased ticket
     const { data: rsvp } = await supabase
       .from('event_rsvps')
@@ -184,7 +217,6 @@ export async function DELETE(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function updateEventCounters(supabase: SupabaseClient<any, 'public', any>, eventId: string) {
   // Count going
   const { count: goingCount } = await supabase

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocale } from 'next-intl';
+import { useHydrated } from '@/hooks/use-hydrated';
 import {
   locales,
   localeNames,
@@ -23,25 +24,19 @@ interface LanguageSwitcherProps {
  */
 export function LanguageSwitcher({ className = '', onChange }: LanguageSwitcherProps) {
   const activeLocale = useLocale();
-  const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    if (locales.includes(activeLocale as Locale)) {
-      setCurrentLocale(activeLocale as Locale);
-      return;
-    }
-    setCurrentLocale(getCurrentLocale());
-  }, [activeLocale]);
+  const [pendingLocale, setPendingLocale] = useState<Locale | null>(null);
+  const mounted = useHydrated();
+  const runtimeLocale = locales.includes(activeLocale as Locale)
+    ? (activeLocale as Locale)
+    : mounted
+      ? getCurrentLocale()
+      : 'uk';
+  const currentLocale = pendingLocale ?? runtimeLocale;
 
   const handleLocaleChange = (locale: Locale) => {
-    const runtimeLocale = locales.includes(activeLocale as Locale)
-      ? (activeLocale as Locale)
-      : currentLocale;
     if (locale === runtimeLocale) return;
 
-    setCurrentLocale(locale);
+    setPendingLocale(locale);
     setStoredLocale(locale);
     onChange?.(locale);
 
@@ -81,25 +76,19 @@ export function LanguageSwitcher({ className = '', onChange }: LanguageSwitcherP
  */
 export function LanguageSwitcherCompact({ className = '', onChange }: LanguageSwitcherProps) {
   const activeLocale = useLocale();
-  const [currentLocale, setCurrentLocale] = useState<Locale>('uk');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    if (locales.includes(activeLocale as Locale)) {
-      setCurrentLocale(activeLocale as Locale);
-      return;
-    }
-    setCurrentLocale(getCurrentLocale());
-  }, [activeLocale]);
+  const [pendingLocale, setPendingLocale] = useState<Locale | null>(null);
+  const mounted = useHydrated();
+  const runtimeLocale = locales.includes(activeLocale as Locale)
+    ? (activeLocale as Locale)
+    : mounted
+      ? getCurrentLocale()
+      : 'uk';
+  const currentLocale = pendingLocale ?? runtimeLocale;
 
   const handleLocaleChange = (locale: Locale) => {
-    const runtimeLocale = locales.includes(activeLocale as Locale)
-      ? (activeLocale as Locale)
-      : currentLocale;
     if (locale === runtimeLocale) return;
 
-    setCurrentLocale(locale);
+    setPendingLocale(locale);
     setStoredLocale(locale);
     onChange?.(locale);
 

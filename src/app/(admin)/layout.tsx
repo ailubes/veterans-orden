@@ -45,9 +45,9 @@ export default async function AdminLayout({
       {/* Global Search - Cmd+K / Ctrl+K */}
       <GlobalSearch />
       <div className="flex">
-        <AdminSidebar />
+        <AdminSidebar staffRole={profile?.staff_role} />
         <div className="flex-1 flex flex-col min-h-screen">
-          <AdminMobileNav />
+          <AdminMobileNav staffRole={profile?.staff_role} />
           <main className="flex-1 p-4 lg:p-8">{children}</main>
         </div>
       </div>

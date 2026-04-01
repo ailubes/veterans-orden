@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth/get-user';
-import { generatePresignedUploadUrl } from '@/lib/storage/s3-storage';
+import {
+  generatePresignedUploadUrl,
+  isValidFileSize,
+  isValidFileType,
+} from '@/lib/storage/s3-storage';
 import { validateBody } from '@/lib/validation/validate';
 import { uploadAvatarSchema, updateAvatarUrlSchema } from '@/lib/validation/schemas';
 
 export const dynamic = 'force-dynamic';
+
+function hasS3Credentials() {
+  const hasS3Pair = Boolean(process.env.S3_ACCESS_KEY && process.env.S3_SECRET_KEY);
+  const hasAwsPair = Boolean(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY);
+
+  return Boolean(
+    hasS3Pair || hasAwsPair
+  );
+}
 
 /**
  * POST /api/user/upload-avatar
@@ -50,12 +63,32 @@ export async function POST(request: NextRequest) {
 
     const { fileName, fileType, fileSize } = validatedData;
 
+    if (!isValidFileType(fileType, 'user_avatar')) {
+      return NextResponse.json(
+        { error: `Непідтримуваний тип файлу: ${fileType}` },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidFileSize(fileSize, 'user_avatar')) {
+      return NextResponse.json(
+        { error: 'Файл занадто великий. Максимум: 10MB' },
+        { status: 400 }
+      );
+    }
+
     // Generate unique filename with user ID
     const timestamp = Date.now();
-    const extension = fileName.split('.').pop();
+    const extension = fileName.split('.').pop() || 'jpg';
     const uniqueFileName = `avatar-${userProfile.id}-${timestamp}.${extension}`;
 
-    // Generate presigned URL for S3 upload
+    if (!hasS3Credentials()) {
+      return NextResponse.json(
+        { error: 'S3 credentials are not configured on the server' },
+        { status: 503 }
+      );
+    }
+
     const { uploadUrl, publicUrl, s3Key } = await generatePresignedUploadUrl({
       filename: uniqueFileName,
       fileType,
@@ -82,6 +115,19 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+/**
+ * PUT /api/user/upload-avatar
+ *
+ * Deprecated fallback endpoint. Uploads must go directly to S3 presigned URL.
+ */
+export async function PUT(request: NextRequest) {
+  void request;
+  return NextResponse.json(
+    { error: 'Direct PUT is disabled. Use presigned S3 upload URL from POST /api/user/upload-avatar.' },
+    { status: 405 }
+  );
 }
 
 /**

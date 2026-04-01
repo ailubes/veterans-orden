@@ -68,7 +68,6 @@ export default function MemberEditPage({ params }: MemberEditPageProps) {
     if (memberId) {
       loadData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberId]);
 
   const loadData = async () => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useHydrated } from '@/hooks/use-hydrated';
 
 interface ThemeToggleProps {
   className?: string;
@@ -14,12 +14,7 @@ interface ThemeToggleProps {
  */
 export function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // Avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   if (!mounted) {
     // Return placeholder with same dimensions to prevent layout shift
@@ -90,11 +85,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
  */
 export function ThemeToggleCompact({ className = '' }: ThemeToggleProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   if (!mounted) {
     return (

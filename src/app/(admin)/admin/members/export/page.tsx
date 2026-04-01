@@ -24,14 +24,12 @@ export default function MembersExportPage() {
 
   useEffect(() => {
     checkAccessAndLoadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!loading) {
       loadFilteredCount();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roleFilter, statusFilter, tierFilter, loading]);
 
   const checkAccessAndLoadData = async () => {

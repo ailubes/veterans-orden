@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/admin/search?q=query
- * Global search across members, events, votes, tasks, news
+ * Global search across members, events, votes, tasks, news, payments
  */
 export async function GET(request: NextRequest) {
   try {
@@ -64,6 +64,13 @@ export async function GET(request: NextRequest) {
       .ilike('title', `%${query}%`)
       .limit(5);
 
+    // Search payments by provider order ID
+    const { data: payments } = await supabase
+      .from('payments')
+      .select('id, type, status, amount, currency, provider_transaction_id')
+      .ilike('provider_transaction_id', `%${query}%`)
+      .limit(5);
+
     // Format results
     const results = [
       ...(members || []).map((m) => ({
@@ -107,6 +114,14 @@ export async function GET(request: NextRequest) {
           : 'Не опубліковано',
         url: `/admin/news/${n.id}`,
         meta: n.status,
+      })),
+      ...(payments || []).map((p) => ({
+        id: p.id,
+        type: 'payment' as const,
+        title: p.provider_transaction_id || p.id,
+        subtitle: `${p.amount} ${p.currency}`,
+        url: `/admin/payments/${p.id}`,
+        meta: `${p.type} • ${p.status}`,
       })),
     ];
 

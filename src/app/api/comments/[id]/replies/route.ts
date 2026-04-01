@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth/get-user';
+import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
 
 // GET /api/comments/[id]/replies - Get threaded replies to a comment
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUser(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -29,8 +29,7 @@ export async function GET(
       .from('comments')
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position),
-        likes_count:likes(count)
+        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position)
       `)
       .eq('parent_id', id)
       .order('created_at', { ascending: true });
@@ -40,21 +39,35 @@ export async function GET(
       return NextResponse.json({ error: 'Failed to fetch replies' }, { status: 500 });
     }
 
-    // Get user's likes for these replies
+    const dbUserId = profile?.id || user.id;
+
+    // Get likes aggregates and current user's likes for these replies
     const replyIds = replies?.map(r => r.id) || [];
-    const { data: userLikes } = await supabase
-      .from('likes')
-      .select('target_id')
-      .eq('user_id', user.id)
-      .eq('target_type', 'comment')
-      .in('target_id', replyIds);
+    const [{ data: likeRows }, { data: userLikes }] = await Promise.all([
+      supabase
+        .from('likes')
+        .select('target_id')
+        .eq('target_type', 'comment')
+        .in('target_id', replyIds),
+      supabase
+        .from('likes')
+        .select('target_id')
+        .eq('user_id', dbUserId)
+        .eq('target_type', 'comment')
+        .in('target_id', replyIds),
+    ]);
+
+    const likesCountMap = new Map<string, number>();
+    for (const row of likeRows || []) {
+      likesCountMap.set(row.target_id, (likesCountMap.get(row.target_id) || 0) + 1);
+    }
 
     const likedReplyIds = new Set(userLikes?.map(l => l.target_id) || []);
 
     // Format replies
     const formattedReplies = replies?.map(reply => ({
       ...reply,
-      likes_count: reply.likes_count?.[0]?.count || 0,
+      likes_count: likesCountMap.get(reply.id) || 0,
       user_liked: likedReplyIds.has(reply.id),
     })) || [];
 

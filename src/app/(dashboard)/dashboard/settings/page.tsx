@@ -87,10 +87,27 @@ function canChangeLocation(lastChangedAt: string | null): { allowed: boolean; da
   return { allowed: daysSinceChange >= 30, daysRemaining };
 }
 
+function withTimeout<T>(promise: Promise<T>, ms = 12000): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timeoutId = setTimeout(() => reject(new Error('Request timeout')), ms);
+    promise
+      .then((value) => {
+        clearTimeout(timeoutId);
+        resolve(value);
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId);
+        reject(error);
+      });
+  });
+}
+
 export default function SettingsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [message, setMessage] = useState('');
   const [user, setUser] = useState<UserProfile | null>(null);
   const [copied, setCopied] = useState(false);
@@ -126,59 +143,58 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const getUser = async () => {
-      const supabase = createClient();
+      try {
+        setInitialLoading(true);
+        setLoadError('');
+        const supabase = createClient();
 
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
+        const authResponse = await withTimeout(
+          supabase.auth.getUser() as Promise<{ data: { user: { id: string; email?: string | null } | null } }>,
+          10000
+        );
+        const authUser = authResponse.data.user;
 
-      if (authUser) {
-        // Fetch full profile with KATOTTG and referrer info
-        const { data: profile } = await supabase
-          .from('users')
-          .select(`
-            id,
-            first_name,
-            last_name,
-            patronymic,
-            email,
-            phone,
-            date_of_birth,
-            sex,
-            military_unit,
-            position,
-            member_identity,
-            membership_tier,
-            avatar_url,
-            referral_code,
-            referral_count,
-            referred_by_id,
-            katottg_code,
-            settlement_name,
-            hromada_name,
-            raion_name,
-            oblast_name_katottg,
-            location_last_changed_at,
-            oblast_id,
-            city,
-            street_address,
-            postal_code,
-            nova_poshta_city,
-            nova_poshta_branch,
-            points,
-            level,
-            role,
-            status,
-            member_since,
-            is_email_verified,
-            is_phone_verified,
-            is_identity_verified,
-            oblast:oblasts(name)
-          `)
-          .eq('auth_id', authUser.id)
-          .single();
+        if (!authUser) {
+          router.push('/sign-in');
+          return;
+        }
 
-        if (profile) {
+        // Use broad select + follow-up lookups to avoid schema/relationship drift breaking this page.
+        const profileResponse = await withTimeout(
+          supabase
+            .from('users')
+            .select('*')
+            .eq('auth_id', authUser.id)
+            .maybeSingle() as Promise<{ data: Record<string, any> | null; error: { message: string } | null }>,
+          12000
+        );
+        const { data: profile, error: profileError } = profileResponse;
+
+        if (profileError) {
+          console.error('Failed to load profile:', profileError);
+          setLoadError('Не вдалося завантажити профіль. Спробуйте оновити сторінку.');
+          return;
+        }
+
+        if (!profile) {
+          setLoadError('Профіль не знайдено.');
+          return;
+        }
+
+        let oblastName: string | null = null;
+        if (profile.oblast_id) {
+          const oblastResponse = await withTimeout(
+            supabase
+              .from('oblasts')
+              .select('name')
+              .eq('id', profile.oblast_id)
+              .maybeSingle() as Promise<{ data: { name: string } | null }>,
+            8000
+          );
+          const oblast = oblastResponse.data;
+          oblastName = oblast?.name || null;
+        }
+
           // Get referrer name if exists
           let referredByName = null;
           if (profile.referred_by_id) {
@@ -242,9 +258,7 @@ export default function SettingsPage() {
             locationLastChangedAt: profile.location_last_changed_at || null,
             // Legacy location
             oblastId: profile.oblast_id || null,
-            oblastName: Array.isArray(profile.oblast)
-              ? profile.oblast[0]?.name || null
-              : (profile.oblast as { name: string } | null)?.name || null,
+            oblastName,
             city: profile.city,
             streetAddress: profile.street_address,
             postalCode: profile.postal_code,
@@ -254,7 +268,7 @@ export default function SettingsPage() {
             level: profile.level || 1,
             role: profile.role,
             status: profile.status,
-            memberSince: profile.member_since,
+            memberSince: profile.member_since || profile.created_at || null,
             isEmailVerified: profile.is_email_verified || false,
             isPhoneVerified: profile.is_phone_verified || false,
             isIdentityVerified: profile.is_identity_verified || false,
@@ -290,12 +304,16 @@ export default function SettingsPage() {
           setPostalCode(profile.postal_code || '');
           setNovaPoshtaCity(profile.nova_poshta_city || '');
           setNovaPoshtaBranch(profile.nova_poshta_branch || '');
-        }
+      } catch (error) {
+        console.error('Settings page load error:', error);
+        setLoadError('Сталася помилка завантаження профілю.');
+      } finally {
+        setInitialLoading(false);
       }
     };
 
-    getUser();
-  }, []);
+    void getUser();
+  }, [router]);
 
   const copyReferralLink = () => {
     if (!user?.referralCode) return;
@@ -307,10 +325,15 @@ export default function SettingsPage() {
 
   const getRoleName = (role: string) => {
     const roles: Record<string, string> = {
+      free_viewer: 'Глядач',
       prospect: 'Кандидат',
+      silent_member: 'Учасник',
+      full_member: 'Повноправний член',
       member: 'Член',
+      group_leader: 'Лідер групи',
       activist: 'Активіст',
       regional_leader: 'Регіональний лідер',
+      payment_manager: 'Менеджер платежів',
       admin: 'Адміністратор',
       super_admin: 'Супер адмін',
       news_editor: 'Редактор новин',
@@ -457,10 +480,18 @@ export default function SettingsPage() {
     router.refresh();
   };
 
-  if (!user) {
+  if (initialLoading) {
     return (
       <div className="max-w-2xl mx-auto">
         <div className="text-center py-12">Завантаження...</div>
+      </div>
+    );
+  }
+
+  if (loadError || !user) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center py-12 text-red-400">{loadError || 'Не вдалося завантажити профіль.'}</div>
       </div>
     );
   }

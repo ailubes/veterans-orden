@@ -7,6 +7,10 @@ import { createClient } from '@/lib/supabase/client';
 import { HeavyCta } from '@/components/ui/heavy-cta';
 import { LogOut, LayoutDashboard, Settings, Shield } from 'lucide-react';
 import { DefaultAvatar, type UserSex } from '@/components/ui/default-avatar';
+import {
+  canAccessPaymentsAdmin,
+  type StaffRole,
+} from '@/lib/permissions-utils';
 
 interface UserProfile {
   first_name: string | null;
@@ -14,7 +18,7 @@ interface UserProfile {
   avatar_url: string | null;
   sex: UserSex;
   role: string;
-  staff_role: string | null;
+  staff_role: StaffRole | null;
 }
 
 interface MobileAuthNavProps {
@@ -84,8 +88,9 @@ export function MobileAuthNav({ onClose }: MobileAuthNavProps) {
   // Logged in state - show quick links
   const isAdmin = profile && (
     ['admin', 'super_admin'].includes(profile.role) ||
-    ['admin', 'super_admin'].includes(profile.staff_role || '')
+    canAccessPaymentsAdmin(profile.staff_role)
   );
+  const adminHref = profile?.staff_role === 'payment_manager' ? '/admin/payments' : '/admin';
 
   return (
     <div className="flex flex-col gap-2 w-full pt-4 border-t border-line">
@@ -124,7 +129,7 @@ export function MobileAuthNav({ onClose }: MobileAuthNavProps) {
 
       {isAdmin && (
         <Link
-          href="/admin"
+          href={adminHref}
           onClick={onClose}
           className="flex items-center gap-3 px-4 py-3 text-text-100 hover:bg-panel-850 hover:text-bronze rounded-lg transition-colors"
         >

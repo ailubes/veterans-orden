@@ -4,6 +4,17 @@ import { HelpTooltip } from '@/components/help/help-tooltip';
 
 export default async function VotesPage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data: profile } = user
+    ? await supabase
+      .from('users')
+      .select('id, role, membership_role, commandery_id, status')
+      .eq('auth_id', user.id)
+      .single()
+    : { data: null };
 
   // Fetch active votes
   const { data: activeVotes } = await supabase
@@ -21,6 +32,34 @@ export default async function VotesPage() {
     .order('end_date', { ascending: false })
     .limit(5);
 
+  const primariesAllowedMembershipRoles = new Set([
+    'member',
+    'honorary_member',
+    'network_leader',
+    'regional_leader',
+    'national_leader',
+    'network_guide',
+  ]);
+
+  const filteredActiveVotes = (activeVotes || []).filter((vote) => {
+    if (!profile) return false;
+    if (vote.is_election && vote.commandery_scope) {
+      return profile.status === 'active'
+        && profile.commandery_id === vote.commandery_scope
+        && !!profile.membership_role
+        && primariesAllowedMembershipRoles.has(profile.membership_role);
+    }
+
+    if (vote.commandery_scope) {
+      return profile.status === 'active' && profile.commandery_id === vote.commandery_scope;
+    }
+
+    const eligibleRoles = (vote.eligible_roles || []) as string[];
+    if (eligibleRoles.length === 0) return true;
+    return (!!profile.role && eligibleRoles.includes(profile.role))
+      || (!!profile.membership_role && eligibleRoles.includes(profile.membership_role));
+  });
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
@@ -34,7 +73,7 @@ export default async function VotesPage() {
         </div>
       </div>
 
-      <VotesList activeVotes={activeVotes} closedVotes={closedVotes} />
+      <VotesList activeVotes={filteredActiveVotes} closedVotes={closedVotes} />
     </div>
   );
 }

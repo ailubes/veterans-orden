@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { type RealtimeChannel } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import type { Message, UserPresence } from '@/types/messaging';
@@ -32,14 +32,11 @@ export function useMessagingRealtime({
   onTypingStop,
   onPresenceChange,
 }: UseMessagingRealtimeProps): UseMessagingRealtimeReturn {
+  const [isConnected, setIsConnected] = useState(false);
   const channelRef = useRef<RealtimeChannel | null>(null);
   const presenceChannelRef = useRef<RealtimeChannel | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isConnectedRef = useRef(false);
-
-  // Use singleton Supabase client — avoids creating a new GoTrueClient on every render
-  const supabaseRef = useRef(createClient());
-  const supabase = supabaseRef.current;
+  const supabase = createClient();
 
   // Handle incoming realtime events
   const handleInsert = useCallback((payload: { new: Record<string, unknown> }) => {
@@ -161,7 +158,7 @@ export function useMessagingRealtime({
         }
       })
       .subscribe((status: string) => {
-        isConnectedRef.current = status === 'SUBSCRIBED';
+        setIsConnected(status === 'SUBSCRIBED');
       });
 
     channelRef.current = channel;
@@ -169,6 +166,7 @@ export function useMessagingRealtime({
     return () => {
       supabase.removeChannel(channel);
       channelRef.current = null;
+      setIsConnected(false);
     };
   }, [conversationId, userId, supabase, handleInsert, handleUpdate, onTypingStart, onTypingStop]);
 
@@ -265,6 +263,6 @@ export function useMessagingRealtime({
   return {
     sendTypingIndicator,
     updatePresence,
-    isConnected: isConnectedRef.current,
+    isConnected,
   };
 }

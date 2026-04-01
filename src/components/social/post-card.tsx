@@ -48,10 +48,22 @@ interface PostCardProps {
   onLike?: () => void;
   onDelete?: () => void;
   isOwner?: boolean;
+  canFollow?: boolean;
+  isFollowingAuthor?: boolean;
+  onToggleFollow?: () => Promise<void> | void;
 }
 
-export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
+export function PostCard({
+  post,
+  onLike,
+  onDelete,
+  isOwner,
+  canFollow = false,
+  isFollowingAuthor = false,
+  onToggleFollow,
+}: PostCardProps) {
   const [isLiking, setIsLiking] = useState(false);
+  const [isFollowUpdating, setIsFollowUpdating] = useState(false);
   const isJobPost = post.link_preview?.kind === 'job';
 
   const timeAgo = formatDistanceToNow(new Date(post.created_at), {
@@ -65,6 +77,16 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
       await onLike?.();
     } finally {
       setIsLiking(false);
+    }
+  };
+
+  const handleFollow = async () => {
+    if (!onToggleFollow || isFollowUpdating) return;
+    setIsFollowUpdating(true);
+    try {
+      await onToggleFollow();
+    } finally {
+      setIsFollowUpdating(false);
     }
   };
 
@@ -89,6 +111,17 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
           </div>
         </Link>
         <div className="flex items-center gap-2">
+          {canFollow && (
+            <Button
+              size="sm"
+              variant={isFollowingAuthor ? 'outline' : 'primary'}
+              onClick={handleFollow}
+              disabled={isFollowUpdating}
+              className="h-8 text-xs"
+            >
+              {isFollowUpdating ? '...' : isFollowingAuthor ? 'Підписка' : 'Підписатись'}
+            </Button>
+          )}
           <span className="text-xs text-muted-foreground">
             {timeAgo}
             {post.is_edited && ' (ред.)'}
@@ -148,7 +181,6 @@ export function PostCard({ post, onLike, onDelete, isOwner }: PostCardProps) {
                 key={index}
                 className="relative aspect-video bg-muted rounded-md overflow-hidden"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={url}
                   alt=""

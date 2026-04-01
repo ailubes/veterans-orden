@@ -11,11 +11,12 @@ import {
   Newspaper,
   Briefcase,
   ArrowRight,
+  CreditCard,
 } from 'lucide-react';
 
 interface SearchResult {
   id: string;
-  type: 'member' | 'event' | 'vote' | 'task' | 'news';
+  type: 'member' | 'event' | 'vote' | 'task' | 'news' | 'payment';
   title: string;
   subtitle: string;
   url: string;
@@ -28,6 +29,7 @@ const TYPE_ICONS = {
   vote: Vote,
   task: CheckSquare,
   news: Newspaper,
+  payment: CreditCard,
 };
 
 const TYPE_LABELS = {
@@ -36,6 +38,7 @@ const TYPE_LABELS = {
   vote: 'Голосування',
   task: 'Завдання',
   news: 'Новина',
+  payment: 'Платіж',
 };
 
 export function GlobalSearch() {

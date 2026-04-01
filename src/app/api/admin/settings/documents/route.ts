@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth/get-user';
-import { createServiceClient } from '@/lib/supabase/server';
 import { randomUUID } from 'crypto';
 
 const ALLOWED_MIME: Record<string, string[]> = {
@@ -38,7 +37,7 @@ const ALLOWED_MIME: Record<string, string[]> = {
 };
 
 export async function GET(request: NextRequest) {
-  const { isAdmin, error } = await requireAdminUser(request);
+  const { isAdmin, supabase, error } = await requireAdminUser(request);
   if (!isAdmin) {
     return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
@@ -48,7 +47,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid category' }, { status: 400 });
   }
 
-  const supabase = createServiceClient();
   const { data, error: dbError } = await supabase
     .from('organization_documents')
     .select('*')
@@ -57,6 +55,7 @@ export async function GET(request: NextRequest) {
     .order('created_at', { ascending: true });
 
   if (dbError) {
+    console.error('[GET /api/admin/settings/documents] DB error:', dbError);
     return NextResponse.json({ error: dbError.message }, { status: 500 });
   }
 
@@ -64,7 +63,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { isAdmin, user, error } = await requireAdminUser(request);
+  const { isAdmin, user, supabase, error } = await requireAdminUser(request);
   if (!isAdmin) {
     return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
@@ -96,12 +95,12 @@ export async function POST(request: NextRequest) {
 
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  const supabase = createServiceClient();
   const { error: uploadError } = await supabase.storage
     .from('org-documents')
     .upload(storagePath, buffer, { contentType: file.type });
 
   if (uploadError) {
+    console.error('[POST /api/admin/settings/documents] Storage upload error:', uploadError);
     return NextResponse.json({ error: uploadError.message }, { status: 500 });
   }
 
@@ -126,6 +125,7 @@ export async function POST(request: NextRequest) {
   if (insertError) {
     // Clean up storage on DB failure
     await supabase.storage.from('org-documents').remove([storagePath]);
+    console.error('[POST /api/admin/settings/documents] DB insert error:', insertError);
     return NextResponse.json({ error: insertError.message }, { status: 500 });
   }
 

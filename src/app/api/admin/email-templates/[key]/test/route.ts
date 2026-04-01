@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
+import { requireAdminUser } from '@/lib/auth/get-user';
 import { getEmailTemplate, substituteVariables } from '@/lib/email-templates';
 import { sendEmail } from '@/lib/email';
 
@@ -12,16 +12,9 @@ export async function POST(
   { params }: { params: Promise<{ key: string }> }
 ) {
   const { key } = await params;
-  const { user, profile, error } = await getAuthenticatedUserWithProfile(request);
-
-  if (!user || error) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Check if user is admin
-  const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.role)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const { isAdmin, error } = await requireAdminUser(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
 
   try {

@@ -35,6 +35,10 @@ export default function SupportPage() {
         setError(data.error || 'Помилка. Спробуйте пізніше.');
         return;
       }
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+        return;
+      }
       router.push(`/pay?token=${data.hutkoToken}&amount=${data.amount}&type=donation`);
     } catch {
       setError('Помилка зʼєднання. Спробуйте пізніше.');

@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createHutkoToken } from '@/lib/payments/hutko';
+import { getHutkoConfig } from '@/lib/payments/hutko-config';
+import { db } from '@/lib/db';
+import { sql } from 'drizzle-orm';
 import crypto from 'crypto';
 
 export const dynamic = 'force-dynamic';
@@ -19,30 +22,49 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
-    const hutkoMerchantId = process.env.HUTKO_MERCHANT_ID;
-    const hutkoSecretKey = process.env.HUTKO_SECRET_KEY;
+    const hutkoConfig = await getHutkoConfig();
 
-    if (!hutkoMerchantId || !hutkoSecretKey) {
+    if (!hutkoConfig.enabled || !hutkoConfig.merchantId || !hutkoConfig.secretKey) {
       return NextResponse.json({ error: 'Payments not configured' }, { status: 503 });
     }
 
     const orderId = generateDonationOrderId(amount);
     const amountKopiyki = Math.round(amount * 100);
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ordenv.org';
 
-    const hutkoToken = await createHutkoToken(
-      { merchantId: Number(hutkoMerchantId), secretKey: hutkoSecretKey },
+    await db.execute(sql`
+      INSERT INTO payments (
+        type,
+        amount,
+        currency,
+        provider,
+        provider_transaction_id,
+        status,
+        provider_data
+      ) VALUES (
+        'donation'::payment_type,
+        ${amount},
+        'UAH',
+        'hutko'::payment_provider,
+        ${orderId},
+        'pending'::payment_status,
+        ${JSON.stringify({ source: 'public_support_page' })}::jsonb
+      )
+    `);
+
+    const { token: hutkoToken, checkoutUrl } = await createHutkoToken(
+      { merchantId: Number(hutkoConfig.merchantId), secretKey: hutkoConfig.secretKey },
       {
         orderId,
         orderDesc: 'Підтримка Ордену Ветеранів',
         amount: amountKopiyki,
         currency: 'UAH',
-        serverCallbackUrl: `${baseUrl}/api/payments/hutko-callback`,
+        serverCallbackUrl: `${hutkoConfig.baseUrl}/api/payments/hutko-callback`,
+        responseUrl: `${hutkoConfig.baseUrl}/?donate=success`,
         requiredRectoken: 'N',
       }
     );
 
-    return NextResponse.json({ hutkoToken, orderId, amount });
+    return NextResponse.json({ hutkoToken, checkoutUrl, orderId, amount });
   } catch (error) {
     console.error('Donate payment error:', error);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });

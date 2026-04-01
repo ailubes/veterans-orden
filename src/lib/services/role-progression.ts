@@ -35,7 +35,12 @@ export type MembershipRole =
   | 'national_leader'
   | 'network_guide';
 
-export type StaffRole = 'none' | 'news_editor' | 'admin' | 'super_admin';
+export type StaffRole =
+  | 'none'
+  | 'news_editor'
+  | 'payment_manager'
+  | 'admin'
+  | 'super_admin';
 
 export type AdvancementTrigger =
   | 'contribution'

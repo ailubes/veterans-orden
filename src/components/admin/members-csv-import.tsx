@@ -72,18 +72,43 @@ export function MembersCSVImport() {
 
       // Parse rows
       const rows: ParsedRow[] = [];
+      const allowedHeaders: Array<keyof ParsedRow> = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'patronymic',
+        'date_of_birth',
+        'city',
+        'oblast_name',
+        'role',
+        'membership_tier',
+      ];
       for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(',').map((v) => v.trim());
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const row: any = {};
+        const row: Partial<ParsedRow> = {};
 
         headers.forEach((header, index) => {
-          if (values[index]) {
-            row[header] = values[index];
+          const value = values[index];
+          if (value && allowedHeaders.includes(header as keyof ParsedRow)) {
+            row[header as keyof ParsedRow] = value;
           }
         });
 
-        rows.push(row);
+        if (row.first_name && row.last_name && row.email) {
+          rows.push({
+            first_name: row.first_name,
+            last_name: row.last_name,
+            email: row.email,
+            phone: row.phone,
+            patronymic: row.patronymic,
+            date_of_birth: row.date_of_birth,
+            city: row.city,
+            oblast_name: row.oblast_name,
+            role: row.role,
+            membership_tier: row.membership_tier,
+          });
+        }
       }
 
       setParsedData(rows);

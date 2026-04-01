@@ -295,35 +295,6 @@ export function useMessaging(): UseMessagingReturn {
     }
   }, [getAuthHeaders]);
 
-  // Mark as read
-  const markAsRead = useCallback(async (conversationId: string, messageId: string) => {
-    try {
-      const headers = await getAuthHeaders();
-      await fetch(`/api/messaging/messages/${messageId}/read`, {
-        method: 'POST',
-        headers,
-      });
-
-      // Update local unread count
-      setUnreadByConversation((prev) => {
-        const { [conversationId]: removed, ...rest } = prev;
-        return rest;
-      });
-
-      // Update conversations list
-      setConversations((prev) =>
-        prev.map((c) =>
-          c.id === conversationId ? { ...c, unreadCount: 0 } : c
-        )
-      );
-
-      // Update total
-      await fetchUnreadCount();
-    } catch (err) {
-      console.error('Error marking as read:', err);
-    }
-  }, [getAuthHeaders]);
-
   // React to message
   const reactToMessage = useCallback(async (messageId: string, emoji: string) => {
     try {
@@ -381,6 +352,35 @@ export function useMessaging(): UseMessagingReturn {
       console.error('Error fetching unread count:', err);
     }
   }, [getAuthHeaders]);
+
+  // Mark as read
+  const markAsRead = useCallback(async (conversationId: string, messageId: string) => {
+    try {
+      const headers = await getAuthHeaders();
+      await fetch(`/api/messaging/messages/${messageId}/read`, {
+        method: 'POST',
+        headers,
+      });
+
+      // Update local unread count
+      setUnreadByConversation((prev) => {
+        const { [conversationId]: removed, ...rest } = prev;
+        return rest;
+      });
+
+      // Update conversations list
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === conversationId ? { ...c, unreadCount: 0 } : c
+        )
+      );
+
+      // Update total
+      await fetchUnreadCount();
+    } catch (err) {
+      console.error('Error marking as read:', err);
+    }
+  }, [getAuthHeaders, fetchUnreadCount]);
 
   // Mute conversation
   const muteConversation = useCallback(async (conversationId: string, duration?: number) => {

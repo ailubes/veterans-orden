@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Upload, X, Link as LinkIcon, Image, Check, Clipboard } from 'lucide-react';
+import { Upload, X, Link as LinkIcon, Image as ImageIcon, Check, Clipboard } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -282,7 +282,7 @@ export function CompleteButton({ taskId, requiresProof, points }: CompleteButton
                     : 'border-line hover:border-bronze/50 text-text-200'
                 }`}
               >
-                <Image size={18} />
+                <ImageIcon size={18} />
                 <span className="text-sm font-bold">Скріншот</span>
               </button>
               <button

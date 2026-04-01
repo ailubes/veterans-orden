@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdminUser } from '@/lib/auth/get-user';
-import { createServiceClient } from '@/lib/supabase/server';
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { isAdmin, error } = await requireAdminUser(request);
+  const { isAdmin, supabase, error } = await requireAdminUser(request);
   if (!isAdmin) {
     return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
 
   const { id } = await params;
-  const supabase = createServiceClient();
 
   const { data: doc, error: fetchError } = await supabase
     .from('organization_documents')
@@ -48,7 +46,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { isAdmin, error } = await requireAdminUser(request);
+  const { isAdmin, supabase, error } = await requireAdminUser(request);
   if (!isAdmin) {
     return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
@@ -64,7 +62,6 @@ export async function PATCH(
     return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
   }
 
-  const supabase = createServiceClient();
   const { data, error: updateError } = await supabase
     .from('organization_documents')
     .update(updates)

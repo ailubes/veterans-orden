@@ -10,6 +10,7 @@ import {
   pgEnum,
   index,
   uniqueIndex,
+  date,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -268,6 +269,7 @@ export const membershipRoleEnum = pgEnum('membership_role', [
 export const staffRoleEnum = pgEnum('staff_role', [
   'none',
   'news_editor',
+  'payment_manager',
   'admin',
   'super_admin',
 ]);
@@ -353,6 +355,7 @@ export const orgRoleTypeEnum = pgEnum('org_role_type', [
   'honor_court_judge',      // Суддя Суду Честі
   'honor_court_head',       // Голова Суду Честі
   'komandant',              // Комендант комендатури
+  'deputy_commander',       // Заступник керівника командерії
   'council_thinker',        // Член Колегії Мислителів
   'president',              // Президент
   'vice_president',         // Віце-президент
@@ -540,6 +543,12 @@ export const commanderies = pgTable('commanderies', {
   type: varchar('type', { length: 20 }).notNull(), // 'commandery' | 'city'
   parentCode: varchar('parent_code', { length: 20 }), // Parent commandery code (for city commanderies)
   leaderId: uuid('leader_id'), // Reference to users.id (Komendant)
+  katottgCode: varchar('katottg_code', { length: 19 }),
+  settlementName: varchar('settlement_name', { length: 255 }),
+  hromadaName: varchar('hromada_name', { length: 255 }),
+  raionName: varchar('raion_name', { length: 255 }),
+  oblastName: varchar('oblast_name', { length: 255 }),
+  address: text('address'),
   memberCount: integer('member_count').default(0),
   groupCount: integer('group_count').default(0),
   description: text('description'),
@@ -549,6 +558,31 @@ export const commanderies = pgTable('commanderies', {
   codeIdx: uniqueIndex('commanderies_code_idx').on(table.code),
   typeIdx: index('commanderies_type_idx').on(table.type),
   parentCodeIdx: index('commanderies_parent_code_idx').on(table.parentCode),
+  katottgCodeIdx: index('commanderies_katottg_code_idx').on(table.katottgCode),
+}));
+
+// ----- COMMANDERY MVP MONTHLY REPORTS -----
+export const commanderyMvpReports = pgTable('commandery_mvp_reports', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id).notNull(),
+  reportMonth: date('report_month').notNull(),
+
+  activeMembersCount: integer('active_members_count').notNull(),
+  monthlyMeetingsCount: integer('monthly_meetings_count').notNull(),
+  monthlyLocalActionsCount: integer('monthly_local_actions_count').notNull(),
+
+  whatDone: text('what_done').notNull(),
+  whatPlanned: text('what_planned').notNull(),
+  whatNeeded: text('what_needed').notNull(),
+  isMvpCompliant: boolean('is_mvp_compliant').notNull().default(false),
+
+  submittedById: uuid('submitted_by_id').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  commanderyIdx: index('commandery_mvp_reports_commandery_idx').on(table.commanderyId),
+  monthIdx: index('commandery_mvp_reports_month_idx').on(table.reportMonth),
+  uniquePerMonth: uniqueIndex('commandery_mvp_reports_month_unique').on(table.commanderyId, table.reportMonth),
 }));
 
 // ----- GROUPS (Local Cells) -----
@@ -696,6 +730,7 @@ export const events = pgTable('events', {
   // Organizer
   organizerId: uuid('organizer_id').references(() => users.id).notNull(),
   oblastId: uuid('oblast_id').references(() => oblasts.id),
+  commanderyId: uuid('commandery_id').references(() => commanderies.id),
   groupId: uuid('group_id').references(() => groups.id),
 
   // Attendance
@@ -724,6 +759,7 @@ export const events = pgTable('events', {
   startDateIdx: index('events_start_date_idx').on(table.startDate),
   statusIdx: index('events_status_idx').on(table.status),
   oblastIdx: index('events_oblast_idx').on(table.oblastId),
+  commanderyIdx: index('events_commandery_idx').on(table.commanderyId),
   organizerIdx: index('events_organizer_idx').on(table.organizerId),
 }));
 
@@ -801,10 +837,12 @@ export const voteOptions = pgTable('vote_options', {
   voteId: uuid('vote_id').references(() => votes.id).notNull(),
   text: varchar('text', { length: 500 }).notNull(),
   description: text('description'),
+  candidateUserId: uuid('candidate_user_id').references(() => users.id),
   order: integer('order').default(0),
   voteCount: integer('vote_count').default(0),
 }, (table) => ({
   voteIdx: index('vote_options_vote_idx').on(table.voteId),
+  candidateUserIdx: index('vote_options_candidate_user_idx').on(table.candidateUserId),
 }));
 
 // ----- USER VOTES (Cast Votes) -----
@@ -2346,6 +2384,10 @@ export const eventsRelations = relations(events, ({ one, many }) => ({
   oblast: one(oblasts, {
     fields: [events.oblastId],
     references: [oblasts.id],
+  }),
+  commandery: one(commanderies, {
+    fields: [events.commanderyId],
+    references: [commanderies.id],
   }),
   group: one(groups, {
     fields: [events.groupId],

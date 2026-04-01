@@ -63,7 +63,6 @@ export default function NewMemberPage() {
 
   useEffect(() => {
     checkAccessAndLoadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAccessAndLoadData = async () => {

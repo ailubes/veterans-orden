@@ -21,7 +21,7 @@ export default async function EventDetailPage({ params }: PageProps) {
   // Get user's database ID
   const { data: profile } = await supabase
     .from('users')
-    .select('id')
+    .select('id, commandery_id')
     .eq('auth_id', user?.id)
     .single();
 
@@ -33,6 +33,10 @@ export default async function EventDetailPage({ params }: PageProps) {
     .single();
 
   if (error || !event) {
+    notFound();
+  }
+
+  if (event.commandery_id && event.commandery_id !== profile?.commandery_id) {
     notFound();
   }
 

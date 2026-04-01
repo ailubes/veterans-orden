@@ -36,8 +36,12 @@ export default function EmailTemplatesTab({
   const canEdit = isStaffAdmin(adminProfile.staff_role);
 
   useEffect(() => {
+    if (!canEdit) {
+      setLoading(false);
+      return;
+    }
     fetchTemplates();
-  }, []);
+  }, [canEdit]);
 
   async function fetchTemplates() {
     try {

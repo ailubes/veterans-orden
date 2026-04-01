@@ -299,7 +299,7 @@ export const updateUserRoleSchema = z.object({
     'admin',
     'super_admin',
   ]),
-  staff_role: z.enum(['none', 'news_editor', 'admin', 'super_admin']).optional(),
+  staff_role: z.enum(['none', 'news_editor', 'payment_manager', 'admin', 'super_admin']).optional(),
 });
 
 export const awardPointsSchema = z.object({

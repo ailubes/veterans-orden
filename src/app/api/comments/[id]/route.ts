@@ -8,18 +8,19 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const { user, supabase } = await getAuthenticatedUserWithProfile(request);
+    const { user, profile, supabase } = await getAuthenticatedUserWithProfile(request);
 
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     const { data: comment, error } = await supabase
       .from('comments')
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position),
-        likes_count:likes(count)
+        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position)
       `)
       .eq('id', id)
       .single();
@@ -29,17 +30,24 @@ export async function GET(
     }
 
     // Check if user liked this comment
-    const { data: userLike } = await supabase
+    const [{ count: likesCount }, { data: userLike }] = await Promise.all([
+      supabase
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('target_type', 'comment')
+        .eq('target_id', id),
+      supabase
       .from('likes')
       .select('reaction_type')
-      .eq('user_id', user.id)
+      .eq('user_id', dbUserId)
       .eq('target_type', 'comment')
       .eq('target_id', id)
-      .single();
+      .single(),
+    ]);
 
     const formattedComment = {
       ...comment,
-      likes_count: comment.likes_count?.[0]?.count || 0,
+      likes_count: likesCount || 0,
       user_liked: !!userLike,
       user_reaction: userLike?.reaction_type || null,
     };
@@ -75,8 +83,10 @@ export async function PUT(
       return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     // Check ownership or admin
-    const isOwner = existingComment.author_id === user.id;
+    const isOwner = existingComment.author_id === dbUserId;
     const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'super_admin';
 
     if (!isOwner && !isAdmin) {
@@ -100,8 +110,7 @@ export async function PUT(
       .eq('id', id)
       .select(`
         *,
-        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position),
-        likes_count:likes(count)
+        author:users!comments_author_id_fkey(id, display_name, avatar_url, military_unit, position)
       `)
       .single();
 
@@ -110,7 +119,18 @@ export async function PUT(
       return NextResponse.json({ error: 'Failed to update comment' }, { status: 500 });
     }
 
-    return NextResponse.json({ comment });
+    const { count: likesCount } = await supabase
+      .from('likes')
+      .select('*', { count: 'exact', head: true })
+      .eq('target_type', 'comment')
+      .eq('target_id', id);
+
+    return NextResponse.json({
+      comment: {
+        ...comment,
+        likes_count: likesCount || 0,
+      },
+    });
   } catch (error) {
     console.error('Error in PUT /api/comments/[id]:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -141,8 +161,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
     }
 
+    const dbUserId = profile?.id || user.id;
+
     // Check ownership or admin
-    const isOwner = existingComment.author_id === user.id;
+    const isOwner = existingComment.author_id === dbUserId;
     const isAdmin = profile?.staff_role === 'admin' || profile?.staff_role === 'super_admin';
 
     if (!isOwner && !isAdmin) {

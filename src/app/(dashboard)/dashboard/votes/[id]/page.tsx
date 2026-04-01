@@ -24,7 +24,7 @@ export default async function VoteDetailPage({
   // Get user's database profile
   const { data: profile } = await supabase
     .from('users')
-    .select('id, role')
+    .select('id, role, membership_role, commandery_id, status')
     .eq('auth_id', user.id)
     .single();
 
@@ -57,8 +57,29 @@ export default async function VoteDetailPage({
   }
 
   // Check eligibility
-  const eligibleRoles = (vote.eligible_roles as string[]) || ['full_member'];
-  const isEligible = profile && eligibleRoles.includes(profile.role);
+  const eligibleRoles = (vote.eligible_roles as string[]) || [];
+  const isCommanderyElection = vote.is_election && !!vote.commandery_scope;
+  const isCommanderyLocalVote = !isCommanderyElection && !!vote.commandery_scope;
+  const primariesAllowedMembershipRoles = new Set([
+    'member',
+    'honorary_member',
+    'network_leader',
+    'regional_leader',
+    'national_leader',
+    'network_guide',
+  ]);
+  const isEligible = !!profile && (
+    isCommanderyElection
+      ? profile.status === 'active'
+        && profile.commandery_id === vote.commandery_scope
+        && !!profile.membership_role
+        && primariesAllowedMembershipRoles.has(profile.membership_role)
+      : isCommanderyLocalVote
+        ? profile.status === 'active' && profile.commandery_id === vote.commandery_scope
+      : eligibleRoles.length === 0
+        || (!!profile.role && eligibleRoles.includes(profile.role))
+        || (!!profile.membership_role && eligibleRoles.includes(profile.membership_role))
+  );
 
   const isActive = vote.status === 'active' && new Date(vote.end_date) > new Date();
 
@@ -123,6 +144,11 @@ export default async function VoteDetailPage({
               ЗАВЕРШЕНО
             </span>
           )}
+          {isCommanderyElection && (
+            <span className="px-2 py-1 bg-bronze/15 text-bronze text-xs font-bold rounded">
+              ПРАЙМЕРІЗ КОМАНДЕРІЇ
+            </span>
+          )}
         </div>
 
         <h1 className="font-syne text-2xl lg:text-3xl font-bold text-text-100 mb-4">
@@ -152,11 +178,19 @@ export default async function VoteDetailPage({
         {/* Not eligible warning */}
         {!isEligible && isActive && (
           <div className="bg-yellow-500/10 border border-yellow-500/30 p-4 mb-6 text-sm text-yellow-400 rounded">
-            <strong>Увага:</strong> Для участі в голосуванні потрібен статус
-            &quot;Повноправний член&quot;.{' '}
-            <Link href="/dashboard/settings" className="text-bronze underline">
-              Оновити членство
-            </Link>
+            <strong>Увага:</strong>{' '}
+            {isCommanderyElection
+              ? 'Ви не маєте доступу до цього праймеріз. Голосують лише активні члени відповідної командерії.'
+              : isCommanderyLocalVote
+                ? 'Це локальне голосування командерії. Голосувати можуть лише активні учасники відповідного осередку.'
+              : (
+                <>
+                  Для участі в голосуванні потрібен відповідний статус членства.{' '}
+                  <Link href="/dashboard/settings" className="text-bronze underline">
+                    Оновити профіль
+                  </Link>
+                </>
+              )}
           </div>
         )}
 

@@ -25,21 +25,37 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { dashboardNavGroups, isDashboardItemActive } from './navigation-config';
+import {
+  canAccessPaymentsAdmin,
+  hasAdminAccess,
+  type StaffRole,
+} from '@/lib/permissions-utils';
+import type { MembershipRole } from '@/lib/constants';
 
 interface UserProfile {
   first_name: string | null;
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  role: string | null;
   staff_role: string | null;
   membership_role: string | null;
 }
 
 export function MobileNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>(() => {
+    const defaults: Record<string, boolean> = {};
+    for (const group of dashboardNavGroups) {
+      if (group.collapsible) {
+        defaults[group.id] = !!group.defaultCollapsed;
+      }
+    }
+    return defaults;
+  });
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminHref, setAdminHref] = useState('/admin');
   const pathname = usePathname();
   const router = useRouter();
   const { totalUnread, toggleMessenger } = useMessenger();
@@ -52,18 +68,20 @@ export function MobileNav() {
       if (user) {
         const { data } = await supabase
           .from('users')
-          .select('first_name, last_name, email, avatar_url, staff_role, membership_role')
+          .select('first_name, last_name, email, avatar_url, role, staff_role, membership_role')
           .eq('auth_id', user.id)
           .single();
 
         if (data) {
           setProfile(data);
-          // Check if user has admin access through either staff role or membership role
-          const staffRole = data.staff_role || 'none';
-          const membershipRole = data.membership_role || 'supporter';
-          const isStaffAdmin = staffRole === 'admin' || staffRole === 'super_admin';
-          const isLeaderByMembership = ['regional_leader', 'national_leader', 'network_guide'].includes(membershipRole);
-          setIsAdmin(isStaffAdmin || isLeaderByMembership);
+          const staffRole = data.staff_role as StaffRole | null;
+          const membershipRole = data.membership_role as MembershipRole | null;
+          setIsAdmin(
+            hasAdminAccess(staffRole, membershipRole) ||
+              canAccessPaymentsAdmin(staffRole) ||
+              ['admin', 'super_admin', 'regional_leader'].includes(data.role || '')
+          );
+          setAdminHref(staffRole === 'payment_manager' ? '/admin/payments' : '/admin');
         }
       }
     };
@@ -73,17 +91,26 @@ export function MobileNav() {
 
   // Close menu when pathname changes
   useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
+    if (!isMenuOpen) return;
+    const frame = requestAnimationFrame(() => {
+      setIsMenuOpen(false);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [pathname, isMenuOpen]);
 
   useEffect(() => {
-    const defaults: Record<string, boolean> = {};
-    for (const group of dashboardNavGroups) {
-      if (group.collapsible) {
-        defaults[group.id] = !!group.defaultCollapsed;
-      }
+    if (typeof window === 'undefined' || window.innerHeight >= 900) {
+      return;
     }
-    setCollapsedGroups(defaults);
+
+    const frame = requestAnimationFrame(() => {
+      setCollapsedGroups((prev) => ({
+        ...prev,
+        engagement: true,
+      }));
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   // Prevent body scroll when menu is open
@@ -226,6 +253,18 @@ export function MobileNav() {
                     <span className="text-sm font-medium">Налаштування</span>
                   </Link>
                 </DropdownMenuItem>
+
+                {isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={adminHref}
+                      className="flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-panel-850/5 transition-colors"
+                    >
+                      <Shield size={18} />
+                      <span className="text-sm font-medium">Адмін-панель</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
               </div>
 
               <DropdownMenuSeparator className="bg-panel-850/10" />
@@ -314,7 +353,7 @@ export function MobileNav() {
             {isAdmin && (
               <div className="border-t-2 border-canvas/10 py-3 mt-2">
                 <Link
-                  href="/admin"
+                  href={adminHref}
                   className={`flex items-center gap-4 px-6 py-4 text-sm font-medium tracking-wide transition-all ${
                     pathname.startsWith('/admin')
                       ? 'bg-bronze text-canvas shadow-md'

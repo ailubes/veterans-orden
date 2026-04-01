@@ -5,7 +5,6 @@ import autoTable from 'jspdf-autotable';
 /**
  * Export data to Excel file
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function exportToExcel(data: any[], filename: string, sheetName: string = 'Data') {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(sheetName);
@@ -57,7 +56,6 @@ export async function exportToExcel(data: any[], filename: string, sheetName: st
  * Export data to PDF file
  */
 export function exportToPDF(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[],
   filename: string,
   title: string,
@@ -106,7 +104,6 @@ export function exportToPDF(
 /**
  * Export members data with formatted fields
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function exportMembersData(members: any[], format: 'excel' | 'pdf') {
   const formattedData = members.map(m => ({
     'Ім\'я': m.first_name,
@@ -132,7 +129,6 @@ export async function exportMembersData(members: any[], format: 'excel' | 'pdf')
 /**
  * Export analytics data
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function exportAnalyticsData(data: any, format: 'excel' | 'pdf') {
   const formattedData = [{
     'Всього членів': data.totalMembers || 0,
@@ -161,6 +157,7 @@ function formatRole(role: string): string {
   const roles: Record<string, string> = {
     super_admin: 'Супер-адмін',
     admin: 'Адмін',
+    payment_manager: 'Менеджер платежів',
     regional_leader: 'Регіональний лідер',
     group_leader: 'Лідер групи',
     full_member: 'Повноцінний член',

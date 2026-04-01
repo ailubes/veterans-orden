@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { createHutkoRecurringCharge } from '@/lib/payments/hutko';
-import { parseSettingValue } from '@/lib/settings/parser';
+import { getHutkoConfig } from '@/lib/payments/hutko-config';
 import { generateOrderId } from '@/lib/liqpay';
 
 export const dynamic = 'force-dynamic';
@@ -17,26 +17,13 @@ export async function GET(request: Request) {
 
   const supabase = createServiceClient();
 
-  // Fetch HUTKO settings
-  const { data: settings } = await supabase
-    .from('organization_settings')
-    .select('key, value')
-    .in('key', [
-      'payment_hutko_enabled',
-      'payment_hutko_merchant_id',
-      'payment_hutko_secret_key',
-    ]);
+  const hutkoConfig = await getHutkoConfig();
 
-  const settingsMap = new Map((settings || []).map((s) => [s.key, s.value]));
-  const hutkoEnabled = parseSettingValue<boolean>(settingsMap.get('payment_hutko_enabled'), 'boolean');
-  const hutkoMerchantId = parseSettingValue<string>(settingsMap.get('payment_hutko_merchant_id'), 'string');
-  const hutkoSecretKey = parseSettingValue<string>(settingsMap.get('payment_hutko_secret_key'), 'string');
-
-  if (!hutkoEnabled || !hutkoMerchantId || !hutkoSecretKey) {
+  if (!hutkoConfig.enabled || !hutkoConfig.merchantId || !hutkoConfig.secretKey) {
     return NextResponse.json({ skipped: true, reason: 'HUTKO not configured' });
   }
 
-  const config = { merchantId: Number(hutkoMerchantId), secretKey: hutkoSecretKey };
+  const config = { merchantId: Number(hutkoConfig.merchantId), secretKey: hutkoConfig.secretKey };
   const now = new Date();
 
   // ── Step 1: Charge members whose membership expires within 5 days ──────────

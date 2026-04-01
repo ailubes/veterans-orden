@@ -22,9 +22,10 @@ export async function createHutkoToken(
     amount: number; // in kopiyki (e.g. 49 UAH = 4900)
     currency: string;
     serverCallbackUrl: string;
+    responseUrl?: string;
     requiredRectoken?: 'Y' | 'N';
   }
-): Promise<string> {
+): Promise<{ token: string; checkoutUrl: string }> {
   const requestParams: Record<string, string | number> = {
     merchant_id: config.merchantId,
     order_id: opts.orderId,
@@ -34,19 +35,30 @@ export async function createHutkoToken(
     server_callback_url: opts.serverCallbackUrl,
     required_rectoken: opts.requiredRectoken ?? 'Y',
   };
+
+  if (opts.responseUrl) {
+    requestParams.response_url = opts.responseUrl;
+  }
+
   const signature = createSignature(requestParams, config.secretKey);
 
-  const res = await fetch('https://pay.hutko.org/api/checkout/token/', {
+  const res = await fetch('https://pay.hutko.org/api/checkout/url/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ request: { ...requestParams, signature } }),
   });
 
   const data = await res.json();
-  if (data.response?.response_status !== 'success') {
-    throw new Error(`HUTKO token error: ${data.response?.error_message}`);
+  if (data.response?.response_status !== 'success' || !data.response?.checkout_url) {
+    throw new Error(`HUTKO checkout URL error: ${data.response?.error_message || 'Missing checkout URL'}`);
   }
-  return data.response.token as string;
+  const checkoutUrl = data.response.checkout_url as string;
+  const token = new URL(checkoutUrl).searchParams.get('token') ?? '';
+
+  return {
+    token,
+    checkoutUrl,
+  };
 }
 
 export async function createHutkoRecurringCharge(

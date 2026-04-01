@@ -4,7 +4,7 @@
  * Handles role-based access control and regional leader scoping.
  *
  * Two-tier role system:
- * 1. StaffRole (staff_role) - Administrative access (none, news_editor, admin, super_admin)
+ * 1. StaffRole (staff_role) - Administrative access (none, news_editor, payment_manager, admin, super_admin)
  * 2. MembershipRole (membership_role) - Network progression (supporter → network_guide)
  *
  * Admin panel access:
@@ -20,6 +20,7 @@ import {
   type UserRole,
   isStaffAdmin,
   isStaffSuperAdmin,
+  canAccessPaymentsAdmin,
   hasAdminAccess,
   isRegionalLeaderOnly,
   // Legacy re-exports for backwards compatibility
@@ -44,6 +45,7 @@ export {
   canSuspendMembers,
   canImpersonate,
   canAccessSystemSettings,
+  canAccessPaymentsAdmin,
   canSendNotificationTo,
   getAssignableRoles,
   getAssignableStaffRoles,
@@ -70,7 +72,6 @@ export interface AdminProfile {
 export async function checkReferralTreeAccess(
   regionalLeaderId: string,
   targetUserId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabaseClient?: any
 ): Promise<boolean> {
   const supabase = supabaseClient || await createClient();
@@ -184,6 +185,58 @@ export async function getAdminProfileFromRequest(
     first_name: profile.first_name,
     last_name: profile.last_name,
     role: profile.role as UserRole, // Legacy field
+  };
+
+  return { profile: adminProfile, auth };
+}
+
+/**
+ * Get staff profile for payment operations.
+ * Allows payment managers in addition to admins.
+ */
+export async function getPaymentsAdminProfileFromRequest(
+  request: Request
+): Promise<{ profile: AdminProfile; auth: AuthResult }> {
+  const auth = await getAuthenticatedUser(request);
+
+  if (!auth.user) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const { data: profile } = await auth.supabase
+    .from('users')
+    .select('id, auth_id, staff_role, membership_role, role, email, first_name, last_name')
+    .eq('auth_id', auth.user.id)
+    .single();
+
+  if (!profile) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const staffRole = (profile.staff_role || 'none') as StaffRole;
+
+  if (!canAccessPaymentsAdmin(staffRole)) {
+    throw new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  const adminProfile: AdminProfile = {
+    id: profile.id,
+    auth_id: profile.auth_id,
+    staff_role: staffRole,
+    membership_role: (profile.membership_role || 'supporter') as MembershipRole,
+    email: profile.email,
+    first_name: profile.first_name,
+    last_name: profile.last_name,
+    role: profile.role as UserRole,
   };
 
   return { profile: adminProfile, auth };

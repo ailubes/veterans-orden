@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedUserWithProfile } from '@/lib/auth/get-user';
+import { requireAdminUser } from '@/lib/auth/get-user';
 import { getAllEmailTemplates } from '@/lib/email-templates';
 
 /**
@@ -7,16 +7,9 @@ import { getAllEmailTemplates } from '@/lib/email-templates';
  * Get all email templates
  */
 export async function GET(request: NextRequest) {
-  const { user, profile, error } = await getAuthenticatedUserWithProfile(request);
-
-  if (!user || error) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Check if user is admin
-  const adminRoles = ['admin', 'super_admin'];
-  if (!profile || !adminRoles.includes(profile.role)) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const { isAdmin, error } = await requireAdminUser(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: error || 'Forbidden' }, { status: 403 });
   }
 
   try {

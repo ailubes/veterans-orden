@@ -3,7 +3,7 @@ import { getAuthenticatedUser } from '@/lib/auth/get-user';
 import { generateOrderId } from '@/lib/liqpay';
 import { MEMBERSHIP_TIERS } from '@/lib/constants';
 import { createHutkoToken } from '@/lib/payments/hutko';
-import { parseSettingValue } from '@/lib/settings/parser';
+import { getHutkoConfig } from '@/lib/payments/hutko-config';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,40 +60,26 @@ export async function POST(request: Request) {
       throw paymentError;
     }
 
-    // Fetch HUTKO settings
-    const { data: settings } = await supabase
-      .from('organization_settings')
-      .select('key, value')
-      .in('key', [
-        'payment_hutko_enabled',
-        'payment_hutko_merchant_id',
-        'payment_hutko_secret_key',
-      ]);
+    const hutkoConfig = await getHutkoConfig();
 
-    const settingsMap = new Map((settings || []).map((s) => [s.key, s.value]));
-    const hutkoEnabled = parseSettingValue<boolean>(settingsMap.get('payment_hutko_enabled'), 'boolean');
-    const hutkoMerchantId = parseSettingValue<string>(settingsMap.get('payment_hutko_merchant_id'), 'string');
-    const hutkoSecretKey = parseSettingValue<string>(settingsMap.get('payment_hutko_secret_key'), 'string');
-
-    if (hutkoEnabled && hutkoMerchantId && hutkoSecretKey) {
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://ordenv.org';
-
+    if (hutkoConfig.enabled && hutkoConfig.merchantId && hutkoConfig.secretKey) {
       // Amount in kopiyki (UAH × 100)
       const amountKopiyki = Math.round(amount * 100);
 
       try {
-        const hutkoToken = await createHutkoToken(
-          { merchantId: Number(hutkoMerchantId), secretKey: hutkoSecretKey },
+        const { token: hutkoToken, checkoutUrl } = await createHutkoToken(
+          { merchantId: Number(hutkoConfig.merchantId), secretKey: hutkoConfig.secretKey },
           {
             orderId,
             orderDesc: `Членство в Ордені Ветеранів: ${tier.name}`,
             amount: amountKopiyki,
             currency: 'UAH',
-            serverCallbackUrl: `${baseUrl}/api/payments/hutko-callback`,
+            serverCallbackUrl: `${hutkoConfig.baseUrl}/api/payments/hutko-callback`,
+            responseUrl: `${hutkoConfig.baseUrl}/dashboard?payment=success`,
           }
         );
 
-        return NextResponse.json({ hutkoToken, orderId, isAnnual, amount });
+        return NextResponse.json({ hutkoToken, checkoutUrl, orderId, isAnnual, amount });
       } catch (hutkoError) {
         console.error('HUTKO token creation failed:', hutkoError);
         // Fall through to payLater response so the user isn't blocked

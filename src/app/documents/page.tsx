@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: 'Офіційні документи, реквізити та юридична інформація ГО «Орден Ветеранів».',
 };
 
+const STATUTE_PDF_URL = '/%D0%A1%D1%82%D0%B0%D1%82%D1%83%D1%82_%D0%9E%D1%80%D0%B4%D0%B5%D0%BD_%D0%92%D0%B5%D1%82%D0%B5%D1%80%D0%B0%D0%BD%D1%96%D0%B2_%D0%B7_%D0%BF%D1%96%D0%B4%D0%BF%D0%B8%D1%81%D0%B0%D0%BC%D0%B8.pdf';
+
 interface OrgDocument {
   id: string;
   name: string;
@@ -62,7 +64,6 @@ function DocList({ items }: { items: OrgDocument[] }) {
             className="flex items-center gap-2 text-sm text-bronze hover:underline"
           >
             {doc.mime_type?.startsWith('image/') ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img src={doc.url} alt={doc.name} className="w-16 h-16 object-cover rounded border border-line shrink-0" />
             ) : (
               <FileIcon className="w-4 h-4 shrink-0" />
@@ -96,7 +97,11 @@ export default async function DocumentsPage() {
           <DocList items={documents} />
         ) : (
           <ul>
-            <li>Статут організації</li>
+            <li>
+              <a href={STATUTE_PDF_URL} target="_blank" rel="noopener noreferrer" className="text-bronze hover:underline">
+                Статут організації
+              </a>
+            </li>
             <li>Рішення про реєстрацію</li>
             <li>Кодекс Честі</li>
             <li>Положення про Суд Честі</li>

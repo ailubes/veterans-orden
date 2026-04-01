@@ -114,6 +114,25 @@ export default function HelpHomePage() {
         </div>
       </div>
 
+      <section className="bg-panel-900 border border-line rounded-lg p-6">
+        <h2 className="font-syne text-2xl font-bold mb-3">Командерії: як створити осередок</h2>
+        <p className="text-sm text-muted-500 mb-3">
+          Створення нового осередку в кабінеті доступне лише для ролі <strong className="text-text-100">Почесний Член</strong>.
+        </p>
+        <p className="text-sm text-muted-500 mb-4">
+          Обов&apos;язкові поля: назва, код осередку, тип (командерія/міський осередок), KATOTTG-код населеного пункту.
+          Рекомендовано також вказувати адресу осередку.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/commanderies" className="inline-flex items-center gap-2 px-4 py-2 border border-line rounded hover:bg-panel-850 transition-colors text-sm font-semibold">
+            Публічні правила
+          </Link>
+          <Link href="/dashboard/commanderies" className="inline-flex items-center gap-2 px-4 py-2 bg-bronze text-bg-950 rounded transition-colors text-sm font-semibold">
+            Відкрити у кабінеті
+          </Link>
+        </div>
+      </section>
+
       {/* Categories Grid */}
       <section>
         <h2 className="font-syne text-2xl font-bold mb-6 flex items-center gap-3">

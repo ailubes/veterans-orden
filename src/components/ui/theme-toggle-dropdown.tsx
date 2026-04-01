@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 import { useEffect, useState, useRef } from 'react';
+import { useHydrated } from '@/hooks/use-hydrated';
 
 interface ThemeToggleDropdownProps {
   className?: string;
@@ -14,12 +15,8 @@ interface ThemeToggleDropdownProps {
 export function ThemeToggleDropdown({ className = '' }: ThemeToggleDropdownProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {

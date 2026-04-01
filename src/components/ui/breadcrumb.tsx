@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 
@@ -26,31 +24,34 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
     <nav className={`breadcrumb ${className}`} aria-label="Breadcrumb">
-      {items.map((item, index) => {
-        const isLast = index === items.length - 1;
+      <ol className="breadcrumb-list">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+          const key = `${item.label}-${item.href ?? 'current'}-${index}`;
 
-        return (
-          <span key={index} className="breadcrumb-segment">
-            {item.href && !isLast ? (
-              <Link href={item.href} className="breadcrumb-item">
-                {item.label}
-              </Link>
-            ) : (
-              <span className={isLast ? 'breadcrumb-current' : 'breadcrumb-item'}>
-                {item.label}
-              </span>
-            )}
+          return (
+            <li key={key} className="breadcrumb-segment">
+              {item.href && !isLast ? (
+                <Link href={item.href} className="breadcrumb-item">
+                  {item.label}
+                </Link>
+              ) : (
+                <span className={isLast ? 'breadcrumb-current' : 'breadcrumb-item'} aria-current={isLast ? 'page' : undefined}>
+                  {item.label}
+                </span>
+              )}
 
-            {!isLast && (
-              <ChevronRight
-                size={14}
-                className="breadcrumb-separator"
-                aria-hidden="true"
-              />
-            )}
-          </span>
-        );
-      })}
+              {!isLast && (
+                <ChevronRight
+                  size={14}
+                  className="breadcrumb-separator"
+                  aria-hidden="true"
+                />
+              )}
+            </li>
+          );
+        })}
+      </ol>
     </nav>
   );
 }

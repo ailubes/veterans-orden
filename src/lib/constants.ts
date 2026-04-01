@@ -122,8 +122,9 @@ export const MEMBERSHIP_ROLES = {
 export const STAFF_ROLES = {
   none: { level: 0, label: 'Без ролі', description: 'Звичайний користувач' },
   news_editor: { level: 1, label: 'Редактор новин', description: 'Управління контентом та новинами' },
-  admin: { level: 2, label: 'Адміністратор', description: 'Управління користувачами та налаштуваннями' },
-  super_admin: { level: 3, label: 'Супер-адміністратор', description: 'Повний доступ до системи' },
+  payment_manager: { level: 2, label: 'Менеджер платежів', description: 'Доступ до журналу платежів та логів провайдера' },
+  admin: { level: 3, label: 'Адміністратор', description: 'Управління користувачами та налаштуваннями' },
+  super_admin: { level: 4, label: 'Супер-адміністратор', description: 'Повний доступ до системи' },
 } as const;
 
 // Privilege labels in Ukrainian
@@ -355,6 +356,12 @@ export const ORGANIZATIONAL_ROLES = {
     labelEn: 'Commandant',
     description: 'Керівник комендатури (регіонального підрозділу)',
     scope: ['regional', 'local'],
+  },
+  deputy_commander: {
+    label: 'Заступник керівника командерії',
+    labelEn: 'Commandery Deputy',
+    description: 'Заступник лідера командерії з правом виконувати обовʼязки за відсутності керівника',
+    scope: ['local'],
   },
   council_thinker: {
     label: 'Член Колегії Мислителів',

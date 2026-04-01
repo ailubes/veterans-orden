@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { HeavyCta } from '@/components/ui/heavy-cta';
 import { UserDropdown } from './user-dropdown';
 import type { UserSex } from '@/components/ui/default-avatar';
+import type { StaffRole } from '@/lib/permissions-utils';
 
 interface UserProfile {
   first_name: string | null;
@@ -13,13 +13,13 @@ interface UserProfile {
   avatar_url: string | null;
   sex: UserSex;
   role: string;
-  staff_role: string | null;
+  staff_role: StaffRole | null;
+  membership_role: string | null;
 }
 
 export function AuthNav() {
   const [user, setUser] = useState<{ id: string } | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const supabase = createClient();
@@ -32,12 +32,11 @@ export function AuthNav() {
       if (user) {
         const { data } = await supabase
           .from('users')
-          .select('first_name, last_name, avatar_url, sex, role, staff_role')
+          .select('first_name, last_name, avatar_url, sex, role, staff_role, membership_role')
           .eq('auth_id', user.id)
           .single();
         setProfile(data);
       }
-      setLoading(false);
     };
 
     checkUser();
@@ -49,7 +48,7 @@ export function AuthNav() {
         if (session?.user) {
           const { data } = await supabase
             .from('users')
-            .select('first_name, last_name, avatar_url, sex, role, staff_role')
+            .select('first_name, last_name, avatar_url, sex, role, staff_role, membership_role')
             .eq('auth_id', session.user.id)
             .single();
           setProfile(data);
@@ -62,22 +61,21 @@ export function AuthNav() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
-    return <div className="w-24 h-9 bg-panel-850 rounded animate-pulse" />;
-  }
-
-  // Logged out - show only sign-in button with bronze background
+  // Logged out - keep single clear auth action
   if (!user) {
     return (
-      <Link
-        href="/sign-in"
-        className="nav-signin-btn"
-      >
-        УВІЙТИ
-      </Link>
+      <div className="nav-auth-compact">
+        <Link href="/sign-in" className="nav-signin-btn">
+          УВІЙТИ
+        </Link>
+      </div>
     );
   }
 
-  // Logged in - show user dropdown
-  return <UserDropdown profile={profile} />;
+  // Logged in - single compact profile control (dashboard/admin/settings inside dropdown)
+  return (
+    <div className="nav-auth-compact">
+      <UserDropdown profile={profile} />
+    </div>
+  );
 }

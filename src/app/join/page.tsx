@@ -33,6 +33,14 @@ export default function JoinPage() {
           Орден Ветеранів — це не просто організація, а братерство з чіткою структурою, правилами та місією.
           Ми пропонуємо два формати участі, щоб кожен міг знайти своє місце.
         </p>
+        <div style={{ marginTop: '1.25rem', padding: '1rem', border: '1px solid var(--line)', borderRadius: '0.5rem', background: 'var(--panel-900)' }}>
+          <p style={{ margin: 0 }}>
+            <strong>Про створення Командерії:</strong> створити новий осередок у кабінеті може лише учасник з роллю
+            {' '}
+            <strong>«Почесний Член»</strong>. Для заявки потрібно вказати: назву, код, тип осередку, KATOTTG-код
+            населеного пункту та адресу осередку.
+          </p>
+        </div>
       </PageContent>
 
       {/* Two Membership Options */}

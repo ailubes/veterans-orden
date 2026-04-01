@@ -1,8 +1,58 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/server';
 import { verifyHutkoCallback } from '@/lib/payments/hutko';
+import { getHutkoConfig } from '@/lib/payments/hutko-config';
 
 export const dynamic = 'force-dynamic';
+
+type PaymentDbStatus = 'pending' | 'completed' | 'failed';
+
+function resolvePaymentStatus(body: Record<string, string>): PaymentDbStatus {
+  const orderStatus = body.order_status?.toLowerCase() || '';
+  const responseCode = body.response_code?.trim() || '';
+  const responseDescription = body.response_description?.toLowerCase() || '';
+
+  let bankResponseDescription = '';
+  try {
+    const additionalInfo = JSON.parse(body.additional_info || '{}') as {
+      bank_response_description?: string | null;
+    };
+    bankResponseDescription = additionalInfo.bank_response_description?.toLowerCase() || '';
+  } catch {
+    bankResponseDescription = '';
+  }
+
+  if (orderStatus === 'approved') {
+    return 'completed';
+  }
+
+  const failedOrderStatuses = new Set([
+    'declined',
+    'expired',
+    'rejected',
+    'cancelled',
+    'canceled',
+    'failed',
+  ]);
+
+  if (failedOrderStatuses.has(orderStatus)) {
+    return 'failed';
+  }
+
+  if (responseCode) {
+    return 'failed';
+  }
+
+  if (
+    responseDescription.includes('failed') ||
+    bankResponseDescription.includes('failed') ||
+    bankResponseDescription.includes('authentication_failed')
+  ) {
+    return 'failed';
+  }
+
+  return 'pending';
+}
 
 export async function POST(request: Request) {
   try {
@@ -29,13 +79,8 @@ export async function POST(request: Request) {
 
     const supabase = createServiceClient();
 
-    // Fetch secret key
-    const { data: settings } = await supabase
-      .from('organization_settings')
-      .select('key, value')
-      .eq('key', 'payment_hutko_secret_key');
-
-    const secretKey = String(settings?.find((s) => s.key === 'payment_hutko_secret_key')?.value ?? '');
+    const hutkoConfig = await getHutkoConfig();
+    const secretKey = hutkoConfig.secretKey;
 
     if (!secretKey) {
       console.error('HUTKO callback: secret key not configured');
@@ -56,28 +101,69 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing order_id' }, { status: 400 });
     }
 
-    const dbStatus = orderStatus === 'approved' ? 'completed' : 'failed';
+    const dbStatus = resolvePaymentStatus(body);
 
-    // Fetch the payment record to get user_id, membership_tier, and existing provider_data
+    // Fetch the payment record to get payment type, user_id, membership_tier, and existing provider_data
     const { data: payment, error: fetchError } = await supabase
       .from('payments')
-      .select('id, user_id, membership_tier, provider_data')
+      .select('id, type, user_id, membership_tier, provider_data')
       .eq('provider_transaction_id', orderId)
       .single();
 
     if (fetchError || !payment) {
+      if (orderId.startsWith('don_')) {
+        console.warn('HUTKO callback: donation payment not found for order_id', orderId);
+        return new Response('OK', { status: 200 });
+      }
+
       console.error('HUTKO callback: payment not found for order_id', orderId);
       return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
     }
 
     const now = new Date();
     const existingProviderData = (payment.provider_data as Record<string, unknown>) ?? {};
+    const existingCallbackEvents = Array.isArray(existingProviderData.callback_events)
+      ? existingProviderData.callback_events as unknown[]
+      : [];
+    const callbackEvent = {
+      received_at: now.toISOString(),
+      order_status: body.order_status ?? null,
+      response_status: body.response_status ?? null,
+      response_code: body.response_code ?? null,
+      response_description: body.response_description ?? null,
+      payment_id: body.payment_id ?? null,
+      amount: body.amount ?? null,
+      actual_amount: body.actual_amount ?? null,
+      payment_system: body.payment_system ?? null,
+      masked_card: body.masked_card ?? body.sender_card_mask2 ?? null,
+      raw: body,
+    };
+
+    let bankResponseCode: string | null = null;
+    let bankResponseDescription: string | null = null;
+
+    try {
+      const additionalInfo = JSON.parse(body.additional_info || '{}') as {
+        bank_response_code?: string | null;
+        bank_response_description?: string | null;
+      };
+      bankResponseCode = additionalInfo.bank_response_code ?? null;
+      bankResponseDescription = additionalInfo.bank_response_description ?? null;
+    } catch {
+      bankResponseCode = null;
+      bankResponseDescription = null;
+    }
+
+    const isMembershipPayment = payment.type === 'membership';
     const isAnnual = existingProviderData.is_annual === true;
-    const periodEnd = new Date(now);
-    if (isAnnual) {
-      periodEnd.setFullYear(periodEnd.getFullYear() + 1);
-    } else {
-      periodEnd.setMonth(periodEnd.getMonth() + 1);
+    const periodEnd = isMembershipPayment ? new Date(now) : null;
+
+    if (periodEnd) {
+      if (isAnnual) {
+        periodEnd.setFullYear(periodEnd.getFullYear() + 1);
+      } else {
+        periodEnd.setMonth(periodEnd.getMonth() + 1);
+      }
     }
 
     // Update payment record with rectoken, period dates, and HUTKO response fields
@@ -86,13 +172,24 @@ export async function POST(request: Request) {
       .update({
         status: dbStatus,
         completed_at: dbStatus === 'completed' ? now.toISOString() : null,
-        period_start: dbStatus === 'completed' ? now.toISOString() : null,
-        period_end: dbStatus === 'completed' ? periodEnd.toISOString() : null,
+        period_start: dbStatus === 'completed' && isMembershipPayment ? now.toISOString() : null,
+        period_end: dbStatus === 'completed' && periodEnd ? periodEnd.toISOString() : null,
         provider_data: {
           ...existingProviderData,
           hutko_order_status: orderStatus,
           hutko_payment_id: body.payment_id,
-          hutko_sender_card_mask2: body.sender_card_mask2,
+          hutko_response_status: body.response_status ?? null,
+          hutko_response_code: body.response_code ?? null,
+          hutko_response_description: body.response_description ?? null,
+          hutko_bank_response_code: bankResponseCode,
+          hutko_bank_response_description: bankResponseDescription,
+          hutko_masked_card: body.masked_card ?? body.sender_card_mask2 ?? null,
+          hutko_card_type: body.card_type ?? null,
+          hutko_payment_system: body.payment_system ?? null,
+          hutko_sender_card_mask2: body.sender_card_mask2 ?? null,
+          hutko_last_callback_at: now.toISOString(),
+          hutko_last_callback: callbackEvent,
+          callback_events: [...existingCallbackEvents.slice(-19), callbackEvent],
           rectoken: body.rectoken ?? existingProviderData.rectoken ?? null,
         },
       })
@@ -104,7 +201,7 @@ export async function POST(request: Request) {
     }
 
     // On success — promote the user's membership tier, role, membership_role, and set paid_until
-    if (dbStatus === 'completed' && payment.membership_tier && payment.user_id) {
+    if (dbStatus === 'completed' && isMembershipPayment && payment.membership_tier && payment.user_id && periodEnd) {
       const { error: userUpdateError } = await supabase
         .from('users')
         .update({

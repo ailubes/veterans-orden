@@ -20,9 +20,7 @@ export async function GET(
       .from('posts')
       .select(`
         *,
-        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position),
-        likes_count:likes(count),
-        comments_count:comments(count)
+        author:users!posts_author_id_fkey(id, first_name, last_name, avatar_url, military_unit, position)
       `)
       .eq('id', id)
       .single();
@@ -31,14 +29,25 @@ export async function GET(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    // Check if user liked this post
-    const { data: userLike } = await supabase
-      .from('likes')
-      .select('reaction_type')
-      .eq('user_id', dbUserId)
-      .eq('target_type', 'post')
-      .eq('target_id', id)
-      .single();
+    // Get likes/comments aggregates and current user's reaction
+    const [{ count: likesCount }, { count: commentsCount }, { data: userLike }] = await Promise.all([
+      supabase
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('target_type', 'post')
+        .eq('target_id', id),
+      supabase
+        .from('comments')
+        .select('*', { count: 'exact', head: true })
+        .eq('post_id', id),
+      supabase
+        .from('likes')
+        .select('reaction_type')
+        .eq('user_id', dbUserId)
+        .eq('target_type', 'post')
+        .eq('target_id', id)
+        .single(),
+    ]);
 
     const formattedPost = {
       ...post,
@@ -47,8 +56,8 @@ export async function GET(
         display_name:
           `${post.author?.first_name || ''} ${post.author?.last_name || ''}`.trim() || 'Користувач',
       },
-      likes_count: post.likes_count?.[0]?.count || 0,
-      comments_count: post.comments_count?.[0]?.count || 0,
+      likes_count: likesCount || 0,
+      comments_count: commentsCount || 0,
       user_liked: !!userLike,
       user_reaction: userLike?.reaction_type || null,
     };

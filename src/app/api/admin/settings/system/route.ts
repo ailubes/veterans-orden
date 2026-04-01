@@ -2,6 +2,21 @@ import { getAdminProfileFromRequest, isSuperAdmin } from '@/lib/permissions';
 import { createAuditLog } from '@/lib/audit';
 import { NextResponse } from 'next/server';
 
+const EXCLUDED_PAYMENT_KEYS = [
+  'payment_hutko_enabled',
+  'payment_hutko_merchant_id',
+  'payment_hutko_secret_key',
+  'payment_hutko_credit_key',
+] as const;
+
+function isEditableSystemSetting(key: string): boolean {
+  if (EXCLUDED_PAYMENT_KEYS.includes(key as typeof EXCLUDED_PAYMENT_KEYS[number])) {
+    return false;
+  }
+
+  return key.startsWith('system_') || key.startsWith('points_') || key.startsWith('payment_');
+}
+
 // GET - Fetch system configuration
 export async function GET(request: Request) {
   try {
@@ -13,7 +28,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    // Fetch all system settings (including payment settings)
+    // Fetch all system settings (including editable payment settings)
     const { data: settings, error } = await supabase
       .from('organization_settings')
       .select('key, value')
@@ -24,6 +39,8 @@ export async function GET(request: Request) {
     // Transform to key-value object with proper types
     const configObject: Record<string, boolean | string | number> = {};
     settings?.forEach((setting) => {
+      if (!isEditableSystemSetting(setting.key)) return;
+
       const value = setting.value;
       // Parse value based on type
       if (typeof value === 'boolean') {
@@ -60,6 +77,9 @@ export async function PATCH(request: Request) {
     }
 
     const body = await request.json();
+    const sanitizedBody = Object.fromEntries(
+      Object.entries(body).filter(([key]) => isEditableSystemSetting(key))
+    );
 
     // Get old settings for audit log
     const { data: oldSettings } = await supabase
@@ -69,11 +89,12 @@ export async function PATCH(request: Request) {
 
     const oldData: Record<string, unknown> = {};
     oldSettings?.forEach((s) => {
+      if (!isEditableSystemSetting(s.key)) return;
       oldData[s.key] = s.value;
     });
 
     // Update each setting
-    const updates = Object.entries(body).map(([key, value]) => {
+    const updates = Object.entries(sanitizedBody).map(([key, value]) => {
       return supabase
         .from('organization_settings')
         .update({
@@ -93,7 +114,7 @@ export async function PATCH(request: Request) {
       entityType: 'organization_settings',
       entityId: 'system',
       oldData,
-      newData: body,
+      newData: sanitizedBody,
     });
 
     return NextResponse.json({ success: true });

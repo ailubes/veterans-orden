@@ -65,11 +65,12 @@ SENTRY_DSN=YOUR_SENTRY_DSN
 # Email (Resend)
 RESEND_API_KEY=YOUR_RESEND_KEY
 
-# VST Bank Payment Integration
-VSTBANK_MERCHANT_ID=YOUR_MERCHANT_ID
-VSTBANK_API_KEY=YOUR_API_KEY
-VSTBANK_SECRET_KEY=YOUR_SECRET_KEY
-VSTBANK_CALLBACK_URL=https://veterans-orden.org/api/payments/callback
+# HUTKO Payment Integration
+HUTKO_ENABLED=true
+HUTKO_MERCHANT_ID=YOUR_MERCHANT_ID
+HUTKO_SECRET_KEY=YOUR_PAYMENT_KEY
+HUTKO_CREDIT_KEY=YOUR_CREDIT_KEY
+APP_URL=https://veterans-orden.org
 ```
 
 **⚠️ Security Note:** Never commit `.env.local` to git! Use `.env.example` as a template.
@@ -144,7 +145,7 @@ Update `NEXT_PUBLIC_APP_URL` to production URL:
 
 ```bash
 NEXT_PUBLIC_APP_URL=https://veterans-orden.org
-VSTBANK_CALLBACK_URL=https://veterans-orden.org/api/payments/callback
+APP_URL=https://veterans-orden.org
 ```
 
 ## 🔄 Continuous Deployment

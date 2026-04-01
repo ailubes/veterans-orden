@@ -411,7 +411,7 @@ nav .nav-link:hover {
 .nav-selector {
   position: relative;
   display: inline-block !important;
-  margin-left: 0.5rem;
+  margin-left: 0;
   visibility: visible !important;
   opacity: 1 !important;
 }
@@ -419,8 +419,8 @@ nav .nav-link:hover {
 .nav-selector-trigger {
   display: flex !important;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.75rem;
+  gap: 0.3rem;
+  padding: 0.45rem 0.6rem;
   background: rgba(255, 255, 255, 0.08) !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 8px;
@@ -432,7 +432,7 @@ nav .nav-link:hover {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
-  min-height: 32px;
+  min-height: 30px;
   visibility: visible !important;
   opacity: 1 !important;
 }
@@ -541,7 +541,7 @@ nav .nav-link:hover {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  padding: 0.65rem 1.25rem;
+  padding: 0.55rem 0.95rem;
   border: 2px solid var(--bronze);
   background: rgba(181, 121, 58, 0.12);
   color: var(--text-100) !important;
@@ -553,9 +553,16 @@ nav .nav-link:hover {
   text-decoration: none;
   border-radius: 12px;
   transition: all 0.25s ease;
-  margin-left: 0.75rem;
+  margin-left: 0;
   visibility: visible !important;
   opacity: 1 !important;
+}
+
+.nav-auth-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.1rem;
 }
 
 .nav-signin-btn:hover {
@@ -2359,7 +2366,7 @@ nav .nav-link:hover {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .nav-mobile-toggle {
@@ -2582,10 +2589,7 @@ nav .nav-link:hover {
 }
 
 .joint {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
+  display: none !important;
 }
 
 .joint-tl {
@@ -3294,6 +3298,16 @@ nav .nav-link:hover {
   align-items: center;
   gap: 0;
   flex-wrap: wrap;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .breadcrumb-segment {
