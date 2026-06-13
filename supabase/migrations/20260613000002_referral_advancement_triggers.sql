@@ -78,14 +78,8 @@ COMMENT ON TRIGGER trg_evaluate_referrer_on_role_change ON users IS
 -- The new trigger only fires on future events. For existing users, we run a
 -- one-time sweep so any user who already qualifies (e.g. someone who already
 -- has 1+ direct referral but is still 'supporter') is promoted immediately.
--- process_pending_advancements() iterates active users and advances those eligible.
-DO $$
-DECLARE
-  v_advanced_count INT := 0;
-BEGIN
-  -- process_pending_advancements is defined in 0029. It returns rows for advanced users.
-  -- We just need to run it; the actual count is for logging.
-  PERFORM 1 FROM process_pending_advancements();
-  GET DIAGNOSTICS v_advanced_count = ROW_COUNT;
-  RAISE NOTICE 'Backfill: process_pending_advancements() affected % users', v_advanced_count;
-END $$;
+--
+-- This block is split into a separate migration (20260613000003) because it
+-- depends on process_pending_advancements() — a function that is not present
+-- on every Supabase environment. See 20260613000003_add_process_pending_advancements.sql
+-- for the function definition + the actual backfill pass.

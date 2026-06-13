@@ -36,15 +36,16 @@ WHERE membership_role = 'supporter'
 --  BEFORE UPDATE trigger on users; we run a plain UPDATE here, so we insert the row manually.)
 INSERT INTO role_advancements (user_id, from_role, to_role, advanced_by, trigger_type, trigger_data, advanced_at)
 SELECT
-  id,
+  users.id,
   'supporter'::membership_role,
   'candidate'::membership_role,
   NULL,
   'manual'::advancement_trigger,
-  jsonb_build_object('trigger', 'grand_parent_2026_06_13', 'previous_tier', membership_tier),
+  jsonb_build_object('trigger', 'grand_parent_2026_06_13', 'previous_tier', users.membership_tier),
   NOW()
-WHERE membership_role = 'candidate'
-  AND membership_tier IN ('basic_49', 'supporter_100', 'supporter_200', 'patron_500')
+FROM users
+WHERE users.membership_role = 'candidate'
+  AND users.membership_tier IN ('basic_49', 'supporter_100', 'supporter_200', 'patron_500')
   AND NOT EXISTS (
     SELECT 1 FROM role_advancements ra
     WHERE ra.user_id = users.id
