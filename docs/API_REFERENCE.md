@@ -564,8 +564,15 @@ Link Telegram account to a user profile.
 ### Cron
 
 #### `GET /api/cron/billing`
-Recurring billing job. Requires `Authorization: Bearer <CRON_SECRET>`.
-Charges due members, suspends overdue members.
+Cron endpoint. Requires `Authorization: Bearer <CRON_SECRET>`.
+
+**As of 2026-06-13** the route no longer auto-charges due members and no
+longer suspends overdue members — payments are now a voluntary support tier
+and do not gate membership role advancement. The route runs
+`process_pending_advancements()` as a safety-net batch pass; the primary
+advancement path is the real-time SQL trigger chain
+(`trg_evaluate_referrer_on_insert` / `trg_evaluate_referrer_on_role_change`
+from `supabase/migrations/20260613000002_*`).
 
 ---
 

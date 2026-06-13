@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Trophy, Target, Sparkles, ChevronDown, ChevronUp, ArrowRight, Users, CreditCard, Star } from 'lucide-react';
 import Link from 'next/link';
 import TaskCard from '@/components/progression/task-card';
@@ -81,22 +80,25 @@ const PRIVILEGE_LABELS: Record<string, string> = {
   nomination_rights: 'Право висування кандидатів',
 };
 
-// Concrete next-steps per role, shown when tasks are unavailable
+// Concrete next-steps per role, shown when tasks are unavailable.
+// As of 2026-06-13, role advancement is driven entirely by network growth
+// (referral activity). Payments are no longer a gate to any role — see
+// supabase/migrations/20260613000001_* and 20260613000002_*.
 const NEXT_STEPS: Record<string, { icon: typeof CreditCard; title: string; description: string; cta: string; ctaUrl: string }[]> = {
   supporter: [
     {
-      icon: CreditCard,
-      title: 'Зробіть перший членський внесок',
-      description: 'Оформіть членство від 49 грн, щоб перейти на рівень «Кандидат в члени» та отримати право голосу на праймеріз.',
-      cta: 'Оформити членство',
-      ctaUrl: 'payment:basic_49',
+      icon: Users,
+      title: 'Запросіть свого першого реферала',
+      description: 'Запросіть 1 друга за вашим реферальним посиланням — щойно він зареєструється, ви автоматично перейдете на рівень «Кандидат в члени» та отримаєте право голосу на праймеріз.',
+      cta: 'Запросити друга',
+      ctaUrl: '/dashboard/referrals',
     },
   ],
   candidate: [
     {
       icon: Users,
       title: 'Запросіть 2 кандидатів',
-      description: 'Запросіть щонайменше 2 друзів, які зареєструються та оформлять власний членський внесок — і ви станете «Членом Ордену».',
+      description: 'Запросіть щонайменше 2 друзів, які зареєструються, — і ви станете «Членом Ордену».',
       cta: 'Запросити друзів',
       ctaUrl: '/dashboard/referrals',
     },
@@ -150,42 +152,12 @@ const NEXT_STEPS: Record<string, { icon: typeof CreditCard; title: string; descr
 };
 
 export default function ProgressionPage() {
-  const router = useRouter();
   const [data, setData] = useState<ProgressionData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedAchievement, setSelectedAchievement] = useState<any>(null);
   const [currentMilestone, setCurrentMilestone] = useState<any>(null);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  const handlePayment = async (tierId: string) => {
-    setPaymentLoading(true);
-    setPaymentError(null);
-    try {
-      const res = await fetch('/api/payments/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tierId }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Помилка створення платежу');
-
-      if (json.checkoutUrl) {
-        window.location.href = json.checkoutUrl;
-      } else if (json.hutkoToken) {
-        router.push(`/pay?token=${json.hutkoToken}&orderId=${encodeURIComponent(json.orderId)}&tier=${tierId}`);
-      } else {
-        // payLater — show feedback in place
-        setPaymentError('Платіжну систему не налаштовано. Ваш запит зареєстровано — реквізити надійдуть на пошту.');
-      }
-    } catch (err) {
-      setPaymentError(err instanceof Error ? err.message : 'Помилка оплати');
-    } finally {
-      setPaymentLoading(false);
-    }
-  };
 
   useEffect(() => {
     async function loadData() {
@@ -362,15 +334,8 @@ export default function ProgressionPage() {
                   <HelpTooltip pageSlug="dashboard-progression" elementId="current-tasks" position="right" />
                 </div>
                 <div className="space-y-4">
-                  {paymentError && (
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-red-400 text-sm">
-                      {paymentError}
-                    </div>
-                  )}
                   {steps.map((step, i) => {
                     const Icon = step.icon;
-                    const isPaymentAction = step.ctaUrl.startsWith('payment:');
-                    const tierId = isPaymentAction ? step.ctaUrl.replace('payment:', '') : null;
                     return (
                       <div key={i} className="border-2 border-bronze/40 bg-bronze/5 card-with-joints p-6 flex flex-col sm:flex-row items-start gap-5">
                         <div className="flex-shrink-0 w-12 h-12 bg-bronze/10 border border-bronze/30 flex items-center justify-center">
@@ -379,24 +344,13 @@ export default function ProgressionPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-syne text-xl font-bold text-text-100 mb-2">{step.title}</h3>
                           <p className="font-mono text-sm text-text-100/80 mb-4">{step.description}</p>
-                          {isPaymentAction ? (
-                            <button
-                              onClick={() => handlePayment(tierId!)}
-                              disabled={paymentLoading}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
-                            >
-                              {paymentLoading ? 'ЗАВАНТАЖЕННЯ...' : step.cta}
-                              {!paymentLoading && <ArrowRight className="w-4 h-4" />}
-                            </button>
-                          ) : (
-                            <Link
-                              href={step.ctaUrl}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
-                            >
-                              {step.cta}
-                              <ArrowRight className="w-4 h-4" />
-                            </Link>
-                          )}
+                          <Link
+                            href={step.ctaUrl}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
+                          >
+                            {step.cta}
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
                         </div>
                       </div>
                     );

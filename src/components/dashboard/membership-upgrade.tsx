@@ -1,144 +1,56 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Check, Loader2 } from 'lucide-react';
-import { MEMBERSHIP_TIERS } from '@/lib/constants';
+import Link from 'next/link';
+import { Heart, ArrowRight } from 'lucide-react';
 
-interface MembershipUpgradeProps {
+interface SupportCardProps {
   currentTier: string;
 }
 
-export function MembershipUpgrade({ currentTier }: MembershipUpgradeProps) {
-  const router = useRouter();
-  const [loading, setLoading] = useState<string | null>(null);
-  const [error, setError] = useState('');
-
-  const handleUpgrade = async (tierId: string) => {
-    setLoading(tierId);
-    setError('');
-
-    try {
-      const response = await fetch('/api/payments/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tierId }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Payment failed');
-      }
-
-      const { checkoutUrl, hutkoToken, orderId, amount } = await response.json();
-
-      if (checkoutUrl) {
-        window.location.href = checkoutUrl;
-        return;
-      }
-
-      if (hutkoToken) {
-        const amountParam = amount ? `&amount=${amount}` : '';
-        router.push(`/pay?token=${hutkoToken}&orderId=${encodeURIComponent(orderId)}&tier=${tierId}${amountParam}`);
-        return;
-      }
-
-      throw new Error('Платіжне посилання не отримано');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Помилка оплати');
-      setLoading(null);
-    }
-  };
-
-  const tiers = Object.entries(MEMBERSHIP_TIERS);
-  const currentTierIndex = tiers.findIndex(([id]) => id === currentTier);
+/**
+ * "Support the Organization" card.
+ *
+ * As of 2026-06-13, payments no longer gate membership. A member's role in
+ * the Order is determined by their network activity (referrals), not by a
+ * support-tier payment. This card surfaces the voluntary /support donation
+ * flow so members who want to financially back the Order still have a clear
+ * path. The tier shown is the user's current support subscription (or none).
+ */
+export function SupportCard({ currentTier }: SupportCardProps) {
+  const isSupporting = currentTier && currentTier !== 'free';
 
   return (
-    <div className="space-y-4">
-      {error && (
-        <div className="bg-red-50 border border-red-200 p-3 text-red-600 text-sm">
-          {error}
+    <div className="border-2 border-bronze/40 bg-bronze/5 card-with-joints p-6">
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-12 h-12 bg-bronze/10 border border-bronze/30 flex items-center justify-center">
+          <Heart className="w-6 h-6 text-bronze" />
         </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tiers.map(([id, tier], index) => {
-          const isCurrentTier = id === currentTier;
-          const isDowngrade = index < currentTierIndex;
-
-          return (
-            <div
-              key={id}
-              className={`border-2 p-4 relative ${
-                isCurrentTier
-                  ? 'border-bronze bg-bronze/5'
-                  : 'border-line hover:border-bronze/50'
-              }`}
-            >
-              {isCurrentTier && (
-                <div className="absolute -top-3 left-4 bg-bronze text-canvas px-2 py-0.5 text-xs font-bold">
-                  ПОТОЧНИЙ
-                </div>
-              )}
-
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h3 className="font-syne font-bold text-lg">{tier.name}</h3>
-                  <p className="text-sm text-muted-500">{tier.description}</p>
-                </div>
-                <div className="text-right">
-                  <span className="font-syne text-2xl font-bold">{tier.price}</span>
-                  <span className="text-sm text-muted-500"> грн/міс</span>
-                </div>
-              </div>
-
-              <ul className="space-y-2 mb-4">
-                {tier.benefits.map((benefit, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm">
-                    <Check size={14} className="text-bronze flex-shrink-0" />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-
-              {isCurrentTier ? (
-                <button
-                  disabled
-                  className="w-full py-2 bg-panel-850/10 text-muted-500 text-sm font-bold cursor-not-allowed"
-                >
-                  АКТИВНИЙ ПЛАН
-                </button>
-              ) : isDowngrade ? (
-                <button
-                  disabled
-                  className="w-full py-2 bg-panel-850/10 text-muted-500 text-sm font-bold cursor-not-allowed"
-                >
-                  ЗНИЖЕННЯ НЕДОСТУПНЕ
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleUpgrade(id)}
-                  disabled={loading !== null}
-                  className="w-full btn justify-center text-sm disabled:opacity-50"
-                >
-                  {loading === id ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin mr-2" />
-                      ОБРОБКА...
-                    </>
-                  ) : (
-                    `ОБРАТИ ${tier.name.toUpperCase()} →`
-                  )}
-                </button>
-              )}
-            </div>
-          );
-        })}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-syne font-bold text-lg text-text-100 mb-1">
+            Підтримати Орден
+          </h3>
+          <p className="text-sm text-text-100/80 mb-3">
+            Членство розвивається через мережу. Бажаєте фінансово підтримати
+            Орден? Будь-яка сума допомагає ветеранам, адаптації та захисту прав.
+          </p>
+          {isSupporting && (
+            <p className="text-xs text-muted-500 mb-3">
+              Ваш поточний рівень підтримки: <span className="text-bronze font-mono">{currentTier}</span>
+            </p>
+          )}
+          <Link
+            href="/support"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-bronze text-canvas font-mono text-sm font-semibold border-2 border-bronze hover:bg-panel-850 hover:border-line transition-all duration-200"
+          >
+            {isSupporting ? 'ПОДОВЖИТИ ПІДТРИМКУ' : 'ПІДТРИМАТИ'} <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
-
-      <p className="text-xs text-muted-500 text-center">
-        Оплата здійснюється через захищений сервіс LiqPay. Членство активується одразу після оплати.
-      </p>
     </div>
   );
 }
+
+// Backwards-compatible export so existing imports of MembershipUpgrade
+// keep working. New code should use the SupportCard name.
+export const MembershipUpgrade = SupportCard;
+export default SupportCard;

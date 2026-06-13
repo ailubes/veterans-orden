@@ -9,7 +9,7 @@ import { Logo } from '@/components/ui/logo';
 import { KatottgSelector, KatottgDetails } from '@/components/ui/katottg-selector';
 import { HeavyCta } from '@/components/ui/heavy-cta';
 
-type Step = 'welcome' | 'personal' | 'region' | 'tier' | 'complete';
+type Step = 'welcome' | 'personal' | 'region' | 'complete';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -40,13 +40,8 @@ export default function OnboardingPage() {
   const [katottgCode, setKatottgCode] = useState<string | null>(null);
   const [katottgDetails, setKatottgDetails] = useState<KatottgDetails | null>(null);
 
-  // Membership tier
-  const [selectedTier, setSelectedTier] = useState<'free' | 'basic_49' | 'supporter_100' | 'supporter_200' | 'patron_500'>('free');
-  const [isAnnual, setIsAnnual] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [paymentPending, setPaymentPending] = useState(false);
 
   const [user, setUser] = useState<{ email: string; id: string } | null>(null);
 
@@ -168,8 +163,8 @@ export default function OnboardingPage() {
           oblast_name_katottg: katottgDetails?.oblastName || null,
           referral_code: finalReferralCode,
           referred_by_id: referrerId,
-          membership_tier: selectedTier,
-          role: selectedTier === 'free' ? 'prospect' : 'full_member',
+          membership_tier: 'free',
+          role: 'full_member',
           status: 'active',
           member_since: finalMemberSince,
           updated_at: new Date().toISOString(),
@@ -199,39 +194,8 @@ export default function OnboardingPage() {
         }
       }
 
-      // If paid tier selected, attempt payment
-      if (selectedTier !== 'free') {
-        const paymentResponse = await fetch('/api/payments/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tierId: selectedTier, isAnnual }),
-        });
-
-        if (!paymentResponse.ok) {
-          const err = await paymentResponse.json().catch(() => ({}));
-          throw new Error(err.error || 'Помилка створення запиту на оплату');
-        }
-
-        const { hutkoToken, checkoutUrl, orderId, payLater, amount } = await paymentResponse.json();
-
-        if (checkoutUrl) {
-          window.location.href = checkoutUrl;
-          return;
-        }
-
-        if (hutkoToken) {
-          const annualFlag = isAnnual ? '&annual=1' : '';
-          const amountParam = amount ? `&amount=${amount}` : '';
-          router.push(`/pay?token=${hutkoToken}&orderId=${encodeURIComponent(orderId)}&tier=${selectedTier}${annualFlag}${amountParam}`);
-          return;
-        }
-
-        // payLater: payment record created but no gateway — show pending notice
-        if (payLater) {
-          setPaymentPending(true);
-        }
-      }
-
+      // Payments are no longer required for membership. Role advancement is driven
+      // by referral activity (see supabase migrations 20260613000001/2).
       setStep('complete');
     } catch (err) {
       console.error('Onboarding error:', err);
@@ -246,8 +210,7 @@ export default function OnboardingPage() {
       case 'welcome': return 1;
       case 'personal': return 2;
       case 'region': return 3;
-      case 'tier': return 4;
-      case 'complete': return 5;
+      case 'complete': return 4;
     }
   };
 
@@ -256,14 +219,14 @@ export default function OnboardingPage() {
       <div className="bg-panel-900 border border-line rounded-lg p-8 max-w-lg mx-auto">
         {/* Progress */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          {[1, 2, 3, 4, 5].map((num, idx) => (
+          {[1, 2, 3, 4].map((num, idx) => (
             <div key={num} className="flex items-center">
               <div
                 className={`w-3 h-3 rounded-full transition-colors ${
                   getStepNumber() >= num ? 'bg-bronze' : 'bg-panel-850'
                 }`}
               />
-              {idx < 4 && <div className="w-8 h-0.5 bg-panel-850 ml-2" />}
+              {idx < 3 && <div className="w-8 h-0.5 bg-panel-850 ml-2" />}
             </div>
           ))}
         </div>
@@ -491,249 +454,15 @@ export default function OnboardingPage() {
                   <ChevronLeft size={18} /> НАЗАД
                 </HeavyCta>
                 <HeavyCta
-                  onClick={() => setStep('tier')}
+                  onClick={handleCompleteOnboarding}
+                  disabled={loading}
                   variant="primary"
                   size="lg"
                   className="flex-1"
                 >
-                  ДАЛІ <ChevronRight size={18} />
+                  {loading ? 'ЗБЕРЕЖЕННЯ...' : 'ЗАВЕРШИТИ'} <ChevronRight size={18} />
                 </HeavyCta>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step: Tier Selection */}
-        {step === 'tier' && (
-          <div>
-            <h1 className="font-inter font-black text-2xl text-text-100 mb-4 mt-0 text-center">
-              Оберіть план членства
-            </h1>
-            <p className="text-center text-sm text-muted-500 mb-6">
-              Підтримайте громаду та отримайте додаткові можливості
-            </p>
-
-            {/* Billing period toggle — shown only when a paid tier is selected */}
-            {selectedTier !== 'free' && (
-              <div className="flex rounded-lg border border-line overflow-hidden mb-5">
-                <button
-                  type="button"
-                  onClick={() => setIsAnnual(false)}
-                  className={`flex-1 py-2 text-sm font-mono transition-colors ${
-                    !isAnnual
-                      ? 'bg-bronze text-bg-950 font-bold'
-                      : 'text-muted-500 hover:text-text-100'
-                  }`}
-                >
-                  Щомісяця
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAnnual(true)}
-                  className={`flex-1 py-2 text-sm font-mono transition-colors ${
-                    isAnnual
-                      ? 'bg-bronze text-bg-950 font-bold'
-                      : 'text-muted-500 hover:text-text-100'
-                  }`}
-                >
-                  Щорічно
-                  <span className="ml-1.5 text-xs bg-green-500/20 text-green-400 rounded px-1 py-0.5">−2 міс.</span>
-                </button>
-              </div>
-            )}
-
-            <div className="space-y-3 mb-6">
-              {/* Free Tier */}
-              <div
-                onClick={() => setSelectedTier('free')}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  selectedTier === 'free'
-                    ? 'border-bronze bg-bronze/10'
-                    : 'border-line hover:border-muted-500'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-text-100">Безкоштовний</h3>
-                    <p className="text-sm text-muted-500">Базова участь в Ордені</p>
-                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
-                      <li>• Доступ до голосувань</li>
-                      <li>• Перегляд подій</li>
-                      <li>• Участь у обговореннях</li>
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-xl text-text-100">0₴</div>
-                    <div className="text-xs text-muted-500">на місяць</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Basic 49 */}
-              <div
-                onClick={() => setSelectedTier('basic_49')}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  selectedTier === 'basic_49'
-                    ? 'border-bronze bg-bronze/10'
-                    : 'border-line hover:border-muted-500'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-text-100">Базовий</h3>
-                    <p className="text-sm text-muted-500">Повноцінне членство</p>
-                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
-                      <li>• Все з безкоштовного</li>
-                      <li>• Створення голосувань</li>
-                      <li>• Організація подій</li>
-                      <li>• Пріоритетна підтримка</li>
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    {isAnnual ? (
-                      <>
-                        <div className="font-bold text-xl text-text-100">490₴</div>
-                        <div className="text-xs text-muted-500">на рік</div>
-                        <div className="text-xs text-green-400">економія 98₴</div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="font-bold text-xl text-text-100">49₴</div>
-                        <div className="text-xs text-muted-500">на місяць</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Supporter 100 */}
-              <div
-                onClick={() => setSelectedTier('supporter_100')}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  selectedTier === 'supporter_100'
-                    ? 'border-bronze bg-bronze/10'
-                    : 'border-line hover:border-muted-500'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-text-100">Прихильник</h3>
-                    <p className="text-sm text-muted-500">Підтримка розвитку</p>
-                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
-                      <li>• Все з базового</li>
-                      <li>• Ваше ім&apos;я на сайті підтримки</li>
-                      <li>• Ексклюзивні новини</li>
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    {isAnnual ? (
-                      <>
-                        <div className="font-bold text-xl text-text-100">1000₴</div>
-                        <div className="text-xs text-muted-500">на рік</div>
-                        <div className="text-xs text-green-400">економія 200₴</div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="font-bold text-xl text-text-100">100₴</div>
-                        <div className="text-xs text-muted-500">на місяць</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Supporter 200 */}
-              <div
-                onClick={() => setSelectedTier('supporter_200')}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  selectedTier === 'supporter_200'
-                    ? 'border-bronze bg-bronze/10'
-                    : 'border-line hover:border-muted-500'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-text-100">Прихильник+</h3>
-                    <p className="text-sm text-muted-500">Активна підтримка</p>
-                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
-                      <li>• Все з прихильника</li>
-                      <li>• Згадка у звітах</li>
-                      <li>• Доступ до закритих подій</li>
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    {isAnnual ? (
-                      <>
-                        <div className="font-bold text-xl text-text-100">2000₴</div>
-                        <div className="text-xs text-muted-500">на рік</div>
-                        <div className="text-xs text-green-400">економія 400₴</div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="font-bold text-xl text-text-100">200₴</div>
-                        <div className="text-xs text-muted-500">на місяць</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Patron 500 */}
-              <div
-                onClick={() => setSelectedTier('patron_500')}
-                className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  selectedTier === 'patron_500'
-                    ? 'border-bronze bg-bronze/10'
-                    : 'border-line hover:border-muted-500'
-                }`}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-text-100">Патрон</h3>
-                    <p className="text-sm text-muted-500">Максимальна підтримка</p>
-                    <ul className="text-xs text-muted-500 mt-2 space-y-1">
-                      <li>• Все з прихильника+</li>
-                      <li>• Особиста подяка від команди</li>
-                      <li>• Участь у стратегічних зустрічах</li>
-                      <li>• VIP-статус у спільноті</li>
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    {isAnnual ? (
-                      <>
-                        <div className="font-bold text-xl text-text-100">5000₴</div>
-                        <div className="text-xs text-muted-500">на рік</div>
-                        <div className="text-xs text-green-400">економія 1000₴</div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="font-bold text-xl text-text-100">500₴</div>
-                        <div className="text-xs text-muted-500">на місяць</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <HeavyCta
-                onClick={() => setStep('region')}
-                variant="outline"
-                size="lg"
-                className="flex-1"
-              >
-                <ChevronLeft size={18} /> НАЗАД
-              </HeavyCta>
-              <HeavyCta
-                onClick={handleCompleteOnboarding}
-                disabled={loading}
-                variant="primary"
-                size="lg"
-                className="flex-1"
-              >
-                {loading ? 'ЗБЕРЕЖЕННЯ...' : (selectedTier === 'free' ? 'ЗАВЕРШИТИ' : 'ДО ОПЛАТИ')}
-              </HeavyCta>
             </div>
           </div>
         )}
@@ -753,15 +482,6 @@ export default function OnboardingPage() {
               Ваш профіль налаштовано. Тепер ви можете користуватися всіма
               можливостями Ордену.
             </p>
-
-            {paymentPending && (
-              <div className="bg-bronze/10 border border-bronze/30 rounded-lg p-4 mb-6 text-sm text-left">
-                <p className="font-bold text-bronze mb-1">Оплата очікує підтвердження</p>
-                <p className="text-muted-500">
-                  Ваш запит на членство зареєстровано. Реквізити для оплати надійдуть на пошту.
-                </p>
-              </div>
-            )}
 
             <div className="space-y-3">
               <HeavyCta

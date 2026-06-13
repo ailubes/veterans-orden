@@ -28,14 +28,19 @@ group_leader (4) → regional_leader (5) → [staff roles: news_editor, admin, s
 
 | Level | Role (UA) | Role Key | Requirements | Privileges |
 |-------|-----------|----------|--------------|------------|
-| 0 | Прихильник | `supporter` | Registered, no contribution | Newsletter only |
-| 1 | Кандидат в члени | `candidate` | Made any contribution | Primary voting |
-| 2 | Член Мережі | `member` | 2 recruited candidates | Full voting rights |
+| 0 | Прихильник | `supporter` | Registered, no referrals yet | Newsletter only |
+| 1 | Кандидат в члени | `candidate` | 1+ direct referral (network growth) | Primary voting |
+| 2 | Член Мережі | `member` | 2 direct referrals at `candidate` | Full voting rights |
 | 3 | Почесний Член | `honorary_member` | 2 recruits became Members | Loyalty program |
 | 4 | Лідер Мережі | `network_leader` | 8 personal + 49 total referrals | Nomination rights, Leaders' Council |
 | 5 | Регіональний лідер | `regional_leader` | Helped 6 Honorary→Leader + 400 total | Mayor nomination priority |
 | 6 | Національний лідер | `national_leader` | Helped 4 Leaders→Regional + 4000 total | MP/President nomination |
 | 7 | Провідник Мережі | `network_guide` | Helped 2 Regional→National + 25000 total | 70% budget control |
+
+> **As of 2026-06-13** the `candidate` level no longer requires a payment. A user
+> reaches `candidate` automatically when their first direct referral joins.
+> See `supabase/migrations/20260613000001_*` (the schema change) and
+> `20260613000002_*` (the real-time advancement trigger).
 
 **Staff Roles (separate track):**
 - `news_editor` - Content management
@@ -154,8 +159,8 @@ CREATE TABLE role_requirements (
 
 -- Seed initial requirements
 INSERT INTO role_requirements (role, role_level, display_name_uk, description_uk, requires_contribution, min_contribution_amount, min_direct_referrals, min_direct_referrals_at_role, min_total_referrals, min_helped_advance, helped_advance_from_role, helped_advance_to_role, privileges) VALUES
-('supporter', 0, 'Прихильник', 'Зареєстрований користувач без внеску', FALSE, NULL, 0, NULL, 0, 0, NULL, NULL, '["newsletter"]'),
-('candidate', 1, 'Кандидат в члени', 'Зробив перший внесок', TRUE, 100, 0, NULL, 0, 0, NULL, NULL, '["newsletter", "primary_voting"]'),
+('supporter', 0, 'Прихильник', 'Зареєстрований користувач без рефералів', FALSE, NULL, 0, NULL, 0, 0, NULL, NULL, '["newsletter"]'),
+('candidate', 1, 'Кандидат в члени', 'Залучив 1+ реферала (зростання мережі)', FALSE, 0, 1, 'supporter', 0, 0, NULL, NULL, '["newsletter", "primary_voting"]'),
 ('member', 2, 'Член Мережі', 'Залучив 2 кандидатів', FALSE, NULL, 2, 'candidate', 0, 0, NULL, NULL, '["newsletter", "primary_voting", "full_voting", "events", "tasks"]'),
 ('honorary_member', 3, 'Почесний Член', '2 залучених стали Членами', FALSE, NULL, 0, NULL, 0, 2, 'candidate', 'member', '["newsletter", "primary_voting", "full_voting", "events", "tasks", "loyalty_program"]'),
 ('network_leader', 4, 'Лідер Мережі', '8 особистих + 49 загальних рефералів', FALSE, NULL, 8, 'candidate', 49, 0, NULL, NULL, '["newsletter", "primary_voting", "full_voting", "events", "tasks", "loyalty_program", "nomination", "leaders_council"]'),

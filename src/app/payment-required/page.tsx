@@ -2,44 +2,37 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/ui/logo';
 import { HeavyCta } from '@/components/ui/heavy-cta';
-import { AlertCircle, Mail } from 'lucide-react';
+import { Users, Mail } from 'lucide-react';
 
-const TIER_NAMES: Record<string, string> = {
-  basic_49: 'Базовий — 49₴/міс',
-  supporter_100: 'Прихильник — 100₴/міс',
-  supporter_200: 'Прихильник+ — 200₴/міс',
-  patron_500: 'Патрон — 500₴/міс',
-};
-
+/**
+ * /payment-required
+ *
+ * As of 2026-06-13, a failed payment does NOT suspend a user — membership
+ * role advancement is driven entirely by referral activity (see
+ * supabase/migrations/20260613000001_*). This page is kept reachable for
+ * any case where an admin needs to point a user at the progression hub
+ * (e.g. after a HUTKO chargeback, or any other manual review). The page
+ * no longer offers a "renew membership" CTA — instead it routes the user
+ * to their network-growth progression page, which is the new membership
+ * upgrade path.
+ */
 export default async function PaymentRequiredPage() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let membershipTier: string | null = null;
-  let membershipPaidUntil: string | null = null;
+  let firstName: string | null = null;
 
   if (user) {
     const { data: profile } = await supabase
       .from('users')
-      .select('membership_tier, membership_paid_until')
+      .select('first_name')
       .eq('auth_id', user.id)
       .single();
 
-    membershipTier = profile?.membership_tier ?? null;
-    membershipPaidUntil = profile?.membership_paid_until ?? null;
+    firstName = profile?.first_name ?? null;
   }
-
-  const tierLabel = membershipTier ? TIER_NAMES[membershipTier] ?? membershipTier : null;
-
-  const formattedUntil = membershipPaidUntil
-    ? new Date(membershipPaidUntil).toLocaleDateString('uk-UA', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : null;
 
   return (
     <div className="min-h-screen bg-bg-950 flex items-center justify-center px-4 py-12">
@@ -48,38 +41,30 @@ export default async function PaymentRequiredPage() {
           <Logo size={48} />
         </div>
 
-        <div className="flex items-center justify-center w-14 h-14 bg-red-500/10 border border-red-500/30 rounded-full mx-auto mb-5">
-          <AlertCircle size={28} className="text-red-400" />
+        <div className="flex items-center justify-center w-14 h-14 bg-bronze/10 border border-bronze/30 rounded-full mx-auto mb-5">
+          <Users size={28} className="text-bronze" />
         </div>
 
         <h1 className="font-inter font-black text-2xl text-text-100 text-center mb-2 mt-0">
-          Членство призупинено
+          {firstName ? `${firstName}, ваш наступний крок — мережа` : 'Ваш наступний крок — мережа'}
         </h1>
+
         <p className="text-sm text-muted-500 text-center mb-6">
-          Ваше членство в Ордені Ветеранів призупинено через несплату членського внеску.
+          Членство в Ордені розвивається через запрошення нових учасників.
+          Перегляньте свій прогрес та запросіть першого реферала, щоб перейти
+          на рівень «Кандидат в члени».
         </p>
 
-        {tierLabel && (
-          <div className="bg-panel-850 border border-line rounded-lg p-4 mb-4 text-sm">
-            <div className="flex justify-between text-muted-500">
-              <span>Ваш план</span>
-              <span className="text-text-100">{tierLabel}</span>
-            </div>
-            {formattedUntil && (
-              <div className="flex justify-between text-muted-500 mt-2">
-                <span>Оплачено до</span>
-                <span className="text-red-400">{formattedUntil}</span>
-              </div>
-            )}
-          </div>
-        )}
-
         <div className="space-y-3">
-          <Link
-            href={membershipTier ? `/pay?renew=1&tier=${membershipTier}` : '/onboarding'}
-          >
+          <Link href="/dashboard/progression">
             <HeavyCta variant="primary" size="lg" fullWidth>
-              ПОНОВИТИ ЧЛЕНСТВО
+              ДО ПРОГРЕСУ В МЕРЕЖІ
+            </HeavyCta>
+          </Link>
+
+          <Link href="/dashboard/referrals">
+            <HeavyCta variant="outline" size="lg" fullWidth>
+              ЗАПРОСИТИ ДРУЗІВ
             </HeavyCta>
           </Link>
 

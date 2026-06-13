@@ -200,14 +200,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'DB update failed' }, { status: 500 });
     }
 
-    // On success — promote the user's membership tier, role, membership_role, and set paid_until
+    // On success — record the support-tier payment. Role advancement is no longer
+    // tied to payments: users reach 'candidate' via referral activity (see
+    // supabase/migrations/20260613000001_* and 20260613000002_*). We update the
+    // support tier and paid_until only.
     if (dbStatus === 'completed' && isMembershipPayment && payment.membership_tier && payment.user_id && periodEnd) {
       const { error: userUpdateError } = await supabase
         .from('users')
         .update({
           membership_tier: payment.membership_tier,
-          role: 'full_member',
-          membership_role: 'candidate',
           membership_paid_until: periodEnd.toISOString(),
           status: 'active',
           updated_at: now.toISOString(),
@@ -218,7 +219,7 @@ export async function POST(request: Request) {
         console.error('HUTKO callback: failed to update user membership', userUpdateError);
         // Don't fail the callback — payment is recorded, manual fix possible
       } else {
-        console.log(`HUTKO callback: user ${payment.user_id} promoted to ${payment.membership_tier}, paid until ${periodEnd.toISOString()}`);
+        console.log(`HUTKO callback: user ${payment.user_id} support tier ${payment.membership_tier} recorded, paid until ${periodEnd.toISOString()}`);
       }
     }
 

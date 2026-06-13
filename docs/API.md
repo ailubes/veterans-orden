@@ -2462,7 +2462,12 @@ Signature verification: `SHA1(secret|sorted_values)` or `SHA1(secret|values|secr
 
 On success updates:
 - `payments` table: `rectoken`, `period_start`, `period_end`
-- `users` table: `membership_tier`, `membership_role`, `membership_paid_until`, `status = 'active'`
+- `users` table: `membership_tier`, `membership_paid_until`, `status = 'active'`
+
+**As of 2026-06-13** the callback no longer writes `membership_role` to the
+`users` table. Role advancement is driven by referral activity
+(`supabase/migrations/20260613000001_*`, `20260613000002_*`). The tier recorded
+on a successful payment is a voluntary support tier, not a role gate.
 
 ---
 
@@ -2488,10 +2493,19 @@ Generic payment callback handler.
 
 **Auth:** `Authorization: Bearer <CRON_SECRET>` (not a user token)
 
-Recurring billing cron job. Called daily at 09:00 Kyiv time.
+Cron endpoint kept for backwards compatibility. Called daily at 09:00 Kyiv time.
 
-- Charges members whose `membership_paid_until < now + 5 days`
-- Suspends overdue members (`membership_paid_until < now - 3 days`)
+**As of 2026-06-13** payments no longer gate membership role advancement (see
+`supabase/migrations/20260613000001_*` and `20260613000002_*`). The endpoint:
+
+- Does **not** auto-charge members for paid support tiers (the loop was removed).
+- Does **not** suspend overdue members (membership is no longer tied to payments).
+- Runs `process_pending_advancements()` as a safety-net pass over referral-driven
+  advancement. The real-time trigger chain
+  (`trg_evaluate_referrer_on_insert` / `trg_evaluate_referrer_on_role_change`)
+  is the primary path.
+
+Response shape: `{ ok, auto_charge, suspension, advanced_in_batch }`.
 
 ---
 
